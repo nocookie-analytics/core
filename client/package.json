@@ -27,6 +27,9 @@
     "last 2 versions",
     "not ie <= 10"
   ],
+  "scripts": {
+      "dev": "parcel index.html"
+  },
   "jest": {
     "moduleFileExtensions": [
       "js",
