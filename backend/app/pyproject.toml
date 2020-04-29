@@ -34,6 +34,7 @@ flake8 = "^3.7.9"
 pytest = "^5.4.1"
 sqlalchemy-stubs = "^0.3"
 pytest-cov = "^2.8.1"
+pylint = "^2.5.0"
 
 [tool.isort]
 multi_line_output = 3
