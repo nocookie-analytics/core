@@ -41,7 +41,7 @@ services:
         # - "traefik.frontend.redirect.replacement=https://${DOMAIN}/$$3"
   
   db:
-    image: postgres:12
+    image: timescale/timescaledb:latest-pg12
     volumes:
       - app-db-data:/var/lib/postgresql/data/pgdata
     env_file:
