@@ -1,0 +1,24 @@
+name: Python application
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    container: tiangolo/docker-with-compose
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup env file
+      run: |
+        mv .env-ci .env
+
+    - name: Run tests
+      run: |
+        sh ./scripts/test.sh

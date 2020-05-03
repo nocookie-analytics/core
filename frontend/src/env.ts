@@ -11,4 +11,4 @@ if (env === 'production') {
 }
 
 export const apiUrl = envApiUrl;
-export const appName = process.env.VUE_APP_NAME;
+export const appName = 'No Cookie Analytics'
