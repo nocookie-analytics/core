@@ -909,6 +909,18 @@ postgresql_psycopg2cffi = ["psycopg2cffi"]
 pymysql = ["pymysql"]
 
 [[package]]
+category = "main"
+description = "SQLAlchemy type to store standard enum.Enum value"
+name = "sqlalchemy-enum34"
+optional = false
+python-versions = "*"
+version = "1.0.1"
+
+[package.dependencies]
+SQLAlchemy = ">=0.8.0"
+setuptools = "*"
+
+[[package]]
 category = "dev"
 description = "SQLAlchemy stubs and mypy plugin"
 name = "sqlalchemy-stubs"
@@ -1052,7 +1064,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "06dbc1c91706feb5264f938ed7749ceb3e296decd5d184ddeb8ae3f5e69b146b"
+content-hash = "cbe97641f33f759310c32dc2e09b165a719f53dee787c1db77999c566b6ad72c"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -1613,6 +1625,10 @@ sqlalchemy = [
     {file = "SQLAlchemy-1.3.16-cp38-cp38-win32.whl", hash = "sha256:3e625e283eecc15aee5b1ef77203bfb542563fa4a9aa622c7643c7b55438ff49"},
     {file = "SQLAlchemy-1.3.16-cp38-cp38-win_amd64.whl", hash = "sha256:7d98e0785c4cd7ae30b4a451416db71f5724a1839025544b4edbd92e00b91f0f"},
     {file = "SQLAlchemy-1.3.16.tar.gz", hash = "sha256:7224e126c00b8178dfd227bc337ba5e754b197a3867d33b9f30dc0208f773d70"},
+]
+sqlalchemy-enum34 = [
+    {file = "SQLAlchemy-Enum34-1.0.1.tar.gz", hash = "sha256:f74e77cfd059a3fa5c5adf1fb701aa090458d1d8b076ee604a1b1e5ecc7a6fb3"},
+    {file = "SQLAlchemy_Enum34-1.0.1-py2.py3-none-any.whl", hash = "sha256:c23fc4a71947b923192a8ab2fc3fe11d031a31ce32c2fda5e2fd67077d667263"},
 ]
 sqlalchemy-stubs = [
     {file = "sqlalchemy-stubs-0.3.tar.gz", hash = "sha256:a3318c810697164e8c818aa2d90bac570c1a0e752ced3ec25455b309c0bee8fd"},
