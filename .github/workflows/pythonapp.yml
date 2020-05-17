@@ -12,6 +12,13 @@ jobs:
 
     container: tiangolo/docker-with-compose
 
+    env:
+      DOMAIN: backend
+      SMTP_HOST: ""
+      TRAEFIK_PUBLIC_NETWORK_IS_EXTERNAL: false
+      INSTALL_DEV: true
+
+
     steps:
     - uses: actions/checkout@v2
 
@@ -19,6 +26,20 @@ jobs:
       run: |
         mv .env-ci .env
 
+    - name: Create docker stack
+      run: |
+        docker-compose \
+        -f docker-compose.yml \
+        config > docker-stack.yml
+
+    - name: Build docker images
+      run: |
+        docker-compose -f docker-stack.yml build --parallel
+
+    - name: Start docker
+      run: |
+        docker-compose -f docker-stack.yml up -d
+
     - name: Run tests
       run: |
-        sh ./scripts/test.sh
+        docker-compose -f docker-stack.yml exec -T backend bash /app/tests-start.sh "$@"
