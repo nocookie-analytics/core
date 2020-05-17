@@ -41,8 +41,6 @@ def upgrade():
     sa.ForeignKeyConstraint(['visitor_id'], ['visitor.id'], ),
     sa.PrimaryKeyConstraint('id', 'timestamp')
     )
-    conn.execute("CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;")
-    conn.execute("SELECT create_hypertable('event', 'timestamp')")
     op.create_index(op.f('ix_event_id'), 'event', ['id'], unique=False)
     op.alter_column('user', 'email',
                existing_type=sa.VARCHAR(),
@@ -52,9 +50,9 @@ def upgrade():
                nullable=False)
     # ### end Alembic commands ###
 
-    bind = op.get_bind()
-    session = Session(bind=bind)
-    session.execute("select create_hypertable('event', 'timestamp')")
+    conn = op.get_bind()
+    conn.execute("CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;")
+    conn.execute("SELECT create_hypertable('event', 'timestamp')")
 
 
 def downgrade():
