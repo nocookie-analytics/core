@@ -41,6 +41,8 @@ def upgrade():
     sa.ForeignKeyConstraint(['visitor_id'], ['visitor.id'], ),
     sa.PrimaryKeyConstraint('id', 'timestamp')
     )
+    conn.execute("CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;")
+    conn.execute("SELECT create_hypertable('event', 'timestamp')")
     op.create_index(op.f('ix_event_id'), 'event', ['id'], unique=False)
     op.alter_column('user', 'email',
                existing_type=sa.VARCHAR(),
