@@ -40,6 +40,10 @@ jobs:
         -f docker-compose.yml \
         config > docker-stack.yml
 
+    - name: DEBUG
+      run: |
+        docker image ls
+
     - name: Build docker images
       run: |
         docker-compose -f docker-stack.yml build --parallel
