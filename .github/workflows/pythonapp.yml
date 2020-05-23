@@ -9,7 +9,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     container: tiangolo/docker-with-compose
 
     env:
@@ -19,8 +18,17 @@ jobs:
       INSTALL_DEV: true
 
 
+
     steps:
     - uses: actions/checkout@v2
+
+    - uses: whoan/docker-build-with-cache-action@v5
+      with:
+        username: ${{ github.repository_owner }}
+        password: "${{ secrets.GITHUB_TOKEN }}"
+        registry: docker.pkg.github.com
+        context: backend
+        image_name: nca-backend
 
     - name: Setup env file
       run: |
