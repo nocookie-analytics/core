@@ -2,7 +2,6 @@ name: Python application
 
 on:
   push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -39,6 +38,12 @@ jobs:
     - name: Start docker
       run: |
         docker-compose -f docker-stack.yml up -d
+
+    - name: Log docker status
+      if: ${{ always() }}
+      run: |
+        docker-compose logs -t
+
 
     - name: Run tests
       run: |
