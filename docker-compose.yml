@@ -114,7 +114,6 @@ services:
       - SMTP_HOST=${SMTP_HOST}
     build:
       context: ./backend
-      dockerfile: backend.dockerfile
       args:
         INSTALL_DEV: ${INSTALL_DEV-false}
     deploy:
@@ -139,7 +138,6 @@ services:
     command: bash /app/worker-start.sh
     build:
       context: ./backend
-      dockerfile: backend.dockerfile
       args:
         INSTALL_DEV: ${INSTALL_DEV-false}
   
