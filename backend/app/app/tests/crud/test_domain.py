@@ -6,56 +6,56 @@ from app.tests.utils.user import create_random_user
 from app.tests.utils.utils import random_lower_string
 
 
-def test_create_item(db: Session) -> None:
-    title = random_lower_string()
+def test_create_domain(db: Session) -> None:
+    domain_name = random_lower_string()
     description = random_lower_string()
-    item_in = DomainCreate(title=title, description=description)
+    domain_in = DomainCreate(domain_name=domain_name, description=description)
     user = create_random_user(db)
-    item = crud.domain.create_with_owner(db=db, obj_in=item_in, owner_id=user.id)
-    assert item.title == title
-    assert item.description == description
-    assert item.owner_id == user.id
+    domain = crud.domain.create_with_owner(db=db, obj_in=domain_in, owner_id=user.id)
+    assert domain.domain_name == domain_name
+    assert domain.description == description
+    assert domain.owner_id == user.id
 
 
-def test_get_item(db: Session) -> None:
-    title = random_lower_string()
+def test_get_domain(db: Session) -> None:
+    domain_name = random_lower_string()
     description = random_lower_string()
-    item_in = DomainCreate(title=title, description=description)
+    domain_in = DomainCreate(domain_name=domain_name, description=description)
     user = create_random_user(db)
-    item = crud.domain.create_with_owner(db=db, obj_in=item_in, owner_id=user.id)
-    stored_item = crud.domain.get(db=db, id=item.id)
-    assert stored_item
-    assert item.id == stored_item.id
-    assert item.title == stored_item.title
-    assert item.description == stored_item.description
-    assert item.owner_id == stored_item.owner_id
+    domain = crud.domain.create_with_owner(db=db, obj_in=domain_in, owner_id=user.id)
+    stored_domain = crud.domain.get(db=db, id=domain.id)
+    assert stored_domain
+    assert domain.id == stored_domain.id
+    assert domain.domain_name == stored_domain.domain_name
+    assert domain.description == stored_domain.description
+    assert domain.owner_id == stored_domain.owner_id
 
 
-def test_update_item(db: Session) -> None:
-    title = random_lower_string()
+def test_update_domain(db: Session) -> None:
+    domain_name = random_lower_string()
     description = random_lower_string()
-    item_in = DomainCreate(title=title, description=description)
+    domain_in = DomainCreate(domain_name=domain_name, description=description)
     user = create_random_user(db)
-    item = crud.domain.create_with_owner(db=db, obj_in=item_in, owner_id=user.id)
+    domain = crud.domain.create_with_owner(db=db, obj_in=domain_in, owner_id=user.id)
     description2 = random_lower_string()
-    item_update = DomainUpdate(description=description2)
-    item2 = crud.domain.update(db=db, db_obj=item, obj_in=item_update)
-    assert item.id == item2.id
-    assert item.title == item2.title
-    assert item2.description == description2
-    assert item.owner_id == item2.owner_id
+    domain_update = DomainUpdate(description=description2)
+    domain2 = crud.domain.update(db=db, db_obj=domain, obj_in=domain_update)
+    assert domain.id == domain2.id
+    assert domain.domain_name == domain2.domain_name
+    assert domain2.description == description2
+    assert domain.owner_id == domain2.owner_id
 
 
-def test_delete_item(db: Session) -> None:
-    title = random_lower_string()
+def test_delete_domain(db: Session) -> None:
+    domain_name = random_lower_string()
     description = random_lower_string()
-    item_in = DomainCreate(title=title, description=description)
+    domain_in = DomainCreate(domain_name=domain_name, description=description)
     user = create_random_user(db)
-    item = crud.domain.create_with_owner(db=db, obj_in=item_in, owner_id=user.id)
-    item2 = crud.domain.remove(db=db, id=item.id)
-    item3 = crud.domain.get(db=db, id=item.id)
-    assert item3 is None
-    assert item2.id == item.id
-    assert item2.title == title
-    assert item2.description == description
-    assert item2.owner_id == user.id
+    domain = crud.domain.create_with_owner(db=db, obj_in=domain_in, owner_id=user.id)
+    domain2 = crud.domain.remove(db=db, id=domain.id)
+    domain3 = crud.domain.get(db=db, id=domain.id)
+    assert domain3 is None
+    assert domain2.id == domain.id
+    assert domain2.domain_name == domain_name
+    assert domain2.description == description
+    assert domain2.owner_id == user.id
