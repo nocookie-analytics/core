@@ -13,6 +13,5 @@ def create_random_domain(db: Session, *, owner_id: Optional[int] = None) -> mode
         user = create_random_user(db)
         owner_id = user.id
     domain_name = random_lower_string()
-    description = random_lower_string()
-    item_in = DomainCreate(domain_name=domain_name, description=description, id=id)
+    item_in = DomainCreate(domain_name=domain_name, id=id)
     return crud.domain.create_with_owner(db=db, obj_in=item_in, owner_id=owner_id)

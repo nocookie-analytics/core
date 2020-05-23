@@ -6,7 +6,6 @@ from pydantic import BaseModel
 # Shared properties
 class DomainBase(BaseModel):
     domain_name: Optional[str] = None
-    description: Optional[str] = None
 
 
 # Properties to receive on item creation
