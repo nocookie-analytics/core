@@ -35,6 +35,7 @@ services:
       - SERVER_HOST=http://${DOMAIN}
     build:
       context: ./backend
+      cache_from: backend
       args:
         INSTALL_DEV: ${INSTALL_DEV-true}
         INSTALL_JUPYTER: ${INSTALL_JUPYTER-true}
