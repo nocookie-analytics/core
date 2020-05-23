@@ -28,7 +28,6 @@ jobs:
         password: "${{ secrets.GITHUB_TOKEN }}"
         registry: docker.pkg.github.com
         context: backend
-        image_tag: backend
         image_name: nca-backend
 
     - name: Setup env file
