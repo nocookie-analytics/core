@@ -1,5 +1,5 @@
 from .domain import Domain
 from .event import Event
-from .item import Item
+from .domain import Domain
 from .user import User
 from .visitor import Visitor
