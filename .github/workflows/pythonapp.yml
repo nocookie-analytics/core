@@ -37,12 +37,11 @@ jobs:
       run: |
         docker-compose -f docker-stack.yml up -d
 
+    - name: Run tests
+      run: |
+        docker-compose -f docker-stack.yml exec -T backend bash /app/tests-start.sh "$@"
+
     - name: Log docker status
       if: ${{ always() }}
       run: |
         docker-compose logs -t
-
-
-    - name: Run tests
-      run: |
-        docker-compose -f docker-stack.yml exec -T backend bash /app/tests-start.sh "$@"
