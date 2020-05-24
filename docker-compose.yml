@@ -129,6 +129,7 @@ services:
     depends_on:
       - db
       - queue
+      - backend  # This ensures that backend build is finished before celeryworker
     env_file:
       - .env
     environment:
