@@ -2,9 +2,6 @@ name: Python application
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   test:
@@ -55,3 +52,8 @@ jobs:
     - name: Run tests
       run: |
         docker-compose -f docker-stack.yml exec -T backend bash /app/tests-start.sh "$@"
+
+    - name: Log docker status
+      if: ${{ always() }}
+      run: |
+        docker-compose logs -t
