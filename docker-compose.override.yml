@@ -35,7 +35,8 @@ services:
       - SERVER_HOST=http://${DOMAIN}
     build:
       context: ./backend
-      cache_from: docker.pkg.github.com/gaganpreet/nocookie-analytics/nca-backend:${GITHUB_SHA}
+      cache_from:
+        - docker.pkg.github.com/gaganpreet/nocookie-analytics/nca-backend:${GITHUB_SHA}
       args:
         INSTALL_DEV: ${INSTALL_DEV-true}
         INSTALL_JUPYTER: ${INSTALL_JUPYTER-true}
