@@ -116,6 +116,8 @@ services:
       context: ./backend
       args:
         INSTALL_DEV: ${INSTALL_DEV-false}
+      cache_from:
+        - nca-backend:latest
     deploy:
       labels:
         - traefik.frontend.rule=PathPrefix:/api,/docs,/redoc
