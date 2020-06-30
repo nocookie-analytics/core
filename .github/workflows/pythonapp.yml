@@ -27,6 +27,10 @@ jobs:
         context: backend
         image_name: nca-backend
 
+    - name: Retag images
+      run: |
+        docker tag docker.pkg.github.com/gaganpreet/nocookie-analytics/nca-backend nca-backend:latest
+
     - name: Setup env file
       run: |
         mv .env-ci .env
