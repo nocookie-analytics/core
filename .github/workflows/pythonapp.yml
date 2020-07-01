@@ -13,23 +13,14 @@ jobs:
       SMTP_HOST: ""
       TRAEFIK_PUBLIC_NETWORK_IS_EXTERNAL: false
       INSTALL_DEV: true
-
-
+      BUILDKIT_INLINE_CACHE: 1
+      COMPOSE_DOCKER_CLI_BUILD: 1
+      DOCKER_BUILDKIT: 1
+      DOCKER_IMAGE_BACKEND: docker.pkg.github.com/gaganpreet/nocookie-analytics/nca-backend
+      DOCKER_IMAGE_FRONTEND: docker.pkg.github.com/gaganpreet/nocookie-analytics/nca-frontend
 
     steps:
     - uses: actions/checkout@v2
-
-    - uses: whoan/docker-build-with-cache-action@v5
-      with:
-        username: ${{ github.repository_owner }}
-        password: "${{ secrets.GITHUB_TOKEN }}"
-        registry: docker.pkg.github.com
-        context: backend
-        image_name: nca-backend
-
-    - name: Retag images
-      run: |
-        docker tag docker.pkg.github.com/gaganpreet/nocookie-analytics/nca-backend nca-backend:latest
 
     - name: Setup env file
       run: |
@@ -48,6 +39,10 @@ jobs:
     - name: Build docker images
       run: |
         docker-compose -f docker-stack.yml build --parallel
+
+    - name: Start docker
+      run: |
+        docker-compose push
 
     - name: Start docker
       run: |
