@@ -114,10 +114,10 @@ services:
       - SMTP_HOST=${SMTP_HOST}
     build:
       context: ./backend
+      cache_from:
+        - '${DOCKER_IMAGE_BACKEND}:${TAG-latest}'
       args:
         INSTALL_DEV: ${INSTALL_DEV-false}
-      cache_from:
-        - nca-backend-stages:1
     deploy:
       labels:
         - traefik.frontend.rule=PathPrefix:/api,/docs,/redoc
@@ -143,6 +143,8 @@ services:
   frontend:
     image: '${DOCKER_IMAGE_FRONTEND}:${TAG-latest}'
     build:
+      cache_from:
+        - '${DOCKER_IMAGE_FRONTEND}:${TAG-latest}'
       context: ./frontend
       args:
         FRONTEND_ENV: ${FRONTEND_ENV-production}

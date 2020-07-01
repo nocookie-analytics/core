@@ -32,12 +32,9 @@ jobs:
         -f docker-compose.yml \
         config > docker-stack.yml
 
-    - name: Docker Login
-      uses: azure/docker-login@v1
-      with:
-        login-server: docker.pkg.github.com
-        username: $GITHUB_ACTOR
-        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Docker login
+      run: |
+        echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
 
     - name: DEBUG
       run: |
