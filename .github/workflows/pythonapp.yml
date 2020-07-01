@@ -32,6 +32,10 @@ jobs:
         -f docker-compose.yml \
         config > docker-stack.yml
 
+    - name: Login to docker
+      run: |
+        docker login -u ${{ github.repostitory }} -p ${{ secrets.GITHUB_TOKEN }}
+
     - name: DEBUG
       run: |
         docker image ls
