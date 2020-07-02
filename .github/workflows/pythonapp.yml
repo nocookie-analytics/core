@@ -36,6 +36,27 @@ jobs:
       run: |
         echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
 
+    - name: Build backend image
+      - uses: whoan/docker-build-with-cache-action@v5
+        with:
+          username: gaganpreet
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          image_name: $DOCKER_IMAGE_BACKEND
+          push_git_tag: true
+          registry: docker.pkg.github.com
+          context: backend
+
+    - name: Build front-end image
+      - uses: whoan/docker-build-with-cache-action@v5
+        with:
+          username: gaganpreet
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          image_name: $DOCKER_IMAGE_FRONTEND
+          push_image_and_stages: false
+          push_git_tag: true
+          registry: docker.pkg.github.com
+          context: frontend
+
     - name: DEBUG
       run: |
         docker image ls
