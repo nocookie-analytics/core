@@ -41,7 +41,7 @@ jobs:
       with:
         username: gaganpreet
         password: "${{ secrets.GITHUB_TOKEN }}"
-        image_name: $DOCKER_IMAGE_BACKEND
+        image_name: ${DOCKER_IMAGE_BACKEND}
         push_git_tag: true
         registry: docker.pkg.github.com
         context: backend
@@ -51,7 +51,7 @@ jobs:
       with:
         username: gaganpreet
         password: "${{ secrets.GITHUB_TOKEN }}"
-        image_name: $DOCKER_IMAGE_FRONTEND
+        image_name: ${DOCKER_IMAGE_FRONTEND}
         push_image_and_stages: false
         push_git_tag: true
         registry: docker.pkg.github.com
