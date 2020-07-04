@@ -18,6 +18,7 @@ jobs:
       DOCKER_BUILDKIT: 1
       DOCKER_IMAGE_BACKEND: eu.gcr.io/no-cookie-analytics/nca-backend
       DOCKER_IMAGE_FRONTEND: eu.gcr.io/no-cookie-analytics/nca-frontend
+      TAG: latest
 
     steps:
     - uses: actions/checkout@v2
@@ -53,6 +54,8 @@ jobs:
 
     - name: Push docker
       run: |
+        docker image ls
+        echo $DOCKER_IMAGE_BACKEND:$TAG $DOCKER_IMAGE_FRONTEND:$TAG
         docker push $DOCKER_IMAGE_BACKEND:$TAG
         docker push $DOCKER_IMAGE_FRONTEND:$TAG
 
