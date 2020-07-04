@@ -18,7 +18,6 @@ jobs:
       DOCKER_BUILDKIT: 1
       DOCKER_IMAGE_BACKEND: eu.gcr.io/no-cookie-analytics/nca-backend
       DOCKER_IMAGE_FRONTEND: eu.gcr.io/no-cookie-analytics/nca-frontend
-      TAG: latest
 
     steps:
     - uses: actions/checkout@v2
