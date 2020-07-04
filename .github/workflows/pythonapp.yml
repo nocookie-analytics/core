@@ -25,7 +25,7 @@ jobs:
     - name: Setup env file
       run: |
         mv .env-ci .env
-        echo "TAG=$GITHUB_REF" | sed 's|/|-|g' >> .env
+        echo "TAG=$GITHUB_SHA" | sed 's|/|-|g' >> .env
 
     - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       with:
@@ -55,8 +55,11 @@ jobs:
     - name: Push docker
       run: |
         docker image ls
-        docker push $DOCKER_IMAGE_BACKEND:$(echo "$GITHUB_REF" | sed 's|/|-|g')
-        docker push $DOCKER_IMAGE_FRONTEND:$(echo "$GITHUB_REF" | sed 's|/|-|g')
+        export BRANCH_TAG=$(echo "$GITHUB_REF" | sed 's|/|-|g')
+        docker tag $DOCKER_IMAGE_BACKEND:$TAG $DOCKER_IMAGE_BACKEND:$BRANCH_TAG
+        docker tag $DOCKER_IMAGE_FRONTEND:$TAG $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG
+        docker push $DOCKER_IMAGE_BACKEND:$BRANCH_TAG
+        docker push $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG
 
     - name: Start docker
       run: |
