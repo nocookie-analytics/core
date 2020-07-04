@@ -26,8 +26,7 @@ jobs:
     - name: Setup env file
       run: |
         mv .env-ci .env
-        echo "TAG=$GITHUB_REF" | sed 's|/|-|g' > .env
-        cat .env
+        echo "TAG=$GITHUB_REF" | sed 's|/|-|g' >> .env
 
     - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       with:
