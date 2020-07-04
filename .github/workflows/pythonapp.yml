@@ -41,6 +41,10 @@ jobs:
         -f docker-compose.yml \
         config > docker-stack.yml
 
+    - name: cat docker stack
+      run: |
+        cat docker-stack.yml
+
     - name: Docker login
       run: |
         gcloud auth configure-docker
