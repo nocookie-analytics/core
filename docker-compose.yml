@@ -146,6 +146,7 @@ services:
     build:
       cache_from:
         - '${DOCKER_IMAGE_FRONTEND}:${TAG-latest}'
+        - '${DOCKER_IMAGE_FRONTEND}:master'
       context: ./frontend
       args:
         FRONTEND_ENV: ${FRONTEND_ENV-production}
