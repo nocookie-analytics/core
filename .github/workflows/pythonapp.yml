@@ -57,8 +57,8 @@ jobs:
         docker image ls
         export BRANCH_TAG=$(echo "$GITHUB_REF" | sed 's|/|-|g')
         echo $BRANCH_TAG
-        docker tag $DOCKER_IMAGE_BACKEND:$TAG $DOCKER_IMAGE_BACKEND:$BRANCH_TAG
-        docker tag $DOCKER_IMAGE_FRONTEND:$TAG $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG
+        docker tag $DOCKER_IMAGE_BACKEND:$GITHUB_SHA $DOCKER_IMAGE_BACKEND:$BRANCH_TAG
+        docker tag $DOCKER_IMAGE_FRONTEND:$GITHUB_SHA $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG
         docker image ls
         docker push $DOCKER_IMAGE_BACKEND:$BRANCH_TAG
         docker push $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG
