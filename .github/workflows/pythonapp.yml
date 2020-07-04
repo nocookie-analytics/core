@@ -59,10 +59,8 @@ jobs:
     - name: Push docker
       run: |
         docker image ls
-        echo docker push $DOCKER_IMAGE_BACKEND:$(echo "TAG=$GITHUB_REF" | sed 's|/|-|g')
-        echo docker push $DOCKER_IMAGE_FRONTEND:$(echo "TAG=$GITHUB_REF" | sed 's|/|-|g')
-        docker push $DOCKER_IMAGE_BACKEND:$(echo "TAG=$GITHUB_REF" | sed 's|/|-|g')
-        docker push $DOCKER_IMAGE_FRONTEND:$(echo "TAG=$GITHUB_REF" | sed 's|/|-|g')
+        docker push $DOCKER_IMAGE_BACKEND:$(echo "$GITHUB_REF" | sed 's|/|-|g')
+        docker push $DOCKER_IMAGE_FRONTEND:$(echo "$GITHUB_REF" | sed 's|/|-|g')
 
     - name: Start docker
       run: |
