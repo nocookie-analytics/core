@@ -117,6 +117,7 @@ services:
       cache_from:
         - '${DOCKER_IMAGE_BACKEND}:${TAG-latest}'
       args:
+        BUILDKIT_INLINE_CACHE: 1
         INSTALL_DEV: ${INSTALL_DEV-false}
     deploy:
       labels:
@@ -148,6 +149,7 @@ services:
       context: ./frontend
       args:
         FRONTEND_ENV: ${FRONTEND_ENV-production}
+        BUILDKIT_INLINE_CACHE: 1
     deploy:
       labels:
         - traefik.frontend.rule=PathPrefix:/
@@ -160,5 +162,5 @@ volumes:
 
 networks:
   traefik-public:
-    # Allow setting it to false for testing
+    # Alleurope-west4ow setting it to false for testing
     external: ${TRAEFIK_PUBLIC_NETWORK_IS_EXTERNAL-true}
