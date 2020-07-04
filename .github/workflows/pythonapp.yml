@@ -49,7 +49,7 @@ jobs:
 
     - name: Build docker images
       run: |
-        docker-compose -f docker-stack.yml build --parallel
+        docker-compose -f docker-stack.yml build --parallel --progress=plain
 
     - name: Start docker
       run: |
