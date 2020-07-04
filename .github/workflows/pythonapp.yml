@@ -51,9 +51,10 @@ jobs:
       run: |
         docker-compose -f docker-stack.yml build --parallel --progress=plain
 
-    - name: Start docker
+    - name: Push docker
       run: |
-        docker-compose push
+        docker push $DOCKER_IMAGE_BACKEND:$TAG
+        docker push $DOCKER_IMAGE_FRONTEND:$TAG
 
     - name: Start docker
       run: |
