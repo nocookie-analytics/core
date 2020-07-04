@@ -41,7 +41,7 @@ jobs:
 
     - name: Docker login
       run: |
-        echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+        gcloud auth configure-docker
 
     - name: DEBUG
       run: |
