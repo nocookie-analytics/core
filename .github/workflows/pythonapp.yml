@@ -48,6 +48,10 @@ jobs:
       run: |
         docker-compose -f docker-stack.yml build --parallel --progress=plain
 
+    - name: docker image list
+      run: |
+        docker image ls
+
     - name: Push docker
       run: |
         docker image ls
