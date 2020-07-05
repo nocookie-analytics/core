@@ -115,7 +115,6 @@ services:
     build:
       context: ./backend
       cache_from:
-        - '${DOCKER_IMAGE_BACKEND}:${TAG-latest}'
         - '${DOCKER_IMAGE_BACKEND}:${BRANCH_TAG-latest}'
         - '${DOCKER_IMAGE_BACKEND}:master'
       args:
@@ -147,7 +146,6 @@ services:
     image: '${DOCKER_IMAGE_FRONTEND}:${TAG-latest}'
     build:
       cache_from:
-        - '${DOCKER_IMAGE_FRONTEND}:${TAG-latest}'
         - '${DOCKER_IMAGE_FRONTEND}:${BRANCH_TAG-latest}'
         - '${DOCKER_IMAGE_FRONTEND}:master'
       context: ./frontend
