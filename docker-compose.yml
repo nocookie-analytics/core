@@ -164,5 +164,5 @@ volumes:
 
 networks:
   traefik-public:
-    # Alleurope-west4ow setting it to false for testing
+    # Allow setting it to false for testing
     external: ${TRAEFIK_PUBLIC_NETWORK_IS_EXTERNAL-true}
