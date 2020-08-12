@@ -6,7 +6,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     container: tiangolo/docker-with-compose
 
     env:
@@ -14,7 +13,11 @@ jobs:
       SMTP_HOST: ""
       TRAEFIK_PUBLIC_NETWORK_IS_EXTERNAL: false
       INSTALL_DEV: true
-
+      COMPOSE_DOCKER_CLI_BUILD: 1
+      #DOCKER_BUILDKIT: 1
+      #BUILDKIT_INLINE_CACHE: 1
+      DOCKER_IMAGE_BACKEND: eu.gcr.io/no-cookie-analytics/nca-backend
+      DOCKER_IMAGE_FRONTEND: eu.gcr.io/no-cookie-analytics/nca-frontend
 
     steps:
     - uses: actions/checkout@v2
@@ -22,6 +25,15 @@ jobs:
     - name: Setup env file
       run: |
         mv .env-ci .env
+        echo "TAG=$GITHUB_SHA" | sed 's|/|-|g' >> .env
+        echo "BRANCH_TAG=$(echo $GITHUB_REF | sed 's|/|-|g')" >> .env
+
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        version: '290.0.1'
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
 
     - name: Create docker stack
       run: |
@@ -29,9 +41,36 @@ jobs:
         -f docker-compose.yml \
         config > docker-stack.yml
 
+    - name: Docker login
+      run: |
+        gcloud auth configure-docker
+
+    - name: Pull docker cache
+      run: |
+        export BRANCH_TAG=$(echo "$GITHUB_REF" | sed 's|/|-|g')
+        docker pull $DOCKER_IMAGE_BACKEND:$BRANCH_TAG&
+        docker pull $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG&
+        docker pull $DOCKER_IMAGE_BACKEND:master&
+        docker pull $DOCKER_IMAGE_FRONTEND:master&
+        wait
+
     - name: Build docker images
       run: |
-        docker-compose -f docker-stack.yml build --parallel
+        export BRANCH_TAG=$(echo "$GITHUB_REF" | sed 's|/|-|g')
+        docker build backend/ --progress=plain -t $DOCKER_IMAGE_BACKEND:$GITHUB_SHA --cache-from $DOCKER_IMAGE_BACKEND:$BRANCH_TAG --cache-from $DOCKER_IMAGE_BACKEND:master --build-arg INSTALL_DEV=true &
+        # TODO: front-end isn't cached because of multiple build stages
+        docker build frontend/ --progress=plain -t $DOCKER_IMAGE_FRONTEND:$GITHUB_SHA --cache-from $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG --cache-from $DOCKER_IMAGE_FRONTEND:master --build-arg INSTALL_DEV=true &
+        wait
+
+    - name: Push docker
+      run: |
+        docker image ls
+        export BRANCH_TAG=$(echo "$GITHUB_REF" | sed 's|/|-|g')
+        docker tag $DOCKER_IMAGE_BACKEND:$GITHUB_SHA $DOCKER_IMAGE_BACKEND:$BRANCH_TAG
+        docker tag $DOCKER_IMAGE_FRONTEND:$GITHUB_SHA $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG
+        docker push $DOCKER_IMAGE_BACKEND:$BRANCH_TAG&
+        docker push $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG&
+        wait
 
     - name: Start docker
       run: |
