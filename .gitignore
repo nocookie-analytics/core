@@ -119,3 +119,4 @@ yarn-error.log
 .env
 docker-stack.yml
 .vim
+pyrightconfig.json

@@ -10,90 +10,90 @@ router = APIRouter()
 
 
 @router.get("/", response_model=List[schemas.Domain])
-def read_items(
+def read_domains(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Retrieve items.
+    Retrieve domains.
     """
     if crud.user.is_superuser(current_user):
-        items = crud.domain.get_multi(db, skip=skip, limit=limit)
+        domains = crud.domain.get_multi(db, skip=skip, limit=limit)
     else:
-        items = crud.domain.get_multi_by_owner(
+        domains = crud.domain.get_multi_by_owner(
             db=db, owner_id=current_user.id, skip=skip, limit=limit
         )
-    return items
+    return domains
 
 
 @router.post("/", response_model=schemas.Domain)
-def create_item(
+def create_domain(
     *,
     db: Session = Depends(deps.get_db),
-    item_in: schemas.DomainCreate,
+    domain_in: schemas.DomainCreate,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Create new item.
+    Create new domain.
     """
-    item = crud.domain.create_with_owner(db=db, obj_in=item_in, owner_id=current_user.id)
-    return item
+    domain = crud.domain.create_with_owner(db=db, obj_in=domain_in, owner_id=current_user.id)
+    return domain
 
 
 @router.put("/{id}", response_model=schemas.Domain)
-def update_item(
+def update_domain(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    item_in: schemas.DomainUpdate,
+    domain_in: schemas.DomainUpdate,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Update an item.
+    Update an domain.
     """
-    item = crud.domain.get(db=db, id=id)
-    if not item:
-        raise HTTPException(status_code=404, detail="Item not found")
-    if not crud.user.is_superuser(current_user) and (item.owner_id != current_user.id):
+    domain = crud.domain.get(db=db, id=id)
+    if not domain:
+        raise HTTPException(status_code=404, detail="Domain not found")
+    if not crud.user.is_superuser(current_user) and (domain.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
-    item = crud.domain.update(db=db, db_obj=item, obj_in=item_in)
-    return item
+    domain = crud.domain.update(db=db, db_obj=domain, obj_in=domain_in)
+    return domain
 
 
 @router.get("/{id}", response_model=schemas.Domain)
-def read_item(
+def read_domain(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Get item by ID.
+    Get domain by ID.
     """
-    item = crud.domain.get(db=db, id=id)
-    if not item:
-        raise HTTPException(status_code=404, detail="Item not found")
-    if not crud.user.is_superuser(current_user) and (item.owner_id != current_user.id):
+    domain = crud.domain.get(db=db, id=id)
+    if not domain:
+        raise HTTPException(status_code=404, detail="Domain not found")
+    if not crud.user.is_superuser(current_user) and (domain.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
-    return item
+    return domain
 
 
 @router.delete("/{id}", response_model=schemas.Domain)
-def delete_item(
+def delete_domain(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Delete an item.
+    Delete an domain.
     """
-    item = crud.domain.get(db=db, id=id)
-    if not item:
-        raise HTTPException(status_code=404, detail="Item not found")
-    if not crud.user.is_superuser(current_user) and (item.owner_id != current_user.id):
+    domain = crud.domain.get(db=db, id=id)
+    if not domain:
+        raise HTTPException(status_code=404, detail="Domain not found")
+    if not crud.user.is_superuser(current_user) and (domain.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
-    item = crud.domain.remove(db=db, id=id)
-    return item
+    domain = crud.domain.remove(db=db, id=id)
+    return domain

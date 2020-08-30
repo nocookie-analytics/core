@@ -17,4 +17,3 @@ class User(Base):
     is_active = Column(Boolean(), default=True)
     is_superuser = Column(Boolean(), default=False)
     domains = relationship("Domain", back_populates="owner")
-    domains = relationship("Domain", back_populates="owner")
