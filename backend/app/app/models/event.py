@@ -1,8 +1,9 @@
 from enum import Enum
-from sqlalchemy import Column, ForeignKey, Integer, String, TIMESTAMP
+
+from sqlalchemy import TIMESTAMP, Column, ForeignKey, Integer, String
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 from sqlalchemy_enum34 import EnumType
-from sqlalchemy.dialects.postgresql import JSONB, ENUM
 
 from app.db.base_class import Base
 
