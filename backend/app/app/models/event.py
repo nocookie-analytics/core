@@ -13,15 +13,18 @@ class EventType(Enum):
     custom = 'custom'
 
 
-EventTypeEnum = EnumType(EventType)
+EventTypeEnum = EnumType(EventType, name='eventtype')
 
 
 class Event(Base):
     id = Column(Integer, primary_key=True, index=True)
     timestamp = Column(TIMESTAMP, primary_key=True)
 
-    visitor_id = Column(Integer, ForeignKey("visitor.id"))
-    visitor = relationship("Visitor", back_populates="events")
+    domain_id = Column(Integer, ForeignKey("domain.id", name='fk_event_domain_id'))
+    domain = relationship("Domain")
+
+    uid = Column(String)
+    raw_data = Column(JSONB)
 
     event_type = Column(EventTypeEnum, nullable=False)
 
