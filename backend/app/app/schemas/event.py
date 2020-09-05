@@ -6,12 +6,11 @@ from pydantic import BaseModel
 
 # Shared properties
 class EventBase(BaseModel):
-    domain_id: Optional[int] = None
+    pass
 
 
 # Properties to receive on item creation
 class EventCreate(EventBase):
-    domain_id: int
     uid: str
     event_type: EventType
     ua_string: str
@@ -23,6 +22,9 @@ class EventCreate(EventBase):
     page_size_bytes: int
     referrer: str
     user_timezone: str
+
+class EventUpdate(EventBase):
+    pass
 
 
 # Properties shared by models stored in DB
