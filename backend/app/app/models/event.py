@@ -16,6 +16,9 @@ class EventType(Enum):
     custom = "custom"
 
 
+EventTypeEnum = EnumType(EventType, name="event_type")
+
+
 class Event(Base):
     timestamp = Column(TIMESTAMP, default=func.now())
     id = Column(Integer, autoincrement=True)
@@ -26,7 +29,7 @@ class Event(Base):
     uid = Column(String)
     raw_data = Column(JSONB)
 
-    event_type = Column(EnumType(EventType, name="event_type"), nullable=False)
+    event_type = Column(EventTypeEnum, nullable=False)
 
     ua_string = Column(String)
     path = Column(String)
