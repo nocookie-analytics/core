@@ -1,3 +1,4 @@
+from enum import Enum
 import logging
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -5,6 +6,7 @@ from typing import Any, Dict, Optional
 
 import emails
 from emails.template import JinjaTemplate
+from fastapi.encoders import jsonable_encoder
 from jose import jwt
 
 from app.core.config import settings
@@ -104,3 +106,7 @@ def verify_password_reset_token(token: str) -> Optional[str]:
         return decoded_token["email"]
     except jwt.JWTError:
         return None
+
+
+def sqlalchemy_encoder(obj):
+    return jsonable_encoder(obj, custom_encoder={Enum: lambda e: e})

@@ -1,3 +1,4 @@
+import os
 import secrets
 from typing import Any, Dict, List, Optional, Union
 
@@ -86,4 +87,10 @@ class Settings(BaseSettings):
         case_sensitive = True
 
 
-settings = Settings()
+override_settings = {}
+if "POSTGRES_DB" in os.environ:
+    # Pydantic settings order is env followed by .env file
+    # In this case we override it so we can use a different db name in tests
+    override_settings = {"POSTGRES_DB": os.environ["POSTGRES_DB"]}
+
+settings = Settings(**override_settings)

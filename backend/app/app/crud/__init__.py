@@ -1,5 +1,6 @@
 from .crud_domain import domain
 from .crud_user import user
+from .crud_event import event
 
 # For a new basic set of CRUD operations you could just do
 
