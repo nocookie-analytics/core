@@ -22,9 +22,6 @@ def test_create_event(db: Session) -> None:
         user_timezone="Europe/Amsterdam",
         ua_string="firefox",
     )
-    print(EventType.page_view)
-    print(event_in.event_type)
-
     event = crud.event.create_with_domain(db=db, obj_in=event_in, domain_id=domain.id)
     assert event.domain_id == domain.id
-    assert event.ua_string == obj_in.ua_string
+    assert event.ua_string == event_in.ua_string
