@@ -21,7 +21,9 @@ EventTypeEnum = EnumType(EventType, name="event_type")
 
 
 class Event(Base):
-    timestamp = Column(DateTime(timezone=True), server_default=func.now())
+    timestamp = Column(
+        DateTime(timezone=True), server_default=func.now(), default=func.now()
+    )
     id = Column(Integer, autoincrement=True)
 
     domain_id = Column(Integer, ForeignKey("domain.id", name="fk_event_domain_id"))
