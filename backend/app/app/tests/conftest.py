@@ -37,6 +37,11 @@ def db(request) -> Generator:
     yield session
 
 
+@pytest.fixture(scope="function", autouse=True)
+def auto_rollback(db):
+    db.rollback()
+
+
 @pytest.fixture(scope="module")
 def client() -> Generator:
     with TestClient(app) as c:
