@@ -18,6 +18,7 @@ jobs:
       #BUILDKIT_INLINE_CACHE: 1
       DOCKER_IMAGE_BACKEND: eu.gcr.io/no-cookie-analytics/nca-backend
       DOCKER_IMAGE_FRONTEND: eu.gcr.io/no-cookie-analytics/nca-frontend
+      DOCKER_IMAGE_FRONTEND_BUILD_STAGE: eu.gcr.io/no-cookie-analytics/nca-frontend-build-stage
 
     steps:
     - uses: actions/checkout@v2
@@ -52,14 +53,16 @@ jobs:
         docker pull $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG&
         docker pull $DOCKER_IMAGE_BACKEND:master&
         docker pull $DOCKER_IMAGE_FRONTEND:master&
+        docker pull $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$BRANCH_TAG&
+        docker pull $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:master&
         wait
 
     - name: Build docker images
       run: |
         export BRANCH_TAG=$(echo "$GITHUB_REF" | sed 's|/|-|g')
         docker build backend/ --progress=plain -t $DOCKER_IMAGE_BACKEND:$GITHUB_SHA --cache-from $DOCKER_IMAGE_BACKEND:$BRANCH_TAG --cache-from $DOCKER_IMAGE_BACKEND:master --build-arg INSTALL_DEV=true &
-        # TODO: front-end isn't cached because of multiple build stages
-        docker build frontend/ --progress=plain -t $DOCKER_IMAGE_FRONTEND:$GITHUB_SHA --cache-from $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG --cache-from $DOCKER_IMAGE_FRONTEND:master --build-arg INSTALL_DEV=true &
+        docker build frontend/ --progress=plain --target build-stage -t $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$GITHUB_SHA --cache-from $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$BRANCH_TAG --cache-from $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:master --build-arg INSTALL_DEV=true
+        docker build frontend/ --progress=plain -t $DOCKER_IMAGE_FRONTEND:$GITHUB_SHA --cache-from $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$GITHUB_SHA --cache-from $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG --cache-from $DOCKER_IMAGE_FRONTEND:master --build-arg INSTALL_DEV=true &
         wait
 
     - name: Push docker
@@ -68,8 +71,10 @@ jobs:
         export BRANCH_TAG=$(echo "$GITHUB_REF" | sed 's|/|-|g')
         docker tag $DOCKER_IMAGE_BACKEND:$GITHUB_SHA $DOCKER_IMAGE_BACKEND:$BRANCH_TAG
         docker tag $DOCKER_IMAGE_FRONTEND:$GITHUB_SHA $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG
+        docker tag $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$GITHUB_SHA $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$BRANCH_TAG
         docker push $DOCKER_IMAGE_BACKEND:$BRANCH_TAG&
         docker push $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG&
+        docker push $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$BRANCH_TAG&
         wait
 
     - name: Start docker
