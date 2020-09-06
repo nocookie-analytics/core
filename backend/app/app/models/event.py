@@ -1,11 +1,12 @@
 from enum import Enum
 
-from sqlalchemy import TIMESTAMP, Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy.sql.functions import func
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql.functions import func
-from sqlalchemy.sql.schema import Index
+from sqlalchemy.sql.schema import Index, PrimaryKeyConstraint
 from sqlalchemy.sql.schema import PrimaryKeyConstraint
+from sqlalchemy.sql.sqltypes import DateTime
 from sqlalchemy_enum34 import EnumType
 
 from app.db.base_class import Base
@@ -20,7 +21,7 @@ EventTypeEnum = EnumType(EventType, name="event_type")
 
 
 class Event(Base):
-    timestamp = Column(TIMESTAMP, default=func.now())
+    timestamp = Column(DateTime(timezone=True), server_default=func.now())
     id = Column(Integer, autoincrement=True)
 
     domain_id = Column(Integer, ForeignKey("domain.id", name="fk_event_domain_id"))
