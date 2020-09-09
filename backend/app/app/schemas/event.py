@@ -9,6 +9,11 @@ class EventBase(BaseModel):
     pass
 
 
+class EventCreated(BaseModel):
+    success: bool = True
+    error: Optional[str] = None
+
+
 # Properties to receive on item creation
 class EventCreate(EventBase):
     uid: str
@@ -22,6 +27,7 @@ class EventCreate(EventBase):
     page_size_bytes: int
     referrer: str
     user_timezone: str
+
 
 class EventUpdate(EventBase):
     pass
