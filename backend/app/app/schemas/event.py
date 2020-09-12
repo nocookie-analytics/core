@@ -29,8 +29,8 @@ class EventCreate(EventBase):
     status_code: int
     load_time_ms: int
     page_size_bytes: int
-    referrer: str
-    user_timezone: str
+    referrer: Optional[str]
+    user_timezone: Optional[str]
 
     @classmethod
     def depends(
@@ -43,8 +43,8 @@ class EventCreate(EventBase):
         sc: int,
         ltms: int,
         psb: str,
-        ref: str,
-        ut: str,
+        ref: Optional[str] = None,
+        ut: Optional[str] = None,
     ) -> EventCreate:
         try:
             event_type = EventType(et)
