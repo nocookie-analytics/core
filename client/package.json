@@ -5,7 +5,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "core-js": "^3.4.3",
-    "fingerprintjs2": "^2.1.0"
+    "fingerprintjs2": "^2.1.0",
+    "perfume.js": "^5.3.0"
   },
   "devDependencies": {
     "@types/fingerprintjs2": "^2.0.0",
@@ -28,7 +29,7 @@
     "not ie <= 10"
   ],
   "scripts": {
-      "dev": "parcel index.html"
+    "dev": "parcel index.html"
   },
   "jest": {
     "moduleFileExtensions": [
