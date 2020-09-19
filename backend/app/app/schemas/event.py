@@ -23,10 +23,15 @@ class EventCreate(EventBase):
     url_params: Dict
     page_title: str
     status_code: int
-    load_time_ms: int
     page_size_bytes: int
     referrer: str
     user_timezone: str
+
+    dnslookup_time: int
+    download_time: int
+    fetch_time: int
+    time_to_first_byte: int
+    total_time: int
 
 
 class EventUpdate(EventBase):

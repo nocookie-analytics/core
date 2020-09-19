@@ -38,10 +38,16 @@ class Event(Base):
 
     page_title = Column(String)
     status_code = Column(Integer)
-    load_time_ms = Column(Integer)
     page_size_bytes = Column(Integer)
     referrer = Column(String)
     user_timezone = Column(String)
+
+    # All time values in microseconds
+    dnslookup_time = Column(Integer)
+    download_time = Column(Integer)
+    fetch_time = Column(Integer)
+    time_to_first_byte = Column(Integer)
+    total_time = Column(Integer)
 
     ix_domain_timestamp = Index("ix_domain_timestamp", domain_id, timestamp)
 
