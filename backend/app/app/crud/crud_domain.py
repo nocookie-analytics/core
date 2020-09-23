@@ -30,5 +30,8 @@ class CRUDDomain(CRUDBase[Domain, DomainCreate, DomainUpdate]):
             .all()
         )
 
+    def get_by_name(self, db: Session, name: str):
+        return db.query(self.model).filter(Domain.domain_name == name).scalar()
+
 
 domain = CRUDDomain(Domain)

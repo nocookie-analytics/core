@@ -59,3 +59,10 @@ def get_current_active_superuser(
             status_code=400, detail="The user doesn't have enough privileges"
         )
     return current_user
+
+
+def get_request_domain(domain_name: str, db: Session = Depends(get_db)):
+    domain = crud.domain.get_by_name(db, domain_name)
+    if not domain:
+        raise HTTPException(status_code=404, detail="Domain not found")
+    return domain
