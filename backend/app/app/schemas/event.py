@@ -31,6 +31,12 @@ class EventCreate(EventBase):
     status_code: Optional[int]  # Not possible in current API
     user_timezone: Optional[str]
 
+    dnslookup_time: Optional[int]
+    download_time: Optional[int]
+    fetch_time: Optional[int]
+    time_to_first_byte: Optional[int]
+    total_time: Optional[int]
+
     @classmethod
     def depends(
         cls: EventCreate,
@@ -42,6 +48,11 @@ class EventCreate(EventBase):
         sc: int,
         ltms: int,
         psb: str,
+        dnslt: Optional[int] = None,
+        dt: Optional[int] = None,
+        ft: Optional[int] = None,
+        ttfb: Optional[int] = None,
+        tt: Optional[int] = None,
         ref: Optional[str] = None,
         ut: Optional[str] = None,
     ) -> EventCreate:
@@ -71,16 +82,15 @@ class EventCreate(EventBase):
                 user_timezone=ut,
                 path=path,
                 url_params=url_params,
+                dnslookup_time=dnslt,
+                download_time=dt,
+                fetch_time=ft,
+                time_to_first_byte=ttfb,
+                total_time=tt,
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception
             raise HTTPException(status_code=400, detail=e.errors())
-
-    dnslookup_time: int
-    download_time: int
-    fetch_time: int
-    time_to_first_byte: int
-    total_time: int
 
 
 class EventUpdate(EventBase):
