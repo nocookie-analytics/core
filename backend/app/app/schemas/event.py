@@ -26,9 +26,9 @@ class EventCreate(EventBase):
     path: str
     url_params: Dict
     page_title: str
-    status_code: int
     page_size_bytes: int
     referrer: Optional[str]
+    status_code: Optional[int]  # Not possible in current API
     user_timezone: Optional[str]
 
     @classmethod
