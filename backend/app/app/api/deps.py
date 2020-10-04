@@ -2,6 +2,7 @@ from typing import Generator
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
+from furl import furl
 from jose import jwt
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
@@ -61,8 +62,20 @@ def get_current_active_superuser(
     return current_user
 
 
-def get_request_domain(domain_name: str, db: Session = Depends(get_db)):
-    domain = crud.domain.get_by_name(db, domain_name)
+def get_request_domain(url: str, db: Session = Depends(get_db)):
+    furled_url = furl(url=url)
+    domain = furled_url.host
+
     if not domain:
+        raise HTTPException(
+            status_code=404, detail="The user doesn't have enough privileges"
+        )
+
+    if furled_url.port not in [80, 443]:
+        domain = f"{domain}:{furled_url.port}"
+
+    domain_obj = crud.domain.get_by_name(db, domain)
+
+    if not domain_obj:
         raise HTTPException(status_code=404, detail="Domain not found")
-    return domain
+    return domain_obj
