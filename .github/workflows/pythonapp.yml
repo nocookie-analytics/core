@@ -46,13 +46,10 @@ jobs:
       run: |
         gcloud auth configure-docker
 
-    - name: Eagerly start docker services in background
-      run: |
-        docker-compose up -d db flower pgadmin queue proxy &
-
     - name: Pull docker cache
       run: |
         export BRANCH_TAG=$(echo "$GITHUB_REF" | sed 's|/|-|g')
+        docker-compose up -d db flower pgadmin queue proxy &
         docker pull $DOCKER_IMAGE_BACKEND:$BRANCH_TAG&
         docker pull $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG&
         docker pull $DOCKER_IMAGE_BACKEND:master&
