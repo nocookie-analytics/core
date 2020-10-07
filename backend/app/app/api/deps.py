@@ -67,9 +67,7 @@ def get_request_domain(url: str, db: Session = Depends(get_db)):
     domain = furled_url.host
 
     if not domain:
-        raise HTTPException(
-            status_code=404, detail="The user doesn't have enough privileges"
-        )
+        raise HTTPException(status_code=404, detail="Domain not found")
 
     if furled_url.port not in [80, 443]:
         domain = f"{domain}:{furled_url.port}"
