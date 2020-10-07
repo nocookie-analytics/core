@@ -13,9 +13,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         """
         Create an event
         """
-        obj_in_data = sqlalchemy_encoder(obj_in)
+        obj_in_data = obj_in.dict()
         db_obj = self.model(**obj_in_data, domain_id=domain_id)
-        db_obj.event_type = EventType.page_view
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
