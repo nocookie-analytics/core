@@ -10,7 +10,6 @@ from app.tests.utils.domain import create_random_domain
 def test_create_event(db: Session) -> None:
     domain = create_random_domain(db)
     event_in = EventCreate(
-        uid="abc",
         event_type=EventType.page_view,
         path="/abc",
         url_params={},
