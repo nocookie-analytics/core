@@ -1,4 +1,3 @@
-import Fingerprint2, { Component } from "fingerprintjs2";
 import objectHash from "object-hash";
 import Perfume from "perfume.js";
 import { IPerfumeNavigationTiming } from "perfume.js/dist/types/types";
@@ -6,10 +5,6 @@ import "whatwg-fetch";
 
 const domain = "http://localhost";
 const eventUrl = `${domain}/api/v1/e/`;
-
-const getComponents = () => {
-  Fingerprint2.getPromise().then(handleComponents);
-};
 
 const perfume = new Perfume({
   resourceTiming: true,
@@ -29,7 +24,6 @@ const perfume = new Perfume({
       } = data;
 
       const urlParams = new URLSearchParams({
-        uid: "aaaa",
         url: document.URL,
         et: "page_view",
         uas: navigator.userAgent,
@@ -52,14 +46,3 @@ const perfume = new Perfume({
     }
   },
 });
-
-const handleComponents = (components: Component[]) => {
-  const userIdentifier: string = objectHash(components);
-  console.log(userIdentifier);
-};
-
-if (window.requestIdleCallback) {
-  window.requestIdleCallback(getComponents);
-} else {
-  setTimeout(getComponents, 500);
-}

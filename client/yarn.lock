@@ -754,10 +754,6 @@
     "@parcel/utils" "^1.11.0"
     physical-cpu-count "^2.0.0"
 
-"@types/fingerprintjs2@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@types/fingerprintjs2/-/fingerprintjs2-2.0.0.tgz#3af76e165416fa75261bbce4393f5445fca4cadd"
-
 "@types/object-hash@^1.3.1":
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/@types/object-hash/-/object-hash-1.3.1.tgz#b8145122b230bad5a13cba52016e78c54dae6ed5"
@@ -2003,10 +1999,6 @@ find-up@^3.0.0:
   resolved "https://registry.yarnpkg.com/find-up/-/find-up-3.0.0.tgz#49169f1d7993430646da61ecc5ae355c21c97b73"
   dependencies:
     locate-path "^3.0.0"
-
-fingerprintjs2@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/fingerprintjs2/-/fingerprintjs2-2.1.0.tgz#21dc3fee27d3b199056ef8eb873debccd8e06323"
 
 flow-bin@^0.123.0:
   version "0.123.0"
