@@ -9,12 +9,12 @@ from app.tests.utils.utils import random_lower_string
 
 def test_create_event(client: TestClient, db: Session) -> None:
     domain = create_random_domain(db)
+    url = f"https://{domain.domain_name}/path?query=123"
     data = {
-        "domain_name": domain.domain_name,
         "uid": random_lower_string(),
         "et": EventType.page_view.value,
         "uas": "Firefox",
-        "url": "https://gaganpreet.in/",
+        "url": url,
         "pt": "Hello World Page Title",
         "sc": 200,
         "ltms": 10,
