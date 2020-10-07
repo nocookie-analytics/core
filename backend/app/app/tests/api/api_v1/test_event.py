@@ -23,7 +23,6 @@ def test_create_event(client: TestClient, db: Session) -> None:
         "ut": "Europe/Amsterdam",
     }
     response = client.get(f"{settings.API_V1_STR}/e/", params=data)
-    print(response.text)
     assert response.status_code == 200
     content = response.json()
     assert content["success"] == True
