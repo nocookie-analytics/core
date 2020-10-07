@@ -20,7 +20,6 @@ class EventCreated(BaseModel):
 
 # Properties to receive on item creation
 class EventCreate(EventBase):
-    uid: str
     event_type: EventType
     ua_string: str
     path: str
@@ -40,7 +39,6 @@ class EventCreate(EventBase):
     @classmethod
     def depends(
         cls: EventCreate,
-        uid: str,
         et: str,
         uas: str,
         url: str,
@@ -71,7 +69,6 @@ class EventCreate(EventBase):
 
         try:
             return cls(
-                uid=uid,
                 event_type=event_type,
                 ua_string=uas,
                 page_title=pt,

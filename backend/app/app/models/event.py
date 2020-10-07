@@ -2,7 +2,7 @@ from enum import Enum
 
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.sql.functions import func
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, INET
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import Index, PrimaryKeyConstraint
 from sqlalchemy.sql.schema import PrimaryKeyConstraint
@@ -27,7 +27,6 @@ class Event(Base):
     domain_id = Column(Integer, ForeignKey("domain.id", name="fk_event_domain_id"))
     domain = relationship("Domain")
 
-    uid = Column(String)
     raw_data = Column(JSONB)
 
     event_type = Column(EventTypeEnum, nullable=False)
