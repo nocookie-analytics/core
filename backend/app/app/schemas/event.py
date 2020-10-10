@@ -27,10 +27,8 @@ class EventCreate(EventBase):
     page_title: str
     page_size_bytes: int
     referrer: Optional[str]
-    status_code: Optional[int]  # Not possible in current API
     user_timezone: Optional[str]
 
-    dnslookup_time: Optional[int]
     download_time: Optional[int]
     fetch_time: Optional[int]
     time_to_first_byte: Optional[int]
@@ -46,7 +44,6 @@ class EventCreate(EventBase):
         psb: str,
         ltms: Optional[int] = None,
         sc: Optional[int] = None,
-        dnslt: Optional[int] = None,
         dt: Optional[int] = None,
         ft: Optional[int] = None,
         ttfb: Optional[int] = None,
@@ -72,14 +69,12 @@ class EventCreate(EventBase):
                 event_type=event_type,
                 ua_string=uas,
                 page_title=pt,
-                status_code=sc,
                 load_time_ms=ltms,
                 page_size_bytes=psb,
                 referrer=ref,
                 user_timezone=ut,
                 path=path,
                 url_params=url_params,
-                dnslookup_time=dnslt,
                 download_time=dt,
                 fetch_time=ft,
                 time_to_first_byte=ttfb,
