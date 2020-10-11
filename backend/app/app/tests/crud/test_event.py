@@ -25,6 +25,8 @@ def test_create_event(db: Session) -> None:
         time_to_first_byte=5000,
         total_time=5000,
     )
-    event = crud.event.create_with_domain(db=db, obj_in=event_in, domain_id=domain.id)
+    event = crud.event.create_with_domain(
+        db=db, obj_in=event_in, domain_id=domain.id, ip_address="127.0.0.1"
+    )
     assert event.domain_id == domain.id
     assert event.ua_string == event_in.ua_string
