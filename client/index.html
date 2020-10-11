@@ -1,17 +1,28 @@
 <html>
 <body>
+  <button>Click me</button>
+  <br />
+  <br />
+  <div></div>
+
   <script src="./src/index.ts"></script>
   <script type="text/javascript">
     function getRandomInt(min, max) {
       return min + Math.floor(Math.random() * Math.floor(max - min));
     }
 
-    const height = getRandomInt(300, 1000);
-    const width = getRandomInt(height, 1000);
-    const img = document.createElement('img')
-    img.src = `https://placekitten.com/${width}/${height}`
-    document.body.appendChild(img);
+    function updateImage() {
+      const height = getRandomInt(300, 1000);
+      const width = getRandomInt(height, 1000);
+      const img = document.createElement('img')
+      img.src = `https://placekitten.com/${width}/${height}`
+      const div = document.querySelector('div')
+      div.innerHTML = '';
+      div.appendChild(img);
+    }
+    const button = document.querySelector('button')
+    button.onclick = updateImage;
+    updateImage()
   </script>
-
 </body>
 </html>
