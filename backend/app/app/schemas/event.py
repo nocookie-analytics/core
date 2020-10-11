@@ -1,4 +1,5 @@
 from __future__ import annotations
+from decimal import Decimal
 from furl import furl
 from fastapi.exceptions import HTTPException
 import pydantic
@@ -29,10 +30,9 @@ class EventCreate(EventBase):
     referrer: Optional[str]
     user_timezone: Optional[str]
 
-    download_time: Optional[int]
-    fetch_time: Optional[int]
-    time_to_first_byte: Optional[int]
-    total_time: Optional[int]
+    download_time: Optional[Decimal]
+    time_to_first_byte: Optional[Decimal]
+    total_time: Optional[Decimal]
 
     @classmethod
     def depends(
@@ -41,15 +41,13 @@ class EventCreate(EventBase):
         uas: str,
         url: str,
         pt: str,
-        psb: str,
-        ltms: Optional[int] = None,
-        sc: Optional[int] = None,
-        dt: Optional[int] = None,
+        psb: Optional[int] = None,
         ft: Optional[int] = None,
         ttfb: Optional[int] = None,
         tt: Optional[int] = None,
         ref: Optional[str] = None,
         ut: Optional[str] = None,
+        dt: Optional[int] = None,
     ) -> EventCreate:
         try:
             event_type = EventType(et)
@@ -69,16 +67,14 @@ class EventCreate(EventBase):
                 event_type=event_type,
                 ua_string=uas,
                 page_title=pt,
-                load_time_ms=ltms,
                 page_size_bytes=psb,
                 referrer=ref,
                 user_timezone=ut,
                 path=path,
                 url_params=url_params,
-                download_time=dt,
-                fetch_time=ft,
                 time_to_first_byte=ttfb,
                 total_time=tt,
+                download_time=dt,
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception
