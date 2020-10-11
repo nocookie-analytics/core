@@ -3,7 +3,7 @@ import Perfume from "perfume.js";
 import { IPerfumeNavigationTiming } from "perfume.js/dist/types/types";
 import "whatwg-fetch";
 
-const domain = "http://localhost";
+const domain = "http://geektower.emoh";
 const eventUrl = `${domain}/api/v1/e/`;
 
 const perfume = new Perfume({
