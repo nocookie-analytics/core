@@ -43,11 +43,11 @@ class EventCreate(EventBase):
         pt: str,
         psb: Optional[int] = None,
         ft: Optional[int] = None,
-        ttfb: Optional[int] = None,
-        tt: Optional[int] = None,
         ref: Optional[str] = None,
         ut: Optional[str] = None,
-        dt: Optional[int] = None,
+        ttfb: Optional[Decimal] = None,
+        tt: Optional[Decimal] = None,
+        dt: Optional[Decimal] = None,
     ) -> EventCreate:
         try:
             event_type = EventType(et)
