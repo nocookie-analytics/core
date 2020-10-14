@@ -1,12 +1,13 @@
-from app.models.event import EventType
+import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
+from app.models.event import EventType
 from app.tests.utils.domain import create_random_domain
-from app.tests.utils.utils import random_lower_string
 
 
+@pytest.mark.usefixtures("override_testclient")
 def test_create_event(client: TestClient, db: Session) -> None:
     domain = create_random_domain(db)
     url = f"https://{domain.domain_name}/path?query=123"

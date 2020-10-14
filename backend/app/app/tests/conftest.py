@@ -3,6 +3,9 @@ isort:skip_file
 """
 import time
 import os
+from starlette.datastructures import Address
+
+from starlette.requests import Request
 
 # We override the env before doing any other imports
 os.environ["POSTGRES_DB"] = "apptest"
@@ -58,3 +61,8 @@ def normal_user_token_headers(client: TestClient, db: Session) -> Dict[str, str]
     return authentication_token_from_email(
         client=client, email=settings.EMAIL_TEST_USER, db=db
     )
+
+
+@pytest.fixture
+def override_testclient(monkeypatch):
+    monkeypatch.setattr(Request, "client", Address("127.0.0.1", 5000))
