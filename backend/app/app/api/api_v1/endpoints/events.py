@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
@@ -20,8 +20,7 @@ def new_event(
     """
     Report a new event.
     """
-    ip_address = request.client.host
     crud.event.create_with_domain(
-        db, obj_in=event_in, domain_id=request_domain.id, ip_address=ip_address
+        db, obj_in=event_in, domain_id=request_domain.id,
     )
     return schemas.EventCreated(success=True)
