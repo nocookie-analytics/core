@@ -58,7 +58,6 @@ class EventCreate(EventBase):
             raise HTTPException(status_code=400, detail="Bad event type")
 
         ip_address = request.client.host
-        ua_string: Optional[str] = request.headers.get("user-agent", None)
         furled_url = furl(url)
         path = str(furled_url.path)
         url_params = dict(
@@ -78,7 +77,7 @@ class EventCreate(EventBase):
                 total_time=tt,
                 download_time=dt,
                 ip_address=ip_address,
-                ua_string=ua_string,
+                raw_ua_string=ua_string,
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception
