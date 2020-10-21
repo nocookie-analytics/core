@@ -106,7 +106,3 @@ def verify_password_reset_token(token: str) -> Optional[str]:
         return decoded_token["email"]
     except jwt.JWTError:
         return None
-
-
-def sqlalchemy_encoder(obj):
-    return jsonable_encoder(obj, custom_encoder={Enum: lambda e: e})

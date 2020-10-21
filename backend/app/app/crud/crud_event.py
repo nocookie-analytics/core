@@ -1,5 +1,4 @@
 from typing import Optional
-from app.utils import sqlalchemy_encoder
 from sqlalchemy.orm import Session
 
 from app.crud.base import CRUDBase
