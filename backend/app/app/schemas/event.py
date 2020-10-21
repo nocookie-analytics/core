@@ -7,6 +7,7 @@ import pydantic
 from fastapi.exceptions import HTTPException
 from furl import furl
 from pydantic import BaseModel, validator
+from pydantic.networks import IPvAnyAddress
 from starlette.requests import Request
 
 from app.models.event import EventType
@@ -25,6 +26,9 @@ class EventCreated(BaseModel):
 
 # Properties to receive on item creation
 class EventCreate(EventBase):
+    class Config:
+        extra = "forbid"
+
     event_type: EventType
     ua_string: str
     path: str
@@ -33,6 +37,7 @@ class EventCreate(EventBase):
     page_size_bytes: int
     referrer: Optional[str]
     user_timezone: Optional[str]
+    ip_address: IPvAnyAddress
 
     download_time: Optional[Decimal]
     time_to_first_byte: Optional[Decimal]
