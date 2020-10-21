@@ -41,3 +41,12 @@ def test_create_event_fail(client: TestClient, db: Session) -> None:
     assert response.status_code == 400
     content = response.json()
     assert content["detail"]
+
+
+@pytest.mark.usefixtures("override_testclient")
+def test_create_event_fail(client: TestClient, db: Session) -> None:
+    data = create_event(db, et="invalid_event")
+    response = client.get(f"{settings.API_V1_STR}/e/", params=data)
+    assert response.status_code == 400
+    content = response.json()
+    assert content["detail"]
