@@ -54,4 +54,4 @@ build-backend = "poetry.masonry.api"
 source = ["app"]
 
 [tool.coverage.report]
-fail_under = 81
+fail_under = 80
