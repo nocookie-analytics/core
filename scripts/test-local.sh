@@ -3,7 +3,7 @@
 # Exit in case of error
 set -e
 
-docker-compose down -v --remove-orphans # Remove possibly previous broken stacks left hanging after an error
+docker-compose down --remove-orphans # Remove possibly previous broken stacks left hanging after an error
 
 if [ $(uname -s) = "Linux" ]; then
     echo "Remove __pycache__ files"
