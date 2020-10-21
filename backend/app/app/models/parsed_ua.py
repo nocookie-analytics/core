@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Tuple
+from typing import Optional, Tuple
 from pydantic.main import BaseModel
 from user_agents import parse
 
@@ -14,11 +14,11 @@ class ParsedUA(BaseModel):
     os_version_minor: str
 
     device_family: str
-    device_brand: str
-    device_model: str
+    device_brand: Optional[str]
+    device_model: Optional[str]
 
     is_mobile: bool
-    is_table: bool
+    is_tablet: bool
     is_touch_capable: bool
     is_pc: bool
     is_bot: bool
