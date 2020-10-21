@@ -7,11 +7,10 @@ from app.models.event import EventType
 from app.tests.utils.domain import create_random_domain
 
 
-@pytest.mark.usefixtures("override_testclient")
-def test_create_event(client: TestClient, db: Session) -> None:
+def create_event(db, **kwargs):
     domain = create_random_domain(db)
     url = f"https://{domain.domain_name}/path?query=123"
-    data = {
+    event = {
         "et": EventType.page_view.value,
         "uas": "Firefox",
         "url": url,
@@ -21,8 +20,24 @@ def test_create_event(client: TestClient, db: Session) -> None:
         "psb": 300000,
         "ref": None,
         "ut": "Europe/Amsterdam",
+        **kwargs,
     }
+    return event
+
+
+@pytest.mark.usefixtures("override_testclient")
+def test_create_event(client: TestClient, db: Session) -> None:
+    data = create_event(db)
     response = client.get(f"{settings.API_V1_STR}/e/", params=data)
     assert response.status_code == 200
     content = response.json()
-    assert content["success"] == True
+    assert content["success"] is True
+
+
+@pytest.mark.usefixtures("override_testclient")
+def test_create_event_fail(client: TestClient, db: Session) -> None:
+    data = create_event(db, et=EventType.custom.value)
+    response = client.get(f"{settings.API_V1_STR}/e/", params=data)
+    assert response.status_code == 400
+    content = response.json()
+    assert content["detail"]
