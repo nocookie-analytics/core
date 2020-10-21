@@ -23,7 +23,6 @@ const perfume = new Perfume({
           const urlParams = new URLSearchParams({
             url: document.URL,
             et: "page_view",
-            uas: navigator.userAgent,
             pt: document.title,
             psb: encodedBodySize.toString(),
             ref: document.referrer,
