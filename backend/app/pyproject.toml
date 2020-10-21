@@ -50,3 +50,8 @@ line_length = 88
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
 
+[tool.coverage.run]
+source = ["app"]
+
+[tool.coverage.report]
+fail_under = 90
