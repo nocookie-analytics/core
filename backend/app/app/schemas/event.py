@@ -1,13 +1,16 @@
 from __future__ import annotations
+
 from decimal import Decimal
-from furl import furl
-from fastapi.exceptions import HTTPException
-import pydantic
-from starlette.requests import Request
-from app.models.event import EventType
 from typing import Dict, Optional
 
-from pydantic import BaseModel
+import pydantic
+from fastapi.exceptions import HTTPException
+from furl import furl
+from pydantic import BaseModel, validator
+from starlette.requests import Request
+
+from app.models.event import EventType
+from app.models.parsed_ua import ParsedUA
 
 
 # Shared properties
@@ -35,6 +38,14 @@ class EventCreate(EventBase):
     time_to_first_byte: Optional[Decimal]
     total_time: Optional[Decimal]
 
+    parsed_ua: Optional[ParsedUA] = None
+
+    @validator("parsed_ua", always=True)
+    def fill_parsed_ua(cls, v, values, **kwargs):
+        if values["ua_string"]:
+            return ParsedUA.from_ua_string(values["ua_string"])
+        return None
+
     @classmethod
     def depends(
         cls: EventCreate,
@@ -58,6 +69,7 @@ class EventCreate(EventBase):
             raise HTTPException(status_code=400, detail="Bad event type")
 
         ip_address = request.client.host
+        ua_string = request.headers.get("user-agent")
         furled_url = furl(url)
         path = str(furled_url.path)
         url_params = dict(
@@ -77,7 +89,7 @@ class EventCreate(EventBase):
                 total_time=tt,
                 download_time=dt,
                 ip_address=ip_address,
-                raw_ua_string=ua_string,
+                ua_string=ua_string,
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception

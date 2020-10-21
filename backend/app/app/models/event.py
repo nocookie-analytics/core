@@ -1,7 +1,7 @@
 from __future__ import annotations
 from app.models.parsed_ua import ParsedUA
 from enum import Enum
-from typing import TYPE_CHECKING, Tuple
+from typing import Mapping, Optional, TYPE_CHECKING, Tuple
 from pydantic.main import BaseModel
 
 from sqlalchemy import Column, ForeignKey, Integer, NUMERIC, String, DateTime
@@ -36,17 +36,20 @@ class Event(Base):
 
     ip_address = Column(INET)
 
-    raw_ua_string = Column(String)
+    ua_string = Column(String)
     # Note: JSONB doesn't track changes, use sqlalchemy-json lib if needed
     _parsed_ua = Column("parsed_ua", JSONB)
 
     @property
-    def parsed_ua(self):
-        return ParsedUA(**self._parsed_ua)
+    def parsed_ua(self) -> Optional[ParsedUA]:
+        if self._parsed_ua:
+            return ParsedUA(**self._parsed_ua)
+        return None
 
     @parsed_ua.setter
     def parsed_ua(self, parsed_ua):
-        self._parsed_ua = parsed_ua.dict()
+        if isinstance(parsed_ua, Mapping):
+            self._parsed_ua = parsed_ua
 
     url = Column(String)
     path = Column(String)
