@@ -24,15 +24,9 @@ jobs:
         env:
           GEOIP_LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
 
-      - name: Push to Github
+      - name: Create date file
         run: |
-          git checkout -b geolite-update
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
           date > backend/app/data/last-update
-          git add backend/app/data/
-          git commit -m "$(date +"%Y.%m.%d") update geolite db"
-          git push -f origin geolite-update
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
@@ -40,3 +34,5 @@ jobs:
           title: Update Geolite DB
           branch: geolite-update
           base: master
+          path: backend/app/data/
+          commit-message: "Update geolite db"
