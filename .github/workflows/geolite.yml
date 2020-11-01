@@ -22,7 +22,7 @@ jobs:
       - name: Run update script
         run: bash backend/app/data/update.sh
         env:
-          GEOIP_LICENSE_KEY: ${{ secrets.LICENSE_KEY }}
+          GEOIP_LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
 
       - name: Push to Github
         run: |
