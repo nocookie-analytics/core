@@ -29,15 +29,12 @@ jobs:
           git checkout -b geolite-update
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
-          echo "${{ github.actor }}"
           git add backend/app/data/
           git commit -m "$(date +"%Y.%m.%d") update geolite db"
-          echo "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
-          echo git push -f origin geolite-update
+          git push -f origin geolite-update
 
-      #- name: Create Pull Request
-        #uses: peter-evans/create-pull-request@v3
-        #with:
-          #title: Update Geolite DB
-          #branch: geolite-update
-
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: Update Geolite DB
+          branch: geolite-update
