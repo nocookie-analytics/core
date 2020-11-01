@@ -29,6 +29,7 @@ jobs:
           git checkout -b geolite-update
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
+          date > backend/app/data/last-update
           git add backend/app/data/
           git commit -m "$(date +"%Y.%m.%d") update geolite db"
           git push -f origin geolite-update
