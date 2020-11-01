@@ -2,7 +2,6 @@
 name: Update GeoLite.mmdb
 
 on:
-  push:
   schedule:
     - cron: 0 6 * * 0
 
@@ -23,10 +22,6 @@ jobs:
         run: bash backend/app/data/update.sh
         env:
           GEOIP_LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
-
-      - name: Create date file
-        run: |
-          date > backend/app/data/last-update
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
