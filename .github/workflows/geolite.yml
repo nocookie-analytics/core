@@ -1,0 +1,31 @@
+# Sourced from https://github.com/P3TERX/GeoLite.mmdb/blob/master/.github/workflows/GeoLite.yml
+name: Update GeoLite.mmdb
+
+on:
+  schedule:
+    - cron: 0 6 * * 0
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install git lfs
+        run: |
+          sudo apt-get -qq -y install git-lfs
+          git lfs install
+
+      - name: Run update script
+        run: bash backend/app/data/update.sh
+        env:
+          GEOIP_LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: Update Geolite DB
+          branch: geolite-update
+          commit-message: "Update geolite db"
