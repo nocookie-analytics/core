@@ -33,5 +33,4 @@ jobs:
         with:
           title: Update Geolite DB
           branch: geolite-update
-          base: master
           commit-message: "Update geolite db"
