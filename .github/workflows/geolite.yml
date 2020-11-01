@@ -34,5 +34,4 @@ jobs:
           title: Update Geolite DB
           branch: geolite-update
           base: master
-          path: backend/app/data/
           commit-message: "Update geolite db"
