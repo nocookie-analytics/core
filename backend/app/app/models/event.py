@@ -37,9 +37,9 @@ class Event(Base):
 
     ip_address = Column(INET)
 
-    _ip_city_id = Column(Integer, ForeignKey("city.id", name="fk_event_city_id"))
+    ip_city_id = Column(Integer, ForeignKey("city.id", name="fk_event_city_id"))
     ip_city: City = relationship("City")  # type: ignore
-    _ip_country_iso_code = Column(
+    ip_country_iso_code = Column(
         String(length=2), ForeignKey("country.id", name="fk_event_country_id")
     )
     ip_country: Country = relationship("Country")  # type: ignore

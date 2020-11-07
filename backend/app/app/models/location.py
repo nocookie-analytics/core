@@ -12,10 +12,12 @@ class City(Base):
     asciiname = Column(String)
     latitude = Column(NUMERIC)
     longitude = Column(NUMERIC)
-    country_id = ForeignKey("country.id")
+    country_id = Column(
+        String(length=2), ForeignKey("country.id", name="fk_event_country_id")
+    )
     country: Country = relationship("Country")  # type: ignore
 
 
 class Country(Base):
-    id = Column(String(length=2))  # ISO Country code
+    id = Column(String(length=2), primary_key=True)  # ISO Country code
     name = Column(String)
