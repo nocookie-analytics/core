@@ -83,6 +83,8 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str
     USERS_OPEN_REGISTRATION: bool = False
 
+    GEOLITE_PATH = "data/GeoLite2-City.mmdb"
+
     class Config:
         case_sensitive = True
 

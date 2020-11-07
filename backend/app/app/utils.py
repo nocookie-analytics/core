@@ -1,4 +1,3 @@
-from enum import Enum
 import logging
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -6,10 +5,14 @@ from typing import Any, Dict, Optional
 
 import emails
 from emails.template import JinjaTemplate
-from fastapi.encoders import jsonable_encoder
+from geoip2.database import Reader
+from geoip2.errors import AddressNotFoundError
+from geoip2.models import City
 from jose import jwt
 
 from app.core.config import settings
+
+GEOLITE_INSTANCE = Reader(settings.GEOLITE_PATH)
 
 
 def send_email(
@@ -105,4 +108,12 @@ def verify_password_reset_token(token: str) -> Optional[str]:
         decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
         return decoded_token["email"]
     except jwt.JWTError:
+        return None
+
+
+def get_ip_gelocation(ip_address: str) -> Optional[City]:
+    try:
+        city = GEOLITE_INSTANCE.city(ip_address)
+        return city
+    except AddressNotFoundError:
         return None
