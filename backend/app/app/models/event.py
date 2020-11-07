@@ -2,7 +2,6 @@ from __future__ import annotations
 from app.models.parsed_ua import ParsedUA
 from enum import Enum
 from typing import Mapping, Optional, TYPE_CHECKING, Tuple
-from pydantic.main import BaseModel
 
 from sqlalchemy import Column, ForeignKey, Integer, NUMERIC, String, DateTime
 from sqlalchemy.sql.functions import func
@@ -13,7 +12,9 @@ from sqlalchemy_enum34 import EnumType
 
 from app.db.base_class import Base
 
+
 if TYPE_CHECKING:
+    from .location import City, Country
     from .domain import Domain
 
 
@@ -30,15 +31,24 @@ class Event(Base):
     id = Column(Integer, autoincrement=True)
 
     domain_id = Column(Integer, ForeignKey("domain.id", name="fk_event_domain_id"))
-    domain: Domain = relationship("Domain")
+    domain: Domain = relationship("Domain")  # type: ignore
 
     event_type = Column(EventTypeEnum, nullable=False)
 
     ip_address = Column(INET)
 
+    _ip_city_id = Column(Integer, ForeignKey("city.id", name="fk_event_city_id"))
+    ip_city: City = relationship("City")  # type: ignore
+    _ip_country_iso_code = Column(
+        String(length=2), ForeignKey("country.id", name="fk_event_country_id")
+    )
+    ip_country: Country = relationship("Country")  # type: ignore
+    ip_continent = Column(String)
+    ip_timezone = Column(String)
+
     ua_string = Column(String)
     # Note: JSONB doesn't track changes, use sqlalchemy-json lib if needed
-    _parsed_ua = Column("parsed_ua", JSONB)
+    _parsed_ua: Mapping = Column("parsed_ua", JSONB)  # type: ignore
 
     @property
     def parsed_ua(self) -> Optional[ParsedUA]:
@@ -68,6 +78,7 @@ class Event(Base):
 
     ix_domain_timestamp = Index("ix_domain_timestamp", domain_id, timestamp)
 
-    # Choosing this as a primary key so the table is partitioned by domain first, then timestamp
-    # but the combination of domain and timestamp won't be unique, serial id makes it so
+    # Choosing this as a primary key so the table is partitioned by domain first,
+    # then timestamp but the combination of domain and timestamp won't be unique,
+    # serial id makes it so
     __table_args__: Tuple = (PrimaryKeyConstraint(domain_id, timestamp, id), {})
