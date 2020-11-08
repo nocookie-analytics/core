@@ -43,7 +43,7 @@ class Event(Base):
         String(length=2), ForeignKey("country.id", name="fk_event_country_id")
     )
     ip_country: Country = relationship("Country")  # type: ignore
-    ip_continent = Column(String)
+    ip_continent_code = Column(String(length=2))
     ip_timezone = Column(String)
 
     ua_string = Column(String)
