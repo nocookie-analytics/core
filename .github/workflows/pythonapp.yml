@@ -24,7 +24,7 @@ jobs:
     - name: Install git
       run: |
         apk update
-        apk add git git-lfs
+        apk add git git-lfs python3
 
     - uses: actions/checkout@v2
       with:
