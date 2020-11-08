@@ -14,10 +14,12 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 return
             city_id = geolocation.city.geoname_id
             country_code = geolocation.country.iso_code
+            continent_code = geolocation.continent.code
             if city_id:
-                event._ip_city_id = city_id
+                event.ip_city_id = city_id
             if country_code:
-                event._ip_country_iso_code = country_code
+                event.ip_country_iso_code = country_code
+            event.ip_continent_code = continent_code
 
     def create_with_domain(
         self, db: Session, *, obj_in: EventCreate, domain_id: int,
