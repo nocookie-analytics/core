@@ -1,16 +1,17 @@
 """
 isort:skip_file
 """
-import time
+import socket
 import os
+from typing import Dict, Generator
 from starlette.datastructures import Address
-
 from starlette.requests import Request
 
 # We override the env before doing any other imports
 os.environ["POSTGRES_DB"] = "apptest"
 
-from typing import Dict, Generator
+from app.models.location import City, Country
+from app.utils import get_ip_gelocation
 
 import pytest
 from fastapi.testclient import TestClient
@@ -70,3 +71,18 @@ def normal_user_token_headers(client: TestClient, db: Session) -> Dict[str, str]
 @pytest.fixture
 def override_testclient(monkeypatch):
     monkeypatch.setattr(Request, "client", Address("127.0.0.1", 5000))
+
+
+@pytest.fixture(scope="session")
+def mock_ip_address(db):
+    ip_address = socket.gethostbyname("gaganpreet.in")
+    location = get_ip_gelocation(ip_address)
+    db.add(
+        City(
+            id=location.city.geoname_id,
+            name=location.city.name,
+            country=Country(id=location.country.iso_code, name=location.country.name),
+        )
+    )
+    db.commit()
+    return ip_address
