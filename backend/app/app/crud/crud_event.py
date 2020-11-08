@@ -1,9 +1,8 @@
 from app.utils import get_ip_gelocation
-from typing import Optional
 from sqlalchemy.orm import Session
 
 from app.crud.base import CRUDBase
-from app.models.event import Event, EventType
+from app.models.event import Event
 from app.schemas.event import EventCreate, EventUpdate
 
 
