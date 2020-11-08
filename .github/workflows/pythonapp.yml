@@ -6,7 +6,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: tiangolo/docker-with-compose
+    container: docker/compose
 
     env:
       DOMAIN: backend
@@ -21,6 +21,11 @@ jobs:
       DOCKER_IMAGE_FRONTEND_BUILD_STAGE: eu.gcr.io/no-cookie-analytics/nca-frontend-build-stage
 
     steps:
+    - name: Install git
+      run: |
+        apk update
+        apk add git git-lfs
+
     - uses: actions/checkout@v2
       with:
         lfs: true
