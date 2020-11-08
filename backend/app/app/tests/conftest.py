@@ -28,6 +28,10 @@ from app.tests.utils.utils import get_superuser_token_headers
 @pytest.fixture(scope="session", autouse=True)
 def db(request) -> Generator:
     session = SessionLocal()
+    # Start from a clean slate, but first ensure that we're always
+    # working with hardcoded apptest db
+    assert engine.url.database == "apptest"
+    Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
     init_db(session)
 
