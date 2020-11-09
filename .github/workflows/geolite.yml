@@ -19,7 +19,7 @@ jobs:
           git lfs install
 
       - name: Run update script
-        run: bash backend/app/data/update.sh
+        run: bash backend/app/data/update-geolite.sh
         env:
           GEOIP_LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
 
