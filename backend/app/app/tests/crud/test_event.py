@@ -6,7 +6,7 @@ from app.schemas.event import EventCreate
 from app.tests.utils.domain import create_random_domain
 
 
-def test_create_event(db: Session) -> None:
+def test_create_event(db: Session, mock_ip_address) -> None:
     domain = create_random_domain(db)
     event_in = EventCreate(
         event_type=EventType.page_view,
@@ -20,9 +20,13 @@ def test_create_event(db: Session) -> None:
         download_time=5000,
         time_to_first_byte=5000,
         total_time=5000,
-        ip_address="127.0.0.1",
+        ip_address=mock_ip_address,
     )
     event = crud.event.create_with_domain(db=db, obj_in=event_in, domain_id=domain.id)
     assert event.domain_id == domain.id
     assert event.ua_string == event_in.ua_string
+    assert event.parsed_ua
     assert event.parsed_ua.browser_family == "Firefox"
+    assert event.ip_city
+    assert event.ip_country
+    assert event.ip_continent_code

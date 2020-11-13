@@ -13,7 +13,6 @@ router = APIRouter()
 def new_event(
     *,
     db: Session = Depends(deps.get_db),
-    request: Request,
     event_in: schemas.EventCreate = Depends(schemas.EventCreate.depends),
     request_domain: models.Domain = Depends(deps.get_request_domain),
 ) -> Any:
