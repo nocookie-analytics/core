@@ -18,7 +18,6 @@ wait_seconds = 1
     after=after_log(logger, logging.WARN),
 )
 def init() -> None:
-    print("Connecting to db")
     try:
         # Try to create session to check if DB is awake
         db = SessionLocal()
