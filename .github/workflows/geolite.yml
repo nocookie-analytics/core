@@ -26,7 +26,8 @@ jobs:
 
       - name: Install git lfs
         run: |
-          sudo apt-get -qq -y install git-lfs hub
+          sudo apt-get -qq -y install git-lfs
+          sudo snap install hub
           git lfs install
 
       - uses: actions/checkout@v2
