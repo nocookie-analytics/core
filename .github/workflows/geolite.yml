@@ -58,6 +58,8 @@ jobs:
       - name: Create Pull Request
         run: |
           git checkout -b geolite-update
+          git config --global me@gaganpreet.in
+          git config --global user.name "Gaganpreet Arora"
           git commit backend/app/data/*.mmdb -m "Update geolite db"
           git push origin geolite-update
           gh pr create --title "Update goelite db" -B master --assignee gaganpreet
