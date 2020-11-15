@@ -50,8 +50,7 @@ jobs:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
       - name: Run update script
-        run: echo "Hello world"
-        # run: bash backend/app/data/update-geolite.sh
+        run: bash backend/app/data/update-geolite.sh
         env:
           GEOIP_LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
 
