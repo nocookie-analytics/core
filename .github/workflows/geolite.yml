@@ -14,6 +14,17 @@ jobs:
 
     steps:
 
+      - name: Create SSH key
+        run: |
+          mkdir -p ~/.ssh/
+          ls ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ../id_rsa
+          echo "$SSH_PUBLIC_KEY" > ../id_rsa.pub
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+          SSH_PUBLIC_KEY: ${{secrets.SSH_PUBLIC_KEY}}
+
       - name: Install git lfs
         run: |
           sudo apt-get -qq -y install git-lfs
