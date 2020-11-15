@@ -20,7 +20,7 @@ jobs:
           ls ~/.ssh/
           echo "$SSH_PRIVATE_KEY" > ../id_rsa
           echo "$SSH_PUBLIC_KEY" > ../id_rsa.pub
-        shell: bash
+          ls ~/.ssh/
         env:
           SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
           SSH_PUBLIC_KEY: ${{secrets.SSH_PUBLIC_KEY}}
