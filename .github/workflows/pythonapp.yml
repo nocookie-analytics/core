@@ -23,7 +23,7 @@ jobs:
     - name: Install git
       run: |
         apk update
-        apk add git git-lfs python3
+        apk add --no-cache openssh-client git-lfs python3
         git lfs install
 
     - name: Create SSH key
