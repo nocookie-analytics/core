@@ -42,6 +42,8 @@ jobs:
     - name: LFS pull
       run: |
         git lfs pull
+      env:
+        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
     - name: Setup env file
       run: |

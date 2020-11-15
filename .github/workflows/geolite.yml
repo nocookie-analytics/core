@@ -38,6 +38,8 @@ jobs:
       - name: LFS pull
         run: |
           git lfs pull
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
       - name: Run update script
         run: bash backend/app/data/update-geolite.sh
