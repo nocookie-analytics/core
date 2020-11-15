@@ -16,28 +16,32 @@ jobs:
 
       - name: Create SSH key
         run: |
-          mkdir -p ~/.ssh/
-          ls ~/.ssh/
-          env
-          echo "$SSH_PRIVATE_KEY" > ../id_rsa
-          echo "$SSH_PUBLIC_KEY" > ../id_rsa.pub
-          ls ~/.ssh/
+          mkdir -p ~/.ssh
+          ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
         env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
           SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-          SSH_PUBLIC_KEY: ${{secrets.SSH_PUBLIC_KEY}}
 
       - name: Install git lfs
         run: |
           sudo apt-get -qq -y install git-lfs
           git lfs install
 
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+          GIT_TRACE: 1
+          GIT_TRANSFER_TRACE: 1
+          GIT_CURL_VERBOSE: 1
+
       - name: Debug
         run: |
           git lfs env
 
-      - uses: actions/checkout@v2
-        with:
-          lfs: true
 
       - name: Run update script
         run: echo "Hello world"
@@ -52,6 +56,7 @@ jobs:
           branch: geolite-update
           commit-message: "Update geolite db"
         env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
           GIT_TRACE: 1
           GIT_TRANSFER_TRACE: 1
           GIT_CURL_VERBOSE: 1
