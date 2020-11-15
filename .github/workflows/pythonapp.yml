@@ -26,13 +26,19 @@ jobs:
         apk add git git-lfs python3
         git lfs install
 
-    - uses: actions/checkout@v2
-      with:
-        lfs: true
-
-    - name: Debug
+    - name: Create SSH key
       run: |
-        git lfs env
+        mkdir -p ~/.ssh
+        ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+        ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+        ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
+      env:
+        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+
+    - uses: actions/checkout@v2
+      env:
+        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
     - name: Setup env file
       run: |
