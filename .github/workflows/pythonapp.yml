@@ -30,6 +30,10 @@ jobs:
       with:
         lfs: true
 
+    - name: Debug
+      run: |
+        git lfs env
+
     - name: Setup env file
       run: |
         mv .env-ci .env
