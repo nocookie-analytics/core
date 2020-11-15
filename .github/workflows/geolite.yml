@@ -39,6 +39,7 @@ jobs:
       - name: Debug
         if: ${{ always() }}
         run: |
+          head backend/app/data/GeoLite2-*.mmdb
           git lfs env
 
       - name: Run update script
