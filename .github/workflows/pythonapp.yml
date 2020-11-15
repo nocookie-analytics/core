@@ -22,7 +22,6 @@ jobs:
     steps:
     - name: Install git
       run: |
-        apk update
         apk add --no-cache openssh-client git-lfs python3
         git lfs install
 
@@ -31,7 +30,7 @@ jobs:
         mkdir -p ~/.ssh
         ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
         ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-        ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
+        echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
       env:
         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
