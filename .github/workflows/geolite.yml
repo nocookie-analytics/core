@@ -39,16 +39,6 @@ jobs:
           GIT_TRANSFER_TRACE: 1
           GIT_CURL_VERBOSE: 1
 
-      - name: Debug
-        if: ${{ always() }}
-        run: |
-          git lfs pull
-          head backend/app/data/GeoLite2-*.mmdb
-          git lfs env
-          head backend/app/data/GeoLite2-*.mmdb
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-
       - name: Run update script
         run: bash backend/app/data/update-geolite.sh
         env:
