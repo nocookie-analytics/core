@@ -42,6 +42,8 @@ jobs:
           git lfs pull
           head backend/app/data/GeoLite2-*.mmdb
           git lfs env
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
       - name: Run update script
         run: echo "Hello world"
