@@ -39,6 +39,10 @@ jobs:
       env:
         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
+    - name: LFS pull
+      run: |
+        git lfs pull
+
     - name: Setup env file
       run: |
         mv .env-ci .env
