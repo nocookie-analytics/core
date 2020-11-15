@@ -51,7 +51,7 @@ jobs:
           git config --global user.name "Gaganpreet Arora"
           git commit backend/app/data/*.mmdb -m "Update geolite db"
           git push origin geolite-update
-          gh pr create --title "Update goelite db" -B master --assignee gaganpreet
+          gh pr create --title "Update goelite db" -B master --assignee gaganpreet -l automated -b "Update geolite db"
         env:
           GITHUB_TOKEN: ${{ github.token }}
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
