@@ -39,9 +39,9 @@ jobs:
           GIT_CURL_VERBOSE: 1
 
       - name: Debug
+        if: ${{ always() }}
         run: |
           git lfs env
-
 
       - name: Run update script
         run: echo "Hello world"
