@@ -42,6 +42,7 @@ jobs:
           git lfs pull
           head backend/app/data/GeoLite2-*.mmdb
           git lfs env
+          head backend/app/data/GeoLite2-*.mmdb
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
