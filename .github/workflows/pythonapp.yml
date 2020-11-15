@@ -44,6 +44,9 @@ jobs:
         git lfs pull
       env:
         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        GIT_TRACE: 1
+        GIT_TRANSFER_TRACE: 1
+        GIT_CURL_VERBOSE: 1
 
     - name: Setup env file
       run: |
