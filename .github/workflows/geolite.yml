@@ -26,7 +26,7 @@ jobs:
 
       - name: Install git lfs
         run: |
-          sudo apt-get -qq -y install git-lfs
+          sudo apt-get -qq -y install git-lfs hub
           git lfs install
 
       - uses: actions/checkout@v2
@@ -53,11 +53,11 @@ jobs:
           GEOIP_LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          title: Update Geolite DB
-          branch: geolite-update
-          commit-message: "Update geolite db"
+        run: |
+          git checkout -b geolite-update
+          git commit backend/app/data/*.mmdb -m "Update geolite db"
+          git push origin geolite-update
+          GITHUB_USER="$GITHUB_ACTOR" hub pull-request -b update-geolite -h master --no-edit -m "Update geolite"
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
           GIT_TRACE: 1
