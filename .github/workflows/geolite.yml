@@ -30,8 +30,6 @@ jobs:
           git lfs install
 
       - uses: actions/checkout@v2
-        with:
-          lfs: true
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
           GIT_TRACE: 1
