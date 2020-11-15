@@ -63,6 +63,7 @@ jobs:
           git push origin geolite-update
           gh pr create --title "Update goelite db" -B master --assignee gaganpreet
         env:
+          GITHUB_TOKEN: ${{ github.token }}
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
           GIT_TRACE: 1
           GIT_TRANSFER_TRACE: 1
