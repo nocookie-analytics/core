@@ -26,8 +26,10 @@ jobs:
 
       - name: Install git lfs
         run: |
-          sudo apt-get -qq -y install git-lfs
-          sudo snap install hub
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+          sudo apt-add-repository https://cli.github.com/packages
+          sudo apt update
+          sudo apt-get -qq -y install git-lfs gh
           git lfs install
 
       - uses: actions/checkout@v2
@@ -58,7 +60,7 @@ jobs:
           git checkout -b geolite-update
           git commit backend/app/data/*.mmdb -m "Update geolite db"
           git push origin geolite-update
-          GITHUB_USER="$GITHUB_ACTOR" hub pull-request -b update-geolite -h master --no-edit -m "Update geolite"
+          gh pr create --title "Update goelite db" -B master --assignee gaganpreet
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
           GIT_TRACE: 1
