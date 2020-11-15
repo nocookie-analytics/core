@@ -18,6 +18,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh/
           ls ~/.ssh/
+          env
           echo "$SSH_PRIVATE_KEY" > ../id_rsa
           echo "$SSH_PUBLIC_KEY" > ../id_rsa.pub
           ls ~/.ssh/
@@ -39,7 +40,8 @@ jobs:
           lfs: true
 
       - name: Run update script
-        run: bash backend/app/data/update-geolite.sh
+        run: echo "Hello world"
+        # run: bash backend/app/data/update-geolite.sh
         env:
           GEOIP_LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
 
