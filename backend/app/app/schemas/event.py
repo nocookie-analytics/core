@@ -95,6 +95,7 @@ class EventCreate(EventBase):
                 download_time=dt,
                 ip_address=ip_address,
                 ua_string=ua_string,
+                url=url,
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception
