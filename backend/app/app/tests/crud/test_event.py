@@ -11,6 +11,7 @@ def test_create_event(db: Session, mock_ip_address) -> None:
     event_in = EventCreate(
         event_type=EventType.page_view,
         path="/abc",
+        url="https://google.com",
         url_params={},
         page_title="Title",
         page_size_bytes=150,

@@ -32,6 +32,7 @@ class EventCreate(EventBase):
     event_type: EventType
     ua_string: str
     path: str
+    url: str
     url_params: Dict
     page_title: str
     page_size_bytes: int
