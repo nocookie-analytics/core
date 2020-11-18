@@ -70,6 +70,7 @@ class Event(Base):
     page_size_bytes = Column(Integer)
     referrer = Column(String)
     user_timezone = Column(String)
+    user_timezone_offset = Column(Integer)
 
     # All time values in microseconds
     download_time = Column(NUMERIC)
