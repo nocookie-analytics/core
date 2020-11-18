@@ -4,6 +4,7 @@ name: Update GeoLite.mmdb
 on:
   schedule:
     - cron: 0 6 * * 0
+  workflow_dispatch:
 
 jobs:
   run:
@@ -11,12 +12,34 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - uses: actions/checkout@v2
+
+      - name: Create SSH key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
 
       - name: Install git lfs
         run: |
-          sudo apt-get -qq -y install git-lfs
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+          sudo apt-add-repository https://cli.github.com/packages
+          sudo apt update
+          sudo apt-get -qq -y install git-lfs gh
           git lfs install
+
+      - uses: actions/checkout@v2
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+
+      - name: LFS pull
+        run: |
+          git lfs pull
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
       - name: Run update script
         run: bash backend/app/data/update-geolite.sh
@@ -24,8 +47,13 @@ jobs:
           GEOIP_LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          title: Update Geolite DB
-          branch: geolite-update
-          commit-message: "Update geolite db"
+        run: |
+          git checkout -b geolite-update
+          git config --global user.email me@gaganpreet.in
+          git config --global user.name "Gaganpreet Arora"
+          git commit backend/app/data/*.mmdb -m "Update geolite db"
+          git push origin geolite-update
+          gh pr create --title "Update geolite db" -B master --assignee gaganpreet -b "Update geolite db"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
