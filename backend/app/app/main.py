@@ -11,8 +11,12 @@ app = FastAPI(
 )
 
 # https://github.com/tiangolo/fastapi/issues/2033#issuecomment-696465251
-proxy_ip = socket.gethostbyname("proxy")
-app.add_middleware(ProxyHeadersMiddleware, trusted_hosts=proxy_ip)
+try:
+    proxy_ip = socket.gethostbyname("proxy")
+    print(f"Using proxy middleware with {proxy_ip}")
+    app.add_middleware(ProxyHeadersMiddleware, trusted_hosts=proxy_ip)
+except socket.gaierror:
+    print("Not using proxy middleware")
 
 # Set all CORS enabled origins
 if settings.BACKEND_CORS_ORIGINS:
