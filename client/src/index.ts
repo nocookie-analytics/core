@@ -20,6 +20,14 @@ const perfume = new Perfume({
           const { encodedBodySize } = performance;
           const { timeToFirstByte, totalTime, downloadTime } = data;
 
+          let tz: string;
+          try {
+            tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          } catch (e) {
+            tz = "null";
+          }
+          const tzo = new Date().getTimezoneOffset();
+
           const urlParams = new URLSearchParams({
             url: document.URL,
             et: "page_view",
@@ -29,6 +37,8 @@ const perfume = new Perfume({
             ttfb: timeToFirstByte?.toString() || "null",
             tt: totalTime?.toString() || "null",
             dt: downloadTime?.toString() || "null",
+            tz: tz,
+            tzo: tzo.toString(),
           });
           fetch(`${eventUrl}?${urlParams.toString()}`, {
             credentials: "omit",

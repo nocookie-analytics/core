@@ -32,11 +32,13 @@ class EventCreate(EventBase):
     event_type: EventType
     ua_string: str
     path: str
+    url: str
     url_params: Dict
     page_title: str
     page_size_bytes: int
     referrer: Optional[str]
     user_timezone: Optional[str]
+    user_timezone_offset: Optional[str]
     ip_address: IPvAnyAddress
 
     download_time: Optional[Decimal]
@@ -60,8 +62,9 @@ class EventCreate(EventBase):
         pt: str,
         psb: Optional[int] = None,
         ft: Optional[int] = None,
+        tz: Optional[str] = None,
+        tzo: Optional[int] = None,
         ref: Optional[str] = None,
-        ut: Optional[str] = None,
         ttfb: Optional[Decimal] = None,
         tt: Optional[Decimal] = None,
         dt: Optional[Decimal] = None,
@@ -87,7 +90,8 @@ class EventCreate(EventBase):
                 page_title=pt,
                 page_size_bytes=psb,
                 referrer=ref,
-                user_timezone=ut,
+                user_timezone=tz,
+                user_timezone_offset=tzo,
                 path=path,
                 url_params=url_params,
                 time_to_first_byte=ttfb,
@@ -95,6 +99,7 @@ class EventCreate(EventBase):
                 download_time=dt,
                 ip_address=ip_address,
                 ua_string=ua_string,
+                url=url,
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception

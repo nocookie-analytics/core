@@ -29,7 +29,7 @@ def create_event(db, **kwargs):
 def test_create_event(client: TestClient, db: Session) -> None:
     data = create_event(db)
     response = client.get(f"{settings.API_V1_STR}/e/", params=data)
-    assert response.status_code == 200
+    assert response.status_code == 200, response.json()
     content = response.json()
     assert content["success"] is True
 
