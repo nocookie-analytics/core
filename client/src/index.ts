@@ -26,7 +26,7 @@ const perfume = new Perfume({
           } catch (e) {
             tz = "null";
           }
-          const tzo = new Date().getTimezoneOffset();
+          const tzo = -new Date().getTimezoneOffset();
 
           const urlParams = new URLSearchParams({
             url: document.URL,
