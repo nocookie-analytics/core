@@ -20,6 +20,7 @@ if TYPE_CHECKING:
 
 class EventType(Enum):
     page_view = "page_view"
+    metric = "metric"
     custom = "custom"
 
 
@@ -64,6 +65,7 @@ class Event(Base):
     url = Column(String)
     path = Column(String)
     url_params = Column(JSONB)
+    metric = Column(JSONB)
 
     page_title = Column(String)
 
