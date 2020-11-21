@@ -1,11 +1,12 @@
 from __future__ import annotations
+
 from app.models.parsed_ua import ParsedUA
 from enum import Enum
 from typing import Mapping, Optional, TYPE_CHECKING, Tuple
 
 from sqlalchemy import Column, ForeignKey, Integer, NUMERIC, String, DateTime
 from sqlalchemy.sql.functions import func
-from sqlalchemy.dialects.postgresql import JSONB, INET
+from sqlalchemy.dialects.postgresql import JSONB, INET, UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import Index, PrimaryKeyConstraint
 from sqlalchemy_enum34 import EnumType
@@ -30,6 +31,7 @@ EventTypeEnum = EnumType(EventType, name="event_type")
 class Event(Base):
     timestamp = Column(DateTime(timezone=True), server_default=func.now())
     id = Column(Integer, autoincrement=True)
+    page_view_id = Column(UUID, nullable=False)
 
     domain_id = Column(Integer, ForeignKey("domain.id", name="fk_event_domain_id"))
     domain: Domain = relationship("Domain")  # type: ignore
