@@ -108,6 +108,10 @@ jobs:
       run: |
         docker-compose -f docker-stack.yml exec -T backend bash /app/tests-start.sh --cov=app "$@"
 
+    - name: Create alembic migrations
+      run: |
+        docker-compose exec backend alembic revision --autogenerate
+
     - name: Log docker status
       if: ${{ always() }}
       run: |
