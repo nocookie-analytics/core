@@ -1,3 +1,4 @@
+import uuid
 from app.models.event import EventType
 from sqlalchemy.orm import Session
 
@@ -6,7 +7,7 @@ from app.schemas.event import EventCreate
 from app.tests.utils.domain import create_random_domain
 
 
-def test_create_event(db: Session, mock_ip_address) -> None:
+def test_create_page_view_event(db: Session, mock_ip_address) -> None:
     domain = create_random_domain(db)
     event_in = EventCreate(
         event_type=EventType.page_view,
@@ -22,6 +23,7 @@ def test_create_event(db: Session, mock_ip_address) -> None:
         time_to_first_byte=5000,
         total_time=5000,
         ip_address=mock_ip_address,
+        page_view_id=uuid.uuid4(),
     )
     event = crud.event.create_with_domain(db=db, obj_in=event_in, domain_id=domain.id)
     assert event.domain_id == domain.id
