@@ -110,6 +110,8 @@ jobs:
 
     - name: Create alembic migrations
       run: |
+        # These commands operate on app database, which is blank
+        docker-compose exec -T backend alembic upgrade head
         docker-compose exec -T backend alembic revision --autogenerate
 
     - name: Log docker status
