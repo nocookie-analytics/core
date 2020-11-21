@@ -110,7 +110,7 @@ jobs:
 
     - name: Create alembic migrations
       run: |
-        docker-compose exec backend alembic revision --autogenerate
+        docker-compose exec -T backend alembic revision --autogenerate
 
     - name: Log docker status
       if: ${{ always() }}
