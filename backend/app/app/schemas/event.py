@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from decimal import Decimal
 from typing import Dict, Optional
+from uuid import uuid4
 
 import pydantic
 from fastapi.exceptions import HTTPException
 from furl import furl
 from pydantic import BaseModel, validator
 from pydantic.networks import IPvAnyAddress
+from pydantic.types import UUID4
 from starlette.requests import Request
 
 from app.models.event import EventType
@@ -22,6 +24,7 @@ class EventBase(BaseModel):
 class EventCreated(BaseModel):
     success: bool = True
     error: Optional[str] = None
+    pvid: Optional[UUID4] = None
 
 
 # Properties to receive on item creation
@@ -40,6 +43,7 @@ class EventCreate(EventBase):
     user_timezone: Optional[str]
     user_timezone_offset: Optional[str]
     ip_address: IPvAnyAddress
+    page_view_id: UUID4
 
     download_time: Optional[Decimal]
     time_to_first_byte: Optional[Decimal]
@@ -60,6 +64,7 @@ class EventCreate(EventBase):
         et: str,
         url: str,
         pt: str,
+        pvid: Optional[UUID4] = None,
         psb: Optional[int] = None,
         ft: Optional[int] = None,
         tz: Optional[str] = None,
@@ -73,8 +78,10 @@ class EventCreate(EventBase):
             event_type = EventType(et)
         except ValueError:
             raise HTTPException(status_code=400, detail="Bad event type")
-        if event_type != EventType.page_view:
-            raise HTTPException(status_code=400, detail="Bad event type")
+        if event_type == EventType.page_view:
+            pvid = UUID4(uuid4().hex)
+        elif event_type in (EventType.metric, EventType.custom) and not pvid:
+            raise HTTPException(status_code=400, detail="Bad data")
 
         ip_address = request.client.host
         ua_string = request.headers.get("user-agent")
@@ -100,6 +107,7 @@ class EventCreate(EventBase):
                 ip_address=ip_address,
                 ua_string=ua_string,
                 url=url,
+                page_view_id=pvid,
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception
