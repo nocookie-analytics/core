@@ -28,6 +28,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         Create an event
         """
         obj_in_data = obj_in.dict()
+        obj_in_data["page_view_id"] = obj_in_data["page_view_id"].hex
         db_obj = self.model(**obj_in_data, domain_id=domain_id)
         self.add_geolocation_info(db_obj)
         db.add(db_obj)
