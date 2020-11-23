@@ -1,3 +1,5 @@
+import pytest
+import sqlalchemy
 from sqlalchemy.orm import Session
 
 from app import crud
@@ -13,6 +15,9 @@ def test_create_domain(db: Session) -> None:
     domain = crud.domain.create_with_owner(db=db, obj_in=domain_in, owner_id=user.id)
     assert domain.domain_name == domain_name
     assert domain.owner_id == user.id
+
+    with pytest.raises(sqlalchemy.exc.IntegrityError):
+        crud.domain.create_with_owner(db=db, obj_in=domain_in, owner_id=user.id)
 
 
 def test_get_domain(db: Session) -> None:
@@ -32,7 +37,7 @@ def test_update_domain(db: Session) -> None:
     domain_in = DomainCreate(domain_name=domain_name)
     user = create_random_user(db)
     domain = crud.domain.create_with_owner(db=db, obj_in=domain_in, owner_id=user.id)
-    domain_name2 = 'bar.com'
+    domain_name2 = "bar.com"
     domain_update = DomainUpdate(domain_name=domain_name2)
     domain2 = crud.domain.update(db=db, db_obj=domain, obj_in=domain_update)
     assert domain.id == domain2.id
