@@ -9,6 +9,7 @@ const eventUrl = `${domain}/api/v1/e/`;
 const perfume = new Perfume({
   resourceTiming: false,
   analyticsTracker: ({ metricName, data }) => {
+    let pageViewId: string = "";
     data = data as IPerfumeNavigationTiming;
     console.log(metricName, data);
     switch (metricName) {
@@ -42,11 +43,25 @@ const perfume = new Perfume({
           });
           fetch(`${eventUrl}?${urlParams.toString()}`, {
             credentials: "omit",
-          }).then((data) => console.log(data));
+          }).then((data) => {
+            console.log(data.body);
+            pageViewId = data.pvid;
+          });
         }
         break;
       case "lcp":
-        console.log(data, "lcp");
+        console.log(data, "<<<,");
+        const urlParams = new URLSearchParams({
+          url: document.URL,
+          et: "metric",
+          pvid: pageViewId,
+          metric: { lcp: data },
+        });
+        fetch(`${eventUrl}?${urlParams.toString()}`, {
+          credentials: "omit",
+        }).then((data) => {
+          console.log(data);
+        });
     }
   },
 });
