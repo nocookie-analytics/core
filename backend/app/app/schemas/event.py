@@ -27,6 +27,8 @@ class EventCreated(BaseModel):
     pvid: Optional[UUID4] = None
 
 
+MetricType = Optional[Json[Dict[str, Union[str, int]]]]
+
 # Properties to receive on item creation
 class EventCreate(EventBase):
     class Config:
@@ -44,7 +46,7 @@ class EventCreate(EventBase):
     user_timezone_offset: Optional[str]
     ip_address: IPvAnyAddress
     page_view_id: UUID4
-    metric: Optional[Json[Dict[str, Union[str, int]]]]
+    metric: MetricType
 
     download_time: Optional[Decimal]
     time_to_first_byte: Optional[Decimal]
@@ -64,7 +66,8 @@ class EventCreate(EventBase):
         request: Request,
         et: str,
         url: str,
-        pt: Optional[str],
+        metric: str = None,
+        pt: Optional[str] = None,
         pvid: Optional[UUID4] = None,
         psb: Optional[int] = None,
         ft: Optional[int] = None,
@@ -75,6 +78,7 @@ class EventCreate(EventBase):
         tt: Optional[Decimal] = None,
         dt: Optional[Decimal] = None,
     ) -> EventCreate:
+        print(metric)
         try:
             event_type = EventType(et)
         except ValueError:
@@ -109,6 +113,7 @@ class EventCreate(EventBase):
                 ua_string=ua_string,
                 url=url,
                 page_view_id=pvid,
+                metric=metric,
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception
