@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Dict, Optional
+from typing import Dict, Optional, Union
 from uuid import uuid4
 
 import pydantic
 from fastapi.exceptions import HTTPException
 from furl import furl
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, validator, Json
 from pydantic.networks import IPvAnyAddress
 from pydantic.types import UUID4
 from starlette.requests import Request
@@ -37,13 +37,14 @@ class EventCreate(EventBase):
     path: str
     url: str
     url_params: Dict
-    page_title: str
-    page_size_bytes: int
+    page_title: Optional[str]
+    page_size_bytes: Optional[int]
     referrer: Optional[str]
     user_timezone: Optional[str]
     user_timezone_offset: Optional[str]
     ip_address: IPvAnyAddress
     page_view_id: UUID4
+    metric: Optional[Json[Dict[str, Union[str, int]]]]
 
     download_time: Optional[Decimal]
     time_to_first_byte: Optional[Decimal]
@@ -63,7 +64,7 @@ class EventCreate(EventBase):
         request: Request,
         et: str,
         url: str,
-        pt: str,
+        pt: Optional[str],
         pvid: Optional[UUID4] = None,
         psb: Optional[int] = None,
         ft: Optional[int] = None,

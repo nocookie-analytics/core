@@ -2,16 +2,17 @@ import objectHash from "object-hash";
 import Perfume from "perfume.js";
 import { IPerfumeNavigationTiming } from "perfume.js/dist/types/types";
 import "whatwg-fetch";
+import { http } from "./utils";
 
 const domain = "http://geektower.emoh";
 const eventUrl = `${domain}/api/v1/e/`;
 
 const perfume = new Perfume({
   resourceTiming: false,
-  analyticsTracker: ({ metricName, data }) => {
+  analyticsTracker: async ({ metricName, data }) => {
     let pageViewId: string = "";
     data = data as IPerfumeNavigationTiming;
-    console.log(metricName, data);
+    console.log("pageViewId:", pageViewId);
     switch (metricName) {
       case "navigationTiming":
         {
@@ -41,27 +42,26 @@ const perfume = new Perfume({
             tz: tz,
             tzo: tzo.toString(),
           });
-          fetch(`${eventUrl}?${urlParams.toString()}`, {
-            credentials: "omit",
-          }).then((data) => {
-            console.log(data.body);
-            pageViewId = data.pvid;
-          });
+          const url = `${eventUrl}?${urlParams.toString()}`;
+          const resp = await http(url);
+          const result = await resp.json();
+          pageViewId = result.pvid;
+          console.log("pageViewId:", pageViewId);
         }
         break;
       case "lcp":
-        console.log(data, "<<<,");
+        const metricData = JSON.stringify({ lcp: data });
+        console.log("pageViewId:", pageViewId);
         const urlParams = new URLSearchParams({
           url: document.URL,
           et: "metric",
           pvid: pageViewId,
-          metric: { lcp: data },
+          metric: metricData,
         });
-        fetch(`${eventUrl}?${urlParams.toString()}`, {
-          credentials: "omit",
-        }).then((data) => {
-          console.log(data);
-        });
+        const url = `${eventUrl}?${urlParams.toString()}`;
+        const resp = await http(url);
+        const result = await resp.json();
+        console.log(result);
     }
   },
 });
