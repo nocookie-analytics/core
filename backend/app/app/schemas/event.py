@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Dict, Optional
+from typing import Dict, Optional, Union
+from uuid import uuid4
 
 import pydantic
 from fastapi.exceptions import HTTPException
 from furl import furl
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, validator, Json
 from pydantic.networks import IPvAnyAddress
+from pydantic.types import UUID4
 from starlette.requests import Request
 
 from app.models.event import EventType
@@ -22,7 +24,10 @@ class EventBase(BaseModel):
 class EventCreated(BaseModel):
     success: bool = True
     error: Optional[str] = None
+    pvid: Optional[UUID4] = None
 
+
+MetricType = Optional[Json[Dict[str, int]]]
 
 # Properties to receive on item creation
 class EventCreate(EventBase):
@@ -34,12 +39,14 @@ class EventCreate(EventBase):
     path: str
     url: str
     url_params: Dict
-    page_title: str
-    page_size_bytes: int
+    page_title: Optional[str]
+    page_size_bytes: Optional[int]
     referrer: Optional[str]
     user_timezone: Optional[str]
     user_timezone_offset: Optional[str]
     ip_address: IPvAnyAddress
+    page_view_id: UUID4
+    metric: MetricType
 
     download_time: Optional[Decimal]
     time_to_first_byte: Optional[Decimal]
@@ -59,7 +66,9 @@ class EventCreate(EventBase):
         request: Request,
         et: str,
         url: str,
-        pt: str,
+        metric: str = None,
+        pt: Optional[str] = None,
+        pvid: Optional[UUID4] = None,
         psb: Optional[int] = None,
         ft: Optional[int] = None,
         tz: Optional[str] = None,
@@ -69,12 +78,15 @@ class EventCreate(EventBase):
         tt: Optional[Decimal] = None,
         dt: Optional[Decimal] = None,
     ) -> EventCreate:
+        print(metric)
         try:
             event_type = EventType(et)
         except ValueError:
             raise HTTPException(status_code=400, detail="Bad event type")
-        if event_type != EventType.page_view:
-            raise HTTPException(status_code=400, detail="Bad event type")
+        if event_type == EventType.page_view:
+            pvid = UUID4(uuid4().hex)
+        elif event_type in (EventType.metric, EventType.custom) and not pvid:
+            raise HTTPException(status_code=400, detail="Bad data")
 
         ip_address = request.client.host
         ua_string = request.headers.get("user-agent")
@@ -100,6 +112,8 @@ class EventCreate(EventBase):
                 ip_address=ip_address,
                 ua_string=ua_string,
                 url=url,
+                page_view_id=pvid,
+                metric=metric,
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception

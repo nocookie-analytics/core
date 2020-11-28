@@ -2,15 +2,34 @@ import objectHash from "object-hash";
 import Perfume from "perfume.js";
 import { IPerfumeNavigationTiming } from "perfume.js/dist/types/types";
 import "whatwg-fetch";
+import { http } from "./utils";
 
 const domain = "http://geektower.emoh";
 const eventUrl = `${domain}/api/v1/e/`;
+let pageViewId: string = "";
+
+const eventBaseData = () => {
+  let tz: string;
+  try {
+    tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  } catch (e) {
+    tz = "null";
+  }
+  const tzo = -new Date().getTimezoneOffset();
+
+  return {
+    url: document.URL,
+    pt: document.title,
+    ref: document.referrer,
+    tz: tz,
+    tzo: tzo.toString(),
+  };
+};
 
 const perfume = new Perfume({
   resourceTiming: false,
-  analyticsTracker: ({ metricName, data }) => {
+  analyticsTracker: async ({ metricName, data }) => {
     data = data as IPerfumeNavigationTiming;
-    console.log(metricName, data);
     switch (metricName) {
       case "navigationTiming":
         {
@@ -20,33 +39,46 @@ const perfume = new Perfume({
           const { encodedBodySize } = performance;
           const { timeToFirstByte, totalTime, downloadTime } = data;
 
-          let tz: string;
-          try {
-            tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-          } catch (e) {
-            tz = "null";
-          }
-          const tzo = -new Date().getTimezoneOffset();
-
           const urlParams = new URLSearchParams({
-            url: document.URL,
+            ...eventBaseData(),
             et: "page_view",
-            pt: document.title,
-            psb: encodedBodySize.toString(),
-            ref: document.referrer,
             ttfb: timeToFirstByte?.toString() || "null",
             tt: totalTime?.toString() || "null",
+            psb: encodedBodySize.toString(),
             dt: downloadTime?.toString() || "null",
-            tz: tz,
-            tzo: tzo.toString(),
           });
-          fetch(`${eventUrl}?${urlParams.toString()}`, {
-            credentials: "omit",
-          }).then((data) => console.log(data));
+          const url = `${eventUrl}?${urlParams.toString()}`;
+          const resp = await http(url);
+          const result = await resp.json();
+          pageViewId = result.pvid;
+          console.log("pageViewId:", pageViewId);
         }
         break;
       case "lcp":
-        console.log(data, "lcp");
+      case "fid":
+      case "fp":
+      case "cls":
+      case "lcpFinal":
+        const reportMetric = async () => {
+          const metricData = JSON.stringify({ [metricName]: data });
+          const urlParams = new URLSearchParams({
+            ...eventBaseData(),
+            et: "metric",
+            pvid: pageViewId,
+            metric: metricData,
+          });
+          const url = `${eventUrl}?${urlParams.toString()}`;
+          const resp = await http(url);
+          const result = await resp.json();
+        };
+        const waitForPageViewId = async () => {
+          if (!pageViewId) {
+            setTimeout(waitForPageViewId, 500);
+          } else {
+            await reportMetric();
+          }
+        };
+        await waitForPageViewId();
     }
   },
 });
