@@ -29,7 +29,6 @@ const perfume = new Perfume({
   resourceTiming: false,
   analyticsTracker: async ({ metricName, data }) => {
     data = data as IPerfumeNavigationTiming;
-    console.log("pageViewId:", pageViewId);
     switch (metricName) {
       case "navigationTiming":
         {
@@ -55,18 +54,30 @@ const perfume = new Perfume({
         }
         break;
       case "lcp":
-        const metricData = JSON.stringify({ lcp: data });
-        console.log("pageViewId:", pageViewId);
-        const urlParams = new URLSearchParams({
-          ...eventBaseData(),
-          et: "metric",
-          pvid: pageViewId,
-          metric: metricData,
-        });
-        const url = `${eventUrl}?${urlParams.toString()}`;
-        const resp = await http(url);
-        const result = await resp.json();
-        console.log(result);
+      case "fid":
+      case "fp":
+      case "cls":
+      case "lcpFinal":
+        const reportMetric = async () => {
+          const metricData = JSON.stringify({ [metricName]: data });
+          const urlParams = new URLSearchParams({
+            ...eventBaseData(),
+            et: "metric",
+            pvid: pageViewId,
+            metric: metricData,
+          });
+          const url = `${eventUrl}?${urlParams.toString()}`;
+          const resp = await http(url);
+          const result = await resp.json();
+        };
+        const waitForPageViewId = async () => {
+          if (!pageViewId) {
+            setTimeout(waitForPageViewId, 500);
+          } else {
+            await reportMetric();
+          }
+        };
+        await waitForPageViewId();
     }
   },
 });

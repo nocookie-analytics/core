@@ -27,7 +27,7 @@ class EventCreated(BaseModel):
     pvid: Optional[UUID4] = None
 
 
-MetricType = Optional[Json[Dict[str, Union[str, int]]]]
+MetricType = Optional[Json[Dict[str, int]]]
 
 # Properties to receive on item creation
 class EventCreate(EventBase):
