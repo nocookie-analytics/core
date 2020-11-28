@@ -15,7 +15,8 @@ const eventBaseData = () => {
   } catch (e) {
     tz = "null";
   }
-  const tzo = new Date().getTimezoneOffset();
+  const tzo = -new Date().getTimezoneOffset();
+
   return {
     url: document.URL,
     pt: document.title,
