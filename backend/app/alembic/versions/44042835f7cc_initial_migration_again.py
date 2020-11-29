@@ -55,6 +55,7 @@ def upgrade():
         ),
         sa.PrimaryKeyConstraint("domain_id", "timestamp", "id"),
     )
+    op.execute("SELECT create_hypertable('event', 'timestamp')")
     op.create_index(
         "ix_domain_timestamp", "event", ["domain_id", "timestamp"], unique=False
     )
