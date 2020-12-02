@@ -1,39 +1,15 @@
 from __future__ import annotations
-from starlette import status
 import arrow
-from enum import Enum
 from datetime import datetime
 from typing import List, Optional, Tuple
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app import schemas
+from app import AnalyticsType, schemas
 from app.api import deps
 
 router = APIRouter()
-
-
-class AnalyticsType(Enum):
-    PAGEVIEWS = "pageviews"
-    BROWSERS = "browsers"
-
-    @staticmethod
-    def from_csv_string(s) -> List[AnalyticsType]:
-        seq = []
-        invalid = []
-        for item in s.split(","):
-            try:
-                seq.append(AnalyticsType(item))
-            except ValueError:
-                invalid.append(item)
-
-        if invalid:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Invalid fields: {', '.join(invalid)}",
-            )
-        return seq
 
 
 def _parse_date_range(
@@ -44,7 +20,7 @@ def _parse_date_range(
     return start_obj, end_obj
 
 
-@router.get("/", response_model=List[schemas.Analytics])
+@router.get("/", response_model=List[AnalyticsType])
 def get_analytics(
     db: Session = Depends(deps.get_db),
     start: datetime = None,

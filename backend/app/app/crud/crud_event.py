@@ -36,5 +36,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         db.refresh(db_obj)
         return db_obj
 
+    def get_analytics_from_fields(self, db: Session, *, fields: List[AnalyticsType]):
+        ...
+
 
 event = CRUDEvent(Event)
