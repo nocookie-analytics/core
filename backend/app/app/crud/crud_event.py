@@ -1,14 +1,14 @@
-from app.models.domain import Domain
 from typing import List
 
 from arrow.arrow import Arrow
-from app import AnalyticsType
-from app.utils import get_ip_gelocation
 from sqlalchemy.orm import Session
 
 from app.crud.base import CRUDBase
+from app.models.domain import Domain
 from app.models.event import Event
+from app.schemas.analytics import AnalyticsType
 from app.schemas.event import EventCreate, EventUpdate
+from app.utils import get_ip_gelocation
 
 
 class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):

@@ -1,7 +1,8 @@
 from __future__ import annotations
+from datetime import datetime
 from enum import Enum
 from typing import List, Union
-from arrow.arrow import Arrow
+from arrow import arrow
 from fastapi import HTTPException
 from pydantic import BaseModel
 from starlette import status
@@ -29,13 +30,24 @@ class AnalyticsType(Enum):
         return seq
 
 
+class PydanticArrow(datetime):
+    # https://github.com/tiangolo/fastapi/issues/1285
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, v):
+        return arrow.get(v)
+
+
 class AnalyticsBase(BaseModel):
     type: AnalyticsType
-    start: Arrow
-    end: Arrow
+    start: PydanticArrow
+    end: PydanticArrow
 
     class Config:
-        json_encoders = {Arrow: lambda obj: obj.isoformat()}
+        json_encoders = {arrow.Arrow: lambda obj: obj.isoformat()}
 
 
 class PageViewData(AnalyticsBase):
