@@ -1,4 +1,6 @@
 from typing import List
+
+from arrow.arrow import Arrow
 from app import AnalyticsType
 from app.utils import get_ip_gelocation
 from sqlalchemy.orm import Session
@@ -38,7 +40,9 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         db.refresh(db_obj)
         return db_obj
 
-    def get_analytics_from_fields(self, db: Session, *, fields: List[AnalyticsType]):
+    def get_analytics_from_fields(
+        self, db: Session, *, fields: List[AnalyticsType], start=Arrow, end=Arrow
+    ):
         for field in fields:
             if field == AnalyticsType.PAGEVIEWS:
                 ...

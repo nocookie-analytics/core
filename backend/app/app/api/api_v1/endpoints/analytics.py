@@ -15,15 +15,13 @@ router = APIRouter()
 
 
 def get_end_date(end: Optional[datetime] = None):
-    end_obj = arrow.get(end) if end else arrow.now()
-    return end_obj
+    return arrow.get(end) if end else arrow.now()
 
 
 def get_start_date(
     end: arrow.Arrow = Depends(get_end_date), start: Optional[datetime] = None
 ):
-    start_obj = arrow.get(start) if start else end.shift(months=-1)
-    return start_obj
+    return arrow.get(start) if start else end.shift(months=-1)
 
 
 @router.get("/", response_model=List[AnalyticsType])
@@ -37,4 +35,6 @@ def get_analytics(
         raise HTTPException(
             status_code=400, detail="End date should be after start date"
         )
-    return crud.event.get_analytics_from_fields(db=db, fields=include)
+    return crud.event.get_analytics_from_fields(
+        db=db, fields=include, start=start, end=end
+    )
