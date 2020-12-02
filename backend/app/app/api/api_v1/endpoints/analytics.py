@@ -34,6 +34,8 @@ def get_analytics(
     end: datetime = Depends(get_end_date),
     include: List[AnalyticsType] = Depends(AnalyticsType.from_csv_string),
 ):
+    # TODO: This section (getting domain/verifying ownership)
+    # can be written as a reusable dependency
     domain = crud.domain.get(db=db, id=domain_id)
     if not domain:
         raise HTTPException(status_code=404, detail="Domain not found")
