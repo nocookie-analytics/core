@@ -1,4 +1,5 @@
 from __future__ import annotations
+from app import models
 
 from datetime import datetime
 from typing import List, Optional
@@ -26,15 +27,25 @@ def get_start_date(
 
 @router.get("/", response_model=List[AnalyticsType])
 def get_analytics(
+    domain_id: int,
     db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
     start: datetime = Depends(get_start_date),
     end: datetime = Depends(get_end_date),
     include: List[AnalyticsType] = Depends(AnalyticsType.from_csv_string),
 ):
+    domain = crud.domain.get(db=db, id=domain_id)
+    if not domain:
+        raise HTTPException(status_code=404, detail="Domain not found")
+    if not crud.user.is_superuser(current_user) and (
+        domain.owner_id != current_user.id
+    ):
+        raise HTTPException(status_code=404, detail="Domain not found")
+
     if start >= end:
         raise HTTPException(
             status_code=400, detail="End date should be after start date"
         )
     return crud.event.get_analytics_from_fields(
-        db=db, fields=include, start=start, end=end
+        db=db, fields=include, start=start, end=end, domain=domain
     )

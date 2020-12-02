@@ -1,3 +1,4 @@
+from app.models.domain import Domain
 from typing import List
 
 from arrow.arrow import Arrow
@@ -41,13 +42,23 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         return db_obj
 
     def get_analytics_from_fields(
-        self, db: Session, *, fields: List[AnalyticsType], start=Arrow, end=Arrow
+        self,
+        db: Session,
+        *,
+        fields: List[AnalyticsType],
+        start: Arrow,
+        end: Arrow,
+        domain: Domain,
     ):
         for field in fields:
             if field == AnalyticsType.PAGEVIEWS:
+                self._get_page_views(db, start, end)
                 ...
             if field == AnalyticsType.BROWSERS:
                 ...
+        ...
+
+    def _get_page_views(self, db: Session, domain: Domain, start: Arrow, end: Arrow):
         ...
 
 
