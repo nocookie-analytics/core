@@ -3,16 +3,13 @@ from starlette import status
 import arrow
 from enum import Enum
 from datetime import datetime
-from typing import Any, List, Optional, Tuple
+from typing import List, Optional, Tuple
 
-from fastapi import APIRouter, Body, Depends, HTTPException
-from fastapi.encoders import jsonable_encoder
-from pydantic.networks import EmailStr
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app import crud, models, schemas
+from app import schemas
 from app.api import deps
-from app.core.config import settings
 
 router = APIRouter()
 
