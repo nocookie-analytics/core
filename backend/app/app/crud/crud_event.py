@@ -55,7 +55,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         start: Arrow,
         end: Arrow,
         domain: Domain,
-    ):
+    ) -> AnalyticsData:
         data: List[AnalyticsDataTypes] = []
         for field in fields:
             if field == AnalyticsType.PAGEVIEWS:
