@@ -34,6 +34,6 @@ def get_analytics(
 ):
     if start >= end:
         raise HTTPException(
-            status_code=400, detail="end date should be after start date"
+            status_code=400, detail="End date should be after start date"
         )
     return crud.event.get_analytics_from_fields(db=db, fields=include)
