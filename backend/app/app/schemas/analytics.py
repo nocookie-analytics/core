@@ -2,7 +2,7 @@ from __future__ import annotations
 from datetime import datetime
 from enum import Enum
 from typing import List, Union
-from arrow import arrow
+import arrow
 from fastapi import HTTPException
 from pydantic import BaseModel
 from starlette import status
@@ -13,10 +13,10 @@ class AnalyticsType(Enum):
     BROWSERS = "browsers"
 
     @staticmethod
-    def from_csv_string(s) -> List[AnalyticsType]:
+    def from_csv_string(include) -> List[AnalyticsType]:
         seq = []
         invalid = []
-        for item in s.split(","):
+        for item in include.split(","):
             try:
                 seq.append(AnalyticsType(item))
             except ValueError:
@@ -26,6 +26,13 @@ class AnalyticsType(Enum):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Invalid fields: {', '.join(invalid)}",
+                hint=[t.value for t in AnalyticsType],
+            )
+        if not seq:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"No fields specified, see hint",
+                valid_fields=[t.value for t in AnalyticsType],
             )
         return seq
 
@@ -43,11 +50,6 @@ class PydanticArrow(datetime):
 
 class AnalyticsBase(BaseModel):
     type: AnalyticsType
-    start: PydanticArrow
-    end: PydanticArrow
-
-    class Config:
-        json_encoders = {arrow.Arrow: lambda obj: obj.isoformat()}
 
 
 class PageViewData(AnalyticsBase):
@@ -58,4 +60,13 @@ class BrowsersData(AnalyticsBase):
     type = AnalyticsType.BROWSERS
 
 
-AnalyticsData = Union[PageViewData, BrowsersData]
+AnalyticsDataTypes = Union[PageViewData, BrowsersData]
+
+
+class AnalyticsData(BaseModel):
+    start: PydanticArrow
+    end: PydanticArrow
+    data: List[AnalyticsDataTypes]
+
+    class Config:
+        json_encoders = {arrow.Arrow: lambda obj: obj.isoformat()}

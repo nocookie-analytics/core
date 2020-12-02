@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from app import crud
 from app.api import deps
-from app.schemas.analytics import AnalyticsType
+from app.schemas.analytics import AnalyticsData, AnalyticsType, PageViewData
 
 router = APIRouter()
 
@@ -25,11 +25,12 @@ def get_start_date(
     return arrow.get(start) if start else end.shift(months=-1)
 
 
-@router.get("/", response_model=List[AnalyticsType])
+@router.get("/", response_model=AnalyticsData)
 def get_analytics(
     domain_id: int,
-    db: Session = Depends(deps.get_db),
+    *,
     current_user: models.User = Depends(deps.get_current_active_user),
+    db: Session = Depends(deps.get_db),
     start: datetime = Depends(get_start_date),
     end: datetime = Depends(get_end_date),
     include: List[AnalyticsType] = Depends(AnalyticsType.from_csv_string),
