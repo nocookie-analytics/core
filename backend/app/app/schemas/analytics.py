@@ -1,7 +1,7 @@
 from __future__ import annotations
 from datetime import datetime
 from enum import Enum
-from typing import List, Union
+from typing import List, Set, Union
 import arrow
 from fastapi import HTTPException
 from pydantic import BaseModel
@@ -14,27 +14,31 @@ class AnalyticsType(Enum):
 
     @staticmethod
     def from_csv_string(include) -> List[AnalyticsType]:
-        seq = []
+        seq: Set[AnalyticsType] = set()
         invalid = []
         for item in include.split(","):
             try:
-                seq.append(AnalyticsType(item))
+                seq.add(AnalyticsType(item))
             except ValueError:
                 invalid.append(item)
 
         if invalid:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Invalid fields: {', '.join(invalid)}",
-                hint=[t.value for t in AnalyticsType],
+                detail={
+                    "msg": f"Invalid fields: {', '.join(invalid)}",
+                    "hint": [t.value for t in AnalyticsType],
+                },
             )
         if not seq:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"No fields specified, see hint",
-                valid_fields=[t.value for t in AnalyticsType],
+                detail={
+                    "msg": "No field specified, see hint",
+                    "hint": [t.value for t in AnalyticsType],
+                },
             )
-        return seq
+        return list(seq)
 
 
 class PydanticArrow(datetime):
