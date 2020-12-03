@@ -1,5 +1,5 @@
 from app.models.domain import Domain
-from datetime import datetime
+from datetime import datetime, timedelta
 from app.schemas.analytics import AnalyticsType
 import uuid
 import arrow
@@ -12,7 +12,7 @@ from app.schemas.event import EventCreate
 from app.tests.utils.domain import create_random_domain
 from hypothesis import given
 from hypothesis.extra.pytz import timezones
-from hypothesis.strategies import datetimes
+from hypothesis.strategies import datetimes, timedeltas
 
 aware_datetimes = datetimes(timezones=timezones())
 
@@ -45,14 +45,15 @@ def test_create_page_view_event(db: Session, mock_ip_address) -> None:
     assert event.ip_continent_code
 
 
-@given(aware_datetimes, aware_datetimes)
+@given(
+    aware_datetimes,
+    timedeltas(min_value=timedelta(hours=1), max_value=timedelta(days=180)),
+)
 def test_get_analytics(
-    db: Session, mock_read_only_domain: Domain, start: datetime, end: datetime,
+    db: Session, mock_read_only_domain: Domain, start: datetime, duration: timedelta,
 ) -> None:
-    if start >= end:
-        return
     start = arrow.get(start)
-    end = arrow.get(end)
+    end = start + duration
     fields = [AnalyticsType.PAGEVIEWS, AnalyticsType.BROWSERS]
     analytics_data = crud.event.get_analytics_from_fields(
         db=db, domain=mock_read_only_domain, start=start, fields=fields, end=end,
