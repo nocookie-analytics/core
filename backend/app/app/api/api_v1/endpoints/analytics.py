@@ -22,7 +22,12 @@ def get_end_date(end: Optional[datetime] = None):
 def get_start_date(
     end: arrow.Arrow = Depends(get_end_date), start: Optional[datetime] = None
 ):
-    return arrow.get(start) if start else end.shift(months=-1)
+    start = arrow.get(start) if start else end.shift(months=-1)
+    if start >= end:
+        raise HTTPException(
+            status_code=400, detail="End date should be after start date"
+        )
+    return start
 
 
 @router.get("/", response_model=AnalyticsData)
@@ -45,10 +50,6 @@ def get_analytics(
     ):
         raise HTTPException(status_code=404, detail="Domain not found")
 
-    if start >= end:
-        raise HTTPException(
-            status_code=400, detail="End date should be after start date"
-        )
     return crud.event.get_analytics_from_fields(
         db=db, fields=include, start=start, end=end, domain=domain
     )
