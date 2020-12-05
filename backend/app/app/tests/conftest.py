@@ -24,6 +24,7 @@ from app.db.session import SessionLocal, engine
 from app.main import app
 from app.tests.utils.user import authentication_token_from_email
 from app.tests.utils.utils import get_superuser_token_headers
+from app.tests.utils.domain import create_random_domain
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -86,3 +87,9 @@ def mock_ip_address(db):
     )
     db.commit()
     return ip_address
+
+
+@pytest.fixture(scope="session")
+def mock_read_only_domain(db):
+    domain = create_random_domain(db)
+    return domain
