@@ -11,7 +11,7 @@ fastapi = "^0.54.1"
 python-multipart = "^0.0.5"
 email-validator = "^1.0.5"
 requests = "^2.23.0"
-celery = "^4.4.2"
+celery = "^5.0.3"
 passlib = {extras = ["bcrypt"], version = "^1.7.2"}
 tenacity = "^6.1.0"
 pydantic = "^1.4"
@@ -28,6 +28,8 @@ furl = "^2.1.0"
 user-agents = "^2.2.0"
 geoip2 = "^4.1.0"
 arrow = "^0.17.0"
+vine = "^5.0.0"
+amqp = "^5.0.2"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.770"
