@@ -1,9 +1,20 @@
-from app.utils import get_ip_gelocation
+from typing import List
+
+from arrow.arrow import Arrow
 from sqlalchemy.orm import Session
 
 from app.crud.base import CRUDBase
+from app.models.domain import Domain
 from app.models.event import Event
+from app.schemas.analytics import (
+    AnalyticsData,
+    AnalyticsType,
+    BrowsersData,
+    PageViewData,
+    AnalyticsDataTypes,
+)
 from app.schemas.event import EventCreate, EventUpdate
+from app.utils import get_ip_gelocation
 
 
 class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
@@ -35,6 +46,33 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         db.commit()
         db.refresh(db_obj)
         return db_obj
+
+    def get_analytics_from_fields(
+        self,
+        db: Session,
+        *,
+        fields: List[AnalyticsType],
+        start: Arrow,
+        end: Arrow,
+        domain: Domain,
+    ) -> AnalyticsData:
+        data: List[AnalyticsDataTypes] = []
+        for field in fields:
+            if field == AnalyticsType.PAGEVIEWS:
+                data.append(self._get_page_views(db, domain, start, end))
+            if field == AnalyticsType.BROWSERS:
+                data.append(self._get_browsers_data(db, domain, start, end))
+        return AnalyticsData(start=start, end=end, data=data)
+
+    def _get_page_views(
+        self, db: Session, domain: Domain, start: Arrow, end: Arrow
+    ) -> PageViewData:
+        return PageViewData()
+
+    def _get_browsers_data(
+        self, db: Session, domain: Domain, start: Arrow, end: Arrow
+    ) -> BrowsersData:
+        return BrowsersData()
 
 
 event = CRUDEvent(Event)

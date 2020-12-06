@@ -1,10 +1,20 @@
+from app.models.domain import Domain
+from datetime import datetime, timedelta
+from app.schemas.analytics import AnalyticsType
 import uuid
+import arrow
+
 from app.models.event import EventType
 from sqlalchemy.orm import Session
 
 from app import crud
 from app.schemas.event import EventCreate
 from app.tests.utils.domain import create_random_domain
+from hypothesis import given
+from hypothesis.extra.pytz import timezones
+from hypothesis.strategies import datetimes, timedeltas
+
+aware_datetimes = datetimes(timezones=timezones())
 
 
 def test_create_page_view_event(db: Session, mock_ip_address) -> None:
@@ -33,3 +43,25 @@ def test_create_page_view_event(db: Session, mock_ip_address) -> None:
     assert event.ip_city
     assert event.ip_country
     assert event.ip_continent_code
+
+
+@given(
+    aware_datetimes,
+    timedeltas(min_value=timedelta(hours=1), max_value=timedelta(days=180)),
+)
+def test_get_analytics(
+    db: Session, mock_read_only_domain: Domain, start: datetime, duration: timedelta,
+) -> None:
+    start = arrow.get(start)
+    end = start + duration
+    fields = [AnalyticsType.PAGEVIEWS, AnalyticsType.BROWSERS]
+    analytics_data = crud.event.get_analytics_from_fields(
+        db=db, domain=mock_read_only_domain, start=start, fields=fields, end=end,
+    )
+    assert analytics_data.start == start
+    assert analytics_data.end == end
+    assert analytics_data.data
+    data = analytics_data.data
+    assert len(data) == len(fields)
+    for field_data in data:
+        assert field_data.type
