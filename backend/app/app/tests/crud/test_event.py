@@ -1,3 +1,4 @@
+from app.tests.utils.event import create_random_page_view_event
 from app.models.domain import Domain
 from datetime import datetime, timedelta
 from app.schemas.analytics import AnalyticsType
@@ -50,13 +51,20 @@ def test_create_page_view_event(db: Session, mock_ip_address) -> None:
     timedeltas(min_value=timedelta(hours=1), max_value=timedelta(days=180)),
 )
 def test_get_analytics(
-    db: Session, mock_read_only_domain: Domain, start: datetime, duration: timedelta,
+    db: Session,
+    mock_read_only_domain: Domain,
+    start: datetime,
+    duration: timedelta,
 ) -> None:
     start = arrow.get(start)
     end = start + duration
     fields = [AnalyticsType.PAGEVIEWS, AnalyticsType.BROWSERS]
     analytics_data = crud.event.get_analytics_from_fields(
-        db=db, domain=mock_read_only_domain, start=start, fields=fields, end=end,
+        db=db,
+        domain=mock_read_only_domain,
+        start=start,
+        fields=fields,
+        end=end,
     )
     assert analytics_data.start == start
     assert analytics_data.end == end
@@ -65,3 +73,24 @@ def test_get_analytics(
     assert len(data) == len(fields)
     for field_data in data:
         assert field_data.type
+
+
+def test_get_pageviews(db: Session, mock_read_only_domain: Domain, mock_ip_address):
+    create_random_page_view_event(
+        db, domain_id=mock_read_only_domain.id, ip_address=mock_ip_address
+    )
+    now = arrow.now()
+
+    data = crud.event._get_page_views(
+        db, mock_read_only_domain, now - timedelta(days=1), now
+    )
+    assert data.count == 1
+
+    create_random_page_view_event(
+        db, domain_id=mock_read_only_domain.id, ip_address=mock_ip_address
+    )
+
+    data = crud.event._get_page_views(
+        db, mock_read_only_domain, now - timedelta(days=1), now
+    )
+    assert data.count == 2
