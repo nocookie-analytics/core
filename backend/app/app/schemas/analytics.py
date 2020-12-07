@@ -58,6 +58,7 @@ class AnalyticsBase(BaseModel):
 
 class PageViewData(AnalyticsBase):
     type = AnalyticsType.PAGEVIEWS
+    count: int
 
 
 class BrowsersData(AnalyticsBase):

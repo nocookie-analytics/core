@@ -33,7 +33,11 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             event.ip_continent_code = continent_code
 
     def create_with_domain(
-        self, db: Session, *, obj_in: EventCreate, domain_id: int,
+        self,
+        db: Session,
+        *,
+        obj_in: EventCreate,
+        domain_id: int,
     ) -> Event:
         """
         Create an event
