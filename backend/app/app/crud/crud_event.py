@@ -2,6 +2,8 @@ from typing import List
 
 from arrow.arrow import Arrow
 from sqlalchemy.orm import Session
+from sqlalchemy import and_
+from sqlalchemy.orm import Query
 
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
@@ -33,7 +35,11 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             event.ip_continent_code = continent_code
 
     def create_with_domain(
-        self, db: Session, *, obj_in: EventCreate, domain_id: int,
+        self,
+        db: Session,
+        *,
+        obj_in: EventCreate,
+        domain_id: int,
     ) -> Event:
         """
         Create an event
@@ -64,10 +70,17 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 data.append(self._get_browsers_data(db, domain, start, end))
         return AnalyticsData(start=start, end=end, data=data)
 
+    @staticmethod
+    def _events_in_date_range(domain: Domain, start: Arrow, end: Arrow) -> Query:
+        return domain.events.filter(
+            and_(Event.timestamp >= start.datetime, Event.timestamp <= end.datetime)
+        )
+
     def _get_page_views(
         self, db: Session, domain: Domain, start: Arrow, end: Arrow
     ) -> PageViewData:
-        return PageViewData()
+        count = self._events_in_date_range(domain, start, end).count()
+        return PageViewData(count=count)
 
     def _get_browsers_data(
         self, db: Session, domain: Domain, start: Arrow, end: Arrow

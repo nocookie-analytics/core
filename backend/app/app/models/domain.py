@@ -17,7 +17,7 @@ class Domain(Base):
     id = Column(Integer, primary_key=True, index=True)
 
     domain_name = Column(String, index=True, unique=True)
-    events: List[Event] = relationship("Event")
+    events: List[Event] = relationship("Event", lazy="dynamic")
 
     owner_id = Column(Integer, ForeignKey("user.id"))
     owner: User = relationship("User", back_populates="domains")

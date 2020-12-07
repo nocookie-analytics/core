@@ -133,6 +133,8 @@ services:
         - traefik.enable=true
         - traefik.port=80
         - traefik.tags=${TRAEFIK_TAG}
+    volumes:
+      - root-home:/root/
   
   celeryworker:
     image: '${DOCKER_IMAGE_BACKEND}:${TAG-latest}'
@@ -168,6 +170,7 @@ services:
 
 volumes:
   app-db-data:
+  root-home:
 
 networks:
   traefik-public:
