@@ -7,7 +7,7 @@ from sqlalchemy.orm import Query
 
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
-from app.models.event import Event
+from app.models.event import Event, EventType
 from app.schemas.analytics import (
     AnalyticsData,
     AnalyticsType,
@@ -71,21 +71,21 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         return AnalyticsData(start=start, end=end, data=data)
 
     @staticmethod
-    def _events_in_date_range(domain: Domain, start: Arrow, end: Arrow) -> Query:
+    def _page_views_in_date_range(domain: Domain, start: Arrow, end: Arrow) -> Query:
         return domain.events.filter(
             and_(Event.timestamp >= start.datetime, Event.timestamp <= end.datetime)
-        )
+        ).filter(Event.event_type == EventType.page_view)
 
     def _get_page_views(
         self, db: Session, domain: Domain, start: Arrow, end: Arrow
     ) -> PageViewData:
-        count = self._events_in_date_range(domain, start, end).count()
-        return PageViewData(count=count)
+        count = self._page_views_in_date_range(domain, start, end).count()
+        return PageViewData(pageviews=count)
 
     def _get_browsers_data(
         self, db: Session, domain: Domain, start: Arrow, end: Arrow
     ) -> BrowsersData:
-        return BrowsersData()
+        return BrowsersData(browsers=[])
 
 
 event = CRUDEvent(Event)

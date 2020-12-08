@@ -1,4 +1,7 @@
-from app.tests.utils.event import create_random_page_view_event
+from app.tests.utils.event import (
+    create_random_metric_event,
+    create_random_page_view_event,
+)
 from app.models.domain import Domain
 from datetime import datetime, timedelta
 from app.schemas.analytics import AnalyticsType
@@ -76,21 +79,29 @@ def test_get_analytics(
 
 
 def test_get_pageviews(db: Session, mock_read_only_domain: Domain, mock_ip_address):
+    # With one page view event
     create_random_page_view_event(
         db, domain_id=mock_read_only_domain.id, ip_address=mock_ip_address
     )
-    now = arrow.now()
-
     data = crud.event._get_page_views(
-        db, mock_read_only_domain, now - timedelta(days=1), now
+        db, mock_read_only_domain, arrow.now() - timedelta(days=1), arrow.now()
     )
-    assert data.count == 1
+    assert data.pageviews == 1
 
+    # With two page view events
     create_random_page_view_event(
         db, domain_id=mock_read_only_domain.id, ip_address=mock_ip_address
     )
-
     data = crud.event._get_page_views(
-        db, mock_read_only_domain, now - timedelta(days=1), now
+        db, mock_read_only_domain, arrow.now() - timedelta(days=1), arrow.now()
     )
-    assert data.count == 2
+    assert data.pageviews == 2
+
+    # With two page view events and one metric event
+    create_random_metric_event(
+        db, domain_id=mock_read_only_domain.id, ip_address=mock_ip_address
+    )
+    data = crud.event._get_page_views(
+        db, mock_read_only_domain, arrow.now() - timedelta(days=1), arrow.now()
+    )
+    assert data.pageviews == 2
