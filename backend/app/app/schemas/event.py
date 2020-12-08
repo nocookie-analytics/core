@@ -27,8 +27,6 @@ class EventCreated(BaseModel):
     pvid: Optional[UUID4] = None
 
 
-MetricType = Optional[Json[Dict[str, int]]]
-
 # Properties to receive on item creation
 class EventCreate(EventBase):
     class Config:
@@ -46,7 +44,7 @@ class EventCreate(EventBase):
     user_timezone_offset: Optional[str]
     ip_address: IPvAnyAddress
     page_view_id: UUID4
-    metric: MetricType
+    metric: Optional[Dict[str, int]]
 
     download_time: Optional[Decimal]
     time_to_first_byte: Optional[Decimal]
@@ -66,7 +64,7 @@ class EventCreate(EventBase):
         request: Request,
         et: str,
         url: str,
-        metric: str = None,
+        metric: Optional[Json[Dict[str, int]]] = None,
         pt: Optional[str] = None,
         pvid: Optional[UUID4] = None,
         psb: Optional[int] = None,
@@ -78,7 +76,6 @@ class EventCreate(EventBase):
         tt: Optional[Decimal] = None,
         dt: Optional[Decimal] = None,
     ) -> EventCreate:
-        print(metric)
         try:
             event_type = EventType(et)
         except ValueError:
