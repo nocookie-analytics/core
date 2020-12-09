@@ -105,3 +105,12 @@ def test_get_pageviews(db: Session, mock_read_only_domain: Domain, mock_ip_addre
         db, mock_read_only_domain, arrow.now() - timedelta(days=1), arrow.now()
     )
     assert data.pageviews == 2
+
+
+def test_get_browsers(db: Session, mock_read_only_domain: Domain, mock_ip_address):
+    data = crud.event._get_browsers_data(
+        db, mock_read_only_domain, arrow.now() - timedelta(days=1), arrow.now()
+    )
+    assert len(data.browsers) == 1
+    assert data.browsers[0].name
+    assert data.browsers[0].total_visits

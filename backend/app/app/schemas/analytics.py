@@ -64,7 +64,6 @@ class PageViewData(AnalyticsBase):
 class Browser(BaseModel):
     name: str
     total_visits: int
-    unique_visits: int
 
 
 class BrowsersData(AnalyticsBase):

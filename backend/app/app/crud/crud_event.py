@@ -2,7 +2,7 @@ from typing import List
 
 from arrow.arrow import Arrow
 from sqlalchemy.orm import Session
-from sqlalchemy import and_
+from sqlalchemy import and_, func
 from sqlalchemy.orm import Query
 
 from app.crud.base import CRUDBase
@@ -11,6 +11,7 @@ from app.models.event import Event, EventType
 from app.schemas.analytics import (
     AnalyticsData,
     AnalyticsType,
+    Browser,
     BrowsersData,
     PageViewData,
     AnalyticsDataTypes,
@@ -85,7 +86,16 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
     def _get_browsers_data(
         self, db: Session, domain: Domain, start: Arrow, end: Arrow
     ) -> BrowsersData:
-        return BrowsersData(browsers=[])
+
+        rows = (
+            self._page_views_in_date_range(domain, start, end)
+            .group_by(Event._parsed_ua["browser_family"])
+            .with_entities(Event._parsed_ua["browser_family"], func.count())
+            .all()
+        )
+        return BrowsersData(
+            browsers=[Browser(name=row[0], total_visits=row[1]) for row in rows]
+        )
 
 
 event = CRUDEvent(Event)
