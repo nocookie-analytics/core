@@ -78,38 +78,34 @@ def test_get_analytics(
         assert field_data.type
 
 
-def test_get_pageviews(db: Session, mock_read_only_domain: Domain, mock_ip_address):
+def test_get_pageviews(db: Session, mock_ip_address):
     # With one page view event
-    create_random_page_view_event(
-        db, domain_id=mock_read_only_domain.id, ip_address=mock_ip_address
-    )
+    domain = create_random_domain(db)
+    create_random_page_view_event(db, domain_id=domain.id, ip_address=mock_ip_address)
     data = crud.event._get_page_views(
-        db, mock_read_only_domain, arrow.now() - timedelta(days=1), arrow.now()
+        db, domain, arrow.now() - timedelta(days=1), arrow.now()
     )
     assert data.pageviews == 1
 
     # With two page view events
-    create_random_page_view_event(
-        db, domain_id=mock_read_only_domain.id, ip_address=mock_ip_address
-    )
+    create_random_page_view_event(db, domain_id=domain.id, ip_address=mock_ip_address)
     data = crud.event._get_page_views(
-        db, mock_read_only_domain, arrow.now() - timedelta(days=1), arrow.now()
+        db, domain, arrow.now() - timedelta(days=1), arrow.now()
     )
     assert data.pageviews == 2
 
     # With two page view events and one metric event
-    create_random_metric_event(
-        db, domain_id=mock_read_only_domain.id, ip_address=mock_ip_address
-    )
+    create_random_metric_event(db, domain_id=domain.id, ip_address=mock_ip_address)
     data = crud.event._get_page_views(
-        db, mock_read_only_domain, arrow.now() - timedelta(days=1), arrow.now()
+        db, domain, arrow.now() - timedelta(days=1), arrow.now()
     )
     assert data.pageviews == 2
 
 
-def test_get_browsers(db: Session, mock_read_only_domain: Domain, mock_ip_address):
+def test_get_browsers(db: Session, mock_ip_address):
+    domain = create_random_domain(db)
     data = crud.event._get_browsers_data(
-        db, mock_read_only_domain, arrow.now() - timedelta(days=1), arrow.now()
+        db, domain, arrow.now() - timedelta(days=1), arrow.now()
     )
     assert len(data.browsers) == 1
     assert data.browsers[0].name
