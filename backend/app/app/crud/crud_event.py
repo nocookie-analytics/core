@@ -89,8 +89,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
 
         rows = (
             self._page_views_in_date_range(domain, start, end)
-            .group_by(Event._parsed_ua["browser_family"])
-            .with_entities(Event._parsed_ua["browser_family"], func.count())
+            .group_by(Event.parsed_ua["browser_family"])
+            .with_entities(Event.parsed_ua["browser_family"], func.count())
             .all()
         )
         return BrowsersData(
