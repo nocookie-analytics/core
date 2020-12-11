@@ -104,6 +104,7 @@ def test_get_pageviews(db: Session, mock_ip_address):
 
 def test_get_browsers(db: Session, mock_ip_address):
     domain = create_random_domain(db)
+    create_random_page_view_event(db, domain_id=domain.id, ip_address=mock_ip_address)
     data = crud.event._get_browsers_data(
         db, domain, arrow.now() - timedelta(days=1), arrow.now()
     )
