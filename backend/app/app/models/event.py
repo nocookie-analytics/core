@@ -83,7 +83,7 @@ class Event(Base):
     path = Column(String)
 
     metric_name = Column(String, index=True)
-    metric_value = Column(Integer)
+    metric_value = Column(NUMERIC)
 
     url_params = Column(JSONB, index=True)
 
