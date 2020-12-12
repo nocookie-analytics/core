@@ -57,3 +57,9 @@ source = ["app"]
 
 [tool.coverage.report]
 fail_under = 80
+
+[tool.pylint.messages_control]
+disable = [
+    "no-name-in-module", # Already done by mypy
+    "invalid-name",
+]
