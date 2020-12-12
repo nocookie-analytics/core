@@ -48,7 +48,6 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             **(event_in.parsed_ua.dict() if event_in.parsed_ua else {}),
             "page_view_id": event_in.page_view_id.hex,
         }
-        print(obj_in_data)
         db_obj = self.model(**obj_in_data)
         return db_obj
 
