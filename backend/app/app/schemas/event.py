@@ -44,13 +44,14 @@ class EventCreate(EventBase):
     user_timezone_offset: Optional[str]
     ip_address: IPvAnyAddress
     page_view_id: UUID4
-    metric: Optional[Dict[str, int]]
 
     download_time: Optional[Decimal]
     time_to_first_byte: Optional[Decimal]
     total_time: Optional[Decimal]
 
     parsed_ua: Optional[ParsedUA] = None
+    metric_name: Optional[str] = None
+    metric_value: Optional[Decimal] = None
 
     @validator("parsed_ua", always=True)
     def fill_parsed_ua(cls, v, values, **kwargs):
@@ -64,17 +65,17 @@ class EventCreate(EventBase):
         request: Request,
         et: str,
         url: str,
-        metric: Optional[Json[Dict[str, int]]] = None,
         pt: Optional[str] = None,
         pvid: Optional[UUID4] = None,
         psb: Optional[int] = None,
-        ft: Optional[int] = None,
         tz: Optional[str] = None,
         tzo: Optional[int] = None,
         ref: Optional[str] = None,
         ttfb: Optional[Decimal] = None,
         tt: Optional[Decimal] = None,
         dt: Optional[Decimal] = None,
+        mn: Optional[Decimal] = None,
+        mv: Optional[Decimal] = None,
     ) -> EventCreate:
         try:
             event_type = EventType(et)
@@ -110,7 +111,8 @@ class EventCreate(EventBase):
                 ua_string=ua_string,
                 url=url,
                 page_view_id=pvid,
-                metric=metric,
+                metric_name=mn,
+                metric_value=mv,
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception

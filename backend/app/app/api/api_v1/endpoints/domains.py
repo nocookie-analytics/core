@@ -38,7 +38,9 @@ def create_domain(
     """
     Create new domain.
     """
-    domain = crud.domain.create_with_owner(db=db, obj_in=domain_in, owner_id=current_user.id)
+    domain = crud.domain.create_with_owner(
+        db=db, obj_in=domain_in, owner_id=current_user.id
+    )
     return domain
 
 
@@ -56,7 +58,9 @@ def update_domain(
     domain = crud.domain.get(db=db, id=id)
     if not domain:
         raise HTTPException(status_code=404, detail="Domain not found")
-    if not crud.user.is_superuser(current_user) and (domain.owner_id != current_user.id):
+    if not crud.user.is_superuser(current_user) and (
+        domain.owner_id != current_user.id
+    ):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     domain = crud.domain.update(db=db, db_obj=domain, obj_in=domain_in)
     return domain
@@ -75,7 +79,9 @@ def read_domain(
     domain = crud.domain.get(db=db, id=id)
     if not domain:
         raise HTTPException(status_code=404, detail="Domain not found")
-    if not crud.user.is_superuser(current_user) and (domain.owner_id != current_user.id):
+    if not crud.user.is_superuser(current_user) and (
+        domain.owner_id != current_user.id
+    ):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     return domain
 
@@ -93,7 +99,9 @@ def delete_domain(
     domain = crud.domain.get(db=db, id=id)
     if not domain:
         raise HTTPException(status_code=404, detail="Domain not found")
-    if not crud.user.is_superuser(current_user) and (domain.owner_id != current_user.id):
+    if not crud.user.is_superuser(current_user) and (
+        domain.owner_id != current_user.id
+    ):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     domain = crud.domain.remove(db=db, id=id)
     return domain

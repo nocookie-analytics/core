@@ -54,6 +54,7 @@ def create_random_metric_event(
         total_time=5000,
         ip_address=ip_address or "127.0.0.1",
         page_view_id=uuid.uuid4(),
-        metric={"lcp": 1234},
+        metric_name="lcp",
+        metric_value=1234,
     )
     return crud.event.create_with_domain(db=db, obj_in=event_in, domain_id=domain_id)
