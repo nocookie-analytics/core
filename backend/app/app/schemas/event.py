@@ -68,7 +68,6 @@ class EventCreate(EventBase):
         pt: Optional[str] = None,
         pvid: Optional[UUID4] = None,
         psb: Optional[int] = None,
-        ft: Optional[int] = None,
         tz: Optional[str] = None,
         tzo: Optional[int] = None,
         ref: Optional[str] = None,
