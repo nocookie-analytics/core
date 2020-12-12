@@ -60,12 +60,12 @@ const perfume = new Perfume({
       case "cls":
       case "lcpFinal":
         const reportMetric = async () => {
-          const metricData = JSON.stringify({ [metricName]: data });
           const urlParams = new URLSearchParams({
             ...eventBaseData(),
             et: "metric",
             pvid: pageViewId,
-            metric: metricData,
+            mn: metricName,
+            mv: data.toString(),
           });
           const url = `${eventUrl}?${urlParams.toString()}`;
           const resp = await http(url);

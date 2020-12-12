@@ -42,8 +42,7 @@ def test_create_page_view_event(db: Session, mock_ip_address) -> None:
     event = crud.event.create_with_domain(db=db, obj_in=event_in, domain_id=domain.id)
     assert event.domain_id == domain.id
     assert event.ua_string == event_in.ua_string
-    assert event.parsed_ua
-    assert event.parsed_ua.browser_family == "Firefox"
+    assert event.browser_family == "Firefox"
     assert event.ip_city
     assert event.ip_country
     assert event.ip_continent_code
