@@ -51,9 +51,8 @@ jobs:
         echo "TAG=$GITHUB_SHA" | sed 's|/|-|g' >> .env
         echo "BRANCH_TAG=$(echo $GITHUB_REF | sed 's|/|-|g')" >> .env
 
-    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+    - uses: google-github-actions/setup-gcloud@master
       with:
-        version: '290.0.1'
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
