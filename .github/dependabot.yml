@@ -22,14 +22,21 @@ updates:
       interval: "daily"
 
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/backend"
+    assignees:
+      - "gaganpreet"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "docker"
+    directory: "/frontend"
     assignees:
       - "gaganpreet"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "pip"
-    directory: "/backend"
+    directory: "/backend/app/"
     assignees:
       - "gaganpreet"
     schedule:
