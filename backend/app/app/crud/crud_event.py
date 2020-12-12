@@ -1,39 +1,56 @@
-from typing import List
+from typing import Dict, List, Optional, Union
 
 from arrow.arrow import Arrow
-from sqlalchemy.orm import Session
+from pydantic import IPvAnyAddress
 from sqlalchemy import and_, func
-from sqlalchemy.orm import Query
+from sqlalchemy.orm import Query, Session
 
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
 from app.models.event import Event, EventType
 from app.schemas.analytics import (
     AnalyticsData,
+    AnalyticsDataTypes,
     AnalyticsType,
     Browser,
     BrowsersData,
     PageViewData,
-    AnalyticsDataTypes,
 )
 from app.schemas.event import EventCreate, EventUpdate
 from app.utils import get_ip_gelocation
 
 
 class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
-    def add_geolocation_info(self, event: Event) -> None:
-        if event.ip_address:
-            geolocation = get_ip_gelocation(event.ip_address)
+    @staticmethod
+    def _get_geolocation_info(
+        ip_address: IPvAnyAddress,
+    ) -> Dict[str, Optional[Union[int, str]]]:
+        data: Dict[str, Optional[Union[str, int]]] = {}
+        if ip_address:
+            geolocation = get_ip_gelocation(str(ip_address))
             if not geolocation:
-                return
+                return data
             city_id = geolocation.city.geoname_id
             country_code = geolocation.country.iso_code
             continent_code = geolocation.continent.code
             if city_id:
-                event.ip_city_id = city_id
+                data["ip_city_id"] = city_id
             if country_code:
-                event.ip_country_iso_code = country_code
-            event.ip_continent_code = continent_code
+                data["ip_country_iso_code"] = country_code
+            data["ip_continent_code"] = continent_code
+        return data
+
+    def build_db_obj(self, event_in: EventCreate) -> Event:
+        obj_in_data = event_in.dict(exclude={"metric", "parsed_ua"})
+        obj_in_data = {
+            **obj_in_data,
+            **self._get_geolocation_info(event_in.ip_address),
+            **(event_in.parsed_ua.dict() if event_in.parsed_ua else {}),
+            "page_view_id": event_in.page_view_id.hex,
+        }
+        print(obj_in_data)
+        db_obj = self.model(**obj_in_data)
+        return db_obj
 
     def create_with_domain(
         self,
@@ -45,10 +62,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         """
         Create an event
         """
-        obj_in_data = obj_in.dict()
-        obj_in_data["page_view_id"] = obj_in_data["page_view_id"].hex
-        db_obj = self.model(**obj_in_data, domain_id=domain_id)
-        self.add_geolocation_info(db_obj)
+        db_obj = self.build_db_obj(obj_in)
+        db_obj.domain_id = domain_id
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
@@ -89,8 +104,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
 
         rows = (
             self._page_views_in_date_range(domain, start, end)
-            .group_by(Event.parsed_ua["browser_family"])
-            .with_entities(Event.parsed_ua["browser_family"], func.count())
+            .group_by(Event.browser_family)
+            .with_entities(Event.browser_family, func.count())
             .all()
         )
         return BrowsersData(
