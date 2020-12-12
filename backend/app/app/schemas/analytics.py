@@ -58,11 +58,17 @@ class AnalyticsBase(BaseModel):
 
 class PageViewData(AnalyticsBase):
     type = AnalyticsType.PAGEVIEWS
-    count: int
+    pageviews: int
+
+
+class Browser(BaseModel):
+    name: str
+    total_visits: int
 
 
 class BrowsersData(AnalyticsBase):
     type = AnalyticsType.BROWSERS
+    browsers: List[Browser]
 
 
 AnalyticsDataTypes = Union[PageViewData, BrowsersData]

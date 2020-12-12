@@ -2,15 +2,16 @@ from typing import List
 
 from arrow.arrow import Arrow
 from sqlalchemy.orm import Session
-from sqlalchemy import and_
+from sqlalchemy import and_, func
 from sqlalchemy.orm import Query
 
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
-from app.models.event import Event
+from app.models.event import Event, EventType
 from app.schemas.analytics import (
     AnalyticsData,
     AnalyticsType,
+    Browser,
     BrowsersData,
     PageViewData,
     AnalyticsDataTypes,
@@ -71,21 +72,30 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         return AnalyticsData(start=start, end=end, data=data)
 
     @staticmethod
-    def _events_in_date_range(domain: Domain, start: Arrow, end: Arrow) -> Query:
+    def _page_views_in_date_range(domain: Domain, start: Arrow, end: Arrow) -> Query:
         return domain.events.filter(
             and_(Event.timestamp >= start.datetime, Event.timestamp <= end.datetime)
-        )
+        ).filter(Event.event_type == EventType.page_view)
 
     def _get_page_views(
         self, db: Session, domain: Domain, start: Arrow, end: Arrow
     ) -> PageViewData:
-        count = self._events_in_date_range(domain, start, end).count()
-        return PageViewData(count=count)
+        count = self._page_views_in_date_range(domain, start, end).count()
+        return PageViewData(pageviews=count)
 
     def _get_browsers_data(
         self, db: Session, domain: Domain, start: Arrow, end: Arrow
     ) -> BrowsersData:
-        return BrowsersData()
+
+        rows = (
+            self._page_views_in_date_range(domain, start, end)
+            .group_by(Event.parsed_ua["browser_family"])
+            .with_entities(Event.parsed_ua["browser_family"], func.count())
+            .all()
+        )
+        return BrowsersData(
+            browsers=[Browser(name=row[0], total_visits=row[1]) for row in rows]
+        )
 
 
 event = CRUDEvent(Event)

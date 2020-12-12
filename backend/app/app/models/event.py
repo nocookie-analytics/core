@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from sqlalchemy.sql import text
+from sqlalchemy.ext.hybrid import hybrid_property
+
 from app.models.parsed_ua import ParsedUA
 from enum import Enum
 from typing import Mapping, Optional, TYPE_CHECKING, Tuple
@@ -53,11 +56,15 @@ class Event(Base):
     # Note: JSONB doesn't track changes, use sqlalchemy-json lib if needed
     _parsed_ua: Mapping = Column("parsed_ua", JSONB)  # type: ignore
 
-    @property
+    @hybrid_property
     def parsed_ua(self) -> Optional[ParsedUA]:
         if self._parsed_ua:
             return ParsedUA(**self._parsed_ua)
         return None
+
+    @parsed_ua.expression
+    def parsed_ua(self):
+        return self._parsed_ua
 
     @parsed_ua.setter
     def parsed_ua(self, parsed_ua):
@@ -82,8 +89,14 @@ class Event(Base):
     total_time = Column(NUMERIC)
 
     ix_domain_timestamp = Index("ix_domain_timestamp", domain_id, timestamp)
+    ix_timestamp = Index("ix_timestamp", timestamp)
 
     # Choosing this as a primary key so the table is partitioned by domain first,
     # then timestamp but the combination of domain and timestamp won't be unique,
     # serial id makes it so
-    __table_args__: Tuple = (PrimaryKeyConstraint(domain_id, timestamp, id), {})
+    __table_args__: Tuple = (
+        ix_domain_timestamp,
+        ix_timestamp,
+        PrimaryKeyConstraint(domain_id, timestamp, id),
+        {},
+    )
