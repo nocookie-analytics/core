@@ -62,12 +62,12 @@ class Event(Base):
     ua_string = Column(String)
 
     browser_family = Column(String, index=True)
-    browser_major_version = Column(String)
-    browser_minor_version = Column(String)
+    browser_version_major = Column(String)
+    browser_version_minor = Column(String)
 
     os_family = Column(String, index=True)
-    os_major_version = Column(String)
-    os_minor_version = Column(String)
+    os_version_major = Column(String)
+    os_version_minor = Column(String)
 
     device_family = Column(String, index=True)
     device_brand = Column(String, index=True)
