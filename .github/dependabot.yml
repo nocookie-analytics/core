@@ -14,22 +14,8 @@ updates:
     schedule:
       interval: "daily"
 
-  - package-ecosystem: "npm"
-    directory: "/frontend"
-    assignees:
-      - "gaganpreet"
-    schedule:
-      interval: "daily"
-
   - package-ecosystem: "docker"
     directory: "/backend"
-    assignees:
-      - "gaganpreet"
-    schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "docker"
-    directory: "/frontend"
     assignees:
       - "gaganpreet"
     schedule:
