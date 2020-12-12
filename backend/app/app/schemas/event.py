@@ -44,7 +44,6 @@ class EventCreate(EventBase):
     user_timezone_offset: Optional[str]
     ip_address: IPvAnyAddress
     page_view_id: UUID4
-    metric: Optional[Dict[str, int]]
 
     download_time: Optional[Decimal]
     time_to_first_byte: Optional[Decimal]
@@ -66,7 +65,6 @@ class EventCreate(EventBase):
         request: Request,
         et: str,
         url: str,
-        metric: Optional[Json[Dict[str, int]]] = None,
         pt: Optional[str] = None,
         pvid: Optional[UUID4] = None,
         psb: Optional[int] = None,
@@ -77,7 +75,7 @@ class EventCreate(EventBase):
         ttfb: Optional[Decimal] = None,
         tt: Optional[Decimal] = None,
         dt: Optional[Decimal] = None,
-        mn: Optional[Decimal] = None
+        mn: Optional[Decimal] = None,
         mv: Optional[Decimal] = None,
     ) -> EventCreate:
         try:
@@ -115,7 +113,7 @@ class EventCreate(EventBase):
                 url=url,
                 page_view_id=pvid,
                 metric_name=mn,
-                metric_value=mn,
+                metric_value=mv,
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception
