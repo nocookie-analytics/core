@@ -1,0 +1,36 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    assignees:
+      - "gaganpreet"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/client"
+    assignees:
+      - "gaganpreet"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    assignees:
+      - "gaganpreet"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    assignees:
+      - "gaganpreet"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pip"
+    directory: "/backend"
+    assignees:
+      - "gaganpreet"
+    schedule:
+      interval: "daily"
