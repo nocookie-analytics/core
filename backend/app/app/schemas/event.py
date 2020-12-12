@@ -51,6 +51,8 @@ class EventCreate(EventBase):
     total_time: Optional[Decimal]
 
     parsed_ua: Optional[ParsedUA] = None
+    metric_name: Optional[str] = None
+    metric_value: Optional[Decimal] = None
 
     @validator("parsed_ua", always=True)
     def fill_parsed_ua(cls, v, values, **kwargs):
@@ -75,6 +77,8 @@ class EventCreate(EventBase):
         ttfb: Optional[Decimal] = None,
         tt: Optional[Decimal] = None,
         dt: Optional[Decimal] = None,
+        mn: Optional[Decimal] = None
+        mv: Optional[Decimal] = None,
     ) -> EventCreate:
         try:
             event_type = EventType(et)
@@ -110,7 +114,8 @@ class EventCreate(EventBase):
                 ua_string=ua_string,
                 url=url,
                 page_view_id=pvid,
-                metric=metric,
+                metric_name=mn,
+                metric_value=mn,
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception
