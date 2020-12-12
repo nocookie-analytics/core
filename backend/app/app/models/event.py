@@ -89,8 +89,14 @@ class Event(Base):
     total_time = Column(NUMERIC)
 
     ix_domain_timestamp = Index("ix_domain_timestamp", domain_id, timestamp)
+    ix_timestamp = Index("ix_timestamp", timestamp)
 
     # Choosing this as a primary key so the table is partitioned by domain first,
     # then timestamp but the combination of domain and timestamp won't be unique,
     # serial id makes it so
-    __table_args__: Tuple = (PrimaryKeyConstraint(domain_id, timestamp, id), {})
+    __table_args__: Tuple = (
+        ix_domain_timestamp,
+        ix_timestamp,
+        PrimaryKeyConstraint(domain_id, timestamp, id),
+        {},
+    )
