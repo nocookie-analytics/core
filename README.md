@@ -827,3 +827,11 @@ $ cookiecutter --config-file ./cookiecutter-config-file.yml --output-dir ../proj
 ```
 
 That will use the file `cookiecutter-config-file.yml` in the current directory (in this project) to generate a new project inside a sibling directory `project-copy`.
+
+
+## Resolve poetry.lock conflicts
+
+https://github.com/python-poetry/poetry/issues/496#issuecomment-738680177
+
+git restore --staged --worktree backend/app/poetry.lock
+poetry lock --no-update

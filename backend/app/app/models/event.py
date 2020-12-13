@@ -1,17 +1,24 @@
 from __future__ import annotations
 
 from sqlalchemy.sql import text
-from sqlalchemy.ext.hybrid import hybrid_property
 
-from app.models.parsed_ua import ParsedUA
 from enum import Enum
-from typing import Mapping, Optional, TYPE_CHECKING, Tuple
+from typing import Mapping, TYPE_CHECKING, Tuple
 
-from sqlalchemy import Column, ForeignKey, Integer, NUMERIC, String, DateTime
-from sqlalchemy.sql.functions import func
-from sqlalchemy.dialects.postgresql import JSONB, INET, UUID
+from sqlalchemy import (
+    Column,
+    ForeignKey,
+    Integer,
+    NUMERIC,
+    String,
+    DateTime,
+    Boolean,
+    func,
+    Index,
+    PrimaryKeyConstraint,
+)
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql.schema import Index, PrimaryKeyConstraint
+from sqlalchemy.dialects.postgresql import JSONB, INET, UUID
 from sqlalchemy_enum34 import EnumType
 
 from app.db.base_class import Base
@@ -53,28 +60,32 @@ class Event(Base):
     ip_timezone = Column(String)
 
     ua_string = Column(String)
-    # Note: JSONB doesn't track changes, use sqlalchemy-json lib if needed
-    _parsed_ua: Mapping = Column("parsed_ua", JSONB)  # type: ignore
 
-    @hybrid_property
-    def parsed_ua(self) -> Optional[ParsedUA]:
-        if self._parsed_ua:
-            return ParsedUA(**self._parsed_ua)
-        return None
+    browser_family = Column(String, index=True)
+    browser_version_major = Column(String)
+    browser_version_minor = Column(String)
 
-    @parsed_ua.expression
-    def parsed_ua(self):
-        return self._parsed_ua
+    os_family = Column(String, index=True)
+    os_version_major = Column(String)
+    os_version_minor = Column(String)
 
-    @parsed_ua.setter
-    def parsed_ua(self, parsed_ua):
-        if isinstance(parsed_ua, Mapping):
-            self._parsed_ua = parsed_ua
+    device_family = Column(String, index=True)
+    device_brand = Column(String, index=True)
+    device_model = Column(String, index=True)
+
+    is_mobile = Column(Boolean)
+    is_tablet = Column(Boolean)
+    is_touch_capable = Column(Boolean)
+    is_pc = Column(Boolean)
+    is_bot = Column(Boolean)
 
     url = Column(String)
     path = Column(String)
-    url_params = Column(JSONB)
-    metric = Column(JSONB)
+
+    metric_name = Column(String, index=True)
+    metric_value = Column(NUMERIC)
+
+    url_params = Column(JSONB, index=True)
 
     page_title = Column(String)
 

@@ -38,6 +38,7 @@ def db(request) -> Generator:
     init_db(session)
 
     def teardown():
+        session.rollback()
         session.commit()
         Base.metadata.drop_all(bind=engine)
 

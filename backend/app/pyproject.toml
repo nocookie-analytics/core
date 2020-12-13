@@ -6,7 +6,7 @@ authors = ["Gaganpreet Arora <me@gaganpreet.in>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-uvicorn = "^0.12.3"
+uvicorn = "^0.13.1"
 fastapi = "^0.62.0"
 python-multipart = "^0.0.5"
 email-validator = "^1.0.5"
@@ -42,7 +42,7 @@ pytest-cov = "^2.8.1"
 pylint = "^2.5.0"
 ipython = "^7.18.1"
 coverage = {extras = ["toml"], version = "^5.3"}
-hypothesis = "^5.41.4"
+hypothesis = "^5.43.3"
 
 [tool.isort]
 multi_line_output = 3
@@ -58,3 +58,9 @@ source = ["app"]
 
 [tool.coverage.report]
 fail_under = 80
+
+[tool.pylint.messages_control]
+disable = [
+    "no-name-in-module", # Already done by mypy
+    "invalid-name",
+]
