@@ -1,32 +1,41 @@
+from datetime import datetime, timedelta
+
+import arrow
+from furl.furl import furl
+from hypothesis import given
+from hypothesis.extra.pytz import timezones
+from hypothesis.provisional import urls
+from hypothesis.strategies import datetimes, timedeltas, uuids
+from sqlalchemy.orm import Session
+
+from app import crud
+from app.models.domain import Domain
+from app.models.event import EventType
+from app.schemas.analytics import AnalyticsType
+from app.schemas.event import EventCreate
+from app.tests.utils.domain import create_random_domain
 from app.tests.utils.event import (
     create_random_metric_event,
     create_random_page_view_event,
 )
-from app.models.domain import Domain
-from datetime import datetime, timedelta
-from app.schemas.analytics import AnalyticsType
-import uuid
-import arrow
-
-from app.models.event import EventType
-from sqlalchemy.orm import Session
-
-from app import crud
-from app.schemas.event import EventCreate
-from app.tests.utils.domain import create_random_domain
-from hypothesis import given
-from hypothesis.extra.pytz import timezones
-from hypothesis.strategies import datetimes, timedeltas
 
 aware_datetimes = datetimes(timezones=timezones())
 
 
-def test_create_page_view_event(db: Session, mock_ip_address) -> None:
-    domain = create_random_domain(db)
+@given(uuids(version=4), urls())
+def test_create_page_view_event(
+    db: Session,
+    mock_read_only_domain: Domain,
+    mock_ip_address: str,
+    page_view_id: str,
+    url: str,
+) -> None:
+    domain = mock_read_only_domain
+    furled = furl(url)
     event_in = EventCreate(
         event_type=EventType.page_view,
-        path="/abc",
-        url="https://google.com",
+        path=str(furled.path),
+        url=url,
         url_params={},
         page_title="Title",
         page_size_bytes=150,
@@ -37,7 +46,7 @@ def test_create_page_view_event(db: Session, mock_ip_address) -> None:
         time_to_first_byte=5000,
         total_time=5000,
         ip_address=mock_ip_address,
-        page_view_id=uuid.uuid4(),
+        page_view_id=str(page_view_id),
     )
     event = crud.event.create_with_domain(db=db, obj_in=event_in, domain_id=domain.id)
     assert event.domain_id == domain.id
