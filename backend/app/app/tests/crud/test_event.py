@@ -1,10 +1,9 @@
+from app.tests.utils.utils import paths
 from datetime import datetime, timedelta
 
 import arrow
-from furl.furl import furl
 from hypothesis import given
 from hypothesis.extra.pytz import timezones
-from hypothesis.provisional import urls
 from hypothesis.strategies import datetimes, timedeltas, uuids
 from sqlalchemy.orm import Session
 
@@ -22,19 +21,19 @@ from app.tests.utils.event import (
 aware_datetimes = datetimes(timezones=timezones())
 
 
-@given(uuids(version=4), urls())
+@given(uuids(version=4), paths())
 def test_create_page_view_event(
     db: Session,
     mock_read_only_domain: Domain,
     mock_ip_address: str,
     page_view_id: str,
-    url: str,
+    path: str,
 ) -> None:
     domain = mock_read_only_domain
-    furled = furl(url)
+    url = f"http://{domain.domain_name}/{path}"
     event_in = EventCreate(
         event_type=EventType.page_view,
-        path=str(furled.path),
+        path=str(path),
         url=url,
         url_params={},
         page_title="Title",
