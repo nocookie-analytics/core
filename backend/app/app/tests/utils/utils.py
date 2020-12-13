@@ -2,6 +2,7 @@ import random
 import string
 from typing import Dict
 
+from hypothesis.strategies import lists, text
 from fastapi.testclient import TestClient
 
 from app.core.config import settings
@@ -25,3 +26,14 @@ def get_superuser_token_headers(client: TestClient) -> Dict[str, str]:
     a_token = tokens["access_token"]
     headers = {"Authorization": f"Bearer {a_token}"}
     return headers
+
+
+def paths():
+    URL_SAFE_CHARACTERS = frozenset(
+        string.ascii_letters + string.digits + "$-_.+!*'(),~"
+    )
+
+    def url_encode(s) -> str:
+        return "".join(c if c in URL_SAFE_CHARACTERS else "%%%02X" % ord(c) for c in s)
+
+    return lists(text(string.printable).map(url_encode)).map("/".join)
