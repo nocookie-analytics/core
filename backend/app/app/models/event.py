@@ -61,17 +61,17 @@ class Event(Base):
 
     ua_string = Column(String)
 
-    browser_family = Column(String, index=True)
+    browser_family = Column(String)
     browser_version_major = Column(String)
     browser_version_minor = Column(String)
 
-    os_family = Column(String, index=True)
+    os_family = Column(String)
     os_version_major = Column(String)
     os_version_minor = Column(String)
 
-    device_family = Column(String, index=True)
-    device_brand = Column(String, index=True)
-    device_model = Column(String, index=True)
+    device_family = Column(String)
+    device_brand = Column(String)
+    device_model = Column(String)
 
     is_mobile = Column(Boolean)
     is_tablet = Column(Boolean)
@@ -82,7 +82,7 @@ class Event(Base):
     url = Column(String)
     path = Column(String)
 
-    metric_name = Column(String, index=True)
+    metric_name = Column(String)
     metric_value = Column(NUMERIC)
 
     url_params = Column(JSONB, index=True)
@@ -101,6 +101,12 @@ class Event(Base):
 
     ix_domain_timestamp = Index("ix_domain_timestamp", domain_id, timestamp)
     ix_timestamp = Index("ix_timestamp", timestamp)
+    ix_browser_family = Index("ix_browser_family", domain_id, browser_family, timestamp)
+    ix_os_family = Index("ix_os_family", domain_id, os_family, timestamp)
+    ix_device_family = Index("ix_device_family", domain_id, device_family, timestamp)
+    ix_device_brand = Index("ix_device_brand", domain_id, device_brand, timestamp)
+    ix_device_model = Index("ix_device_model", domain_id, device_model, timestamp)
+    ix_device_metric = Index("ix_device_metric", domain_id, metric_name, timestamp)
 
     # Choosing this as a primary key so the table is partitioned by domain first,
     # then timestamp but the combination of domain and timestamp won't be unique,
