@@ -101,12 +101,12 @@ class Event(Base):
 
     ix_domain_timestamp = Index("ix_domain_timestamp", domain_id, timestamp)
     ix_timestamp = Index("ix_timestamp", timestamp)
-    ix_browser_family = Index("ix_browser_family", domain_id, browser_family)
-    ix_os_family = Index("ix_os_family", domain_id, os_family)
-    ix_device_family = Index("ix_device_family", domain_id, device_family)
-    ix_device_brand = Index("ix_device_brand", domain_id, device_brand)
-    ix_device_model = Index("ix_device_model", domain_id, device_model)
-    ix_device_metric = Index("ix_device_metric", domain_id, metric_name)
+    ix_browser_family = Index("ix_browser_family", domain_id, browser_family, timestamp)
+    ix_os_family = Index("ix_os_family", domain_id, os_family, timestamp)
+    ix_device_family = Index("ix_device_family", domain_id, device_family, timestamp)
+    ix_device_brand = Index("ix_device_brand", domain_id, device_brand, timestamp)
+    ix_device_model = Index("ix_device_model", domain_id, device_model, timestamp)
+    ix_device_metric = Index("ix_device_metric", domain_id, metric_name, timestamp)
 
     # Choosing this as a primary key so the table is partitioned by domain first,
     # then timestamp but the combination of domain and timestamp won't be unique,
