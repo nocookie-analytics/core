@@ -4,7 +4,7 @@ from typing import Dict, List, Optional, Tuple, Union
 from arrow.arrow import Arrow
 from pydantic import IPvAnyAddress
 from sqlalchemy import and_, func
-from sqlalchemy.orm import Query, Session, selectinload
+from sqlalchemy.orm import Query, Session
 
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
