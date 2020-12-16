@@ -25,7 +25,7 @@ from app.schemas.analytics import (
     PageViewData,
 )
 from app.schemas.event import EventCreate, EventUpdate
-from app.utils import get_ip_gelocation
+from app.utils.geolocation import get_ip_gelocation
 
 
 class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):

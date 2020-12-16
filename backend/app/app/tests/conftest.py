@@ -7,11 +7,8 @@ from typing import Dict, Generator
 from starlette.datastructures import Address
 from starlette.requests import Request
 
-# We override the env before doing any other imports
-os.environ["POSTGRES_DB"] = "apptest"
-
 from app.models.location import City, Country
-from app.utils import get_ip_gelocation
+from app.utils.geolocation import get_ip_gelocation
 
 import pytest
 from fastapi.testclient import TestClient
@@ -25,6 +22,10 @@ from app.main import app
 from app.tests.utils.user import authentication_token_from_email
 from app.tests.utils.utils import get_superuser_token_headers
 from app.tests.utils.domain import create_random_domain
+
+
+# We override the env before doing any other imports
+os.environ["POSTGRES_DB"] = "apptest"
 
 
 @pytest.fixture(scope="session", autouse=True)
