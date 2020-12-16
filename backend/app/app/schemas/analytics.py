@@ -74,6 +74,7 @@ class BrowsersData(AnalyticsBase):
 
 class CountryStat(BaseModel):
     name: str
+    country_code: str
     total_visits: int
 
 

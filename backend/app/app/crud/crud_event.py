@@ -1,4 +1,5 @@
-from typing import Dict, List, Optional, Union
+from app.models.location import Country
+from typing import Dict, List, Optional, Tuple, Union
 
 from arrow.arrow import Arrow
 from pydantic import IPvAnyAddress
@@ -111,15 +112,17 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
 
     @staticmethod
     def _get_countries_data(base_query: Query):
-        rows = (
-            base_query.group_by(Event.ip_country_iso_code)
-            .with_entities(Event.browser_family, func.count())
-            .options(selectinload(Event.ip_country))
+        rows: List[Tuple[str, str, int]] = (
+            base_query.group_by(Event.ip_country_iso_code, Country.name)
+            .with_entities(Event.ip_country_iso_code, Country.name, func.count())
             .limit(10)
             .all()
         )
         return CountryData(
-            countries=[CountryStat(name=row[0], total_visits=row[1]) for row in rows]
+            countries=[
+                CountryStat(country_code=row[0], name=row[1], total_visits=row[2])
+                for row in rows
+            ]
         )
 
 

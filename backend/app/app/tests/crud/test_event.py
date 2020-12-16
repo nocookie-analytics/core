@@ -89,32 +89,49 @@ def test_get_pageviews(db: Session, mock_ip_address):
     # With one page view event
     domain = create_random_domain(db)
     create_random_page_view_event(db, domain_id=domain.id, ip_address=mock_ip_address)
-    data = crud.event._get_page_views(
-        db, domain, arrow.now() - timedelta(days=1), arrow.now()
+    base_query = crud.event._page_views_in_date_range(
+        domain,
+        start=arrow.now() - timedelta(days=1),
+        end=arrow.now() + timedelta(days=1),
     )
+    data = crud.event._get_page_views(base_query)
     assert data.pageviews == 1
 
     # With two page view events
     create_random_page_view_event(db, domain_id=domain.id, ip_address=mock_ip_address)
-    data = crud.event._get_page_views(
-        db, domain, arrow.now() - timedelta(days=1), arrow.now()
-    )
+    data = crud.event._get_page_views(base_query)
     assert data.pageviews == 2
 
     # With two page view events and one metric event
     create_random_metric_event(db, domain_id=domain.id, ip_address=mock_ip_address)
-    data = crud.event._get_page_views(
-        db, domain, arrow.now() - timedelta(days=1), arrow.now()
-    )
+    data = crud.event._get_page_views(base_query)
     assert data.pageviews == 2
 
 
 def test_get_browsers(db: Session, mock_ip_address):
     domain = create_random_domain(db)
     create_random_page_view_event(db, domain_id=domain.id, ip_address=mock_ip_address)
-    data = crud.event._get_browsers_data(
-        db, domain, arrow.now() - timedelta(days=1), arrow.now()
+    base_query = crud.event._page_views_in_date_range(
+        domain,
+        start=arrow.now() - timedelta(days=1),
+        end=arrow.now() + timedelta(days=1),
     )
+    data = crud.event._get_browsers_data(base_query)
     assert len(data.browsers) == 1
     assert data.browsers[0].name
     assert data.browsers[0].total_visits
+
+
+def test_get_countries(db: Session, mock_ip_address):
+    domain = create_random_domain(db)
+    create_random_page_view_event(db, domain_id=domain.id, ip_address=mock_ip_address)
+    base_query = crud.event._page_views_in_date_range(
+        domain,
+        start=arrow.now() - timedelta(days=1),
+        end=arrow.now() + timedelta(days=1),
+    )
+    data = crud.event._get_countries_data(base_query)
+    assert len(data.countries) == 1
+    assert data.countries[0].name
+    assert len(data.countries[0].country_code) == 2
+    assert data.countries[0].total_visits
