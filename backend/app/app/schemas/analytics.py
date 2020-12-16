@@ -68,7 +68,7 @@ class BrowserStat(BaseModel):
     total_visits: int
 
 
-class BrowsersData(AnalyticsBase):
+class BrowserData(AnalyticsBase):
     type = AnalyticsType.BROWSERS
     browser_families: List[BrowserStat]
 
@@ -94,7 +94,17 @@ class OSData(AnalyticsBase):
     os_families: List[OSStat]
 
 
-AnalyticsDataTypes = Union[PageViewData, BrowsersData, CountryData, OSData]
+class DeviceStat(BaseModel):
+    name: str
+    total_visits: int
+
+
+class DeviceData(AnalyticsBase):
+    type = AnalyticsType.OS
+    device_families: List[DeviceStat]
+
+
+AnalyticsDataTypes = Union[PageViewData, BrowserData, CountryData, OSData, DeviceData]
 
 
 class AnalyticsData(BaseModel):
