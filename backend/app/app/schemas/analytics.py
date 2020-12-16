@@ -11,6 +11,7 @@ from starlette import status
 class AnalyticsType(Enum):
     PAGEVIEWS = "pageviews"
     BROWSERS = "browsers"
+    COUNTRY = "countries"
 
     @staticmethod
     def from_csv_string(include) -> List[AnalyticsType]:
@@ -61,14 +62,25 @@ class PageViewData(AnalyticsBase):
     pageviews: int
 
 
-class Browser(BaseModel):
+class BrowserStat(BaseModel):
     name: str
     total_visits: int
 
 
 class BrowsersData(AnalyticsBase):
     type = AnalyticsType.BROWSERS
-    browsers: List[Browser]
+    browsers: List[BrowserStat]
+
+
+class CountryStat(BaseModel):
+    name: str
+    country_code: str
+    total_visits: int
+
+
+class CountryData(AnalyticsBase):
+    type = AnalyticsType.COUNTRY
+    countries: List[CountryStat]
 
 
 AnalyticsDataTypes = Union[PageViewData, BrowsersData]
