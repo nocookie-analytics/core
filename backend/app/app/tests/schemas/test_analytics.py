@@ -16,6 +16,6 @@ def test_from_csv_string_valid():
         AnalyticsType.PAGEVIEWS
     ]
 
-    parsed = AnalyticsType.from_csv_string("pageviews,browsers")
+    parsed = AnalyticsType.from_csv_string("pageviews,browser_families")
     expected = [AnalyticsType.PAGEVIEWS, AnalyticsType.BROWSERS]
     assert set(parsed) == set(expected)

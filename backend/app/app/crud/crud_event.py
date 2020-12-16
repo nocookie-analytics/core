@@ -17,6 +17,8 @@ from app.schemas.analytics import (
     BrowsersData,
     CountryData,
     CountryStat,
+    OSData,
+    OSStat,
     PageViewData,
 )
 from app.schemas.event import EventCreate, EventUpdate
@@ -86,6 +88,11 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 data.append(self._get_page_views(base_page_views_query))
             if field == AnalyticsType.BROWSERS:
                 data.append(self._get_browsers_data(base_page_views_query))
+            if field == AnalyticsType.COUNTRY:
+                data.append(self._get_countries_data(base_page_views_query))
+            if field == AnalyticsType.OS:
+                data.append(self._get_os_data(base_page_views_query))
+
         return AnalyticsData(start=start, end=end, data=data)
 
     @staticmethod
@@ -107,7 +114,9 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             .all()
         )
         return BrowsersData(
-            browsers=[BrowserStat(name=row[0], total_visits=row[1]) for row in rows]
+            browser_families=[
+                BrowserStat(name=row[0], total_visits=row[1]) for row in rows
+            ]
         )
 
     @staticmethod
@@ -123,6 +132,18 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 CountryStat(country_code=row[0], name=row[1], total_visits=row[2])
                 for row in rows
             ]
+        )
+
+    @staticmethod
+    def _get_os_data(base_query: Query):
+        rows: List[Tuple[str, str, int]] = (
+            base_query.group_by(Event.os_family)
+            .with_entities(Event.os_family, func.count())
+            .limit(10)
+            .all()
+        )
+        return OSData(
+            os_families=[OSStat(name=row[0], total_visits=row[1]) for row in rows]
         )
 
 
