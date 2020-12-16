@@ -103,7 +103,7 @@ class Event(Base):
     ix_timestamp = Index("ix_timestamp", timestamp)
     ix_browser_family = Index("ix_browser_family", domain_id, browser_family, timestamp)
     ix_location = Index(
-        "ix_city", domain_id, ip_country_iso_code, ip_city_id, timestamp
+        "ix_location", domain_id, ip_country_iso_code, ip_city_id, timestamp
     )
     ix_os_family = Index(
         "ix_os_family",
