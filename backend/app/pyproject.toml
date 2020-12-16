@@ -29,6 +29,7 @@ user-agents = "^2.2.0"
 geoip2 = "^4.1.0"
 arrow = "^0.17.0"
 pytz = "2019.3"
+referer_parser = "^0.4.1"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.790"
