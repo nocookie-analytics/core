@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Union
 from arrow.arrow import Arrow
 from pydantic import IPvAnyAddress
 from sqlalchemy import and_, func
-from sqlalchemy.orm import Query, Session
+from sqlalchemy.orm import Query, Session, selectinload
 
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
@@ -12,8 +12,10 @@ from app.schemas.analytics import (
     AnalyticsData,
     AnalyticsDataTypes,
     AnalyticsType,
-    Browser,
+    BrowserStat,
     BrowsersData,
+    CountryData,
+    CountryStat,
     PageViewData,
 )
 from app.schemas.event import EventCreate, EventUpdate
@@ -78,10 +80,11 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
     ) -> AnalyticsData:
         data: List[AnalyticsDataTypes] = []
         for field in fields:
+            base_page_views_query = self._page_views_in_date_range(domain, start, end)
             if field == AnalyticsType.PAGEVIEWS:
-                data.append(self._get_page_views(db, domain, start, end))
+                data.append(self._get_page_views(base_page_views_query))
             if field == AnalyticsType.BROWSERS:
-                data.append(self._get_browsers_data(db, domain, start, end))
+                data.append(self._get_browsers_data(base_page_views_query))
         return AnalyticsData(start=start, end=end, data=data)
 
     @staticmethod
@@ -90,24 +93,33 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             and_(Event.timestamp >= start.datetime, Event.timestamp <= end.datetime)
         ).filter(Event.event_type == EventType.page_view)
 
-    def _get_page_views(
-        self, db: Session, domain: Domain, start: Arrow, end: Arrow
-    ) -> PageViewData:
-        count = self._page_views_in_date_range(domain, start, end).count()
-        return PageViewData(pageviews=count)
+    @staticmethod
+    def _get_page_views(base_query: Query) -> PageViewData:
+        return PageViewData(pageviews=base_query.count())
 
-    def _get_browsers_data(
-        self, db: Session, domain: Domain, start: Arrow, end: Arrow
-    ) -> BrowsersData:
-
+    @staticmethod
+    def _get_browsers_data(base_query) -> BrowsersData:
         rows = (
-            self._page_views_in_date_range(domain, start, end)
-            .group_by(Event.browser_family)
+            base_query.group_by(Event.browser_family)
             .with_entities(Event.browser_family, func.count())
+            .limit(10)
             .all()
         )
         return BrowsersData(
-            browsers=[Browser(name=row[0], total_visits=row[1]) for row in rows]
+            browsers=[BrowserStat(name=row[0], total_visits=row[1]) for row in rows]
+        )
+
+    @staticmethod
+    def _get_countries_data(base_query: Query):
+        rows = (
+            base_query.group_by(Event.ip_country_iso_code)
+            .with_entities(Event.browser_family, func.count())
+            .options(selectinload(Event.ip_country))
+            .limit(10)
+            .all()
+        )
+        return CountryData(
+            countries=[CountryStat(name=row[0], total_visits=row[1]) for row in rows]
         )
 
 
