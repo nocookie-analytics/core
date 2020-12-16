@@ -32,11 +32,11 @@ def load_referers(json_file):
     return referers_dict
 
 
-JSON_FILE = os.path.join(os.path.dirname(__file__), "data", "referers.json")
+JSON_FILE = os.path.join(os.path.dirname(__file__), "../../data", "referers.json")
 REFERERS = load_referers(JSON_FILE)
 
 
-class Referer(object):
+class Referer:
     def __init__(self, ref_url, curr_url=None, referers=REFERERS):
         self.known = False
         self.referer = None

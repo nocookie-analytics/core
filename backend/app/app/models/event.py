@@ -35,7 +35,15 @@ class EventType(Enum):
     custom = "custom"
 
 
+class ReferrerMedium(Enum):
+    UNKNOWN = "unknown"
+    EMAIL = "email"
+    SOCIAL = "social"
+    SEARCH = "search"
+
+
 EventTypeEnum = EnumType(EventType, name="event_type")
+ReferrerMediumEnum = EnumType(ReferrerMedium, name="referer_medium")
 
 
 class Event(Base):
@@ -91,6 +99,7 @@ class Event(Base):
 
     page_size_bytes = Column(Integer)
     referrer = Column(String)
+    referrer_medium = Column(ReferrerMediumEnum)
     user_timezone = Column(String)
     user_timezone_offset = Column(Integer)
 

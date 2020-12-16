@@ -1,4 +1,5 @@
 from __future__ import annotations
+from app.utils.referer_parser import Referer
 
 from decimal import Decimal
 from typing import Dict, Optional, Union
@@ -12,7 +13,7 @@ from pydantic.networks import IPvAnyAddress
 from pydantic.types import UUID4
 from starlette.requests import Request
 
-from app.models.event import EventType
+from app.models.event import EventType, ReferrerMedium
 from app.models.parsed_ua import ParsedUA
 
 
@@ -40,6 +41,7 @@ class EventCreate(EventBase):
     page_title: Optional[str]
     page_size_bytes: Optional[int]
     referrer: Optional[str]
+    referrer_medium: Optional[ReferrerMedium]
     user_timezone: Optional[str]
     user_timezone_offset: Optional[str]
     ip_address: IPvAnyAddress
@@ -93,6 +95,10 @@ class EventCreate(EventBase):
         url_params = dict(
             furled_url.args
         )  # TODO: furl.args is multidict, this conversion is lossy
+        if ref:
+            referrer_medium = ReferrerMedium(Referer(ref, url).medium)
+        else:
+            referrer_medium = ReferrerMedium.UNKNOWN
 
         try:
             return cls(
@@ -100,6 +106,7 @@ class EventCreate(EventBase):
                 page_title=pt,
                 page_size_bytes=psb,
                 referrer=ref,
+                referrer_medium=referrer_medium,
                 user_timezone=tz,
                 user_timezone_offset=tzo,
                 path=path,
