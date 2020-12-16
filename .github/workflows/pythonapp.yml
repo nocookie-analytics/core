@@ -103,11 +103,6 @@ jobs:
       run: |
         docker-compose -f docker-stack.yml up -d
 
-    - name: Generate alembic revision
-      run: |
-        docker-compose exec -T backend alembic revision --autogenerate -m 'auto_generated_ci'
-        cat **/*auto_generated_ci*
-
     - name: Run tests
       run: |
         docker-compose -f docker-stack.yml exec -T backend bash /app/tests-start.sh --cov=app "$@"
