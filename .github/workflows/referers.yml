@@ -41,9 +41,14 @@ jobs:
           git checkout -b referers-update
           git config --global user.email me@gaganpreet.in
           git config --global user.name "Gaganpreet Arora"
-          git commit backend/app/data/referers.json -m "Update referers"
-          git push origin referers-update
-          gh pr create --title "Update referers" -B master --assignee gaganpreet -b "Update referers"
+          if [[ $(git diff --stat backend/app/data/referers.json) ]];
+          then
+            git commit backend/app/data/referers.json -m "Update referers"
+            git push origin referers-update
+            gh pr create --title "Update referers" -B master --assignee gaganpreet -b "Update referers"
+          else
+            echo "Clean, nothing to do"
+          fi
         env:
           GITHUB_TOKEN: ${{ github.token }}
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
