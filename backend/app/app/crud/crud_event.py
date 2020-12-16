@@ -1,3 +1,4 @@
+from fastapi.exceptions import HTTPException
 from app.models.location import Country
 from typing import Dict, List, Optional, Tuple, Union
 
@@ -88,14 +89,16 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             base_page_views_query = self._page_views_in_date_range(domain, start, end)
             if field == AnalyticsType.PAGEVIEWS:
                 data.append(self._get_page_views(base_page_views_query))
-            if field == AnalyticsType.BROWSERS:
+            elif field == AnalyticsType.BROWSERS:
                 data.append(self._get_browsers_data(base_page_views_query))
-            if field == AnalyticsType.COUNTRY:
+            elif field == AnalyticsType.COUNTRY:
                 data.append(self._get_countries_data(base_page_views_query))
-            if field == AnalyticsType.OS:
+            elif field == AnalyticsType.OS:
                 data.append(self._get_os_data(base_page_views_query))
-            if field == AnalyticsType.DEVICES:
+            elif field == AnalyticsType.DEVICES:
                 data.append(self._get_device_data(base_page_views_query))
+            else:
+                raise HTTPException(status_code=400)
 
         return AnalyticsData(start=start, end=end, data=data)
 

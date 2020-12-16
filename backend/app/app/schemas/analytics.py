@@ -101,7 +101,7 @@ class DeviceStat(BaseModel):
 
 
 class DeviceData(AnalyticsBase):
-    type = AnalyticsType.OS
+    type = AnalyticsType.DEVICES
     device_families: List[DeviceStat]
 
 
