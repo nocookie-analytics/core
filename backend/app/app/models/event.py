@@ -102,8 +102,7 @@ class Event(Base):
     ix_domain_timestamp = Index("ix_domain_timestamp", domain_id, timestamp)
     ix_timestamp = Index("ix_timestamp", timestamp)
     ix_browser_family = Index("ix_browser_family", domain_id, browser_family, timestamp)
-    ix_city_id = Index("ix_city", domain_id, ip_city_id)
-    ix_country_id = Index("ix_country", domain_id, ip_country_iso_code)
+    ix_location = Index("ix_city", domain_id, ip_country_iso_code, ip_city_id)
     ix_os_family = Index(
         "ix_os_family",
         domain_id,
