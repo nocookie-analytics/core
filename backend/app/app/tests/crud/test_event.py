@@ -117,9 +117,9 @@ def test_get_browsers(db: Session, mock_ip_address):
         end=arrow.now() + timedelta(days=1),
     )
     data = crud.event._get_browsers_data(base_query)
-    assert len(data.browsers) == 1
-    assert data.browsers[0].name
-    assert data.browsers[0].total_visits
+    assert len(data.browser_families) == 1
+    assert data.browser_families[0].name
+    assert data.browser_families[0].total_visits
 
 
 def test_get_countries(db: Session, mock_ip_address):
@@ -146,6 +146,6 @@ def test_get_os(db: Session, mock_ip_address):
         end=arrow.now() + timedelta(days=1),
     )
     data = crud.event._get_os_data(base_query)
-    assert len(data.os_names) == 1
-    assert data.os_names[0].name
-    assert data.os_names[0].total_visits == 1
+    assert len(data.os_families) == 1
+    assert data.os_families[0].name
+    assert data.os_families[0].total_visits == 1

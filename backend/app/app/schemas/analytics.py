@@ -10,9 +10,9 @@ from starlette import status
 
 class AnalyticsType(Enum):
     PAGEVIEWS = "pageviews"
-    BROWSERS = "browsers"
     COUNTRY = "countries"
-    OS = "os_names"
+    BROWSERS = "browser_families"
+    OS = "os_families"
 
     @staticmethod
     def from_csv_string(include) -> List[AnalyticsType]:
@@ -70,7 +70,7 @@ class BrowserStat(BaseModel):
 
 class BrowsersData(AnalyticsBase):
     type = AnalyticsType.BROWSERS
-    browsers: List[BrowserStat]
+    browser_families: List[BrowserStat]
 
 
 class CountryStat(BaseModel):
@@ -91,7 +91,7 @@ class OSStat(BaseModel):
 
 class OSData(AnalyticsBase):
     type = AnalyticsType.OS
-    os_names: List[OSStat]
+    os_families: List[OSStat]
 
 
 AnalyticsDataTypes = Union[PageViewData, BrowsersData, CountryData, OSData]

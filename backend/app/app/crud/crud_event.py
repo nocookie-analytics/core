@@ -114,7 +114,9 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             .all()
         )
         return BrowsersData(
-            browsers=[BrowserStat(name=row[0], total_visits=row[1]) for row in rows]
+            browser_families=[
+                BrowserStat(name=row[0], total_visits=row[1]) for row in rows
+            ]
         )
 
     @staticmethod
@@ -141,7 +143,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             .all()
         )
         return OSData(
-            os_names=[OSStat(name=row[0], total_visits=row[1]) for row in rows]
+            os_families=[OSStat(name=row[0], total_visits=row[1]) for row in rows]
         )
 
 
