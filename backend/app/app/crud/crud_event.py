@@ -1,3 +1,4 @@
+from fastapi.exceptions import HTTPException
 from app.models.location import Country
 from typing import Dict, List, Optional, Tuple, Union
 
@@ -14,9 +15,11 @@ from app.schemas.analytics import (
     AnalyticsDataTypes,
     AnalyticsType,
     BrowserStat,
-    BrowsersData,
+    BrowserData,
     CountryData,
     CountryStat,
+    DeviceData,
+    DeviceStat,
     OSData,
     OSStat,
     PageViewData,
@@ -86,12 +89,16 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             base_page_views_query = self._page_views_in_date_range(domain, start, end)
             if field == AnalyticsType.PAGEVIEWS:
                 data.append(self._get_page_views(base_page_views_query))
-            if field == AnalyticsType.BROWSERS:
+            elif field == AnalyticsType.BROWSERS:
                 data.append(self._get_browsers_data(base_page_views_query))
-            if field == AnalyticsType.COUNTRY:
+            elif field == AnalyticsType.COUNTRY:
                 data.append(self._get_countries_data(base_page_views_query))
-            if field == AnalyticsType.OS:
+            elif field == AnalyticsType.OS:
                 data.append(self._get_os_data(base_page_views_query))
+            elif field == AnalyticsType.DEVICES:
+                data.append(self._get_device_data(base_page_views_query))
+            else:
+                raise HTTPException(status_code=400)
 
         return AnalyticsData(start=start, end=end, data=data)
 
@@ -106,21 +113,21 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         return PageViewData(pageviews=base_query.count())
 
     @staticmethod
-    def _get_browsers_data(base_query) -> BrowsersData:
+    def _get_browsers_data(base_query) -> BrowserData:
         rows = (
             base_query.group_by(Event.browser_family)
             .with_entities(Event.browser_family, func.count())
             .limit(10)
             .all()
         )
-        return BrowsersData(
+        return BrowserData(
             browser_families=[
                 BrowserStat(name=row[0], total_visits=row[1]) for row in rows
             ]
         )
 
     @staticmethod
-    def _get_countries_data(base_query: Query):
+    def _get_countries_data(base_query: Query) -> CountryData:
         rows: List[Tuple[str, str, int]] = (
             base_query.group_by(Event.ip_country_iso_code, Country.name)
             .with_entities(Event.ip_country_iso_code, Country.name, func.count())
@@ -135,7 +142,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         )
 
     @staticmethod
-    def _get_os_data(base_query: Query):
+    def _get_os_data(base_query: Query) -> OSData:
         rows: List[Tuple[str, str, int]] = (
             base_query.group_by(Event.os_family)
             .with_entities(Event.os_family, func.count())
@@ -144,6 +151,20 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         )
         return OSData(
             os_families=[OSStat(name=row[0], total_visits=row[1]) for row in rows]
+        )
+
+    @staticmethod
+    def _get_device_data(base_query) -> DeviceData:
+        rows = (
+            base_query.group_by(Event.device_family)
+            .with_entities(Event.device_family, func.count())
+            .limit(10)
+            .all()
+        )
+        return DeviceData(
+            device_families=[
+                DeviceStat(name=row[0], total_visits=row[1]) for row in rows
+            ]
         )
 
 

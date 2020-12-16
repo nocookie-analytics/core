@@ -13,6 +13,7 @@ class AnalyticsType(Enum):
     COUNTRY = "countries"
     BROWSERS = "browser_families"
     OS = "os_families"
+    DEVICES = "device_families"
 
     @staticmethod
     def from_csv_string(include) -> List[AnalyticsType]:
@@ -68,7 +69,7 @@ class BrowserStat(BaseModel):
     total_visits: int
 
 
-class BrowsersData(AnalyticsBase):
+class BrowserData(AnalyticsBase):
     type = AnalyticsType.BROWSERS
     browser_families: List[BrowserStat]
 
@@ -94,7 +95,17 @@ class OSData(AnalyticsBase):
     os_families: List[OSStat]
 
 
-AnalyticsDataTypes = Union[PageViewData, BrowsersData, CountryData, OSData]
+class DeviceStat(BaseModel):
+    name: str
+    total_visits: int
+
+
+class DeviceData(AnalyticsBase):
+    type = AnalyticsType.DEVICES
+    device_families: List[DeviceStat]
+
+
+AnalyticsDataTypes = Union[PageViewData, BrowserData, CountryData, OSData, DeviceData]
 
 
 class AnalyticsData(BaseModel):

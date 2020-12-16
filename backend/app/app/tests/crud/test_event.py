@@ -85,6 +85,18 @@ def test_get_analytics(
         assert field_data.type
 
 
+def test_get_analytics_from_fields(db: Session, mock_read_only_domain: Domain):
+    for field in AnalyticsType:
+        end = arrow.now()
+        start = end - timedelta(days=1)
+        result = crud.event.get_analytics_from_fields(
+            db, domain=mock_read_only_domain, fields=[field], start=start, end=end
+        )
+        assert result.data
+        assert len(result.data) == 1
+        assert result.data[0].type == field
+
+
 def test_get_pageviews(db: Session, mock_ip_address):
     # With one page view event
     domain = create_random_domain(db)
