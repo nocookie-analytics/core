@@ -3,6 +3,10 @@ isort:skip_file
 """
 import socket
 import os
+
+# We override the env before doing any other imports
+os.environ["POSTGRES_DB"] = "apptest"
+
 from typing import Dict, Generator
 from starlette.datastructures import Address
 from starlette.requests import Request
@@ -22,10 +26,6 @@ from app.main import app
 from app.tests.utils.user import authentication_token_from_email
 from app.tests.utils.utils import get_superuser_token_headers
 from app.tests.utils.domain import create_random_domain
-
-
-# We override the env before doing any other imports
-os.environ["POSTGRES_DB"] = "apptest"
 
 
 @pytest.fixture(scope="session", autouse=True)
