@@ -94,6 +94,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 data.append(self._get_countries_data(base_page_views_query))
             if field == AnalyticsType.OS:
                 data.append(self._get_os_data(base_page_views_query))
+            if field == AnalyticsType.DEVICES:
+                data.append(self._get_device_data(base_page_views_query))
 
         return AnalyticsData(start=start, end=end, data=data)
 

@@ -13,6 +13,7 @@ class AnalyticsType(Enum):
     COUNTRY = "countries"
     BROWSERS = "browser_families"
     OS = "os_families"
+    DEVICES = "device_families"
 
     @staticmethod
     def from_csv_string(include) -> List[AnalyticsType]:
