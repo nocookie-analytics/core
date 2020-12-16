@@ -135,3 +135,17 @@ def test_get_countries(db: Session, mock_ip_address):
     assert data.countries[0].name
     assert len(data.countries[0].country_code) == 2
     assert data.countries[0].total_visits
+
+
+def test_get_os(db: Session, mock_ip_address):
+    domain = create_random_domain(db)
+    create_random_page_view_event(db, domain_id=domain.id, ip_address=mock_ip_address)
+    base_query = crud.event._page_views_in_date_range(
+        domain,
+        start=arrow.now() - timedelta(days=1),
+        end=arrow.now() + timedelta(days=1),
+    )
+    data = crud.event._get_os_data(base_query)
+    assert len(data.os_names) == 1
+    assert data.os_names[0].name
+    assert data.os_names[0].total_visits == 1

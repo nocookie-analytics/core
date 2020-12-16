@@ -12,6 +12,7 @@ class AnalyticsType(Enum):
     PAGEVIEWS = "pageviews"
     BROWSERS = "browsers"
     COUNTRY = "countries"
+    OS = "os_names"
 
     @staticmethod
     def from_csv_string(include) -> List[AnalyticsType]:
@@ -83,7 +84,17 @@ class CountryData(AnalyticsBase):
     countries: List[CountryStat]
 
 
-AnalyticsDataTypes = Union[PageViewData, BrowsersData]
+class OSStat(BaseModel):
+    name: str
+    total_visits: int
+
+
+class OSData(AnalyticsBase):
+    type = AnalyticsType.OS
+    os_names: List[OSStat]
+
+
+AnalyticsDataTypes = Union[PageViewData, BrowsersData, CountryData, OSData]
 
 
 class AnalyticsData(BaseModel):
