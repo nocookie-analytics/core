@@ -43,7 +43,7 @@ class Referer:
         self.medium = "unknown"
         self.search_parameter = None
         self.search_term = None
-        self.referers = referers
+        self._referers = referers
 
         ref_uri = urlparse(ref_url)
         ref_host = ref_uri.hostname
@@ -82,15 +82,15 @@ class Referer:
         referer = None
         try:
             if include_path:
-                referer = self.referers[ref_host + ref_path]
+                referer = self._referers[ref_host + ref_path]
             else:
-                referer = self.referers[ref_host]
+                referer = self._referers[ref_host]
         except KeyError:
             if include_path:
                 path_parts = ref_path.split("/")
                 if len(path_parts) > 1:
                     try:
-                        referer = self.referers[ref_host + "/" + path_parts[1]]
+                        referer = self._referers[ref_host + "/" + path_parts[1]]
                     except KeyError:
                         pass
         if not referer:
