@@ -42,6 +42,7 @@ class EventCreate(EventBase):
     page_size_bytes: Optional[int]
     referrer: Optional[str]
     referrer_medium: Optional[ReferrerMedium]
+    referrer_name: Optional[str]
     user_timezone: Optional[str]
     user_timezone_offset: Optional[str]
     ip_address: IPvAnyAddress
@@ -95,10 +96,11 @@ class EventCreate(EventBase):
         url_params = dict(
             furled_url.args
         )  # TODO: furl.args is multidict, this conversion is lossy
+        referrer_medium, referrer_name = ReferrerMedium.UNKNOWN, None
         if ref:
-            referrer_medium = ReferrerMedium(Referer(ref, url).medium)
-        else:
-            referrer_medium = ReferrerMedium.UNKNOWN
+            parsed_ref = Referer(ref, url)
+            referrer_medium = ReferrerMedium(parsed_ref.medium)
+            referrer_name = parsed_ref.referer
 
         try:
             return cls(
@@ -107,6 +109,7 @@ class EventCreate(EventBase):
                 page_size_bytes=psb,
                 referrer=ref,
                 referrer_medium=referrer_medium,
+                referrer_name=referrer_name,
                 user_timezone=tz,
                 user_timezone_offset=tzo,
                 path=path,

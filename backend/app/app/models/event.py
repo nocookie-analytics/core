@@ -100,6 +100,7 @@ class Event(Base):
     page_size_bytes = Column(Integer)
     referrer = Column(String)
     referrer_medium = Column(ReferrerMediumEnum)
+    referrer_name = Column(String)
     user_timezone = Column(String)
     user_timezone_offset = Column(Integer)
 
