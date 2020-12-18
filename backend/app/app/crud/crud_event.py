@@ -1,3 +1,4 @@
+from app.utils.referer_parser import Referer
 from fastapi.exceptions import HTTPException
 from app.models.location import Country
 from typing import Dict, List, Optional, Tuple, Union
@@ -9,7 +10,7 @@ from sqlalchemy.orm import Query, Session
 
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
-from app.models.event import Event, EventType
+from app.models.event import Event, EventType, ReferrerMedium
 from app.schemas.analytics import (
     AnalyticsData,
     AnalyticsDataTypes,
@@ -48,11 +49,24 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             data["ip_continent_code"] = continent_code
         return data
 
+    @staticmethod
+    def _get_referrer_info(ref: str, curr_url: Optional[str] = None):
+        referrer_medium, referrer_name = ReferrerMedium.UNKNOWN, None
+        if ref:
+            parsed_ref = Referer(ref, curr_url)
+            referrer_medium = ReferrerMedium(parsed_ref.medium)
+            referrer_name = parsed_ref.referer
+        return {
+            "referrer_name": referrer_name,
+            "referrer_medium": referrer_medium,
+        }
+
     def build_db_obj(self, event_in: EventCreate) -> Event:
         obj_in_data = event_in.dict(exclude={"metric", "parsed_ua"})
         obj_in_data = {
             **obj_in_data,
             **self._get_geolocation_info(event_in.ip_address),
+            **self._get_referrer_info(event_in.referrer, event_in.url),
             **(event_in.parsed_ua.dict() if event_in.parsed_ua else {}),
             "page_view_id": event_in.page_view_id.hex,
         }

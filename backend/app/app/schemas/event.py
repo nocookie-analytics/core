@@ -41,8 +41,6 @@ class EventCreate(EventBase):
     page_title: Optional[str]
     page_size_bytes: Optional[int]
     referrer: Optional[str]
-    referrer_medium: Optional[ReferrerMedium]
-    referrer_name: Optional[str]
     user_timezone: Optional[str]
     user_timezone_offset: Optional[str]
     ip_address: IPvAnyAddress
@@ -66,7 +64,7 @@ class EventCreate(EventBase):
     def depends(
         cls: EventCreate,
         request: Request,
-        et: str,
+        et: EventType,
         url: str,
         pt: Optional[str] = None,
         pvid: Optional[UUID4] = None,
@@ -96,11 +94,6 @@ class EventCreate(EventBase):
         url_params = dict(
             furled_url.args
         )  # TODO: furl.args is multidict, this conversion is lossy
-        referrer_medium, referrer_name = ReferrerMedium.UNKNOWN, None
-        if ref:
-            parsed_ref = Referer(ref, url)
-            referrer_medium = ReferrerMedium(parsed_ref.medium)
-            referrer_name = parsed_ref.referer
 
         try:
             return cls(
@@ -108,8 +101,6 @@ class EventCreate(EventBase):
                 page_title=pt,
                 page_size_bytes=psb,
                 referrer=ref,
-                referrer_medium=referrer_medium,
-                referrer_name=referrer_name,
                 user_timezone=tz,
                 user_timezone_offset=tzo,
                 path=path,
