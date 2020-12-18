@@ -1,3 +1,5 @@
+from app.models.parsed_ua import ParsedUA
+from furl.furl import furl
 from app.utils.referer_parser import Referer
 from fastapi.exceptions import HTTPException
 from app.models.location import Country
@@ -50,7 +52,16 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         return data
 
     @staticmethod
-    def _get_referrer_info(ref: str, curr_url: Optional[str] = None):
+    def _get_url_components(url: str) -> Dict:
+        furled_url = furl(url)
+        path = str(furled_url.path)
+        url_params = dict(
+            furled_url.args
+        )  # TODO: furl.args is multidict, this conversion is lossy
+        return {"url_params": url_params, "path": path}
+
+    @staticmethod
+    def _get_referrer_info(ref: Optional[str], curr_url: Optional[str] = None):
         referrer_medium, referrer_name = ReferrerMedium.UNKNOWN, None
         if ref:
             parsed_ref = Referer(ref, curr_url)
@@ -61,13 +72,20 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             "referrer_medium": referrer_medium,
         }
 
+    @staticmethod
+    def _get_parsed_ua(ua_string: str) -> Dict:
+        if ua_string:
+            return ParsedUA.from_ua_string(ua_string).dict()
+        return {}
+
     def build_db_obj(self, event_in: EventCreate) -> Event:
-        obj_in_data = event_in.dict(exclude={"metric", "parsed_ua"})
+        obj_in_data = event_in.dict()
         obj_in_data = {
             **obj_in_data,
             **self._get_geolocation_info(event_in.ip_address),
             **self._get_referrer_info(event_in.referrer, event_in.url),
-            **(event_in.parsed_ua.dict() if event_in.parsed_ua else {}),
+            **(self._get_parsed_ua(event_in.ua_string)),
+            **self._get_url_components(event_in.url),
             "page_view_id": event_in.page_view_id.hex,
         }
         db_obj = self.model(**obj_in_data)
