@@ -16,9 +16,7 @@ def create_random_page_view_event(
 ) -> models.Event:
     event_in = EventCreate(
         event_type=EventType.page_view,
-        path="/abc",
         url="https://google.com",
-        url_params={},
         page_title="Title",
         page_size_bytes=150,
         referrer="abc",
@@ -41,9 +39,7 @@ def create_random_metric_event(
 ) -> models.Event:
     event_in = EventCreate(
         event_type=EventType.metric,
-        path="/abc",
         url="https://google.com",
-        url_params={},
         page_title="Title",
         page_size_bytes=150,
         referrer="abc",
