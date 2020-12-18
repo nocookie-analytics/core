@@ -127,6 +127,9 @@ class Event(Base):
     ix_device_brand = Index("ix_device_brand", domain_id, device_brand, timestamp)
     ix_device_model = Index("ix_device_model", domain_id, device_model, timestamp)
     ix_custom_metric = Index("ix_custom_metric", domain_id, metric_name, timestamp)
+    ix_referrer = Index(
+        "ix_referrer", domain_id, referrer_medium, referrer_name, timestamp
+    )
 
     # Choosing this as a primary key so the table is partitioned by domain first,
     # then timestamp but the combination of domain and timestamp won't be unique,
