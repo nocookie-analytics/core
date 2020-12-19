@@ -105,7 +105,10 @@ def test_get_pageviews(db: Session, mock_ip_address):
         end=arrow.now() + timedelta(days=1),
     )
     data = crud.event._get_page_views(base_query)
+    per_day_data = crud.event._get_page_views_per_day(base_query)
     assert data.pageviews == 1
+    assert len(per_day_data.pageviews_per_day) == 1
+    assert per_day_data.pageviews_per_day[0].total_visits == 1
 
     # With two page view events
     create_random_page_view_event(db, domain_id=domain.id, ip_address=mock_ip_address)
@@ -115,7 +118,10 @@ def test_get_pageviews(db: Session, mock_ip_address):
     # With two page view events and one metric event
     create_random_metric_event(db, domain_id=domain.id, ip_address=mock_ip_address)
     data = crud.event._get_page_views(base_query)
+    per_day_data = crud.event._get_page_views_per_day(base_query)
     assert data.pageviews == 2
+    assert len(per_day_data.pageviews_per_day) == 1
+    assert per_day_data.pageviews_per_day[0].total_visits == 2
 
 
 def test_get_browsers(db: Session, mock_ip_address):
