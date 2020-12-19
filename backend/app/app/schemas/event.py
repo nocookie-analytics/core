@@ -7,14 +7,12 @@ from uuid import uuid4
 
 import pydantic
 from fastapi.exceptions import HTTPException
-from furl import furl
-from pydantic import BaseModel, validator, Json
+from pydantic import BaseModel
 from pydantic.networks import IPvAnyAddress
 from pydantic.types import UUID4
 from starlette.requests import Request
 
-from app.models.event import EventType, ReferrerMedium
-from app.models.parsed_ua import ParsedUA
+from app.models.event import EventType
 
 
 # Shared properties
