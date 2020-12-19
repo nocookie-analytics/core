@@ -8,6 +8,8 @@ It's copied so we can use a newer version of the referer config
 The new data is part of another repo and updated more frequently:
 
 https://github.com/snowplow/referer-parser
+
+NOTE: Only this module uses the incorrect spelling of referrer i.e. single r instead of two
 """
 
 
