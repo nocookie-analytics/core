@@ -1,4 +1,5 @@
 from __future__ import annotations
+from app.models.event import ReferrerMediumType
 from datetime import datetime
 from enum import Enum
 from typing import List, Set, Union
@@ -14,6 +15,8 @@ class AnalyticsType(Enum):
     BROWSERS = "browser_families"
     OS = "os_families"
     DEVICES = "device_families"
+    REFERRER_MEDIUMS = "referrer_mediums"
+    REFERRER_NAMES = "referrer_names"
 
     @staticmethod
     def from_csv_string(include) -> List[AnalyticsType]:
@@ -105,7 +108,36 @@ class DeviceData(AnalyticsBase):
     device_families: List[DeviceStat]
 
 
-AnalyticsDataTypes = Union[PageViewData, BrowserData, CountryData, OSData, DeviceData]
+class ReferrerMediumStat(BaseModel):
+    medium: str
+    total_visits: int
+
+
+class ReferrerMediumData(AnalyticsBase):
+    type = AnalyticsType.REFERRER_MEDIUMS
+    referrer_mediums: List[ReferrerMediumStat]
+
+
+class ReferrerNameStat(BaseModel):
+    medium: str
+    name: str
+    total_visits: int
+
+
+class ReferrerNameData(AnalyticsBase):
+    type = AnalyticsType.REFERRER_NAMES
+    referrer_names: List[ReferrerNameStat]
+
+
+AnalyticsDataTypes = Union[
+    PageViewData,
+    BrowserData,
+    CountryData,
+    OSData,
+    DeviceData,
+    ReferrerMediumData,
+    ReferrerNameData,
+]
 
 
 class AnalyticsData(BaseModel):

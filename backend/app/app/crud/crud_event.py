@@ -26,6 +26,10 @@ from app.schemas.analytics import (
     OSData,
     OSStat,
     PageViewData,
+    ReferrerMediumData,
+    ReferrerMediumStat,
+    ReferrerNameData,
+    ReferrerNameStat,
 )
 from app.schemas.event import EventCreate, EventUpdate
 from app.utils.geolocation import get_ip_gelocation
@@ -129,6 +133,10 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 data.append(self._get_os_data(base_page_views_query))
             elif field == AnalyticsType.DEVICES:
                 data.append(self._get_device_data(base_page_views_query))
+            elif field == AnalyticsType.REFERRER_MEDIUMS:
+                data.append(self._get_referrer_mediums_data(base_page_views_query))
+            elif field == AnalyticsType.REFERRER_NAMES:
+                data.append(self._get_referrer_names_data(base_page_views_query))
             else:
                 raise HTTPException(status_code=400)
 
@@ -196,6 +204,37 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         return DeviceData(
             device_families=[
                 DeviceStat(name=row[0], total_visits=row[1]) for row in rows
+            ]
+        )
+
+    @staticmethod
+    def _get_referrer_mediums_data(base_query) -> ReferrerMediumData:
+        rows = (
+            base_query.group_by(Event.referrer_medium)
+            .with_entities(Event.referrer_medium, func.count())
+            .limit(10)
+            .all()
+        )
+        return ReferrerMediumData(
+            referrer_mediums=[
+                ReferrerMediumStat(medium=row[0].value, total_visits=row[1])
+                for row in rows
+            ]
+        )
+
+    @staticmethod
+    def _get_referrer_names_data(base_query) -> ReferrerNameData:
+        rows = (
+            base_query.group_by(Event.referrer_medium, Event.referrer_name)
+            .with_entities(Event.referrer_medium, Event.referrer_name, func.count())
+            .filter(Event.referrer_name.isnot(None))
+            .limit(10)
+            .all()
+        )
+        return ReferrerNameData(
+            referrer_names=[
+                ReferrerNameStat(medium=row[0].value, name=row[1], total_visits=row[2])
+                for row in rows
             ]
         )
 

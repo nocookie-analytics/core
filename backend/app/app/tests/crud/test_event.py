@@ -159,3 +159,28 @@ def test_get_os(db: Session, mock_ip_address):
     assert len(data.os_families) == 1
     assert data.os_families[0].name
     assert data.os_families[0].total_visits == 1
+
+
+def test_get_referrers(db: Session, mock_ip_address):
+    domain = create_random_domain(db)
+    create_random_page_view_event(
+        db,
+        domain_id=domain.id,
+        ip_address=mock_ip_address,
+        create_overrides={"referrer": "https://www.google.com/"},
+    )
+    base_query = crud.event._page_views_in_date_range(
+        domain,
+        start=arrow.now() - timedelta(days=1),
+        end=arrow.now() + timedelta(days=1),
+    )
+    name_data = crud.event._get_referrer_names_data(base_query)
+    assert len(name_data.referrer_names) == 1
+    assert name_data.referrer_names[0].medium == "search"
+    assert name_data.referrer_names[0].name == "Google"
+    assert name_data.referrer_names[0].total_visits == 1
+
+    medium_data = crud.event._get_referrer_mediums_data(base_query)
+    assert len(medium_data.referrer_mediums) == 1
+    assert medium_data.referrer_mediums[0].medium == "search"
+    assert medium_data.referrer_mediums[0].total_visits == 1
