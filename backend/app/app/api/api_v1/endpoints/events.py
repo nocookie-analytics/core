@@ -1,6 +1,6 @@
-from typing import Any, Optional
+from typing import Any
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
@@ -20,6 +20,8 @@ def new_event(
     Report a new event.
     """
     crud.event.create_with_domain(
-        db, obj_in=event_in, domain_id=request_domain.id,
+        db,
+        obj_in=event_in,
+        domain_id=request_domain.id,
     )
     return schemas.EventCreated(success=True, pvid=event_in.page_view_id)

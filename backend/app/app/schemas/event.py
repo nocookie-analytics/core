@@ -1,8 +1,7 @@
 from __future__ import annotations
-from app.utils.referer_parser import Referer
 
 from decimal import Decimal
-from typing import Dict, Optional, Union
+from typing import Optional
 from uuid import uuid4
 
 import pydantic
