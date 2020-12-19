@@ -1,24 +1,24 @@
-from app.models.parsed_ua import ParsedUA
-from furl.furl import furl
-from app.utils.referer_parser import Referer
-from fastapi.exceptions import HTTPException
-from app.models.location import Country
+from datetime import date
 from typing import Dict, List, Optional, Tuple, Union
 
 from arrow.arrow import Arrow
+from fastapi.exceptions import HTTPException
+from furl.furl import furl
 from pydantic import IPvAnyAddress
-from sqlalchemy import and_, func
+from sqlalchemy import and_, func, cast, DATE
 from sqlalchemy.orm import Query, Session
 
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
 from app.models.event import Event, EventType, ReferrerMediumType
+from app.models.location import Country
+from app.models.parsed_ua import ParsedUA
 from app.schemas.analytics import (
     AnalyticsData,
     AnalyticsDataTypes,
     AnalyticsType,
-    BrowserStat,
     BrowserData,
+    BrowserStat,
     CountryData,
     CountryStat,
     DeviceData,
@@ -26,6 +26,8 @@ from app.schemas.analytics import (
     OSData,
     OSStat,
     PageViewData,
+    PageViewsPerDayData,
+    PageViewsPerDayStat,
     ReferrerMediumData,
     ReferrerMediumStat,
     ReferrerNameData,
@@ -33,6 +35,7 @@ from app.schemas.analytics import (
 )
 from app.schemas.event import EventCreate, EventUpdate
 from app.utils.geolocation import get_ip_gelocation
+from app.utils.referer_parser import Referer
 
 
 class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
@@ -125,6 +128,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             base_page_views_query = self._page_views_in_date_range(domain, start, end)
             if field == AnalyticsType.PAGEVIEWS:
                 data.append(self._get_page_views(base_page_views_query))
+            elif field == AnalyticsType.PAGEVIEWS_PER_DAY:
+                data.append(self._get_page_views_per_day(base_page_views_query))
             elif field == AnalyticsType.BROWSERS:
                 data.append(self._get_browsers_data(base_page_views_query))
             elif field == AnalyticsType.COUNTRY:
@@ -151,6 +156,19 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
     @staticmethod
     def _get_page_views(base_query: Query) -> PageViewData:
         return PageViewData(pageviews=base_query.count())
+
+    @staticmethod
+    def _get_page_views_per_day(base_query) -> PageViewsPerDayData:
+        rows = (
+            base_query.group_by(cast(Event.timestamp, DATE))
+            .with_entities(cast(Event.timestamp, DATE), func.count())
+            .all()
+        )
+        return PageViewsPerDayData(
+            pageviews_per_day=[
+                PageViewsPerDayStat(date=row[0], total_visits=row[1]) for row in rows
+            ]
+        )
 
     @staticmethod
     def _get_browsers_data(base_query) -> BrowserData:

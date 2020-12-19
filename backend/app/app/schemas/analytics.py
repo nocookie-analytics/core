@@ -1,6 +1,5 @@
 from __future__ import annotations
-from app.models.event import ReferrerMediumType
-from datetime import datetime
+import datetime
 from enum import Enum
 from typing import List, Set, Union
 import arrow
@@ -11,6 +10,7 @@ from starlette import status
 
 class AnalyticsType(Enum):
     PAGEVIEWS = "pageviews"
+    PAGEVIEWS_PER_DAY = "pageviews_per_day"
     COUNTRY = "countries"
     BROWSERS = "browser_families"
     OS = "os_families"
@@ -47,7 +47,7 @@ class AnalyticsType(Enum):
         return list(seq)
 
 
-class PydanticArrow(datetime):
+class PydanticArrow(datetime.datetime):
     # https://github.com/tiangolo/fastapi/issues/1285
     @classmethod
     def __get_validators__(cls):
@@ -65,6 +65,16 @@ class AnalyticsBase(BaseModel):
 class PageViewData(AnalyticsBase):
     type = AnalyticsType.PAGEVIEWS
     pageviews: int
+
+
+class PageViewsPerDayStat(BaseModel):
+    date: datetime.date
+    total_visits: int
+
+
+class PageViewsPerDayData(AnalyticsBase):
+    type = AnalyticsType.PAGEVIEWS_PER_DAY
+    pageviews_per_day: List[PageViewsPerDayStat]
 
 
 class BrowserStat(BaseModel):
@@ -137,6 +147,7 @@ AnalyticsDataTypes = Union[
     DeviceData,
     ReferrerMediumData,
     ReferrerNameData,
+    PageViewsPerDayData,
 ]
 
 
