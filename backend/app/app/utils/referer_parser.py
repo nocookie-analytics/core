@@ -8,6 +8,8 @@ It's copied so we can use a newer version of the referer config
 The new data is part of another repo and updated more frequently:
 
 https://github.com/snowplow/referer-parser
+
+NOTE: Only this module uses the incorrect spelling of referrer i.e. single r instead of two
 """
 
 
@@ -32,18 +34,18 @@ def load_referers(json_file):
     return referers_dict
 
 
-JSON_FILE = os.path.join(os.path.dirname(__file__), "data", "referers.json")
+JSON_FILE = os.path.join(os.path.dirname(__file__), "../../data", "referers.json")
 REFERERS = load_referers(JSON_FILE)
 
 
-class Referer(object):
+class Referer:
     def __init__(self, ref_url, curr_url=None, referers=REFERERS):
         self.known = False
         self.referer = None
         self.medium = "unknown"
         self.search_parameter = None
         self.search_term = None
-        self.referers = referers
+        self._referers = referers
 
         ref_uri = urlparse(ref_url)
         ref_host = ref_uri.hostname
@@ -82,15 +84,15 @@ class Referer(object):
         referer = None
         try:
             if include_path:
-                referer = self.referers[ref_host + ref_path]
+                referer = self._referers[ref_host + ref_path]
             else:
-                referer = self.referers[ref_host]
+                referer = self._referers[ref_host]
         except KeyError:
             if include_path:
                 path_parts = ref_path.split("/")
                 if len(path_parts) > 1:
                     try:
-                        referer = self.referers[ref_host + "/" + path_parts[1]]
+                        referer = self._referers[ref_host + "/" + path_parts[1]]
                     except KeyError:
                         pass
         if not referer:

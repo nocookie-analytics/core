@@ -1,3 +1,6 @@
+from app.models.parsed_ua import ParsedUA
+from furl.furl import furl
+from app.utils.referer_parser import Referer
 from fastapi.exceptions import HTTPException
 from app.models.location import Country
 from typing import Dict, List, Optional, Tuple, Union
@@ -9,7 +12,7 @@ from sqlalchemy.orm import Query, Session
 
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
-from app.models.event import Event, EventType
+from app.models.event import Event, EventType, ReferrerMediumType
 from app.schemas.analytics import (
     AnalyticsData,
     AnalyticsDataTypes,
@@ -48,12 +51,41 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             data["ip_continent_code"] = continent_code
         return data
 
+    @staticmethod
+    def _get_url_components(url: str) -> Dict:
+        furled_url = furl(url)
+        path = str(furled_url.path)
+        url_params = dict(
+            furled_url.args
+        )  # TODO: furl.args is multidict, this conversion is lossy
+        return {"url_params": url_params, "path": path}
+
+    @staticmethod
+    def _get_referrer_info(ref: Optional[str], curr_url: Optional[str] = None):
+        referrer_medium, referrer_name = ReferrerMediumType.UNKNOWN, None
+        if ref:
+            parsed_ref = Referer(ref, curr_url)
+            referrer_medium = ReferrerMediumType(parsed_ref.medium)
+            referrer_name = parsed_ref.referer
+        return {
+            "referrer_name": referrer_name,
+            "referrer_medium": referrer_medium,
+        }
+
+    @staticmethod
+    def _get_parsed_ua(ua_string: str) -> Dict:
+        if ua_string:
+            return ParsedUA.from_ua_string(ua_string).dict()
+        return {}
+
     def build_db_obj(self, event_in: EventCreate) -> Event:
-        obj_in_data = event_in.dict(exclude={"metric", "parsed_ua"})
+        obj_in_data = event_in.dict()
         obj_in_data = {
             **obj_in_data,
             **self._get_geolocation_info(event_in.ip_address),
-            **(event_in.parsed_ua.dict() if event_in.parsed_ua else {}),
+            **self._get_referrer_info(event_in.referrer, event_in.url),
+            **(self._get_parsed_ua(event_in.ua_string)),
+            **self._get_url_components(event_in.url),
             "page_view_id": event_in.page_view_id.hex,
         }
         db_obj = self.model(**obj_in_data)

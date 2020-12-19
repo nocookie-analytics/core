@@ -69,6 +69,6 @@ def test_create_page_view_event_invalid_event_type(
 ) -> None:
     data = create_event(db, et="invalid_event")
     response = client.get(f"{settings.API_V1_STR}/e/", params=data)
-    assert response.status_code == 400
+    assert response.status_code == 422, response.text
     content = response.json()
     assert content["detail"]

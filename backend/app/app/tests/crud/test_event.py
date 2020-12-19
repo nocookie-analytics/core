@@ -33,9 +33,7 @@ def test_create_page_view_event(
     url = f"http://{domain.domain_name}/{path}"
     event_in = EventCreate(
         event_type=EventType.page_view,
-        path=str(path),
         url=url,
-        url_params={},
         page_title="Title",
         page_size_bytes=150,
         referrer="abc",

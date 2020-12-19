@@ -1,19 +1,17 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Dict, Optional, Union
+from typing import Optional
 from uuid import uuid4
 
 import pydantic
 from fastapi.exceptions import HTTPException
-from furl import furl
-from pydantic import BaseModel, validator, Json
+from pydantic import BaseModel
 from pydantic.networks import IPvAnyAddress
 from pydantic.types import UUID4
 from starlette.requests import Request
 
 from app.models.event import EventType
-from app.models.parsed_ua import ParsedUA
 
 
 # Shared properties
@@ -34,9 +32,7 @@ class EventCreate(EventBase):
 
     event_type: EventType
     ua_string: str
-    path: str
     url: str
-    url_params: Dict
     page_title: Optional[str]
     page_size_bytes: Optional[int]
     referrer: Optional[str]
@@ -49,21 +45,14 @@ class EventCreate(EventBase):
     time_to_first_byte: Optional[Decimal]
     total_time: Optional[Decimal]
 
-    parsed_ua: Optional[ParsedUA] = None
     metric_name: Optional[str] = None
     metric_value: Optional[Decimal] = None
-
-    @validator("parsed_ua", always=True)
-    def fill_parsed_ua(cls, v, values, **kwargs):
-        if values["ua_string"]:
-            return ParsedUA.from_ua_string(values["ua_string"])
-        return None
 
     @classmethod
     def depends(
         cls: EventCreate,
         request: Request,
-        et: str,
+        et: EventType,
         url: str,
         pt: Optional[str] = None,
         pvid: Optional[UUID4] = None,
@@ -86,14 +75,6 @@ class EventCreate(EventBase):
         elif event_type in (EventType.metric, EventType.custom) and not pvid:
             raise HTTPException(status_code=400, detail="Bad data")
 
-        ip_address = request.client.host
-        ua_string = request.headers.get("user-agent")
-        furled_url = furl(url)
-        path = str(furled_url.path)
-        url_params = dict(
-            furled_url.args
-        )  # TODO: furl.args is multidict, this conversion is lossy
-
         try:
             return cls(
                 event_type=event_type,
@@ -102,13 +83,11 @@ class EventCreate(EventBase):
                 referrer=ref,
                 user_timezone=tz,
                 user_timezone_offset=tzo,
-                path=path,
-                url_params=url_params,
                 time_to_first_byte=ttfb,
                 total_time=tt,
                 download_time=dt,
-                ip_address=ip_address,
-                ua_string=ua_string,
+                ip_address=request.client.host,
+                ua_string=request.headers.get("user-agent"),
                 url=url,
                 page_view_id=pvid,
                 metric_name=mn,
