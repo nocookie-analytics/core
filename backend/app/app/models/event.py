@@ -93,7 +93,13 @@ class Event(Base):
     metric_name = Column(String)
     metric_value = Column(NUMERIC)
 
-    url_params = Column(JSONB, index=True)
+    url_params = Column(JSONB)
+
+    utm_source = Column(String)
+    utm_medium = Column(String)
+    utm_campaign = Column(String)
+    utm_term = Column(String)
+    utm_content = Column(String)
 
     page_title = Column(String)
 
@@ -136,6 +142,41 @@ class Event(Base):
     # serial id makes it so
     __table_args__: Tuple = (
         ix_domain_timestamp,
+        Index(
+            "ix_utm_source",
+            domain_id,
+            utm_source,
+            timestamp,
+            postgresql_where=utm_source.isnot(None),
+        ),
+        Index(
+            "ix_utm_medium",
+            domain_id,
+            utm_medium,
+            timestamp,
+            postgresql_where=utm_medium.isnot(None),
+        ),
+        Index(
+            "ix_utm_campaign",
+            domain_id,
+            utm_campaign,
+            timestamp,
+            postgresql_where=utm_campaign.isnot(None),
+        ),
+        Index(
+            "ix_utm_term",
+            domain_id,
+            utm_term,
+            timestamp,
+            postgresql_where=utm_term.isnot(None),
+        ),
+        Index(
+            "ix_utm_content",
+            domain_id,
+            utm_content,
+            timestamp,
+            postgresql_where=utm_content.isnot(None),
+        ),
         ix_timestamp,
         PrimaryKeyConstraint(domain_id, timestamp, id),
         {},
