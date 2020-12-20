@@ -65,7 +65,17 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         url_params = dict(
             furled_url.args
         )  # TODO: furl.args is multidict, this conversion is lossy
-        return {"url_params": url_params, "path": path}
+        utm_param_list = [
+            "utm_source",
+            "utm_medium",
+            "utm_campaign",
+            "utm_term",
+            "utm_content",
+        ]
+        utm_params = {}
+        for utm_param in utm_param_list:
+            utm_params[utm_param] = url_params.pop(utm_param, None)
+        return {"url_params": url_params, "path": path, **utm_params}
 
     @staticmethod
     def _get_referrer_info(ref: Optional[str], curr_url: Optional[str] = None):
