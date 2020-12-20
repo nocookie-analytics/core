@@ -1,32 +1,29 @@
 from __future__ import annotations
 
-from sqlalchemy.sql import text
-
 from enum import Enum
-from typing import Mapping, TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING, Tuple
 
 from sqlalchemy import (
-    Column,
-    ForeignKey,
-    Integer,
     NUMERIC,
-    String,
-    DateTime,
     Boolean,
-    func,
+    Column,
+    DateTime,
+    ForeignKey,
     Index,
+    Integer,
     PrimaryKeyConstraint,
+    String,
+    func,
 )
+from sqlalchemy.dialects.postgresql import INET, JSONB, UUID
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import JSONB, INET, UUID
 from sqlalchemy_enum34 import EnumType
 
 from app.db.base_class import Base
 
-
 if TYPE_CHECKING:
-    from .location import City, Country
     from .domain import Domain
+    from .location import City, Country
 
 
 class EventType(Enum):
