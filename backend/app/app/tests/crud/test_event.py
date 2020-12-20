@@ -18,7 +18,9 @@ from app.tests.utils.event import (
     create_random_page_view_event,
 )
 
-aware_datetimes = datetimes(timezones=timezones())
+aware_datetimes = datetimes(
+    timezones=timezones(), max_value=datetime(2099, 1, 1), allow_imaginary=False
+)
 
 
 @given(uuids(version=4), paths())
