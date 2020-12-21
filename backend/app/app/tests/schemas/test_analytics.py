@@ -1,22 +1,22 @@
-from app.models.event import Event, EventType
-from sqlalchemy.orm.query import Query
-from app.tests.utils.event import (
-    create_random_metric_event,
-    create_random_page_view_event,
-)
-from app.tests.utils.domain import create_random_domain
-from fastapi.exceptions import HTTPException
 import pytest
+from fastapi.exceptions import HTTPException
 from sqlalchemy.orm.session import Session
+
+from app.models.event import Event, EventType
 from app.schemas.analytics import (
     AnalyticsType,
     BrowserStat,
     CountryStat,
     OSStat,
-    PageViewStat,
     PageViewsPerDayStat,
+    PageViewStat,
     ReferrerMediumStat,
     ReferrerNameStat,
+)
+from app.tests.utils.domain import create_random_domain
+from app.tests.utils.event import (
+    create_random_metric_event,
+    create_random_page_view_event,
 )
 
 
