@@ -178,3 +178,6 @@ class Event(Base):
         PrimaryKeyConstraint(domain_id, timestamp, id),
         {},
     )
+
+    def __repr__(self):
+        return f"Event<<Domain: {self.domain.domain_name}>: {self.event_type}>"
