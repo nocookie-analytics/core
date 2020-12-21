@@ -1,10 +1,14 @@
 from __future__ import annotations
+from app.models.location import Country
+from app.models.event import Event
 import datetime
 from enum import Enum
-from typing import List, Set, Union
+from typing import List, Optional, Set, Tuple
 import arrow
 from fastapi import HTTPException
 from pydantic import BaseModel
+from sqlalchemy import func, cast, DATE
+from sqlalchemy.orm import Query
 from starlette import status
 
 
@@ -58,33 +62,38 @@ class PydanticArrow(datetime.datetime):
         return arrow.get(v)
 
 
-class AnalyticsBase(BaseModel):
-    type: AnalyticsType
+class PageViewStat(BaseModel):
+    total_visits: int
 
-
-class PageViewData(AnalyticsBase):
-    type = AnalyticsType.PAGEVIEWS
-    pageviews: int
+    @staticmethod
+    def from_base_query(base_query: Query):
+        return PageViewStat(total_visits=base_query.count())
 
 
 class PageViewsPerDayStat(BaseModel):
     date: datetime.date
     total_visits: int
 
-
-class PageViewsPerDayData(AnalyticsBase):
-    type = AnalyticsType.PAGEVIEWS_PER_DAY
-    pageviews_per_day: List[PageViewsPerDayStat]
+    @staticmethod
+    def from_base_query(base_query: Query) -> List[PageViewsPerDayStat]:
+        rows = base_query.group_by(cast(Event.timestamp, DATE)).with_entities(
+            cast(Event.timestamp, DATE), func.count()
+        )
+        return [PageViewsPerDayStat(date=row[0], total_visits=row[1]) for row in rows]
 
 
 class BrowserStat(BaseModel):
     name: str
     total_visits: int
 
-
-class BrowserData(AnalyticsBase):
-    type = AnalyticsType.BROWSERS
-    browser_families: List[BrowserStat]
+    @staticmethod
+    def from_base_query(base_query: Query) -> List[BrowserStat]:
+        rows = (
+            base_query.group_by(Event.browser_family)
+            .with_entities(Event.browser_family, func.count())
+            .limit(10)
+        )
+        return [BrowserStat(name=row[0], total_visits=row[1]) for row in rows]
 
 
 class CountryStat(BaseModel):
@@ -92,40 +101,64 @@ class CountryStat(BaseModel):
     country_code: str
     total_visits: int
 
-
-class CountryData(AnalyticsBase):
-    type = AnalyticsType.COUNTRY
-    countries: List[CountryStat]
+    @staticmethod
+    def from_base_query(base_query: Query):
+        rows: List[Tuple[str, str, int]] = (
+            base_query.group_by(Event.ip_country_iso_code, Country.name)
+            .with_entities(Event.ip_country_iso_code, Country.name, func.count())
+            .limit(10)
+        )
+        return [
+            CountryStat(country_code=row[0], name=row[1], total_visits=row[2])
+            for row in rows
+        ]
 
 
 class OSStat(BaseModel):
     name: str
     total_visits: int
 
+    @staticmethod
+    def from_base_query(base_query: Query):
 
-class OSData(AnalyticsBase):
-    type = AnalyticsType.OS
-    os_families: List[OSStat]
+        rows: List[Tuple[str, str, int]] = (
+            base_query.group_by(Event.os_family)
+            .with_entities(Event.os_family, func.count())
+            .limit(10)
+        )
+        return [OSStat(name=row[0], total_visits=row[1]) for row in rows]
 
 
 class DeviceStat(BaseModel):
     name: str
     total_visits: int
 
+    @staticmethod
+    def from_base_query(base_query: Query):
 
-class DeviceData(AnalyticsBase):
-    type = AnalyticsType.DEVICES
-    device_families: List[DeviceStat]
+        rows = (
+            base_query.group_by(Event.device_family)
+            .with_entities(Event.device_family, func.count())
+            .limit(10)
+        )
+        return [DeviceStat(name=row[0], total_visits=row[1]) for row in rows]
 
 
 class ReferrerMediumStat(BaseModel):
     medium: str
     total_visits: int
 
+    @staticmethod
+    def from_base_query(base_query: Query):
 
-class ReferrerMediumData(AnalyticsBase):
-    type = AnalyticsType.REFERRER_MEDIUMS
-    referrer_mediums: List[ReferrerMediumStat]
+        rows = (
+            base_query.group_by(Event.referrer_medium)
+            .with_entities(Event.referrer_medium, func.count())
+            .limit(10)
+        )
+        return [
+            ReferrerMediumStat(medium=row[0].value, total_visits=row[1]) for row in rows
+        ]
 
 
 class ReferrerNameStat(BaseModel):
@@ -133,28 +166,31 @@ class ReferrerNameStat(BaseModel):
     name: str
     total_visits: int
 
-
-class ReferrerNameData(AnalyticsBase):
-    type = AnalyticsType.REFERRER_NAMES
-    referrer_names: List[ReferrerNameStat]
-
-
-AnalyticsDataTypes = Union[
-    PageViewData,
-    BrowserData,
-    CountryData,
-    OSData,
-    DeviceData,
-    ReferrerMediumData,
-    ReferrerNameData,
-    PageViewsPerDayData,
-]
+    @staticmethod
+    def from_base_query(base_query: Query):
+        rows = (
+            base_query.group_by(Event.referrer_medium, Event.referrer_name)
+            .with_entities(Event.referrer_medium, Event.referrer_name, func.count())
+            .filter(Event.referrer_name.isnot(None))
+            .limit(10)
+        )
+        return [
+            ReferrerNameStat(medium=row[0].value, name=row[1], total_visits=row[2])
+            for row in rows
+        ]
 
 
 class AnalyticsData(BaseModel):
     start: PydanticArrow
     end: PydanticArrow
-    data: List[AnalyticsDataTypes]
+    pageviews: Optional[PageViewStat]
+    browser_families: Optional[List[BrowserStat]]
+    countries: Optional[List[CountryStat]]
+    os_families: Optional[List[OSStat]]
+    device_families: Optional[List[DeviceStat]]
+    referrer_mediums: Optional[List[ReferrerMediumStat]]
+    referrer_names: Optional[List[ReferrerNameStat]]
+    pageviews_per_day: Optional[List[PageViewsPerDayStat]]
 
     class Config:
         json_encoders = {arrow.Arrow: lambda obj: obj.isoformat()}
