@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from app import crud
 from app.api import deps
-from app.schemas.analytics import AnalyticsData, AnalyticsType, PageViewData
+from app.schemas.analytics import AnalyticsData, AnalyticsType
 
 router = APIRouter()
 
@@ -30,7 +30,7 @@ def get_start_date(
     return start
 
 
-@router.get("/", response_model=AnalyticsData)
+@router.get("/", response_model=AnalyticsData, response_model_exclude_unset=True)
 def get_analytics(
     domain_id: int,
     *,

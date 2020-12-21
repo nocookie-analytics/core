@@ -9,7 +9,7 @@ from hypothesis.strategies import datetimes, timedeltas
 from app.core.config import settings
 from app.models.domain import Domain
 
-aware_datetimes = datetimes(timezones=timezones())
+aware_datetimes = datetimes(timezones=timezones(), min_value=datetime(1500, 1, 1))
 
 
 @given(
