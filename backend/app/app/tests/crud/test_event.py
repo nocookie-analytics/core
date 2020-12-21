@@ -1,3 +1,4 @@
+from typing import Sequence
 from app.tests.utils.utils import paths
 from datetime import datetime, timedelta
 
@@ -78,11 +79,11 @@ def test_get_analytics(
     )
     assert analytics_data.start == start
     assert analytics_data.end == end
-    assert analytics_data.data
-    data = analytics_data.data
-    assert len(data) == len(fields)
-    for field_data in data:
-        assert field_data.type
+    assert len(
+        set(analytics_data.dict(exclude_unset=True).keys()) - set(["start", "end"])
+    ) == len(fields)
+    assert analytics_data.pageviews
+    assert isinstance(analytics_data.browser_families, Sequence)
 
 
 def test_get_analytics_from_fields(db: Session, mock_read_only_domain: Domain):
@@ -92,103 +93,8 @@ def test_get_analytics_from_fields(db: Session, mock_read_only_domain: Domain):
         result = crud.event.get_analytics_from_fields(
             db, domain=mock_read_only_domain, fields=[field], start=start, end=end
         )
-        assert result.data
-        assert len(result.data) == 1
-        assert result.data[0].type == field
-
-
-def test_get_pageviews(db: Session, mock_ip_address):
-    # With one page view event
-    domain = create_random_domain(db)
-    create_random_page_view_event(db, domain_id=domain.id, ip_address=mock_ip_address)
-    base_query = crud.event._page_views_in_date_range(
-        domain,
-        start=arrow.now() - timedelta(days=1),
-        end=arrow.now() + timedelta(days=1),
-    )
-    data = crud.event._get_page_views(base_query)
-    per_day_data = crud.event._get_page_views_per_day(base_query)
-    assert data.pageviews == 1
-    assert len(per_day_data.pageviews_per_day) == 1
-    assert per_day_data.pageviews_per_day[0].total_visits == 1
-
-    # With two page view events
-    create_random_page_view_event(db, domain_id=domain.id, ip_address=mock_ip_address)
-    data = crud.event._get_page_views(base_query)
-    assert data.pageviews == 2
-
-    # With two page view events and one metric event
-    create_random_metric_event(db, domain_id=domain.id, ip_address=mock_ip_address)
-    data = crud.event._get_page_views(base_query)
-    per_day_data = crud.event._get_page_views_per_day(base_query)
-    assert data.pageviews == 2
-    assert len(per_day_data.pageviews_per_day) == 1
-    assert per_day_data.pageviews_per_day[0].total_visits == 2
-
-
-def test_get_browsers(db: Session, mock_ip_address):
-    domain = create_random_domain(db)
-    create_random_page_view_event(db, domain_id=domain.id, ip_address=mock_ip_address)
-    base_query = crud.event._page_views_in_date_range(
-        domain,
-        start=arrow.now() - timedelta(days=1),
-        end=arrow.now() + timedelta(days=1),
-    )
-    data = crud.event._get_browsers_data(base_query)
-    assert len(data.browser_families) == 1
-    assert data.browser_families[0].name
-    assert data.browser_families[0].total_visits
-
-
-def test_get_countries(db: Session, mock_ip_address):
-    domain = create_random_domain(db)
-    create_random_page_view_event(db, domain_id=domain.id, ip_address=mock_ip_address)
-    base_query = crud.event._page_views_in_date_range(
-        domain,
-        start=arrow.now() - timedelta(days=1),
-        end=arrow.now() + timedelta(days=1),
-    )
-    data = crud.event._get_countries_data(base_query)
-    assert len(data.countries) == 1
-    assert data.countries[0].name
-    assert len(data.countries[0].country_code) == 2
-    assert data.countries[0].total_visits
-
-
-def test_get_os(db: Session, mock_ip_address):
-    domain = create_random_domain(db)
-    create_random_page_view_event(db, domain_id=domain.id, ip_address=mock_ip_address)
-    base_query = crud.event._page_views_in_date_range(
-        domain,
-        start=arrow.now() - timedelta(days=1),
-        end=arrow.now() + timedelta(days=1),
-    )
-    data = crud.event._get_os_data(base_query)
-    assert len(data.os_families) == 1
-    assert data.os_families[0].name
-    assert data.os_families[0].total_visits == 1
-
-
-def test_get_referrers(db: Session, mock_ip_address):
-    domain = create_random_domain(db)
-    create_random_page_view_event(
-        db,
-        domain_id=domain.id,
-        ip_address=mock_ip_address,
-        create_overrides={"referrer": "https://www.google.com/"},
-    )
-    base_query = crud.event._page_views_in_date_range(
-        domain,
-        start=arrow.now() - timedelta(days=1),
-        end=arrow.now() + timedelta(days=1),
-    )
-    name_data = crud.event._get_referrer_names_data(base_query)
-    assert len(name_data.referrer_names) == 1
-    assert name_data.referrer_names[0].medium == "search"
-    assert name_data.referrer_names[0].name == "Google"
-    assert name_data.referrer_names[0].total_visits == 1
-
-    medium_data = crud.event._get_referrer_mediums_data(base_query)
-    assert len(medium_data.referrer_mediums) == 1
-    assert medium_data.referrer_mediums[0].medium == "search"
-    assert medium_data.referrer_mediums[0].total_visits == 1
+        assert (
+            len(set(result.dict(exclude_unset=True).keys()) - set(["start", "end"]))
+            == 1
+        )
+        assert getattr(result, field.value) is not None, field.value
