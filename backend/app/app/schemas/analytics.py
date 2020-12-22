@@ -273,6 +273,11 @@ class AnalyticsData(BaseModel):
     referrer_mediums: Optional[List[ReferrerMediumStat]]
     referrer_names: Optional[List[ReferrerNameStat]]
     pageviews_per_day: Optional[List[PageViewsPerDayStat]]
+    utm_sources: Optional[List[UTMSourceStat]]
+    utm_mediums: Optional[List[UTMMediumStat]]
+    utm_campaigns: Optional[List[UTMCampaignStat]]
+    utm_terms: Optional[List[UTMTermStat]]
+    utm_contents: Optional[List[UTMContentStat]]
 
     class Config:
         json_encoders = {arrow.Arrow: lambda obj: obj.isoformat()}
