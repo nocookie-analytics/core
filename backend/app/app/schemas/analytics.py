@@ -197,7 +197,6 @@ class UTMTermStat(BaseModel):
             .filter(Event.utm_term.isnot(None))
             .limit(10)
         )
-        print(rows.all())
         return [UTMTermStat(term=row[0], total_visits=row[1]) for row in rows]
 
 
@@ -243,7 +242,6 @@ class UTMContentStat(BaseModel):
             .filter(Event.utm_content.isnot(None))
             .limit(10)
         )
-        print(rows.all())
         return [UTMContentStat(content=row[0], total_visits=row[1]) for row in rows]
 
 
