@@ -12,6 +12,11 @@ from app.schemas.analytics import (
     PageViewStat,
     ReferrerMediumStat,
     ReferrerNameStat,
+    UTMCampaignStat,
+    UTMContentStat,
+    UTMMediumStat,
+    UTMSourceStat,
+    UTMTermStat,
 )
 from app.tests.utils.domain import create_random_domain
 from app.tests.utils.event import (
@@ -114,3 +119,45 @@ def test_get_referrers(db: Session, mock_ip_address):
     assert len(medium_data) == 1
     assert medium_data[0].medium == "search"
     assert medium_data[0].total_visits == 1
+
+
+def test_get_utm(db: Session, mock_ip_address):
+    domain = create_random_domain(db)
+    create_random_page_view_event(
+        db,
+        domain_id=domain.id,
+        ip_address=mock_ip_address,
+        create_overrides={
+            "url": "https://www.example.com/page?utm_content=buffercf3b2&utm_medium=social&utm_source=facebook.com&utm_campaign=buffer"
+        },
+    )
+    create_random_page_view_event(
+        db,
+        domain_id=domain.id,
+        ip_address=mock_ip_address,
+    )
+    base_query = domain.events.filter(Event.event_type == EventType.page_view)
+    utm_contents = UTMContentStat.from_base_query(base_query)
+    utm_sources = UTMSourceStat.from_base_query(base_query)
+    utm_mediums = UTMMediumStat.from_base_query(base_query)
+    utm_campaigns = UTMCampaignStat.from_base_query(base_query)
+    utm_terms = UTMTermStat.from_base_query(base_query)
+    assert (
+        len(utm_contents)
+        == len(utm_sources)
+        == len(utm_mediums)
+        == len(utm_campaigns)
+        == 1
+    )
+    assert utm_contents[0].content == "buffercf3b2"
+    assert utm_sources[0].source == "facebook.com"
+    assert utm_mediums[0].medium == "social"
+    assert utm_campaigns[0].campaign == "buffer"
+    assert (
+        utm_contents[0].total_visits
+        == utm_sources[0].total_visits
+        == utm_mediums[0].total_visits
+        == utm_campaigns[0].total_visits
+        == 1
+    )
+    assert not utm_terms
