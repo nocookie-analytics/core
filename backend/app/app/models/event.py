@@ -1,32 +1,29 @@
 from __future__ import annotations
 
-from sqlalchemy.sql import text
-
 from enum import Enum
-from typing import Mapping, TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING, Tuple
 
 from sqlalchemy import (
-    Column,
-    ForeignKey,
-    Integer,
     NUMERIC,
-    String,
-    DateTime,
     Boolean,
-    func,
+    Column,
+    DateTime,
+    ForeignKey,
     Index,
+    Integer,
     PrimaryKeyConstraint,
+    String,
+    func,
 )
+from sqlalchemy.dialects.postgresql import INET, JSONB, UUID
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import JSONB, INET, UUID
 from sqlalchemy_enum34 import EnumType
 
 from app.db.base_class import Base
 
-
 if TYPE_CHECKING:
-    from .location import City, Country
     from .domain import Domain
+    from .location import City, Country
 
 
 class EventType(Enum):
@@ -93,7 +90,13 @@ class Event(Base):
     metric_name = Column(String)
     metric_value = Column(NUMERIC)
 
-    url_params = Column(JSONB, index=True)
+    url_params = Column(JSONB)
+
+    utm_source = Column(String)
+    utm_medium = Column(String)
+    utm_campaign = Column(String)
+    utm_term = Column(String)
+    utm_content = Column(String)
 
     page_title = Column(String)
 
@@ -136,7 +139,45 @@ class Event(Base):
     # serial id makes it so
     __table_args__: Tuple = (
         ix_domain_timestamp,
+        Index(
+            "ix_utm_source",
+            domain_id,
+            utm_source,
+            timestamp,
+            postgresql_where=utm_source.isnot(None),
+        ),
+        Index(
+            "ix_utm_medium",
+            domain_id,
+            utm_medium,
+            timestamp,
+            postgresql_where=utm_medium.isnot(None),
+        ),
+        Index(
+            "ix_utm_campaign",
+            domain_id,
+            utm_campaign,
+            timestamp,
+            postgresql_where=utm_campaign.isnot(None),
+        ),
+        Index(
+            "ix_utm_term",
+            domain_id,
+            utm_term,
+            timestamp,
+            postgresql_where=utm_term.isnot(None),
+        ),
+        Index(
+            "ix_utm_content",
+            domain_id,
+            utm_content,
+            timestamp,
+            postgresql_where=utm_content.isnot(None),
+        ),
         ix_timestamp,
         PrimaryKeyConstraint(domain_id, timestamp, id),
         {},
     )
+
+    def __repr__(self):
+        return f"Event<<Domain: {self.domain.domain_name}>: {self.event_type}>"

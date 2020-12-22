@@ -22,6 +22,11 @@ from app.schemas.analytics import (
     PageViewsPerDayStat,
     ReferrerMediumStat,
     ReferrerNameStat,
+    UTMCampaignStat,
+    UTMContentStat,
+    UTMMediumStat,
+    UTMSourceStat,
+    UTMTermStat,
 )
 from app.schemas.event import EventCreate, EventUpdate
 from app.utils.geolocation import get_ip_gelocation
@@ -55,7 +60,17 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         url_params = dict(
             furled_url.args
         )  # TODO: furl.args is multidict, this conversion is lossy
-        return {"url_params": url_params, "path": path}
+        utm_param_list = [
+            "utm_source",
+            "utm_medium",
+            "utm_campaign",
+            "utm_term",
+            "utm_content",
+        ]
+        utm_params = {}
+        for utm_param in utm_param_list:
+            utm_params[utm_param] = url_params.pop(utm_param, None)
+        return {"url_params": url_params, "path": path, **utm_params}
 
     @staticmethod
     def _get_referrer_info(ref: Optional[str], curr_url: Optional[str] = None):
@@ -134,6 +149,16 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 data.referrer_mediums = ReferrerMediumStat.from_base_query(base_query)
             elif field == AnalyticsType.REFERRER_NAMES:
                 data.referrer_names = ReferrerNameStat.from_base_query(base_query)
+            elif field == AnalyticsType.UTM_CAMPAIGNS:
+                data.utm_campaigns = UTMCampaignStat.from_base_query(base_query)
+            elif field == AnalyticsType.UTM_SOURCES:
+                data.utm_sources = UTMSourceStat.from_base_query(base_query)
+            elif field == AnalyticsType.UTM_TERMS:
+                data.utm_terms = UTMTermStat.from_base_query(base_query)
+            elif field == AnalyticsType.UTM_CONTENTS:
+                data.utm_contents = UTMContentStat.from_base_query(base_query)
+            elif field == AnalyticsType.UTM_MEDIUMS:
+                data.utm_mediums = UTMMediumStat.from_base_query(base_query)
             else:
                 raise HTTPException(status_code=400)
 
