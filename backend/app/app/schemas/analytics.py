@@ -21,6 +21,11 @@ class AnalyticsType(Enum):
     DEVICES = "device_families"
     REFERRER_MEDIUMS = "referrer_mediums"
     REFERRER_NAMES = "referrer_names"
+    UTM_SOURCES = "utm_sources"
+    UTM_MEDIUMS = "utm_mediums"
+    UTM_CAMPAIGNS = "utm_campaigns"
+    UTM_TERMS = "utm_terms"
+    UTM_CONTENTS = "utm_contents"
 
     @staticmethod
     def from_csv_string(include) -> List[AnalyticsType]:
@@ -178,6 +183,83 @@ class ReferrerNameStat(BaseModel):
             ReferrerNameStat(medium=row[0].value, name=row[1], total_visits=row[2])
             for row in rows
         ]
+
+
+class UTMTermStat(BaseModel):
+    term: str
+    total_visits: int
+
+    @staticmethod
+    def from_base_query(base_query: Query) -> List[UTMTermStat]:
+        rows = (
+            base_query.group_by(Event.utm_term)
+            .with_entities(Event.utm_term, func.count())
+            .filter(Event.utm_term.isnot(None))
+            .limit(10)
+        )
+        print(rows.all())
+        return [UTMTermStat(term=row[0], total_visits=row[1]) for row in rows]
+
+
+class UTMSourceStat(BaseModel):
+    source: str
+    total_visits: int
+
+    @staticmethod
+    def from_base_query(base_query: Query) -> List[UTMSourceStat]:
+        rows = (
+            base_query.group_by(Event.utm_source)
+            .with_entities(Event.utm_source, func.count())
+            .filter(Event.utm_source.isnot(None))
+            .limit(10)
+        )
+        return [UTMSourceStat(source=row[0], total_visits=row[1]) for row in rows]
+
+
+class UTMMediumStat(BaseModel):
+    medium: str
+    total_visits: int
+
+    @staticmethod
+    def from_base_query(base_query: Query) -> List[UTMMediumStat]:
+        rows = (
+            base_query.group_by(Event.utm_medium)
+            .with_entities(Event.utm_medium, func.count())
+            .filter(Event.utm_medium.isnot(None))
+            .limit(10)
+        )
+        return [UTMMediumStat(medium=row[0], total_visits=row[1]) for row in rows]
+
+
+class UTMContentStat(BaseModel):
+    content: str
+    total_visits: int
+
+    @staticmethod
+    def from_base_query(base_query: Query) -> List[UTMContentStat]:
+        rows = (
+            base_query.group_by(Event.utm_content)
+            .with_entities(Event.utm_content, func.count())
+            .filter(Event.utm_content.isnot(None))
+            .limit(10)
+        )
+        print(rows.all())
+        return [UTMContentStat(content=row[0], total_visits=row[1]) for row in rows]
+
+
+class UTMCampaignStat(BaseModel):
+    campaign: str
+    total_visits: int
+
+    @staticmethod
+    def from_base_query(base_query: Query) -> List[UTMCampaignStat]:
+        rows = (
+            base_query.group_by(Event.utm_campaign)
+            .with_entities(Event.utm_campaign, func.count())
+            .filter(Event.utm_campaign.isnot(None))
+            .limit(10)
+        )
+        return [UTMCampaignStat(campaign=row[0], total_visits=row[1]) for row in rows]
 
 
 class AnalyticsData(BaseModel):
