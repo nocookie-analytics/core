@@ -1,3 +1,4 @@
+import pytest
 from typing import Sequence
 from app.tests.utils.utils import paths
 from datetime import datetime, timedelta
@@ -13,11 +14,6 @@ from app.models.domain import Domain
 from app.models.event import EventType
 from app.schemas.analytics import AnalyticsType
 from app.schemas.event import EventCreate
-from app.tests.utils.domain import create_random_domain
-from app.tests.utils.event import (
-    create_random_metric_event,
-    create_random_page_view_event,
-)
 
 aware_datetimes = datetimes(
     timezones=timezones(), max_value=datetime(2099, 1, 1), allow_imaginary=False
@@ -86,15 +82,14 @@ def test_get_analytics(
     assert isinstance(analytics_data.browser_families, Sequence)
 
 
-def test_get_analytics_from_fields(db: Session, mock_read_only_domain: Domain):
-    for field in AnalyticsType:
-        end = arrow.now()
-        start = end - timedelta(days=1)
-        result = crud.event.get_analytics_from_fields(
-            db, domain=mock_read_only_domain, fields=[field], start=start, end=end
-        )
-        assert (
-            len(set(result.dict(exclude_unset=True).keys()) - set(["start", "end"]))
-            == 1
-        )
-        assert getattr(result, field.value) is not None, field.value
+@pytest.mark.parametrize("field", AnalyticsType)
+def test_get_analytics_from_fields(
+    db: Session, mock_read_only_domain: Domain, field: AnalyticsType
+):
+    end = arrow.now()
+    start = end - timedelta(days=1)
+    result = crud.event.get_analytics_from_fields(
+        db, domain=mock_read_only_domain, fields=[field], start=start, end=end
+    )
+    assert len(set(result.dict(exclude_unset=True).keys()) - set(["start", "end"])) == 1
+    assert getattr(result, field.value) is not None, field.value
