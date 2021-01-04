@@ -512,7 +512,7 @@ python-versions = "*"
 
 [[package]]
 name = "hypothesis"
-version = "5.43.4"
+version = "5.46.0"
 description = "A library for property-based testing"
 category = "dev"
 optional = false
@@ -523,8 +523,9 @@ attrs = ">=19.2.0"
 sortedcontainers = ">=2.1.0,<3.0.0"
 
 [package.extras]
-all = ["black (>=19.10b0)", "click (>=7.0)", "django (>=2.2)", "dpcontracts (>=0.4)", "lark-parser (>=0.6.5)", "numpy (>=1.9.0)", "pandas (>=0.25)", "pytest (>=4.3)", "python-dateutil (>=1.4)", "pytz (>=2014.1)", "redis (>=3.0.0)", "importlib-resources (>=3.3.0)", "importlib-metadata", "backports.zoneinfo (>=0.2.1)", "tzdata (>=2020.4)"]
+all = ["black (>=19.10b0)", "click (>=7.0)", "django (>=2.2)", "dpcontracts (>=0.4)", "lark-parser (>=0.6.5)", "libcst (>=0.3.16)", "numpy (>=1.9.0)", "pandas (>=0.25)", "pytest (>=4.3)", "python-dateutil (>=1.4)", "pytz (>=2014.1)", "redis (>=3.0.0)", "importlib-resources (>=3.3.0)", "importlib-metadata", "backports.zoneinfo (>=0.2.1)", "tzdata (>=2020.4)"]
 cli = ["click (>=7.0)", "black (>=19.10b0)"]
+codemods = ["libcst (>=0.3.16)"]
 dateutil = ["python-dateutil (>=1.4)"]
 django = ["pytz (>=2014.1)", "django (>=2.2)"]
 dpcontracts = ["dpcontracts (>=0.4)"]
@@ -1357,7 +1358,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "ea9a5600969c5aa81f97404ca53ba80c7d0bad1fe64cc0d39146c19a032796f5"
+content-hash = "39c269b19e9c02d588f4674bceff228fca5b110ad2e259767b19ca25b0759157"
 
 [metadata.files]
 aiohttp = [
@@ -1651,8 +1652,8 @@ h11 = [
     {file = "h11-0.11.0.tar.gz", hash = "sha256:3c6c61d69c6f13d41f1b80ab0322f1872702a3ba26e12aa864c928f6a43fbaab"},
 ]
 hypothesis = [
-    {file = "hypothesis-5.43.4-py3-none-any.whl", hash = "sha256:6dfc4c233f3903f1524242c1e1c92b5e06fb4b689d3fd2abbd22783af25d3c27"},
-    {file = "hypothesis-5.43.4.tar.gz", hash = "sha256:6094f922c1d2bef808b8e6cf3ab8cdb8ad76faa12519a25ac4250eed524e25c0"},
+    {file = "hypothesis-5.46.0-py3-none-any.whl", hash = "sha256:c53dacd3951092b02f6247214aae5f41054509ff5c68448deeb1b825c75f2712"},
+    {file = "hypothesis-5.46.0.tar.gz", hash = "sha256:f30426f0923e1cf12b1bf9799394dcba96858fd4af5323f19cce016685c3fe16"},
 ]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
