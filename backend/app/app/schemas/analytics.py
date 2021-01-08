@@ -1,6 +1,6 @@
 from __future__ import annotations
 from app.models.location import Country
-from app.models.event import Event
+from app.models.event import Event, MetricType
 import datetime
 from enum import Enum
 from typing import List, Optional, Set, Tuple
@@ -26,6 +26,10 @@ class AnalyticsType(Enum):
     UTM_CAMPAIGNS = "utm_campaigns"
     UTM_TERMS = "utm_terms"
     UTM_CONTENTS = "utm_contents"
+    LCP_PER_DAY = "lcp_per_day"
+    FID_PER_DAY = "fid_per_day"
+    FP_PER_DAY = "fp_per_day"
+    CLS_PER_DAY = "cls_per_day"
 
     @staticmethod
     def from_csv_string(include) -> List[AnalyticsType]:
@@ -258,6 +262,30 @@ class UTMCampaignStat(BaseModel):
             .limit(10)
         )
         return [UTMCampaignStat(campaign=row[0], total_visits=row[1]) for row in rows]
+
+
+class MetricStat(BaseModel):
+    metric_type: MetricType
+    values_per_date: List[MetricPerDayStat]
+
+    @staticmethod
+    def from_base_query(base_query: Query, metric_type: MetricType) -> MetricStat:
+        rows = (
+            base_query.group_by(cast(Event.timestamp, DATE))
+            .with_entities(cast(Event.timestamp, DATE), func.count())
+            .filter(Event.metric_name == metric_type)
+        )
+        return MetricStat(
+            values_per_date=[
+                MetricPerDayStat(date=row[0], total_visits=row[1]) for row in rows
+            ],
+            metric_type=metric_type,
+        )
+
+
+class MetricPerDayStat(BaseModel):
+    date: datetime.date
+    total_visits: int
 
 
 class AnalyticsData(BaseModel):
