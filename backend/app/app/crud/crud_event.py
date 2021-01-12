@@ -9,7 +9,7 @@ from sqlalchemy.orm import Query, Session
 
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
-from app.models.event import Event, EventType, ReferrerMediumType
+from app.models.event import Event, EventType, MetricType, ReferrerMediumType
 from app.models.parsed_ua import ParsedUA
 from app.schemas.analytics import (
     AnalyticsData,
@@ -17,6 +17,7 @@ from app.schemas.analytics import (
     BrowserStat,
     CountryStat,
     DeviceStat,
+    MetricStat,
     OSStat,
     PageViewStat,
     PageViewsPerDayStat,
@@ -159,6 +160,22 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 data.utm_contents = UTMContentStat.from_base_query(base_query)
             elif field == AnalyticsType.UTM_MEDIUMS:
                 data.utm_mediums = UTMMediumStat.from_base_query(base_query)
+            elif field == AnalyticsType.LCP_PER_DAY:
+                data.lcp_per_day = MetricStat.from_base_query(
+                    base_query, metric_type=MetricType.LCP
+                )
+            elif field == AnalyticsType.FID_PER_DAY:
+                data.lcp_per_day = MetricStat.from_base_query(
+                    base_query, metric_type=MetricType.FID
+                )
+            elif field == AnalyticsType.FP_PER_DAY:
+                data.lcp_per_day = MetricStat.from_base_query(
+                    base_query, metric_type=MetricType.FP
+                )
+            elif field == AnalyticsType.CLS_PER_DAY:
+                data.lcp_per_day = MetricStat.from_base_query(
+                    base_query, metric_type=MetricType.CLS
+                )
             else:
                 raise HTTPException(status_code=400)
 

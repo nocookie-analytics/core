@@ -130,7 +130,7 @@ class OSStat(BaseModel):
     @staticmethod
     def from_base_query(base_query: Query):
 
-        rows: List[Tuple[str, str, int]] = (
+        rows: List[Tuple[str, int]] = (
             base_query.group_by(Event.os_family)
             .with_entities(Event.os_family, func.count())
             .limit(10)
@@ -264,9 +264,13 @@ class UTMCampaignStat(BaseModel):
         return [UTMCampaignStat(campaign=row[0], total_visits=row[1]) for row in rows]
 
 
+class MetricPerDayStat(BaseModel):
+    date: datetime.date
+    total_visits: int
+
+
 class MetricStat(BaseModel):
     metric_type: MetricType
-    values_per_date: List[MetricPerDayStat]
 
     @staticmethod
     def from_base_query(base_query: Query, metric_type: MetricType) -> MetricStat:
@@ -275,17 +279,29 @@ class MetricStat(BaseModel):
             .with_entities(cast(Event.timestamp, DATE), func.count())
             .filter(Event.metric_name == metric_type)
         )
+        values_per_date = [
+            MetricPerDayStat(date=row[0], total_visits=row[1]) for row in rows
+        ]
         return MetricStat(
-            values_per_date=[
-                MetricPerDayStat(date=row[0], total_visits=row[1]) for row in rows
-            ],
+            values_per_date=values_per_date,
             metric_type=metric_type,
         )
 
 
-class MetricPerDayStat(BaseModel):
-    date: datetime.date
-    total_visits: int
+class LCPStat(MetricStat):
+    metric_type = MetricType.LCP
+
+
+class CLSStat(MetricStat):
+    metric_type = MetricType.CLS
+
+
+class FIDStat(MetricStat):
+    metric_type = MetricType.FID
+
+
+class FPStat(MetricStat):
+    metric_type = MetricType.FP
 
 
 class AnalyticsData(BaseModel):
@@ -304,6 +320,10 @@ class AnalyticsData(BaseModel):
     utm_campaigns: Optional[List[UTMCampaignStat]]
     utm_terms: Optional[List[UTMTermStat]]
     utm_contents: Optional[List[UTMContentStat]]
+    lcp_per_day: Optional[LCPStat]
+    cls_per_day: Optional[CLSStat]
+    fp_per_day: Optional[FPStat]
+    fid_per_day: Optional[FIDStat]
 
     class Config:
         json_encoders = {arrow.Arrow: lambda obj: obj.isoformat()}
