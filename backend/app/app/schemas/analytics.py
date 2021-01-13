@@ -3,7 +3,7 @@ from app.models.location import Country
 from app.models.event import Event
 import datetime
 from enum import Enum
-from typing import List, Optional, Set, Tuple
+from typing import List, Optional, Set, Tuple, Union
 import arrow
 from fastapi import HTTPException
 from pydantic import BaseModel
@@ -65,6 +65,36 @@ class PydanticArrow(datetime.datetime):
     @classmethod
     def validate(cls, v):
         return arrow.get(v)
+
+
+class AggregateStat(BaseModel):
+    total_visits: int
+    value: Union[str, Enum]
+
+    @staticmethod
+    def from_base_query(
+        base_query: Query, group_by_column, *, filter_none: bool = False
+    ) -> List[AggregateStat]:
+        query = base_query.group_by(group_by_column).with_entities(
+            group_by_column, func.count()
+        )
+        if filter_none is True:
+            query = query.filter(group_by_column.isnot(None))
+        query = query.limit(10)
+        print([row for row in query])
+        return [AggregateStat(value=row[0], total_visits=row[1]) for row in query]
+
+
+class AggregatePerDayStat(BaseModel):
+    total_visits: int
+    date: datetime.date
+
+    @staticmethod
+    def from_base_query(base_query: Query) -> List[AggregatePerDayStat]:
+        rows = base_query.group_by(cast(Event.timestamp, DATE)).with_entities(
+            cast(Event.timestamp, DATE), func.count()
+        )
+        return [AggregatePerDayStat(date=row[0], total_visits=row[1]) for row in rows]
 
 
 class PageViewStat(BaseModel):
@@ -264,18 +294,18 @@ class AnalyticsData(BaseModel):
     start: PydanticArrow
     end: PydanticArrow
     pageviews: Optional[PageViewStat]
-    browser_families: Optional[List[BrowserStat]]
-    countries: Optional[List[CountryStat]]
-    os_families: Optional[List[OSStat]]
-    device_families: Optional[List[DeviceStat]]
-    referrer_mediums: Optional[List[ReferrerMediumStat]]
-    referrer_names: Optional[List[ReferrerNameStat]]
-    pageviews_per_day: Optional[List[PageViewsPerDayStat]]
-    utm_sources: Optional[List[UTMSourceStat]]
-    utm_mediums: Optional[List[UTMMediumStat]]
-    utm_campaigns: Optional[List[UTMCampaignStat]]
-    utm_terms: Optional[List[UTMTermStat]]
-    utm_contents: Optional[List[UTMContentStat]]
+    browser_families: Optional[List[AggregateStat]]
+    countries: Optional[List[AggregateStat]]
+    os_families: Optional[List[AggregateStat]]
+    device_families: Optional[List[AggregateStat]]
+    referrer_mediums: Optional[List[AggregateStat]]
+    referrer_names: Optional[List[AggregateStat]]
+    pageviews_per_day: Optional[List[AggregateStat]]
+    utm_sources: Optional[List[AggregateStat]]
+    utm_mediums: Optional[List[AggregateStat]]
+    utm_campaigns: Optional[List[AggregateStat]]
+    utm_terms: Optional[List[AggregateStat]]
+    utm_contents: Optional[List[AggregateStat]]
 
     class Config:
         json_encoders = {arrow.Arrow: lambda obj: obj.isoformat()}
