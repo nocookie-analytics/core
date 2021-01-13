@@ -4,7 +4,7 @@ from sqlalchemy.orm.session import Session
 
 from app.models.event import Event, EventType
 from app.schemas.analytics import (
-    AggregatePerDayStat,
+    PageViewsPerDayStat,
     AggregateStat,
     AnalyticsType,
     PageViewStat,
@@ -43,7 +43,7 @@ class AggregatePerDayStatTest:
         )
         base_query = domain.events.filter(Event.event_type == EventType.page_view)
         data = PageViewStat.from_base_query(base_query)
-        per_day_data = AggregatePerDayStat.from_base_query(base_query)
+        per_day_data = PageViewsPerDayStat.from_base_query(base_query)
         assert data.total_visits == 1
         assert per_day_data[0].total_visits == 1
 
@@ -52,14 +52,14 @@ class AggregatePerDayStatTest:
             db, domain_id=domain.id, ip_address=mock_ip_address
         )
         data = PageViewStat.from_base_query(base_query)
-        per_day_data = AggregatePerDayStat.from_base_query(base_query)
+        per_day_data = PageViewsPerDayStat.from_base_query(base_query)
         assert data.total_visits == 2
         assert per_day_data[0].total_visits == 2
 
         # With two page view events and one metric event
         create_random_metric_event(db, domain_id=domain.id, ip_address=mock_ip_address)
         data = PageViewStat.from_base_query(base_query)
-        per_day_data = AggregatePerDayStat.from_base_query(base_query)
+        per_day_data = PageViewsPerDayStat.from_base_query(base_query)
         assert data.total_visits == 2
         assert len(per_day_data) == 1
         assert per_day_data[0].total_visits == 2

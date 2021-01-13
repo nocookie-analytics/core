@@ -12,7 +12,8 @@ from app.models.domain import Domain
 from app.models.event import Event, EventType, MetricType, ReferrerMediumType
 from app.models.parsed_ua import ParsedUA
 from app.schemas.analytics import (
-    AggregatePerDayStat,
+    AvgMetricPerDayStat,
+    PageViewsPerDayStat,
     AggregateStat,
     AnalyticsData,
     AnalyticsType,
@@ -125,8 +126,6 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             ).filter(Event.event_type == EventType.page_view)
             if field == AnalyticsType.PAGEVIEWS:
                 data.pageviews = PageViewStat.from_base_query(base_query)
-            elif field == AnalyticsType.PAGEVIEWS_PER_DAY:
-                data.pageviews_per_day = AggregatePerDayStat.from_base_query(base_query)
             elif field == AnalyticsType.BROWSERS:
                 data.browser_families = AggregateStat.from_base_query(
                     base_query, Event.browser_family
@@ -183,14 +182,24 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                     Event.utm_medium,
                     filter_none=True,
                 )
+            elif field == AnalyticsType.PAGEVIEWS_PER_DAY:
+                data.pageviews_per_day = PageViewsPerDayStat.from_base_query(base_query)
             elif field == AnalyticsType.LCP_PER_DAY:
-                ...
+                data.lcp_per_day = AvgMetricPerDayStat.from_base_query(
+                    base_query, MetricType.LCP
+                )
             elif field == AnalyticsType.FID_PER_DAY:
-                ...
+                data.fid_per_day = AvgMetricPerDayStat.from_base_query(
+                    base_query, MetricType.FID
+                )
             elif field == AnalyticsType.FP_PER_DAY:
-                ...
+                data.fp_per_day = AvgMetricPerDayStat.from_base_query(
+                    base_query, MetricType.FP
+                )
             elif field == AnalyticsType.CLS_PER_DAY:
-                ...
+                data.cls_per_day = AvgMetricPerDayStat.from_base_query(
+                    base_query, MetricType.CLS
+                )
             else:
                 raise HTTPException(status_code=400)
 

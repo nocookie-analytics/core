@@ -89,16 +89,30 @@ class AggregateStat(BaseModel):
         return [AggregateStat(value=row[0], total_visits=row[1]) for row in query]
 
 
-class AggregatePerDayStat(BaseModel):
+class PageViewsPerDayStat(BaseModel):
     total_visits: int
     date: datetime.date
 
     @staticmethod
-    def from_base_query(base_query: Query) -> List[AggregatePerDayStat]:
+    def from_base_query(base_query: Query) -> List[PageViewsPerDayStat]:
         rows = base_query.group_by(cast(Event.timestamp, DATE)).with_entities(
             cast(Event.timestamp, DATE), func.count()
         )
-        return [AggregatePerDayStat(date=row[0], total_visits=row[1]) for row in rows]
+        return [PageViewsPerDayStat(date=row[0], total_visits=row[1]) for row in rows]
+
+
+class AvgMetricPerDayStat(BaseModel):
+    total_visits: int
+    date: datetime.date
+
+    @staticmethod
+    def from_base_query(
+        base_query: Query, metric_name: MetricType
+    ) -> List[AvgMetricPerDayStat]:
+        rows = base_query.group_by(cast(Event.timestamp, DATE)).with_entities(
+            cast(Event.timestamp, DATE), func.avg(Event.metric_name == metric_name)
+        )
+        return [AvgMetricPerDayStat(date=row[0], value=row[1]) for row in rows]
 
 
 class PageViewStat(BaseModel):
@@ -114,11 +128,12 @@ class AnalyticsData(BaseModel):
     end: PydanticArrow
     pageviews: Optional[PageViewStat]
 
-    lcp_per_day: Optional[AggregatePerDayStat]
-    cls_per_day: Optional[AggregatePerDayStat]
-    fp_per_day: Optional[AggregatePerDayStat]
-    fid_per_day: Optional[AggregatePerDayStat]
-    pageviews_per_day: Optional[List[AggregatePerDayStat]]
+    lcp_per_day: Optional[List[AvgMetricPerDayStat]]
+    cls_per_day: Optional[List[AvgMetricPerDayStat]]
+    fp_per_day: Optional[List[AvgMetricPerDayStat]]
+    fid_per_day: Optional[List[AvgMetricPerDayStat]]
+
+    pageviews_per_day: Optional[List[PageViewsPerDayStat]]
 
     browser_families: Optional[List[AggregateStat]]
     countries: Optional[List[AggregateStat]]
