@@ -93,7 +93,7 @@ class TestAggregateStat:
         )
         base_query = domain.events.filter(Event.event_type == EventType.page_view)
         data = AggregateStat.from_base_query(
-            base_query, Event.referrer_medium, filter_none=True
+            base_query, Event.referrer_name, filter_none=True
         )
         assert len(data) == 1
         assert data[0].value
