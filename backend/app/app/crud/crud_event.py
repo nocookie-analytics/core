@@ -5,29 +5,18 @@ from fastapi.exceptions import HTTPException
 from furl.furl import furl
 from pydantic import IPvAnyAddress
 from sqlalchemy import and_
-from sqlalchemy.orm import Query, Session
+from sqlalchemy.orm import Session
 
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
 from app.models.event import Event, EventType, MetricType, ReferrerMediumType
 from app.models.parsed_ua import ParsedUA
 from app.schemas.analytics import (
+    AggregatePerDayStat,
+    AggregateStat,
     AnalyticsData,
     AnalyticsType,
-    BrowserStat,
-    CountryStat,
-    DeviceStat,
-    MetricStat,
-    OSStat,
     PageViewStat,
-    PageViewsPerDayStat,
-    ReferrerMediumStat,
-    ReferrerNameStat,
-    UTMCampaignStat,
-    UTMContentStat,
-    UTMMediumStat,
-    UTMSourceStat,
-    UTMTermStat,
 )
 from app.schemas.event import EventCreate, EventUpdate
 from app.utils.geolocation import get_ip_gelocation
@@ -137,45 +126,71 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             if field == AnalyticsType.PAGEVIEWS:
                 data.pageviews = PageViewStat.from_base_query(base_query)
             elif field == AnalyticsType.PAGEVIEWS_PER_DAY:
-                data.pageviews_per_day = PageViewsPerDayStat.from_base_query(base_query)
+                data.pageviews_per_day = AggregatePerDayStat.from_base_query(base_query)
             elif field == AnalyticsType.BROWSERS:
-                data.browser_families = BrowserStat.from_base_query(base_query)
+                data.browser_families = AggregateStat.from_base_query(
+                    base_query, Event.browser_family
+                )
             elif field == AnalyticsType.COUNTRY:
-                data.countries = CountryStat.from_base_query(base_query)
+                data.countries = AggregateStat.from_base_query(
+                    base_query, Event.ip_country_iso_code
+                )
             elif field == AnalyticsType.OS:
-                data.os_families = OSStat.from_base_query(base_query)
+                data.os_families = AggregateStat.from_base_query(
+                    base_query, Event.os_family
+                )
             elif field == AnalyticsType.DEVICES:
-                data.device_families = DeviceStat.from_base_query(base_query)
+                data.device_families = AggregateStat.from_base_query(
+                    base_query, Event.device_family
+                )
             elif field == AnalyticsType.REFERRER_MEDIUMS:
-                data.referrer_mediums = ReferrerMediumStat.from_base_query(base_query)
+                data.referrer_mediums = AggregateStat.from_base_query(
+                    base_query, Event.referrer_medium
+                )
             elif field == AnalyticsType.REFERRER_NAMES:
-                data.referrer_names = ReferrerNameStat.from_base_query(base_query)
+                data.referrer_names = AggregateStat.from_base_query(
+                    base_query,
+                    Event.referrer_name,
+                    filter_none=True,
+                )
             elif field == AnalyticsType.UTM_CAMPAIGNS:
-                data.utm_campaigns = UTMCampaignStat.from_base_query(base_query)
+                data.utm_campaigns = AggregateStat.from_base_query(
+                    base_query,
+                    Event.utm_campaign,
+                    filter_none=True,
+                )
             elif field == AnalyticsType.UTM_SOURCES:
-                data.utm_sources = UTMSourceStat.from_base_query(base_query)
+                data.utm_sources = AggregateStat.from_base_query(
+                    base_query,
+                    Event.utm_source,
+                    filter_none=True,
+                )
             elif field == AnalyticsType.UTM_TERMS:
-                data.utm_terms = UTMTermStat.from_base_query(base_query)
+                data.utm_terms = AggregateStat.from_base_query(
+                    base_query,
+                    Event.utm_term,
+                    filter_none=True,
+                )
             elif field == AnalyticsType.UTM_CONTENTS:
-                data.utm_contents = UTMContentStat.from_base_query(base_query)
+                data.utm_contents = AggregateStat.from_base_query(
+                    base_query,
+                    Event.utm_content,
+                    filter_none=True,
+                )
             elif field == AnalyticsType.UTM_MEDIUMS:
-                data.utm_mediums = UTMMediumStat.from_base_query(base_query)
+                data.utm_mediums = AggregateStat.from_base_query(
+                    base_query,
+                    Event.utm_medium,
+                    filter_none=True,
+                )
             elif field == AnalyticsType.LCP_PER_DAY:
-                data.lcp_per_day = MetricStat.from_base_query(
-                    base_query, metric_type=MetricType.LCP
-                )
+                ...
             elif field == AnalyticsType.FID_PER_DAY:
-                data.lcp_per_day = MetricStat.from_base_query(
-                    base_query, metric_type=MetricType.FID
-                )
+                ...
             elif field == AnalyticsType.FP_PER_DAY:
-                data.lcp_per_day = MetricStat.from_base_query(
-                    base_query, metric_type=MetricType.FP
-                )
+                ...
             elif field == AnalyticsType.CLS_PER_DAY:
-                data.lcp_per_day = MetricStat.from_base_query(
-                    base_query, metric_type=MetricType.CLS
-                )
+                ...
             else:
                 raise HTTPException(status_code=400)
 

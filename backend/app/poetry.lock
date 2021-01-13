@@ -512,7 +512,7 @@ python-versions = "*"
 
 [[package]]
 name = "hypothesis"
-version = "6.0.0"
+version = "6.0.1"
 description = "A library for property-based testing"
 category = "dev"
 optional = false
@@ -1185,14 +1185,14 @@ SQLAlchemy = ">=0.8.0"
 
 [[package]]
 name = "sqlalchemy-stubs"
-version = "0.3"
+version = "0.4"
 description = "SQLAlchemy stubs and mypy plugin"
 category = "dev"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-mypy = ">=0.720"
+mypy = ">=0.790"
 typing-extensions = ">=3.7.4"
 
 [[package]]
@@ -1358,7 +1358,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "e30e5fa092084d181db02f376d31da3d7a2c16cb0818965cdea4ae9a138589f5"
+content-hash = "7200f63f71195d52f6ce87d416f16af82bd2a971dda41da48f1138fc9a7b4c6a"
 
 [metadata.files]
 aiohttp = [
@@ -1652,8 +1652,8 @@ h11 = [
     {file = "h11-0.11.0.tar.gz", hash = "sha256:3c6c61d69c6f13d41f1b80ab0322f1872702a3ba26e12aa864c928f6a43fbaab"},
 ]
 hypothesis = [
-    {file = "hypothesis-6.0.0-py3-none-any.whl", hash = "sha256:f1165dce9e430e94d46aa35077b855bbec8b77212ca1f7f3bbe34ba252262832"},
-    {file = "hypothesis-6.0.0.tar.gz", hash = "sha256:d96f55428bd6a9118edc80a782fde8ef517008b050d9856b24f375539eb2a7cf"},
+    {file = "hypothesis-6.0.1-py3-none-any.whl", hash = "sha256:7e7371cd0a06da727cecf923f249e92e4efa5fef5d9ce27559990752dc92b6c3"},
+    {file = "hypothesis-6.0.1.tar.gz", hash = "sha256:f420000a275d858abe5733cc85e7f89c926297a67299650c1c3684790c336f61"},
 ]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
@@ -2144,8 +2144,8 @@ sqlalchemy-enum34 = [
     {file = "SQLAlchemy_Enum34-1.0.1-py2.py3-none-any.whl", hash = "sha256:c23fc4a71947b923192a8ab2fc3fe11d031a31ce32c2fda5e2fd67077d667263"},
 ]
 sqlalchemy-stubs = [
-    {file = "sqlalchemy-stubs-0.3.tar.gz", hash = "sha256:a3318c810697164e8c818aa2d90bac570c1a0e752ced3ec25455b309c0bee8fd"},
-    {file = "sqlalchemy_stubs-0.3-py3-none-any.whl", hash = "sha256:ca1250605a39648cc433f5c70cb1a6f9fe0b60bdda4c51e1f9a2ab3651daadc8"},
+    {file = "sqlalchemy-stubs-0.4.tar.gz", hash = "sha256:c665d6dd4482ef642f01027fa06c3d5e91befabb219dc71fc2a09e7d7695f7ae"},
+    {file = "sqlalchemy_stubs-0.4-py3-none-any.whl", hash = "sha256:5eec7aa110adf9b957b631799a72fef396b23ff99fe296df726645d01e312aa5"},
 ]
 starlette = [
     {file = "starlette-0.13.6-py3-none-any.whl", hash = "sha256:bd2ffe5e37fb75d014728511f8e68ebf2c80b0fa3d04ca1479f4dc752ae31ac9"},

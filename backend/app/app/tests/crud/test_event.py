@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 
 from app import crud
 from app.models.domain import Domain
-from app.models.event import EventType
+from app.models.event import EventType, ReferrerMediumType
 from app.schemas.analytics import AnalyticsType
 from app.schemas.event import EventCreate
 
@@ -20,37 +20,77 @@ aware_datetimes = datetimes(
 )
 
 
-@given(uuids(version=4), paths())
-def test_create_page_view_event(
-    db: Session,
-    mock_read_only_domain: Domain,
-    mock_ip_address: str,
-    page_view_id: str,
-    path: str,
-) -> None:
-    domain = mock_read_only_domain
-    url = f"http://{domain.domain_name}/{path}"
-    event_in = EventCreate(
-        event_type=EventType.page_view,
-        url=url,
-        page_title="Title",
-        page_size_bytes=150,
-        referrer="abc",
-        user_timezone="Europe/Amsterdam",
-        ua_string="Mozilla/5.0 (X11; Linux x86_64; rv:9000.0) Gecko/20100101 Firefox/9000.0",
-        download_time=5000,
-        time_to_first_byte=5000,
-        total_time=5000,
-        ip_address=mock_ip_address,
-        page_view_id=str(page_view_id),
-    )
-    event = crud.event.create_with_domain(db=db, obj_in=event_in, domain_id=domain.id)
-    assert event.domain_id == domain.id
-    assert event.ua_string == event_in.ua_string
-    assert event.browser_family == "Firefox"
-    assert event.ip_city
-    assert event.ip_country
-    assert event.ip_continent_code
+class TestCreatePageViewEvent:
+    @given(uuids(version=4), paths())
+    def test_create_page_view_event(
+        self,
+        db: Session,
+        mock_read_only_domain: Domain,
+        mock_ip_address: str,
+        page_view_id: str,
+        path: str,
+    ) -> None:
+        domain = mock_read_only_domain
+        url = f"http://{domain.domain_name}/{path}"
+        event_in = EventCreate(
+            event_type=EventType.page_view,
+            url=url,
+            page_title="Title",
+            page_size_bytes=150,
+            referrer="abc",
+            user_timezone="Europe/Amsterdam",
+            ua_string="Mozilla/5.0 (X11; Linux x86_64; rv:9000.0) Gecko/20100101 Firefox/9000.0",
+            download_time=5000,
+            time_to_first_byte=5000,
+            total_time=5000,
+            ip_address=mock_ip_address,
+            page_view_id=str(page_view_id),
+        )
+        event = crud.event.create_with_domain(
+            db=db, obj_in=event_in, domain_id=domain.id
+        )
+        assert event.domain_id == domain.id
+        assert event.ua_string == event_in.ua_string
+        assert event.browser_family == "Firefox"
+        assert event.ip_city
+        assert event.ip_country
+        assert event.ip_continent_code
+
+    def test_create_page_view_event_referrer(
+        self,
+        db: Session,
+        mock_read_only_domain: Domain,
+        mock_ip_address: str,
+    ) -> None:
+        domain = mock_read_only_domain
+        event = create_random_page_view_event(
+            db,
+            domain_id=domain.id,
+            ip_address=mock_ip_address,
+            create_overrides={"referrer": "https://www.google.com/"},
+        )
+        assert event.referrer_medium == ReferrerMediumType.SEARCH
+        assert event.referrer_name == "Google"
+
+    def test_create_url_components(
+        self,
+        db: Session,
+        mock_read_only_domain: Domain,
+        mock_ip_address: str,
+    ) -> None:
+        domain = mock_read_only_domain
+        event = create_random_page_view_event(
+            db,
+            domain_id=domain.id,
+            ip_address=mock_ip_address,
+            create_overrides={
+                "url": "https://www.example.com/page?utm_content=buffercf3b2&utm_medium=social&utm_source=facebook.com&utm_campaign=buffer"
+            },
+        )
+        assert event.utm_content == "buffercf3b2"
+        assert event.utm_medium == "social"
+        assert event.utm_campaign == "buffer"
+        assert event.utm_source == "facebook.com"
 
 
 @given(

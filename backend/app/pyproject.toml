@@ -37,12 +37,12 @@ isort = "^5.7.0"
 autoflake = "^1.3.1"
 flake8 = "^3.7.9"
 pytest = "^6.2.1"
-sqlalchemy-stubs = "^0.3"
+sqlalchemy-stubs = "^0.4"
 pytest-cov = "^2.8.1"
 pylint = "^2.5.0"
 ipython = "^7.18.1"
 coverage = {extras = ["toml"], version = "^5.3"}
-hypothesis = "^6.0.0"
+hypothesis = "^6.0.1"
 
 [tool.isort]
 multi_line_output = 3
@@ -59,8 +59,15 @@ source = ["app"]
 [tool.coverage.report]
 fail_under = 80
 
-[tool.pylint.messages_control]
+[tool.pylint.MASTER]
+init-hook='import sys; sys.path.append("backend/app/")'
+
+[tool.pylint.'MESSAGES CONTROL']
 disable = [
     "no-name-in-module", # Already done by mypy
     "invalid-name",
+    "unsubscriptable-object", # https://github.com/PyCQA/pylint/issues/3882
+    "too-few-public-methods",
+    "missing-class-docstring",
+    "missing-function-docstring"
 ]
