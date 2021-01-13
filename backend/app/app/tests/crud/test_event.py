@@ -1,12 +1,11 @@
-import pytest
-from typing import Sequence
-from app.tests.utils.utils import paths
 from datetime import datetime, timedelta
+from typing import Sequence
 
 import arrow
 from hypothesis import given
 from hypothesis.extra.pytz import timezones
 from hypothesis.strategies import datetimes, timedeltas, uuids
+import pytest
 from sqlalchemy.orm import Session
 
 from app import crud
@@ -14,6 +13,8 @@ from app.models.domain import Domain
 from app.models.event import EventType, ReferrerMediumType
 from app.schemas.analytics import AnalyticsType
 from app.schemas.event import EventCreate
+from app.tests.utils.event import create_random_page_view_event
+from app.tests.utils.utils import paths
 
 aware_datetimes = datetimes(
     timezones=timezones(), max_value=datetime(2099, 1, 1), allow_imaginary=False
