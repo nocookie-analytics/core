@@ -59,8 +59,15 @@ source = ["app"]
 [tool.coverage.report]
 fail_under = 80
 
-[tool.pylint.messages_control]
+[tool.pylint.MASTER]
+init-hook='import sys; sys.path.append("backend/app/")'
+
+[tool.pylint.'MESSAGES CONTROL']
 disable = [
     "no-name-in-module", # Already done by mypy
     "invalid-name",
+    "unsubscriptable-object", # https://github.com/PyCQA/pylint/issues/3882
+    "too-few-public-methods",
+    "missing-class-docstring",
+    "missing-function-docstring"
 ]
