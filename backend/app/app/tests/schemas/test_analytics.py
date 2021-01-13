@@ -34,7 +34,7 @@ def test_from_csv_string_valid():
     assert set(parsed) == set(expected)
 
 
-class AggregatePerDayStatTest:
+class PageViewsPerDayStatTest:
     def test_get_pageviews(self, db: Session, mock_ip_address):
         # With one page view event
         domain = create_random_domain(db)
@@ -98,3 +98,8 @@ class TestAggregateStat:
         assert len(data) == 1
         assert data[0].value
         assert data[0].total_visits == 1
+
+
+class AvgMetricPerDayStatTest:
+    def test_avg(self):
+        ...
