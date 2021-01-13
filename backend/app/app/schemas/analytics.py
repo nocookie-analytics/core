@@ -109,8 +109,10 @@ class AvgMetricPerDayStat(BaseModel):
     def from_base_query(
         base_query: Query, metric_name: MetricType
     ) -> List[AvgMetricPerDayStat]:
-        rows = base_query.group_by(cast(Event.timestamp, DATE)).with_entities(
-            cast(Event.timestamp, DATE), func.avg(Event.metric_name == metric_name)
+        rows = (
+            base_query.group_by(cast(Event.timestamp, DATE))
+            .with_entities(cast(Event.timestamp, DATE), func.avg(Event.metric_value))
+            .filter(Event.metric_name == metric_name)
         )
         return [AvgMetricPerDayStat(date=row[0], value=row[1]) for row in rows]
 
