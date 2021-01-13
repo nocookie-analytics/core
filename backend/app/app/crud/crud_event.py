@@ -5,7 +5,7 @@ from fastapi.exceptions import HTTPException
 from furl.furl import furl
 from pydantic import IPvAnyAddress
 from sqlalchemy import and_
-from sqlalchemy.orm import Query, Session
+from sqlalchemy.orm import Session
 
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
@@ -16,19 +16,7 @@ from app.schemas.analytics import (
     AggregateStat,
     AnalyticsData,
     AnalyticsType,
-    BrowserStat,
-    CountryStat,
-    DeviceStat,
-    OSStat,
     PageViewStat,
-    PageViewsPerDayStat,
-    ReferrerMediumStat,
-    ReferrerNameStat,
-    UTMCampaignStat,
-    UTMContentStat,
-    UTMMediumStat,
-    UTMSourceStat,
-    UTMTermStat,
 )
 from app.schemas.event import EventCreate, EventUpdate
 from app.utils.geolocation import get_ip_gelocation
@@ -131,11 +119,6 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         domain: Domain,
     ) -> AnalyticsData:
         data = AnalyticsData(start=start, end=end)
-        field_to_model = {
-            AnalyticsType.COUNTRY: Event.ip_country_iso_code,
-            AnalyticsType.BROWSERS: Event.browser_family,
-            AnalyticsType.OS: Event.os_family,
-        }
         for field in fields:
             base_query = domain.events.filter(
                 and_(Event.timestamp >= start.datetime, Event.timestamp <= end.datetime)
