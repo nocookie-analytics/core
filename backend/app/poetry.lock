@@ -512,7 +512,7 @@ python-versions = "*"
 
 [[package]]
 name = "hypothesis"
-version = "6.0.1"
+version = "6.0.2"
 description = "A library for property-based testing"
 category = "dev"
 optional = false
@@ -1358,7 +1358,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "7200f63f71195d52f6ce87d416f16af82bd2a971dda41da48f1138fc9a7b4c6a"
+content-hash = "0b96d7af0ee6b0bcf7786ac3ddb772ed433196beb04321780af60501b0958578"
 
 [metadata.files]
 aiohttp = [
@@ -1652,8 +1652,8 @@ h11 = [
     {file = "h11-0.11.0.tar.gz", hash = "sha256:3c6c61d69c6f13d41f1b80ab0322f1872702a3ba26e12aa864c928f6a43fbaab"},
 ]
 hypothesis = [
-    {file = "hypothesis-6.0.1-py3-none-any.whl", hash = "sha256:7e7371cd0a06da727cecf923f249e92e4efa5fef5d9ce27559990752dc92b6c3"},
-    {file = "hypothesis-6.0.1.tar.gz", hash = "sha256:f420000a275d858abe5733cc85e7f89c926297a67299650c1c3684790c336f61"},
+    {file = "hypothesis-6.0.2-py3-none-any.whl", hash = "sha256:58ecc8e368be95688d01b1dee788f5b1c1e3d0f31043dc19f014f241f40fa187"},
+    {file = "hypothesis-6.0.2.tar.gz", hash = "sha256:ae616551c8ebe897454e2de5183e325f6a109f70d45b7380154ed974ce8d4772"},
 ]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
