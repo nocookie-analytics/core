@@ -85,7 +85,6 @@ class AggregateStat(BaseModel):
         if filter_none is True:
             query = query.filter(group_by_column.isnot(None))
         query = query.limit(10)
-        print([row for row in query])
         return [AggregateStat(value=row[0], total_visits=row[1]) for row in query]
 
 
