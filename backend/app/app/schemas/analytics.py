@@ -1,6 +1,6 @@
 from __future__ import annotations
 from app.models.location import Country
-from app.models.event import Event
+from app.models.event import Event, MetricType
 import datetime
 from enum import Enum
 from typing import List, Optional, Set, Tuple, Union
@@ -26,6 +26,10 @@ class AnalyticsType(Enum):
     UTM_CAMPAIGNS = "utm_campaigns"
     UTM_TERMS = "utm_terms"
     UTM_CONTENTS = "utm_contents"
+    LCP_PER_DAY = "lcp_per_day"
+    FID_PER_DAY = "fid_per_day"
+    FP_PER_DAY = "fp_per_day"
+    CLS_PER_DAY = "cls_per_day"
 
     @staticmethod
     def from_csv_string(include) -> List[AnalyticsType]:
@@ -81,20 +85,35 @@ class AggregateStat(BaseModel):
         if filter_none is True:
             query = query.filter(group_by_column.isnot(None))
         query = query.limit(10)
-        print([row for row in query])
         return [AggregateStat(value=row[0], total_visits=row[1]) for row in query]
 
 
-class AggregatePerDayStat(BaseModel):
+class PageViewsPerDayStat(BaseModel):
     total_visits: int
     date: datetime.date
 
     @staticmethod
-    def from_base_query(base_query: Query) -> List[AggregatePerDayStat]:
+    def from_base_query(base_query: Query) -> List[PageViewsPerDayStat]:
         rows = base_query.group_by(cast(Event.timestamp, DATE)).with_entities(
             cast(Event.timestamp, DATE), func.count()
         )
-        return [AggregatePerDayStat(date=row[0], total_visits=row[1]) for row in rows]
+        return [PageViewsPerDayStat(date=row[0], total_visits=row[1]) for row in rows]
+
+
+class AvgMetricPerDayStat(BaseModel):
+    value: float
+    date: datetime.date
+
+    @staticmethod
+    def from_base_query(
+        base_query: Query, metric_name: MetricType
+    ) -> List[AvgMetricPerDayStat]:
+        rows = (
+            base_query.group_by(cast(Event.timestamp, DATE))
+            .with_entities(cast(Event.timestamp, DATE), func.avg(Event.metric_value))
+            .filter(Event.metric_name == metric_name)
+        )
+        return [AvgMetricPerDayStat(date=row[0], value=row[1]) for row in rows]
 
 
 class PageViewStat(BaseModel):
@@ -109,13 +128,20 @@ class AnalyticsData(BaseModel):
     start: PydanticArrow
     end: PydanticArrow
     pageviews: Optional[PageViewStat]
+
+    lcp_per_day: Optional[List[AvgMetricPerDayStat]]
+    cls_per_day: Optional[List[AvgMetricPerDayStat]]
+    fp_per_day: Optional[List[AvgMetricPerDayStat]]
+    fid_per_day: Optional[List[AvgMetricPerDayStat]]
+
+    pageviews_per_day: Optional[List[PageViewsPerDayStat]]
+
     browser_families: Optional[List[AggregateStat]]
     countries: Optional[List[AggregateStat]]
     os_families: Optional[List[AggregateStat]]
     device_families: Optional[List[AggregateStat]]
     referrer_mediums: Optional[List[AggregateStat]]
     referrer_names: Optional[List[AggregateStat]]
-    pageviews_per_day: Optional[List[AggregatePerDayStat]]
     utm_sources: Optional[List[AggregateStat]]
     utm_mediums: Optional[List[AggregateStat]]
     utm_campaigns: Optional[List[AggregateStat]]

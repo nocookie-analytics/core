@@ -14,6 +14,7 @@ from sqlalchemy import (
     PrimaryKeyConstraint,
     String,
     func,
+    Enum as SQLAlchemyEnum,
 )
 from sqlalchemy.dialects.postgresql import INET, JSONB, UUID
 from sqlalchemy.orm import relationship
@@ -39,8 +40,17 @@ class ReferrerMediumType(Enum):
     SEARCH = "search"
 
 
+class MetricType(Enum):
+    LCP = "lcp"
+    FID = "fid"
+    FP = "fp"
+    CLS = "cls"
+    LCP_FINAL = "lcpFinal"
+
+
 EventTypeEnum = EnumType(EventType, name="event_type")
 ReferrerMediumTypeEnum = EnumType(ReferrerMediumType, name="referrer_medium_type")
+MetricTypeEnum = EnumType(MetricType, native_enum=False)
 
 
 class Event(Base):
@@ -87,7 +97,7 @@ class Event(Base):
     url = Column(String)
     path = Column(String)
 
-    metric_name = Column(String)
+    metric_name = Column(MetricTypeEnum)
     metric_value = Column(NUMERIC)
 
     url_params = Column(JSONB)

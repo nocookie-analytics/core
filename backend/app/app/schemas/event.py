@@ -11,7 +11,7 @@ from pydantic.networks import IPvAnyAddress
 from pydantic.types import UUID4
 from starlette.requests import Request
 
-from app.models.event import EventType
+from app.models.event import EventType, MetricType
 
 
 # Shared properties
@@ -45,7 +45,7 @@ class EventCreate(EventBase):
     time_to_first_byte: Optional[Decimal]
     total_time: Optional[Decimal]
 
-    metric_name: Optional[str] = None
+    metric_name: Optional[MetricType] = None
     metric_value: Optional[Decimal] = None
 
     @classmethod
@@ -63,7 +63,7 @@ class EventCreate(EventBase):
         ttfb: Optional[Decimal] = None,
         tt: Optional[Decimal] = None,
         dt: Optional[Decimal] = None,
-        mn: Optional[Decimal] = None,
+        mn: Optional[MetricType] = None,
         mv: Optional[Decimal] = None,
     ) -> EventCreate:
         try:
