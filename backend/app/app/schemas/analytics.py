@@ -101,7 +101,7 @@ class PageViewsPerDayStat(BaseModel):
 
 
 class AvgMetricPerDayStat(BaseModel):
-    total_visits: int
+    value: float
     date: datetime.date
 
     @staticmethod
