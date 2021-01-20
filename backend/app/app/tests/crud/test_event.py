@@ -100,7 +100,7 @@ class TestCreatePageViewEvent:
 )
 def test_get_analytics(
     db: Session,
-    mock_read_only_domain: Domain,
+    read_write_domain: Domain,
     start: datetime,
     duration: timedelta,
 ) -> None:
@@ -109,7 +109,7 @@ def test_get_analytics(
     fields = [AnalyticsType.PAGEVIEWS, AnalyticsType.BROWSERS]
     analytics_data = crud.event.get_analytics_from_fields(
         db=db,
-        domain=mock_read_only_domain,
+        domain=read_write_domain,
         start=start,
         fields=fields,
         end=end,
