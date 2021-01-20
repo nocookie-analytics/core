@@ -96,3 +96,17 @@ def mock_ip_address(db):
 def mock_read_only_domain(db):
     domain = create_random_domain(db)
     return domain
+
+
+@pytest.fixture(scope="function")
+def read_write_domain(db, request):
+    domain = create_random_domain(db)
+
+    def teardown():
+        for event in domain.events:
+            db.delete(event)
+        db.delete(domain)
+        db.commit()
+
+    request.addfinalizer(teardown)
+    return domain
