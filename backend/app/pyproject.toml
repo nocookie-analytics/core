@@ -20,7 +20,7 @@ raven = "^6.10.0"
 gunicorn = "^20.0.4"
 jinja2 = "^2.11.2"
 psycopg2-binary = "^2.8.5"
-alembic = "^1.4.2"
+alembic = "^1.5.1"
 sqlalchemy = "^1.3.22"
 python-jose = {extras = ["cryptography"], version = "^3.1.0"}
 sqlalchemy-enum34 = "^1.0.1"
@@ -38,11 +38,11 @@ autoflake = "^1.3.1"
 flake8 = "^3.7.9"
 pytest = "^6.2.1"
 sqlalchemy-stubs = "^0.4"
-pytest-cov = "^2.8.1"
+pytest-cov = "^2.11.0"
 pylint = "^2.5.0"
 ipython = "^7.18.1"
 coverage = {extras = ["toml"], version = "^5.3"}
-hypothesis = "^6.0.1"
+hypothesis = "^6.0.2"
 
 [tool.isort]
 multi_line_output = 3
