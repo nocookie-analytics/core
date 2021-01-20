@@ -123,62 +123,66 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         for field in fields:
             base_query = domain.events.filter(
                 and_(Event.timestamp >= start.datetime, Event.timestamp <= end.datetime)
-            ).filter(Event.event_type == EventType.page_view)
+            )
+            page_view_base_query = base_query.filter(
+                Event.event_type == EventType.page_view
+            )
+            metric_base_query = base_query.filter(Event.event_type == EventType.metric)
             if field == AnalyticsType.PAGEVIEWS:
                 data.pageviews = PageViewStat.from_base_query(base_query)
             elif field == AnalyticsType.BROWSERS:
                 data.browser_families = AggregateStat.from_base_query(
-                    base_query, Event.browser_family
+                    page_view_base_query, Event.browser_family
                 )
             elif field == AnalyticsType.COUNTRY:
                 data.countries = AggregateStat.from_base_query(
-                    base_query, Event.ip_country_iso_code
+                    page_view_base_query, Event.ip_country_iso_code
                 )
             elif field == AnalyticsType.OS:
                 data.os_families = AggregateStat.from_base_query(
-                    base_query, Event.os_family
+                    page_view_base_query, Event.os_family
                 )
             elif field == AnalyticsType.DEVICES:
                 data.device_families = AggregateStat.from_base_query(
-                    base_query, Event.device_family
+                    page_view_base_query, Event.device_family
                 )
             elif field == AnalyticsType.REFERRER_MEDIUMS:
                 data.referrer_mediums = AggregateStat.from_base_query(
-                    base_query, Event.referrer_medium
+                    page_view_base_query, Event.referrer_medium
                 )
             elif field == AnalyticsType.REFERRER_NAMES:
                 data.referrer_names = AggregateStat.from_base_query(
-                    base_query,
+                    page_view_base_query,
                     Event.referrer_name,
                     filter_none=True,
                 )
             elif field == AnalyticsType.UTM_CAMPAIGNS:
                 data.utm_campaigns = AggregateStat.from_base_query(
-                    base_query,
+                    page_view_base_query,
                     Event.utm_campaign,
                     filter_none=True,
                 )
             elif field == AnalyticsType.UTM_SOURCES:
                 data.utm_sources = AggregateStat.from_base_query(
-                    base_query,
+                    page_view_base_query,
                     Event.utm_source,
                     filter_none=True,
                 )
             elif field == AnalyticsType.UTM_TERMS:
                 data.utm_terms = AggregateStat.from_base_query(
-                    base_query,
+                    page_view_base_query,
                     Event.utm_term,
                     filter_none=True,
                 )
             elif field == AnalyticsType.UTM_CONTENTS:
                 data.utm_contents = AggregateStat.from_base_query(
-                    base_query,
+                    page_view_base_query,
                     Event.utm_content,
                     filter_none=True,
                 )
             elif field == AnalyticsType.UTM_MEDIUMS:
                 data.utm_mediums = AggregateStat.from_base_query(
-                    base_query,
+                    page_view_base_query,
                     Event.utm_medium,
                     filter_none=True,
                 )
@@ -186,19 +190,19 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 data.pageviews_per_day = PageViewsPerDayStat.from_base_query(base_query)
             elif field == AnalyticsType.LCP_PER_DAY:
                 data.lcp_per_day = AvgMetricPerDayStat.from_base_query(
-                    base_query, MetricType.LCP
+                    metric_base_query, MetricType.LCP
                 )
             elif field == AnalyticsType.FID_PER_DAY:
                 data.fid_per_day = AvgMetricPerDayStat.from_base_query(
-                    base_query, MetricType.FID
+                    metric_base_query, MetricType.FID
                 )
             elif field == AnalyticsType.FP_PER_DAY:
                 data.fp_per_day = AvgMetricPerDayStat.from_base_query(
-                    base_query, MetricType.FP
+                    metric_base_query, MetricType.FP
                 )
             elif field == AnalyticsType.CLS_PER_DAY:
                 data.cls_per_day = AvgMetricPerDayStat.from_base_query(
-                    base_query, MetricType.CLS
+                    metric_base_query, MetricType.CLS
                 )
             else:
                 raise HTTPException(status_code=400)
