@@ -98,7 +98,7 @@ def mock_read_only_domain(db):
     return domain
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="class")
 def read_write_domain(db, request):
     domain = create_random_domain(db)
 

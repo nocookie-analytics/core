@@ -94,33 +94,35 @@ class TestCreatePageViewEvent:
         assert event.utm_source == "facebook.com"
 
 
-@given(
-    aware_datetimes,
-    timedeltas(min_value=timedelta(hours=1), max_value=timedelta(days=180)),
-)
-def test_get_analytics(
-    db: Session,
-    read_write_domain: Domain,
-    start: datetime,
-    duration: timedelta,
-) -> None:
-    start = arrow.get(start)
-    end = start + duration
-    fields = [AnalyticsType.PAGEVIEWS, AnalyticsType.BROWSERS]
-    analytics_data = crud.event.get_analytics_from_fields(
-        db=db,
-        domain=read_write_domain,
-        start=start,
-        fields=fields,
-        end=end,
+class TestGetAnalytics:
+    @given(
+        aware_datetimes,
+        timedeltas(min_value=timedelta(hours=1), max_value=timedelta(days=180)),
     )
-    assert analytics_data.start == start
-    assert analytics_data.end == end
-    assert len(
-        set(analytics_data.dict(exclude_unset=True).keys()) - set(["start", "end"])
-    ) == len(fields)
-    assert analytics_data.pageviews
-    assert isinstance(analytics_data.browser_families, Sequence)
+    def test_get_analytics(
+        self,
+        db: Session,
+        read_write_domain: Domain,
+        start: datetime,
+        duration: timedelta,
+    ) -> None:
+        start = arrow.get(start)
+        end = start + duration
+        fields = [AnalyticsType.PAGEVIEWS, AnalyticsType.BROWSERS]
+        analytics_data = crud.event.get_analytics_from_fields(
+            db=db,
+            domain=read_write_domain,
+            start=start,
+            fields=fields,
+            end=end,
+        )
+        assert analytics_data.start == start
+        assert analytics_data.end == end
+        assert len(
+            set(analytics_data.dict(exclude_unset=True).keys()) - set(["start", "end"])
+        ) == len(fields)
+        assert analytics_data.pageviews
+        assert isinstance(analytics_data.browser_families, Sequence)
 
 
 @pytest.mark.parametrize("field", AnalyticsType)
