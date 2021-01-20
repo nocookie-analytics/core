@@ -19,7 +19,7 @@ speedups = ["aiodns", "brotlipy", "cchardet"]
 
 [[package]]
 name = "alembic"
-version = "1.5.0"
+version = "1.5.1"
 description = "A database migration tool for SQLAlchemy."
 category = "main"
 optional = false
@@ -1358,7 +1358,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "cf3df5560d178083546e20079a70b5ba7b4b10dac7ecded895321b087aa78e11"
+content-hash = "cb31b31ca08ad1b4515fe4269018b4c9042a8fb4dd45bbea445e4c7fbe94beb9"
 
 [metadata.files]
 aiohttp = [
@@ -1401,7 +1401,8 @@ aiohttp = [
     {file = "aiohttp-3.7.3.tar.gz", hash = "sha256:9c1a81af067e72261c9cbe33ea792893e83bc6aa987bfbd6fdc1e5e7b22777c4"},
 ]
 alembic = [
-    {file = "alembic-1.5.0.tar.gz", hash = "sha256:b7b3b43adc71447967b5f7bf55d5cc9113bb4e74840b6907d2705b34f2c0f898"},
+    {file = "alembic-1.5.1-py2.py3-none-any.whl", hash = "sha256:944f8d541d204f3ae22de17ebcfdd0da9539074f1d2fee4eb42735039b3072d8"},
+    {file = "alembic-1.5.1.tar.gz", hash = "sha256:52d1d48109f17959982779e3c4b5cdeca701e449897bacb75bab173bd6ba984e"},
 ]
 amqp = [
     {file = "amqp-5.0.2-py3-none-any.whl", hash = "sha256:5b9062d5c0812335c75434bf17ce33d7a20ecfedaa0733faec7379868eb4068a"},
