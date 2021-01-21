@@ -59,7 +59,7 @@ class EventCreate(EventBase):
         psb: Optional[int] = Query(None, description="Page size bytes"),
         tz: Optional[str] = Query(None, description="Timezone"),
         tzo: Optional[int] = Query(None, description="Timezone offset"),
-        ref: Optional[str] = Query(None, description="Referrer"),
+        ref: Optional[HttpUrl] = Query(None, description="Referrer"),
         ttfb: Optional[Decimal] = Query(None, description="Time to first-byte"),
         tt: Optional[Decimal] = Query(None, description="Total time"),
         dt: Optional[Decimal] = Query(None, description="Download time"),
