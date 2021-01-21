@@ -1,13 +1,13 @@
 from __future__ import annotations
-
 from decimal import Decimal
 from typing import Optional
 from uuid import uuid4
 
-import pydantic
+from fastapi import Query
 from fastapi.exceptions import HTTPException
+import pydantic
 from pydantic import BaseModel
-from pydantic.networks import IPvAnyAddress
+from pydantic.networks import HttpUrl, IPvAnyAddress
 from pydantic.types import UUID4
 from starlette.requests import Request
 
@@ -52,19 +52,22 @@ class EventCreate(EventBase):
     def depends(
         cls: EventCreate,
         request: Request,
-        et: EventType,
-        url: str,
-        pt: Optional[str] = None,
-        pvid: Optional[UUID4] = None,
-        psb: Optional[int] = None,
-        tz: Optional[str] = None,
-        tzo: Optional[int] = None,
-        ref: Optional[str] = None,
-        ttfb: Optional[Decimal] = None,
-        tt: Optional[Decimal] = None,
-        dt: Optional[Decimal] = None,
-        mn: Optional[MetricType] = None,
-        mv: Optional[Decimal] = None,
+        et: EventType = Query(None, description="Event type"),
+        url: HttpUrl = Query(None, description="URL"),
+        pt: Optional[str] = Query(None, description="Page title"),
+        pvid: Optional[UUID4] = Query(None, description="Page view ID"),
+        psb: Optional[int] = Query(None, description="Page size bytes"),
+        tz: Optional[str] = Query(None, description="Timezone"),
+        tzo: Optional[int] = Query(None, description="Timezone offset"),
+        ref: Optional[str] = Query(None, description="Referrer"),
+        ttfb: Optional[Decimal] = Query(None, description="Time to first-byte"),
+        tt: Optional[Decimal] = Query(None, description="Total time"),
+        dt: Optional[Decimal] = Query(None, description="Download time"),
+        mn: Optional[MetricType] = Query(None, description="Metric name"),
+        mv: Optional[Decimal] = Query(
+            None,
+            description="Metric value",
+        ),
     ) -> EventCreate:
         try:
             event_type = EventType(et)
