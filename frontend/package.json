@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
-    "@types/jest": "^23.3.13",
+    "@types/jest": "^26.0.20",
     "@vue/cli-plugin-babel": "^4.5.11",
     "@vue/cli-plugin-pwa": "^4.5.11",
     "@vue/cli-plugin-typescript": "^4.5.11",
