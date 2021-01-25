@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY package*.json /app/
 
-RUN npm install
+RUN yarn install --frozen-lockfile
 
 COPY ./ /app/
 
@@ -14,9 +14,9 @@ ARG FRONTEND_ENV=production
 ENV VUE_APP_ENV=${FRONTEND_ENV}
 
 # Comment out the next line to disable tests
-RUN npm run test:unit
+RUN yarn test:unit
 
-RUN npm run build
+RUN yarn build
 
 
 # Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
