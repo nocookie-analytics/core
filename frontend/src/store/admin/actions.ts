@@ -27,7 +27,7 @@ export const actions = {
             commitAddNotification(context, loadingNotification);
             const response = (await Promise.all([
                 api.updateUser(context.rootState.main.token, payload.id, payload.user),
-                await new Promise((resolve, reject) => setTimeout(() => resolve(), 500)),
+                await new Promise<void>((resolve, reject) => setTimeout(() => resolve(), 500)),
             ]))[0];
             commitSetUser(context, response.data);
             commitRemoveNotification(context, loadingNotification);
@@ -42,7 +42,7 @@ export const actions = {
             commitAddNotification(context, loadingNotification);
             const response = (await Promise.all([
                 api.createUser(context.rootState.main.token, payload),
-                await new Promise((resolve, reject) => setTimeout(() => resolve(), 500)),
+                await new Promise<void>((resolve, reject) => setTimeout(() => resolve(), 500)),
             ]))[0];
             commitSetUser(context, response.data);
             commitRemoveNotification(context, loadingNotification);
