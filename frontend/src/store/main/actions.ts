@@ -60,6 +60,7 @@ export const actions = {
                     username: payload.email,
                     password: payload.password,
                 });
+                commitRegistrationError(context, null);
             } else {
                 commitRegistrationError(
                     context,
