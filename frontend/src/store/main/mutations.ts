@@ -13,7 +13,7 @@ export const mutations = {
     setLogInError(state: MainState, payload: boolean) {
         state.logInError = payload;
     },
-    setRegistrationError(state: MainState, payload: string) {
+    setRegistrationError(state: MainState, payload: string | null) {
         state.registrationError = payload;
     },
     setUserProfile(state: MainState, payload: IUserProfile) {
