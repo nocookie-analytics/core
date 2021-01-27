@@ -56,11 +56,11 @@ export const actions = {
             const response = await api.register(payload);
             const id = response.data.id;
             if (id) {
+                commitRegistrationError(context, null);
                 await dispatchLogIn(context, {
                     username: payload.email,
                     password: payload.password,
                 });
-                commitRegistrationError(context, null);
             } else {
                 commitRegistrationError(
                     context,
@@ -159,6 +159,7 @@ export const actions = {
     actionRouteLoggedIn(context: MainContext) {
         if (
             router.currentRoute.path === '/login' ||
+            router.currentRoute.path === '/register' ||
             router.currentRoute.path === '/'
         ) {
             router.push('/main');
