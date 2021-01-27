@@ -84,9 +84,11 @@
       <v-toolbar-title v-text="appName"></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu bottom left offset-y>
-        <v-btn slot="activator" icon>
-          <v-icon>more_vert</v-icon>
-        </v-btn>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" icon>
+            <v-icon>more_vert</v-icon>
+          </v-btn>
+        </template>
         <v-list>
           <v-list-item to="/main/profile">
             <v-list-item-content>
