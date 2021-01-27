@@ -61,7 +61,10 @@ export const actions = {
                     password: payload.password,
                 });
             } else {
-                return;
+                commitRegistrationError(
+                    context,
+                    'Something went wrong, please try later',
+                );
             }
         } catch (err) {
             const errorMessage = err.response?.data?.detail;
