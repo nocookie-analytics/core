@@ -3,7 +3,6 @@ import { MainState, AppNotification } from './state';
 import { getStoreAccessors } from 'typesafe-vuex';
 import { State } from '../state';
 
-
 export const mutations = {
     setToken(state: MainState, payload: string) {
         state.token = payload;
@@ -13,6 +12,9 @@ export const mutations = {
     },
     setLogInError(state: MainState, payload: boolean) {
         state.logInError = payload;
+    },
+    setRegistrationError(state: MainState, payload: string) {
+        state.registrationError = payload;
     },
     setUserProfile(state: MainState, payload: IUserProfile) {
         state.userProfile = payload;
@@ -27,16 +29,23 @@ export const mutations = {
         state.notifications.push(payload);
     },
     removeNotification(state: MainState, payload: AppNotification) {
-        state.notifications = state.notifications.filter((notification) => notification !== payload);
+        state.notifications = state.notifications.filter(
+            (notification) => notification !== payload,
+        );
     },
 };
 
-const {commit} = getStoreAccessors<MainState | any, State>('');
+const { commit } = getStoreAccessors<MainState | any, State>('');
 
-export const commitSetDashboardMiniDrawer = commit(mutations.setDashboardMiniDrawer);
-export const commitSetDashboardShowDrawer = commit(mutations.setDashboardShowDrawer);
+export const commitSetDashboardMiniDrawer = commit(
+    mutations.setDashboardMiniDrawer,
+);
+export const commitSetDashboardShowDrawer = commit(
+    mutations.setDashboardShowDrawer,
+);
 export const commitSetLoggedIn = commit(mutations.setLoggedIn);
 export const commitSetLogInError = commit(mutations.setLogInError);
+export const commitRegistrationError = commit(mutations.setRegistrationError);
 export const commitSetToken = commit(mutations.setToken);
 export const commitSetUserProfile = commit(mutations.setUserProfile);
 export const commitAddNotification = commit(mutations.addNotification);

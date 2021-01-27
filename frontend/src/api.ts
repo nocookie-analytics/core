@@ -18,6 +18,9 @@ export const api = {
 
     return axios.post(`${apiUrl}/api/v1/login/access-token`, params);
   },
+  async register(data: IUserProfileCreate) {
+    return axios.post<IUserProfile>(`${apiUrl}/api/v1/users/open`, data);
+  },
   async getMe(token: string) {
     return axios.get<IUserProfile>(`${apiUrl}/api/v1/users/me`, authHeaders(token));
   },
