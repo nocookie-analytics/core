@@ -1,7 +1,6 @@
 <template>
     <div>
         <v-snackbar
-            auto-height
             :color="currentNotificationColor"
             v-model="show"
         >
