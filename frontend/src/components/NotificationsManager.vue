@@ -1,8 +1,17 @@
 <template>
     <div>
-        <v-snackbar auto-height :color="currentNotificationColor" v-model="show">
-            <v-progress-circular class="ma-2" indeterminate v-show="showProgress"></v-progress-circular>{{ currentNotificationContent }}
-            <v-btn flat @click.native="close">Close</v-btn>
+        <v-snackbar
+            auto-height
+            :color="currentNotificationColor"
+            v-model="show"
+        >
+            <v-progress-circular
+                class="ma-2"
+                indeterminate
+                v-show="showProgress"
+            ></v-progress-circular
+            >{{ currentNotificationContent }}
+            <v-btn text @click.native="close">Close</v-btn>
         </v-snackbar>
     </div>
 </template>
@@ -22,7 +31,9 @@ export default class NotificationsManager extends Vue {
 
     public async hide() {
         this.show = false;
-        await new Promise<void>((resolve, reject) => setTimeout(() => resolve(), 500));
+        await new Promise<void>((resolve, reject) =>
+            setTimeout(() => resolve(), 500),
+        );
     }
 
     public async close() {
@@ -61,17 +72,25 @@ export default class NotificationsManager extends Vue {
         if (newNotification !== this.currentNotification) {
             await this.setNotification(newNotification);
             if (newNotification) {
-                dispatchRemoveNotification(this.$store, { notification: newNotification, timeout: 6500 });
+                dispatchRemoveNotification(this.$store, {
+                    notification: newNotification,
+                    timeout: 6500,
+                });
             }
         }
     }
 
     public get currentNotificationContent() {
-        return this.currentNotification && this.currentNotification.content || '';
+        return (
+            (this.currentNotification && this.currentNotification.content) || ''
+        );
     }
 
     public get currentNotificationColor() {
-        return this.currentNotification && this.currentNotification.color || 'info';
+        return (
+            (this.currentNotification && this.currentNotification.color) ||
+            'info'
+        );
     }
 }
 </script>
