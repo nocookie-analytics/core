@@ -79,8 +79,8 @@
         </v-list>
       </v-layout>
     </v-navigation-drawer>
-    <v-toolbar dark color="primary" app>
-      <v-toolbar-side-icon @click.stop="switchShowDrawer"></v-toolbar-side-icon>
+    <v-app-bar dark color="primary" app>
+      <v-app-bar-nav-icon @click.stop="switchShowDrawer"></v-app-bar-nav-icon>
       <v-toolbar-title v-text="appName"></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu bottom left offset-y>
@@ -106,7 +106,7 @@
           </v-list-item>
         </v-list>
       </v-menu>
-    </v-toolbar>
+    </v-app-bar>
     <v-main>
       <router-view></router-view>
     </v-main>
