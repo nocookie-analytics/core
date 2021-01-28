@@ -1,10 +1,9 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify';
-import colors from 'vuetify/lib/util/colors';
 
 Vue.use(Vuetify);
 
-const colors = {
+const appColors = {
     newOrleans: '#edd693',
     flamePea: '#e75f3b',
 };
@@ -16,8 +15,8 @@ export default new Vuetify({
     theme: {
         themes: {
             light: {
-                secondary: colors.newOrleans,
-                primary: colors.flamePea,
+                secondary: appColors.newOrleans,
+                primary: appColors.flamePea,
             },
         },
     },
