@@ -1,18 +1,25 @@
 <template>
     <div id="app">
         <v-app>
-            <v-app-bar app color="primary" dark>
+            <v-app-bar app color="secondary" dark>
                 <div class="d-flex align-center">
                     <v-img
                         alt="No Cookie Analytics"
                         class="shrink mr-2"
                         contain
-                        src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+                        src="/img/logo.png"
                         transition="scale-transition"
                         width="40"
                     />
 
-                    No Cookie Analytics
+                    <v-img
+                        alt="No Cookie Analytics"
+                        src="/img/wordmark.png"
+                        class="shrink mt-1 hidden-sm-and-down"
+                        contain
+                        min-width="200"
+                        width="200"
+                    />
                 </div>
 
                 <v-spacer></v-spacer>

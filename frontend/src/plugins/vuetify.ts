@@ -5,6 +5,7 @@ Vue.use(Vuetify);
 
 const appColors = {
     newOrleans: '#edd693',
+    lighterNewOrleans: '#fff4d8',
     flamePea: '#e75f3b',
 };
 
@@ -15,7 +16,7 @@ export default new Vuetify({
     theme: {
         themes: {
             light: {
-                secondary: appColors.newOrleans,
+                secondary: appColors.lighterNewOrleans,
                 primary: appColors.flamePea,
             },
         },
