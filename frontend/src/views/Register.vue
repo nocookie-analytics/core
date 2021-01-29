@@ -5,9 +5,7 @@
                 <v-flex xs12 sm8 md4>
                     <v-card class="elevation-12">
                         <v-toolbar dark color="primary">
-                            <v-toolbar-title
-                                >{{ appName }} - Register</v-toolbar-title
-                            >
+                            <v-toolbar-title>Register</v-toolbar-title>
                             <v-spacer></v-spacer>
                         </v-toolbar>
                         <v-card-text>
@@ -39,6 +37,16 @@
                                     {{ registrationError }}
                                 </v-alert>
                             </div>
+                            <v-flex class="caption text-xs-right"
+                                ><router-link to="/login"
+                                    >Login</router-link
+                                ></v-flex
+                            >
+                            <v-flex class="caption text-xs-right"
+                                ><router-link to="/recover-password"
+                                    >Forgot your password?</router-link
+                                ></v-flex
+                            >
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
