@@ -5,14 +5,40 @@
         <v-flex xs12 sm8 md4>
           <v-card class="elevation-12">
             <v-toolbar dark color="primary">
-              <v-toolbar-title>{{appName}} - Reset Password</v-toolbar-title>
+              <v-toolbar-title>{{ appName }} - Reset Password</v-toolbar-title>
             </v-toolbar>
             <v-card-text>
               <p class="subheading">Enter your new password below</p>
-              <v-form @keyup.enter="submit" v-model="valid" ref="form" @submit.prevent="" lazy-validation>
-                <v-text-field type="password" ref="password" label="Password" data-vv-name="password" data-vv-delay="100" data-vv-rules="required" v-validate="'required'" v-model="password1" :error-messages="errors.first('password')">
+              <v-form
+                @keyup.enter="submit"
+                v-model="valid"
+                ref="form"
+                @submit.prevent=""
+                lazy-validation
+              >
+                <v-text-field
+                  type="password"
+                  ref="password"
+                  label="Password"
+                  data-vv-name="password"
+                  data-vv-delay="100"
+                  data-vv-rules="required"
+                  v-validate="'required'"
+                  v-model="password1"
+                  :error-messages="errors.first('password')"
+                >
                 </v-text-field>
-                <v-text-field type="password" label="Confirm Password" data-vv-name="password_confirmation" data-vv-delay="100" data-vv-rules="required|confirmed:$password" data-vv-as="password" v-validate="'required|confirmed:password'" v-model="password2" :error-messages="errors.first('password_confirmation')">
+                <v-text-field
+                  type="password"
+                  label="Confirm Password"
+                  data-vv-name="password_confirmation"
+                  data-vv-delay="100"
+                  data-vv-rules="required|confirmed:$password"
+                  data-vv-as="password"
+                  v-validate="'required|confirmed:password'"
+                  v-model="password2"
+                  :error-messages="errors.first('password_confirmation')"
+                >
                 </v-text-field>
               </v-form>
             </v-card-text>
@@ -59,7 +85,7 @@ export default class UserProfileEdit extends Vue {
   }
 
   public checkToken() {
-    const token = (this.$router.currentRoute.query.token as string);
+    const token = this.$router.currentRoute.query.token as string;
     if (!token) {
       commitAddNotification(this.$store, {
         content: 'No token provided in the URL, start a new password recovery',
@@ -75,7 +101,10 @@ export default class UserProfileEdit extends Vue {
     if (await this.$validator.validateAll()) {
       const token = this.checkToken();
       if (token) {
-        await dispatchResetPassword(this.$store, { token, password: this.password1 });
+        await dispatchResetPassword(this.$store, {
+          token,
+          password: this.password1,
+        });
         this.$router.push('/');
       }
     }
