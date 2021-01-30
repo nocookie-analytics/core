@@ -14,7 +14,7 @@ module.exports = {
           mangle: {
             keep_fnames: true,
           },
-        }
+        },
       );
     }
   },
@@ -32,7 +32,7 @@ module.exports = {
             'v-card-media': 'src',
             'v-responsive': 'src',
           },
-        })
+        }),
       );
   },
 };

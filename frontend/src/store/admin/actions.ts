@@ -26,7 +26,7 @@ export const actions = {
   },
   async actionUpdateUser(
     context: MainContext,
-    payload: { id: number; user: IUserProfileUpdate }
+    payload: { id: number; user: IUserProfileUpdate },
   ) {
     try {
       const loadingNotification = { content: 'saving', showProgress: true };
@@ -36,10 +36,10 @@ export const actions = {
           api.updateUser(
             context.rootState.main.token,
             payload.id,
-            payload.user
+            payload.user,
           ),
           await new Promise<void>((resolve, reject) =>
-            setTimeout(() => resolve(), 500)
+            setTimeout(() => resolve(), 500),
           ),
         ])
       )[0];
@@ -61,7 +61,7 @@ export const actions = {
         await Promise.all([
           api.createUser(context.rootState.main.token, payload),
           await new Promise<void>((resolve, reject) =>
-            setTimeout(() => resolve(), 500)
+            setTimeout(() => resolve(), 500),
           ),
         ])
       )[0];

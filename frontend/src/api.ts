@@ -28,27 +28,27 @@ export const api = {
   async getMe(token: string) {
     return axios.get<IUserProfile>(
       `${apiUrl}/api/v1/users/me`,
-      authHeaders(token)
+      authHeaders(token),
     );
   },
   async updateMe(token: string, data: IUserProfileUpdate) {
     return axios.put<IUserProfile>(
       `${apiUrl}/api/v1/users/me`,
       data,
-      authHeaders(token)
+      authHeaders(token),
     );
   },
   async getUsers(token: string) {
     return axios.get<IUserProfile[]>(
       `${apiUrl}/api/v1/users/`,
-      authHeaders(token)
+      authHeaders(token),
     );
   },
   async updateUser(token: string, userId: number, data: IUserProfileUpdate) {
     return axios.put(
       `${apiUrl}/api/v1/users/${userId}`,
       data,
-      authHeaders(token)
+      authHeaders(token),
     );
   },
   async createUser(token: string, data: IUserProfileCreate) {

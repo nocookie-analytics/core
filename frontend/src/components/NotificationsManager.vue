@@ -28,7 +28,7 @@ export default class NotificationsManager extends Vue {
   public async hide() {
     this.show = false;
     await new Promise<void>((resolve, reject) =>
-      setTimeout(() => resolve(), 500)
+      setTimeout(() => resolve(), 500),
     );
   }
 
@@ -63,7 +63,7 @@ export default class NotificationsManager extends Vue {
   @Watch('firstNotification')
   public async onNotificationChange(
     newNotification: AppNotification | false,
-    oldNotification: AppNotification | false
+    oldNotification: AppNotification | false,
   ) {
     if (newNotification !== this.currentNotification) {
       await this.setNotification(newNotification);

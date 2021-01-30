@@ -30,7 +30,7 @@ export const mutations = {
   },
   removeNotification(state: MainState, payload: AppNotification) {
     state.notifications = state.notifications.filter(
-      (notification) => notification !== payload
+      (notification) => notification !== payload,
     );
   },
 };
@@ -38,10 +38,10 @@ export const mutations = {
 const { commit } = getStoreAccessors<MainState | any, State>('');
 
 export const commitSetDashboardMiniDrawer = commit(
-  mutations.setDashboardMiniDrawer
+  mutations.setDashboardMiniDrawer,
 );
 export const commitSetDashboardShowDrawer = commit(
-  mutations.setDashboardShowDrawer
+  mutations.setDashboardShowDrawer,
 );
 export const commitSetLoggedIn = commit(mutations.setLoggedIn);
 export const commitSetLogInError = commit(mutations.setLogInError);
