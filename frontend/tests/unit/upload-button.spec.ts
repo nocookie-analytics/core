@@ -1,6 +1,6 @@
+import { expect } from 'chai';
 import { shallowMount } from '@vue/test-utils';
 import UploadButton from '@/components/UploadButton.vue';
-import '@/plugins/vuetify';
 
 describe('UploadButton.vue', () => {
   it('renders props.title when passed', () => {
@@ -10,6 +10,6 @@ describe('UploadButton.vue', () => {
         default: title,
       },
     });
-    expect(wrapper.text()).toMatch(title);
+    expect(wrapper.text()).to.equal(title);
   });
 });
