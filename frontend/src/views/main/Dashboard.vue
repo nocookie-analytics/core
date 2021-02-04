@@ -34,6 +34,7 @@ export default class Dashboard extends Vue {
         return userProfile.email;
       }
     }
+    return '';
   }
 }
 </script>
