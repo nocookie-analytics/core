@@ -44,8 +44,8 @@ import { dispatchUpdateUserProfile } from '@/store/main/actions';
 @Component
 export default class UserProfileEdit extends Vue {
   public valid = true;
-  public fullName: string = '';
-  public email: string = '';
+  public fullName = '';
+  public email = '';
 
   public created() {
     const userProfile = readUserProfile(this.$store);

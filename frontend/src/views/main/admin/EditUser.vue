@@ -94,13 +94,13 @@ import { readAdminOneUser } from '@/store/admin/getters';
 @Component
 export default class EditUser extends Vue {
   public valid = true;
-  public fullName: string = '';
-  public email: string = '';
-  public isActive: boolean = true;
-  public isSuperuser: boolean = false;
+  public fullName = '';
+  public email = '';
+  public isActive = true;
+  public isSuperuser = false;
   public setPassword = false;
-  public password1: string = '';
-  public password2: string = '';
+  public password1 = '';
+  public password2 = '';
 
   public async mounted() {
     await dispatchGetUsers(this.$store);

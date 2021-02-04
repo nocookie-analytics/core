@@ -67,8 +67,8 @@ import { dispatchRegister } from '@/store/main/actions';
 
 @Component
 export default class Register extends Vue {
-  public email: string = '';
-  public password: string = '';
+  public email = '';
+  public password = '';
   public appName = appName;
 
   public get hasRegistrationError() {

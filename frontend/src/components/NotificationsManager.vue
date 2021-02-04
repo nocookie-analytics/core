@@ -20,9 +20,9 @@ import { dispatchRemoveNotification } from '@/store/main/actions';
 
 @Component
 export default class NotificationsManager extends Vue {
-  public show: boolean = false;
-  public text: string = '';
-  public showProgress: boolean = false;
+  public show = false;
+  public text = '';
+  public showProgress = false;
   public currentNotification: AppNotification | false = false;
 
   public async hide() {

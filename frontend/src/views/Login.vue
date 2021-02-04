@@ -66,8 +66,8 @@ import { dispatchLogIn } from '@/store/main/actions';
 
 @Component
 export default class Login extends Vue {
-  public email: string = '';
-  public password: string = '';
+  public email = '';
+  public password = '';
   public appName = appName;
 
   public get loginError() {
