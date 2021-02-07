@@ -8,11 +8,18 @@
         <template>
           <div class="my-3">
             <div class="subheading secondary--text text--lighten-2">User</div>
-            <div class="title primary--text text--darken-2" v-if="userProfile.full_name">{{userProfile.full_name}}</div>
-            <div class="title primary--text text--darken-2" v-else>{{userProfile.email}}</div>
+            <div
+              class="title primary--text text--darken-2"
+              v-if="userProfile.full_name"
+            >
+              {{ userProfile.full_name }}
+            </div>
+            <div class="title primary--text text--darken-2" v-else>
+              {{ userProfile.email }}
+            </div>
           </div>
           <v-form ref="form">
-            <v-text-field 
+            <v-text-field
               type="password"
               ref="password"
               label="Password"
@@ -21,7 +28,8 @@
               data-vv-rules="required"
               v-validate="'required'"
               v-model="password1"
-              :error-messages="errors.first('password')">
+              :error-messages="errors.first('password')"
+            >
             </v-text-field>
             <v-text-field
               type="password"
@@ -32,7 +40,8 @@
               data-vv-as="password"
               v-validate="'required|confirmed:password'"
               v-model="password2"
-              :error-messages="errors.first('password_confirmation')">
+              :error-messages="errors.first('password_confirmation')"
+            >
             </v-text-field>
           </v-form>
         </template>

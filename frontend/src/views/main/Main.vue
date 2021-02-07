@@ -1,6 +1,12 @@
 <template>
   <div>
-    <v-navigation-drawer persistent :mini-variant="miniDrawer" v-model="showDrawer" fixed app>
+    <v-navigation-drawer
+      persistent
+      :mini-variant="miniDrawer"
+      v-model="showDrawer"
+      fixed
+      app
+    >
       <v-layout column fill-height>
         <v-list>
           <v-subheader>Main menu</v-subheader>
@@ -70,7 +76,9 @@
           <v-divider></v-divider>
           <v-list-item @click="switchMiniDrawer">
             <v-list-item-action>
-              <v-icon v-html="miniDrawer ? 'chevron_right' : 'chevron_left'"></v-icon>
+              <v-icon
+                v-html="miniDrawer ? 'chevron_right' : 'chevron_left'"
+              ></v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>Collapse</v-list-item-title>
@@ -114,7 +122,7 @@
     </v-main>
     <v-footer class="pa-3" fixed app>
       <v-spacer></v-spacer>
-      <span>&copy; {{appName}}</span>
+      <span>&copy; {{ appName }}</span>
     </v-footer>
   </div>
 </template>
@@ -123,8 +131,15 @@
 import { Vue, Component } from 'vue-property-decorator';
 
 import { appName } from '@/env';
-import { readDashboardMiniDrawer, readDashboardShowDrawer, readHasAdminAccess } from '@/store/main/getters';
-import { commitSetDashboardShowDrawer, commitSetDashboardMiniDrawer } from '@/store/main/mutations';
+import {
+  readDashboardMiniDrawer,
+  readDashboardShowDrawer,
+  readHasAdminAccess,
+} from '@/store/main/getters';
+import {
+  commitSetDashboardShowDrawer,
+  commitSetDashboardMiniDrawer,
+} from '@/store/main/mutations';
 import { dispatchUserLogOut } from '@/store/main/actions';
 
 const routeGuardMain = async (to, from, next) => {

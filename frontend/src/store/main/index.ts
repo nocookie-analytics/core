@@ -4,19 +4,19 @@ import { actions } from './actions';
 import { MainState } from './state';
 
 const defaultState: MainState = {
-    isLoggedIn: null,
-    token: '',
-    logInError: false,
-    userProfile: null,
-    dashboardMiniDrawer: false,
-    dashboardShowDrawer: true,
-    notifications: [],
-    registrationError: '',
+  isLoggedIn: null,
+  token: '',
+  logInError: false,
+  userProfile: null,
+  dashboardMiniDrawer: false,
+  dashboardShowDrawer: true,
+  notifications: [],
+  registrationError: '',
 };
 
 export const mainModule = {
-    state: defaultState,
-    mutations,
-    actions,
-    getters,
+  state: defaultState,
+  mutations,
+  actions,
+  getters,
 };

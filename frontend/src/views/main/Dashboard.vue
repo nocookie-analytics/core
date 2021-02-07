@@ -5,7 +5,9 @@
         <div class="headline primary--text">Dashboard</div>
       </v-card-title>
       <v-card-text>
-        <div class="headline font-weight-light ma-5">Welcome {{greetedUser}}</div>
+        <div class="headline font-weight-light ma-5">
+          Welcome {{ greetedUser }}
+        </div>
       </v-card-text>
       <v-card-actions>
         <v-btn to="/main/profile/view">View Profile</v-btn>
@@ -32,6 +34,7 @@ export default class Dashboard extends Vue {
         return userProfile.email;
       }
     }
+    return '';
   }
 }
 </script>

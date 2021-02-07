@@ -83,7 +83,7 @@ jobs:
       run: |
         export BRANCH_TAG=$(echo "$GITHUB_REF" | sed 's|/|-|g')
         docker build backend/ --progress=plain -t $DOCKER_IMAGE_BACKEND:$GITHUB_SHA --cache-from $DOCKER_IMAGE_BACKEND:$BRANCH_TAG --cache-from $DOCKER_IMAGE_BACKEND:master --build-arg INSTALL_DEV=true &
-        docker build frontend/ --progress=plain --target build-stage -t $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$GITHUB_SHA --cache-from $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$BRANCH_TAG --cache-from $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:master --build-arg INSTALL_DEV=true
+        docker build frontend/ --progress=plain --target build-stage -t $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$GITHUB_SHA --cache-from $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$BRANCH_TAG --cache-from $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:master --build-arg INSTALL_DEV=true && \
         docker build frontend/ --progress=plain -t $DOCKER_IMAGE_FRONTEND:$GITHUB_SHA --cache-from $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$GITHUB_SHA --cache-from $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG --cache-from $DOCKER_IMAGE_FRONTEND:master --build-arg INSTALL_DEV=true &
         wait
 

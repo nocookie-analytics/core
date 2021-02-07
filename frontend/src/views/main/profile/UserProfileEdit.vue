@@ -6,11 +6,7 @@
       </v-card-title>
       <v-card-text>
         <template>
-          <v-form
-            v-model="valid"
-            ref="form"
-            lazy-validation
-          >
+          <v-form v-model="valid" ref="form" lazy-validation>
             <v-text-field
               label="Full Name"
               v-model="fullName"
@@ -32,12 +28,7 @@
         <v-spacer></v-spacer>
         <v-btn @click="cancel">Cancel</v-btn>
         <v-btn @click="reset">Reset</v-btn>
-        <v-btn
-          @click="submit"
-          :disabled="!valid"
-        >
-          Save
-        </v-btn>
+        <v-btn @click="submit" :disabled="!valid"> Save </v-btn>
       </v-card-actions>
     </v-card>
   </v-container>
@@ -53,8 +44,8 @@ import { dispatchUpdateUserProfile } from '@/store/main/actions';
 @Component
 export default class UserProfileEdit extends Vue {
   public valid = true;
-  public fullName: string = '';
-  public email: string = '';
+  public fullName = '';
+  public email = '';
 
   public created() {
     const userProfile = readUserProfile(this.$store);
