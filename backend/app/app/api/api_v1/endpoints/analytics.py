@@ -32,7 +32,7 @@ def get_start_date(
 
 @router.get("/", response_model=AnalyticsData, response_model_exclude_unset=True)
 def get_analytics(
-    domain_id: int,
+    domain_name: str,
     *,
     current_user: models.User = Depends(deps.get_current_active_user),
     db: Session = Depends(deps.get_db),
@@ -42,7 +42,7 @@ def get_analytics(
 ):
     # TODO: This section (getting domain/verifying ownership)
     # can be written as a reusable dependency
-    domain = crud.domain.get(db=db, id=domain_id)
+    domain = crud.domain.get_by_name(db=db, name=domain_name)
     if not domain:
         raise HTTPException(status_code=404, detail="Domain not found")
     if not crud.user.is_superuser(current_user) and (

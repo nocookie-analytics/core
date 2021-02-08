@@ -25,7 +25,7 @@ def test_get_analytics_success(
     duration: timedelta,
 ) -> None:
     data = {
-        "domain_id": mock_read_only_domain.id,
+        "domain_name": mock_read_only_domain.domain_name,
         "start": start,
         "end": start + duration,
         "include": "pageviews",
@@ -55,7 +55,7 @@ def test_get_analytics_invalid_domain(
     duration: timedelta,
 ) -> None:
     data = {
-        "domain_id": 10 ** 10,
+        "domain_name": "doesnotexist.com",
         "start": start,
         "end": start + duration,
         "include": "pageviews",
