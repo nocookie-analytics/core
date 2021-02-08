@@ -31,6 +31,16 @@ def test_get_domain(db: Session) -> None:
     assert domain.domain_name == stored_domain.domain_name
     assert domain.owner_id == stored_domain.owner_id
 
+def test_get_domain_by_name(db: Session) -> None:
+    domain_name = random_lower_string()
+    domain_in = DomainCreate(domain_name=domain_name)
+    user = create_random_user(db)
+    domain = crud.domain.create_with_owner(db=db, obj_in=domain_in, owner_id=user.id)
+    stored_domain = crud.domain.get_by_name(db=db, name=domain.domain_name)
+    assert stored_domain
+    assert domain.id == stored_domain.id
+    assert domain.domain_name == stored_domain.domain_name
+    assert domain.owner_id == stored_domain.owner_id
 
 def test_update_domain(db: Session) -> None:
     domain_name = random_lower_string()
