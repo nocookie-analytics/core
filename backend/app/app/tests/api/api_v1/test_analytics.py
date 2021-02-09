@@ -5,6 +5,7 @@ from fastapi.testclient import TestClient
 from hypothesis import given
 from hypothesis.extra.pytz import timezones
 from hypothesis.strategies import datetimes, timedeltas
+from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.models.domain import Domain
@@ -64,3 +65,25 @@ def test_get_analytics_invalid_domain(
         f"{settings.API_V1_STR}/a/", params=data, headers=superuser_token_headers
     )
     assert response.status_code == 404, response.json()
+
+
+@pytest.mark.usefixtures("override_testclient")
+def test_public_analytics(
+    client: TestClient,
+    read_write_domain: Domain,
+    db: Session,
+) -> None:
+    data = {
+        "domain_name": read_write_domain.domain_name,
+        "start": datetime.now() - timedelta(days=1),
+        "end": datetime.now(),
+        "include": "pageviews",
+    }
+    response = client.get(f"{settings.API_V1_STR}/a/", params=data)
+    assert response.status_code == 404, response.json()
+
+    read_write_domain.public = True
+    db.add(read_write_domain)
+    db.commit()
+    response = client.get(f"{settings.API_V1_STR}/a/", params=data)
+    assert response.status_code == 200, response.json()

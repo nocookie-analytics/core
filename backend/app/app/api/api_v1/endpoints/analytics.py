@@ -34,7 +34,7 @@ def get_start_date(
 def get_analytics(
     domain_name: str,
     *,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: models.User = Depends(deps.get_current_active_user_silent),
     db: Session = Depends(deps.get_db),
     start: datetime = Depends(get_start_date),
     end: datetime = Depends(get_end_date),
@@ -45,9 +45,14 @@ def get_analytics(
     domain = crud.domain.get_by_name(db=db, name=domain_name)
     if not domain:
         raise HTTPException(status_code=404, detail="Domain not found")
-    if not crud.user.is_superuser(current_user) and (
-        domain.owner_id != current_user.id
-    ):
+
+    if current_user:
+        if (
+            not crud.user.is_superuser(current_user)
+            and domain.owner_id != current_user.id
+        ):
+            raise HTTPException(status_code=404, detail="Domain not found")
+    elif domain.public is not True:
         raise HTTPException(status_code=404, detail="Domain not found")
 
     return crud.event.get_analytics_from_fields(
