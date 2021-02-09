@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Generator, Optional
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -13,7 +13,7 @@ from app.core.config import settings
 from app.db.session import SessionLocal
 
 reusable_oauth2 = OAuth2PasswordBearer(
-    tokenUrl=f"{settings.API_V1_STR}/login/access-token"
+    tokenUrl=f"{settings.API_V1_STR}/login/access-token", auto_error=False
 )
 
 
@@ -27,7 +27,9 @@ def get_db() -> Generator:
 
 def get_current_user(
     db: Session = Depends(get_db), token: str = Depends(reusable_oauth2)
-) -> models.User:
+) -> Optional[models.User]:
+    if not token:
+        return None
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
@@ -44,9 +46,21 @@ def get_current_user(
     return user
 
 
+def get_current_active_user_silent(
+    current_user: models.User = Depends(get_current_user),
+):
+    if not current_user:
+        return None
+    if not crud.user.is_active(current_user):
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user
+
+
 def get_current_active_user(
     current_user: models.User = Depends(get_current_user),
-) -> models.User:
+) -> Optional[models.User]:
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Not authenticated")
     if not crud.user.is_active(current_user):
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
@@ -54,7 +68,9 @@ def get_current_active_user(
 
 def get_current_active_superuser(
     current_user: models.User = Depends(get_current_user),
-) -> models.User:
+) -> Optional[models.User]:
+    if not current_user:
+        return None
     if not crud.user.is_superuser(current_user):
         raise HTTPException(
             status_code=400, detail="The user doesn't have enough privileges"
