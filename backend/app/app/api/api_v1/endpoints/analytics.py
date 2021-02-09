@@ -47,13 +47,13 @@ def get_analytics(
         raise HTTPException(status_code=404, detail="Domain not found")
 
     if current_user:
-        if not crud.user.is_superuser(current_user) and (
-            domain.owner_id != current_user.id
+        if (
+            not crud.user.is_superuser(current_user)
+            and domain.owner_id != current_user.id
         ):
             raise HTTPException(status_code=404, detail="Domain not found")
-    else:
-        if domain.public is not True:
-            raise HTTPException(status_code=404, detail="Domain not found")
+    elif domain.public is not True:
+        raise HTTPException(status_code=404, detail="Domain not found")
 
     return crud.event.get_analytics_from_fields(
         db=db, fields=include, start=start, end=end, domain=domain
