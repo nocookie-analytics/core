@@ -58,7 +58,7 @@ def get_current_active_user_silent(
 
 def get_current_active_user(
     current_user: models.User = Depends(get_current_user),
-) -> Optional[models.User]:
+) -> models.User:
     if not current_user:
         raise HTTPException(status_code=401, detail="Not authenticated")
     if not crud.user.is_active(current_user):
