@@ -79,6 +79,15 @@ class TestAggregateStat:
         assert data[0].value
         assert data[0].total_visits == 1
 
+    def test_aggregate_stat_local_ip(self, db: Session, mock_ip_address):
+        domain = create_random_domain(db)
+        create_random_page_view_event(db, domain_id=domain.id, ip_address="10.0.0.1")
+        base_query = domain.events.filter(Event.event_type == EventType.page_view)
+        data = AggregateStat.from_base_query(base_query, Event.ip_country_iso_code)
+        assert len(data) == 1
+        assert data[0].value == "Unknown"
+        assert data[0].total_visits == 1
+
     def test_aggregate_stat_filter_none(self, db: Session, mock_ip_address):
         domain = create_random_domain(db)
         create_random_page_view_event(

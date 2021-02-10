@@ -85,7 +85,10 @@ class AggregateStat(BaseModel):
         if filter_none is True:
             query = query.filter(group_by_column.isnot(None))
         query = query.limit(10)
-        return [AggregateStat(value=row[0], total_visits=row[1]) for row in query]
+        return [
+            AggregateStat(value=row[0] or "Unknown", total_visits=row[1])
+            for row in query
+        ]
 
 
 class PageViewsPerDayStat(BaseModel):
