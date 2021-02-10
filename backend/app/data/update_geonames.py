@@ -83,7 +83,7 @@ async def countries(db: Session):
 
 
 async def cities(db: Session):
-    url = "http://localhost:8002/cities500.zip"
+    url = "https://download.geonames.org/export/dump/cities500.zip"
     filename = "./cities500.zip"
     download_file(url, filename)
     with zipfile.ZipFile(filename, mode="r") as zipped:
@@ -91,14 +91,14 @@ async def cities(db: Session):
         assert len(files) == 1
         unzipped_byte_stream = zipped.open(files[0])
         unzipped_text_stream = TextIOWrapper(unzipped_byte_stream)
+        existing_city_ids = set(row[0] for row in db.query(City.id).all())
         for index, line in enumerate(
             csv.DictReader(
                 unzipped_text_stream, delimiter="\t", fieldnames=city_field_names
             )
         ):
             assert None not in line, "File format has changed"
-            city = db.query(City).get(line["geonameid"])
-            if city:
+            if int(line["geonameid"]) in existing_city_ids:
                 continue
             city = City(
                 id=line["geonameid"],
