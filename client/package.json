@@ -15,7 +15,7 @@
     "object-hash": "^2.1.1",
     "parcel-bundler": "^1.12.4",
     "tslint": "^6.1.2",
-    "typescript": "^4.1.4"
+    "typescript": "^4.1.5"
   },
   "postcss": {
     "plugins": {
