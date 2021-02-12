@@ -42,7 +42,7 @@ pytest-cov = "^2.11.1"
 pylint = "^2.5.0"
 ipython = "^7.20.0"
 coverage = {extras = ["toml"], version = "^5.4"}
-hypothesis = "^6.1.1"
+hypothesis = "^6.2.0"
 
 [tool.isort]
 multi_line_output = 3
