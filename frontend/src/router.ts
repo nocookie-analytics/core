@@ -42,6 +42,13 @@ export default new Router({
             ),
         },
         {
+          path: '/:domain_name',
+          component: () =>
+            import(
+              /* webpackChunkName: "analytics" */ './views/ViewAnalytics.vue'
+            ),
+        },
+        {
           path: 'main',
           component: () =>
             import(/* webpackChunkName: "main" */ './views/main/Main.vue'),
