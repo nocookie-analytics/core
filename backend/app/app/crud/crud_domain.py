@@ -40,15 +40,14 @@ class CRUDDomain(CRUDBase[Domain, DomainCreate, DomainUpdate]):
         self, db: Session, name: str, current_user: Optional[User]
     ) -> Optional[Domain]:
         obj = db.query(self.model).filter(Domain.domain_name == name).scalar()
-        if current_user:
-            if (
-                not crud.user.is_superuser(current_user)
-                and obj.owner_id != current_user.id
-            ):
-                return None
-        elif obj.public is not True:
+        if not obj:
             return None
-        return obj
+        if obj.public is True:
+            return obj
+        if current_user:
+            if crud.user.is_superuser(current_user) or obj.owner_id == current_user.id:
+                return obj
+        return None
 
 
 domain = CRUDDomain(Domain)
