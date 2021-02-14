@@ -43,7 +43,7 @@ def get_analytics(
     # TODO: This section (getting domain/verifying ownership)
     # can be written as a reusable dependency
     domain = crud.domain.get_by_name_check_permission(
-        db=db, domain_name=domain_name, current_user=current_user
+        db=db, name=domain_name, current_user=current_user
     )
     if not domain:
         raise HTTPException(status_code=404, detail="Domain not found")
