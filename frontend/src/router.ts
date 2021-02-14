@@ -42,10 +42,10 @@ export default new Router({
             ),
         },
         {
-          path: '/:domain_name',
+          path: ':domainName',
           component: () =>
             import(
-              /* webpackChunkName: "analytics" */ './views/ViewAnalytics.vue'
+              /* webpackChunkName: "view-analytics" */ './views/ViewAnalytics.vue'
             ),
         },
         {
