@@ -27,7 +27,7 @@ sqlalchemy-enum34 = "^1.0.1"
 furl = "^2.1.0"
 user-agents = "^2.2.0"
 geoip2 = "^4.1.0"
-arrow = "^0.17.0"
+arrow = "^1.0.2"
 pytz = "2019.3"
 
 [tool.poetry.dev-dependencies]
