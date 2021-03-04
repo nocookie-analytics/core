@@ -10,7 +10,9 @@ def test_create_domain(
 ) -> None:
     data = {"domain_name": "foo.com"}
     response = client.post(
-        f"{settings.API_V1_STR}/domains/", headers=superuser_token_headers, json=data,
+        f"{settings.API_V1_STR}/domains/",
+        headers=superuser_token_headers,
+        json=data,
     )
     assert response.status_code == 200
     content = response.json()
@@ -24,7 +26,8 @@ def test_read_domain(
 ) -> None:
     domain = create_random_domain(db)
     response = client.get(
-        f"{settings.API_V1_STR}/domains/{domain.id}", headers=superuser_token_headers,
+        f"{settings.API_V1_STR}/domains/{domain.id}",
+        headers=superuser_token_headers,
     )
     assert response.status_code == 200
     content = response.json()
