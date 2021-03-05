@@ -13,7 +13,7 @@ email-validator = "^1.0.5"
 requests = "^2.25.1"
 celery = "^5.0.5"
 passlib = {extras = ["bcrypt"], version = "^1.7.2"}
-tenacity = "^6.3.1"
+tenacity = "^7.0.0"
 pydantic = "^1.8"
 emails = "^0.6"
 raven = "^6.10.0"
