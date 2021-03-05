@@ -41,7 +41,7 @@ sqlalchemy-stubs = "^0.4"
 pytest-cov = "^2.11.1"
 pylint = "^2.7.2"
 ipython = "^7.21.0"
-coverage = {extras = ["toml"], version = "^5.4"}
+coverage = {extras = ["toml"], version = "^5.5"}
 hypothesis = "^6.4.3"
 
 [tool.isort]
