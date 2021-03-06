@@ -19,12 +19,11 @@ jobs:
 
       - name: Install gcrgc
         run: |
-          wget https://github.com/graillus/gcrgc/releases/download/v0.4.0/gcrgc_0.4.0_linux_amd64.tar.gz -O /tmp/gcrgc.tar.gz
+          wget --quiet https://github.com/graillus/gcrgc/releases/download/v0.4.0/gcrgc_0.4.0_linux_amd64.tar.gz -O /tmp/gcrgc.tar.gz
           tar xf /tmp/gcrgc.tar.gz -C /tmp/
-          mv /tmp/gcrgc /usr/local/bin/
 
       - name: Cleanup images
         run: |
-          gcrgc --exclude-tags=refs-heads-master --retention-period=14d gcr.io/${PROJECT_ID}
+          ./tmp/gcrgc --exclude-tags=refs-heads-master --retention-period=14d gcr.io/${PROJECT_ID}
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
