@@ -29,4 +29,3 @@ jobs:
           gcrgc --exclude-tags=refs-heads-master --retention-period=14d gcr.io/${PROJECT_ID}
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-
