@@ -1,10 +1,13 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi.encoders import jsonable_encoder
+from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 
+from app import crud
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
+from app.models.user import User
 from app.schemas.domain import DomainCreate, DomainUpdate
 
 
@@ -32,6 +35,19 @@ class CRUDDomain(CRUDBase[Domain, DomainCreate, DomainUpdate]):
 
     def get_by_name(self, db: Session, name: str) -> Domain:
         return db.query(self.model).filter(Domain.domain_name == name).scalar()
+
+    def get_by_name_check_permission(
+        self, db: Session, name: str, current_user: Optional[User]
+    ) -> Optional[Domain]:
+        obj = db.query(self.model).filter(Domain.domain_name == name).scalar()
+        if not obj:
+            return None
+        if obj.public is True:
+            return obj
+        if current_user:
+            if crud.user.is_superuser(current_user) or obj.owner_id == current_user.id:
+                return obj
+        return None
 
 
 domain = CRUDDomain(Domain)

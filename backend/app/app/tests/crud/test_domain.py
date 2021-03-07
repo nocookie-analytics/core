@@ -1,3 +1,4 @@
+from app.models.domain import Domain
 import pytest
 import sqlalchemy
 from sqlalchemy.orm import Session
@@ -68,3 +69,25 @@ def test_delete_domain(db: Session) -> None:
     assert domain2.id == domain.id
     assert domain2.domain_name == domain_name
     assert domain2.owner_id == user.id
+
+
+def test_public_domain(
+    read_write_domain: Domain,
+    db: Session,
+) -> None:
+    user = create_random_user(db)
+    for current_user in [None, user]:
+        domain = crud.domain.get_by_name_check_permission(
+            db, read_write_domain.domain_name, current_user=current_user
+        )
+        assert not domain, f"{current_user} should be able to access the domain"
+
+    read_write_domain.public = True
+    db.add(read_write_domain)
+    db.commit()
+
+    for current_user in [None, user]:
+        domain = crud.domain.get_by_name_check_permission(
+            db, read_write_domain.domain_name, current_user=current_user
+        )
+        assert domain, f"{current_user} should be able to access the domain"

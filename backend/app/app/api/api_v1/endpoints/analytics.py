@@ -42,17 +42,10 @@ def get_analytics(
 ):
     # TODO: This section (getting domain/verifying ownership)
     # can be written as a reusable dependency
-    domain = crud.domain.get_by_name(db=db, name=domain_name)
+    domain = crud.domain.get_by_name_check_permission(
+        db=db, name=domain_name, current_user=current_user
+    )
     if not domain:
-        raise HTTPException(status_code=404, detail="Domain not found")
-
-    if current_user:
-        if (
-            not crud.user.is_superuser(current_user)
-            and domain.owner_id != current_user.id
-        ):
-            raise HTTPException(status_code=404, detail="Domain not found")
-    elif domain.public is not True:
         raise HTTPException(status_code=404, detail="Domain not found")
 
     return crud.event.get_analytics_from_fields(
