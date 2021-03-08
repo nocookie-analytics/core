@@ -29,6 +29,7 @@ user-agents = "^2.2.0"
 geoip2 = "^4.1.0"
 arrow = "^1.0.2"
 pytz = "2019.3"
+fastapi-utils = "^0.2.1"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.812"
