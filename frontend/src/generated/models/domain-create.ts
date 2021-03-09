@@ -13,6 +13,19 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface DomainCreate
+ */
+export interface DomainCreate {
+    /**
+     * 
+     * @type {string}
+     * @memberof DomainCreate
+     */
+    domain_name: string;
+}
+
+

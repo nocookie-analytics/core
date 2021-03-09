@@ -13,6 +13,31 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface EventCreated
+ */
+export interface EventCreated {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof EventCreated
+     */
+    success?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventCreated
+     */
+    error?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventCreated
+     */
+    pvid?: string;
+}
+
+

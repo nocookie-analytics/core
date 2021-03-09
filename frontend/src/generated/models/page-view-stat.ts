@@ -13,6 +13,19 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface PageViewStat
+ */
+export interface PageViewStat {
+    /**
+     * 
+     * @type {number}
+     * @memberof PageViewStat
+     */
+    total_visits: number;
+}
+
+

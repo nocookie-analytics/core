@@ -13,6 +13,19 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface Msg
+ */
+export interface Msg {
+    /**
+     * 
+     * @type {string}
+     * @memberof Msg
+     */
+    msg: string;
+}
+
+

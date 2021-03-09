@@ -13,6 +13,25 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface BodyResetPasswordApiV1ResetPasswordPost
+ */
+export interface BodyResetPasswordApiV1ResetPasswordPost {
+    /**
+     * 
+     * @type {string}
+     * @memberof BodyResetPasswordApiV1ResetPasswordPost
+     */
+    token: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BodyResetPasswordApiV1ResetPasswordPost
+     */
+    new_password: string;
+}
+
+

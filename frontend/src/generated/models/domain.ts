@@ -13,6 +13,31 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface Domain
+ */
+export interface Domain {
+    /**
+     * 
+     * @type {string}
+     * @memberof Domain
+     */
+    domain_name: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Domain
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Domain
+     */
+    owner_id: number;
+}
+
+

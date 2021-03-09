@@ -13,6 +13,25 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface AggregateStat
+ */
+export interface AggregateStat {
+    /**
+     * 
+     * @type {number}
+     * @memberof AggregateStat
+     */
+    total_visits: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AggregateStat
+     */
+    value: string;
+}
+
+

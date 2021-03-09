@@ -13,6 +13,20 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+import { ValidationError } from './validation-error';
+
+/**
+ * 
+ * @export
+ * @interface HTTPValidationError
+ */
+export interface HTTPValidationError {
+    /**
+     * 
+     * @type {Array<ValidationError>}
+     * @memberof HTTPValidationError
+     */
+    detail?: Array<ValidationError>;
+}
+
+

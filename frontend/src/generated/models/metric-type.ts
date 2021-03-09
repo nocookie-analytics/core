@@ -13,6 +13,19 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * An enumeration.
+ * @export
+ * @enum {string}
+ */
+export enum MetricType {
+    Lcp = 'lcp',
+    Fid = 'fid',
+    Fp = 'fp',
+    Cls = 'cls',
+    LcpFinal = 'lcpFinal'
+}
+
+
+

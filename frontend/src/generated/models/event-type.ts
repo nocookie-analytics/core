@@ -13,6 +13,17 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * An enumeration.
+ * @export
+ * @enum {string}
+ */
+export enum EventType {
+    PageView = 'page_view',
+    Metric = 'metric',
+    Custom = 'custom'
+}
+
+
+

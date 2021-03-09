@@ -13,6 +13,25 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface AvgMetricPerDayStat
+ */
+export interface AvgMetricPerDayStat {
+    /**
+     * 
+     * @type {number}
+     * @memberof AvgMetricPerDayStat
+     */
+    value: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AvgMetricPerDayStat
+     */
+    date: string;
+}
+
+

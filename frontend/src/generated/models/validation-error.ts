@@ -13,6 +13,31 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface ValidationError
+ */
+export interface ValidationError {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ValidationError
+     */
+    loc: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidationError
+     */
+    msg: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidationError
+     */
+    type: string;
+}
+
+
