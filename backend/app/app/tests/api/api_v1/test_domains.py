@@ -34,3 +34,26 @@ def test_read_domain(
     assert content["domain_name"] == domain.domain_name
     assert content["id"] == domain.id
     assert content["owner_id"] == domain.owner_id
+
+
+def test_read_domain_by_name(
+    client: TestClient, superuser_token_headers: dict, db: Session
+) -> None:
+    domain = create_random_domain(db)
+    response = client.get(
+        f"{settings.API_V1_STR}/domains/by-name/{domain.domain_name}",
+    )
+    assert response.status_code == 404
+
+    domain.public = True
+    db.add(domain)
+    db.commit()
+
+    response = client.get(
+        f"{settings.API_V1_STR}/domains/by-name/{domain.domain_name}",
+    )
+    assert response.status_code == 200
+    content = response.json()
+    assert content["domain_name"] == domain.domain_name
+    assert content["id"] == domain.id
+    assert content["owner_id"] == domain.owner_id

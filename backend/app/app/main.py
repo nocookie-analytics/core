@@ -5,6 +5,7 @@ from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 from app.api.api_v1.api import api_router
 from app.core.config import settings
+from fastapi_utils.openapi import simplify_operation_ids
 
 app = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
@@ -29,3 +30,4 @@ if settings.BACKEND_CORS_ORIGINS:
     )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
+simplify_operation_ids(app)

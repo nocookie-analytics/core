@@ -86,7 +86,7 @@ def read_domain(
     return domain
 
 
-@router.get("/{name}", response_model=schemas.Domain)
+@router.get("/by-name/{name}", response_model=schemas.Domain)
 def read_domain_by_name(
     *,
     db: Session = Depends(deps.get_db),

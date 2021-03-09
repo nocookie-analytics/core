@@ -42,13 +42,6 @@ export default new Router({
             ),
         },
         {
-          path: ':domainName',
-          component: () =>
-            import(
-              /* webpackChunkName: "view-analytics" */ './views/ViewAnalytics.vue'
-            ),
-        },
-        {
           path: 'main',
           component: () =>
             import(/* webpackChunkName: "main" */ './views/main/Main.vue'),
@@ -126,6 +119,14 @@ export default new Router({
               ],
             },
           ],
+        },
+        {
+          // This route should always be last
+          path: ':domainName',
+          component: () =>
+            import(
+              /* webpackChunkName: "view-analytics" */ './views/main/ViewAnalytics.vue'
+            ),
         },
       ],
     },

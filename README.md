@@ -833,5 +833,7 @@ That will use the file `cookiecutter-config-file.yml` in the current directory (
 
 https://github.com/python-poetry/poetry/issues/496#issuecomment-738680177
 
+```
 git restore --staged --worktree backend/app/poetry.lock
 poetry lock --no-update
+```
