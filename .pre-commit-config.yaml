@@ -1,7 +1,7 @@
 exclude: |
   (?x)^(
   backend/app/alembic/.*|
-  backend/app/data/referers.json
+  backend/app/data/referers.json|
   frontend/.*/generated/.*
   )$
 
