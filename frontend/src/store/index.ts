@@ -27,7 +27,7 @@ const storeOptions: StoreOptions<State> = {
       return new Configuration(apiConfig);
     },
     domainsApi: (state, getters): DomainsApi => {
-      return new DomainsApi(getters.apiConfig.domainsApi);
+      return new DomainsApi(getters.apiConfig);
     },
   },
 };
