@@ -45,7 +45,6 @@ export default class ChoroplethMap extends Vue {
   @Prop(Array) public mapData: any;
 
   data() {
-    console.log(this.mapData, '<<<<<<<<');
     return {
       data: this.mapData,
       geojson,
