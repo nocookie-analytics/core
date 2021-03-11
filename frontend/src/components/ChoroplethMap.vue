@@ -1,9 +1,9 @@
 <template>
   <div id="map">
     <l-map
-      :center="[-23.752961, -57.854357]"
-      :zoom="6"
-      style="height: 500px"
+      :center="[20, 0]"
+      :zoom="2"
+      style="height: 600px"
       :options="mapOptions"
     >
       <l-choropleth-layer
@@ -38,9 +38,8 @@
 
 <script>
 import { InfoControl, ReferenceChart, ChoroplethLayer } from 'vue-choropleth';
-import { geojson } from './data/py-departments-geojson';
-import { Component, Prop, Vue } from 'vue-property-decorator';
-import paraguayGeojson from './data/paraguay.json';
+import geojson from './data/world.geo.json';
+import { Component, Vue } from 'vue-property-decorator';
 import { pyDepartmentsData } from './data/py-departments-data';
 import { LMap } from 'vue2-leaflet';
 
