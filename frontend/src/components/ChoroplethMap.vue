@@ -7,12 +7,11 @@
       :options="mapOptions"
     >
       <l-choropleth-layer
-        :data="pyDepartmentsData"
-        titleKey="department_name"
-        idKey="department_id"
+        :data="data"
+        titleKey="value"
+        idKey="value"
         :value="value"
-        :extraValues="extraValues"
-        geojsonIdKey="dpto"
+        geojsonIdKey="iso_a2"
         :geojson="geojson"
         :colorScale="colorScale"
       >
@@ -20,15 +19,7 @@
           <l-info-control
             :item="props.currentItem"
             :unit="props.unit"
-            title="Department"
-            placeholder="Hover over a department"
-          />
-          <l-reference-chart
-            title="Girls school enrolment"
-            :colorScale="colorScale"
-            :min="props.min"
-            :max="props.max"
-            position="topright"
+            title=""
           />
         </template>
       </l-choropleth-layer>
@@ -36,11 +27,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { InfoControl, ReferenceChart, ChoroplethLayer } from 'vue-choropleth';
 import geojson from './data/world.geo.json';
-import { Component, Vue } from 'vue-property-decorator';
-import { pyDepartmentsData } from './data/py-departments-data';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import { LMap } from 'vue2-leaflet';
 
 @Component({
@@ -52,21 +42,18 @@ import { LMap } from 'vue2-leaflet';
   },
 })
 export default class ChoroplethMap extends Vue {
+  @Prop(Array) public mapData: any;
+
   data() {
+    console.log(this.mapData, '<<<<<<<<');
     return {
-      pyDepartmentsData,
+      data: this.mapData,
       geojson,
       colorScale: ['e7d090', 'e9ae7b', 'de7062'],
       value: {
-        key: 'amount_w',
-        metric: '% girls',
+        key: 'total_visits',
+        metric: 'visit(s)',
       },
-      extraValues: [
-        {
-          key: 'amount_m',
-          metric: '% boys',
-        },
-      ],
       mapOptions: {
         attributionControl: false,
       },
