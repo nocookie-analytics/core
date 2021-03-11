@@ -5,6 +5,7 @@ import { mainModule } from './main';
 import { State } from './state';
 import { adminModule } from './admin';
 import {
+  AnalyticsApi,
   Configuration,
   ConfigurationParameters,
   DomainsApi,
@@ -26,8 +27,11 @@ const storeOptions: StoreOptions<State> = {
       };
       return new Configuration(apiConfig);
     },
-    domainsApi: (state, getters): DomainsApi => {
+    domainsApi: (_, getters): DomainsApi => {
       return new DomainsApi(getters.apiConfig);
+    },
+    analyticsApi: (_, getters): AnalyticsApi => {
+      return new AnalyticsApi(getters.apiConfig);
     },
   },
 };
