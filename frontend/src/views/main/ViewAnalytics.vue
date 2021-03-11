@@ -17,14 +17,20 @@
         </v-card-text>
       </v-card>
     </v-container>
+    <ChoroplethMap></ChoroplethMap>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { Domain, DomainsApi } from '@/generated';
+import ChoroplethMap from '@/components/ChoroplethMap.vue';
 
-@Component
+@Component({
+  components: {
+    ChoroplethMap,
+  },
+})
 export default class ViewAnalytics extends Vue {
   public domainInfo: Domain | null = null;
   public domainError = '';
