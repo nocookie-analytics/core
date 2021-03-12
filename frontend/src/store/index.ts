@@ -4,6 +4,7 @@ import Vuex, { StoreOptions } from 'vuex';
 import { mainModule } from './main';
 import { State } from './state';
 import { adminModule } from './admin';
+import { analyticsModule } from './analytics';
 import {
   AnalyticsApi,
   Configuration,
@@ -18,6 +19,7 @@ const storeOptions: StoreOptions<State> = {
   modules: {
     main: mainModule,
     admin: adminModule,
+    analytics: analyticsModule,
   },
   getters: {
     apiConfig: (state): ConfigurationParameters => {

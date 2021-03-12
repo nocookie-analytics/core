@@ -25,6 +25,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { AnalyticsApi, AnalyticsData, Domain, DomainsApi } from '@/generated';
 import ChoroplethMap from '@/components/ChoroplethMap.vue';
+import { commitSetActiveDomain } from '@/store/analytics/mutations';
 
 @Component({
   components: {
@@ -41,27 +42,10 @@ export default class ViewAnalytics extends Vue {
   }
 
   public async mounted(): Promise<void> {
-    const domainsApi: DomainsApi = this.$store.getters.domainsApi;
-    const analyticsApi: AnalyticsApi = this.$store.getters.analyticsApi;
-    try {
-      const domainInfoResponse = await domainsApi.readDomainByName(
-        this.domainName,
-      );
-      this.domainInfo = domainInfoResponse.data;
-    } catch (error) {
-      this.domainError = 'Domain not found';
-    }
-
-    try {
-      const response = await analyticsApi.getAnalytics(
-        this.domainName,
-        'countries',
-        '2020-03-11T17:11:24.931589+00:00',
-      );
-      this.analyticsData = response.data;
-    } catch (error) {
-      this.domainError = 'Domain not found';
-    }
+    commitSetActiveDomain(
+      this.$store,
+      this.$router.currentRoute.params.domainName,
+    );
   }
 
   get domainName(): string {
