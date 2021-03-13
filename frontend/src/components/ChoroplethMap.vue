@@ -32,6 +32,7 @@ import { InfoControl, ReferenceChart, ChoroplethLayer } from 'vue-choropleth';
 import geojson from './data/world.geo.json';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { LMap } from 'vue2-leaflet';
+import { AggregateStat } from '@/generated';
 
 @Component({
   components: {
@@ -42,9 +43,9 @@ import { LMap } from 'vue2-leaflet';
   },
 })
 export default class ChoroplethMap extends Vue {
-  @Prop(Array) public mapData: any;
+  @Prop(Array) public mapData!: Array<AggregateStat>;
 
-  data() {
+  data(): Record<string, unknown> {
     return {
       data: this.mapData,
       geojson,
@@ -61,7 +62,7 @@ export default class ChoroplethMap extends Vue {
   }
 }
 </script>
-<style src='leaflet/dist/leaflet.css'></style>
+<style src="leaflet/dist/leaflet.css"></style>
 <style>
 body {
   background-color: #e7d090;
