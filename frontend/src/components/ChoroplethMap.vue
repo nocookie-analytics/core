@@ -7,7 +7,7 @@
       :options="mapOptions"
     >
       <l-choropleth-layer
-        :data="data"
+        :data="countryData"
         titleKey="value"
         idKey="value"
         :value="value"
@@ -45,9 +45,12 @@ import { AggregateStat } from '@/generated';
 export default class ChoroplethMap extends Vue {
   @Prop(Array) public mapData!: Array<AggregateStat>;
 
+  get countryData(): Array<AggregateStat> {
+    return this.mapData || [];
+  }
+
   data(): Record<string, unknown> {
     return {
-      data: this.mapData,
       geojson,
       colorScale: ['e7d090', 'e9ae7b', 'de7062'],
       value: {
