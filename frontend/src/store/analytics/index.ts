@@ -6,6 +6,7 @@ import { AnalyticsState } from './state';
 const defaultState: AnalyticsState = {
   currentDomain: null,
   analyticsData: null,
+  analyticsError: null,
 };
 
 export const analyticsModule = {
