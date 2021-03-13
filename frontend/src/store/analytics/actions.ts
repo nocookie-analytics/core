@@ -1,5 +1,4 @@
-import { AnalyticsApi, AnalyticsData } from '@/generated';
-import { AxiosPromise } from 'axios';
+import { AnalyticsApi } from '@/generated';
 import { getStoreAccessors } from 'typesafe-vuex';
 import { ActionContext } from 'vuex';
 import { State } from '../state';
