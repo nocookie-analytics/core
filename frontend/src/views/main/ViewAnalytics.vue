@@ -50,8 +50,8 @@ export default class ViewAnalytics extends Vue {
     );
   }
 
-  get mapData(): Array<AggregateStat> {
-    return readAnalyticsData(this.$store)?.countries || [];
+  get mapData(): Array<AggregateStat> | undefined {
+    return readAnalyticsData(this.$store)?.countries;
   }
 }
 </script>
