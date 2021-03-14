@@ -13,6 +13,7 @@ git_push.sh
 index.ts
 models/aggregate-stat.ts
 models/analytics-data.ts
+models/analytics-type.ts
 models/avg-metric-per-day-stat.ts
 models/body-create-user-open-api-v1-users-open-post.ts
 models/body-reset-password-api-v1-reset-password-post.ts

@@ -1,5 +1,6 @@
 export * from './aggregate-stat';
 export * from './analytics-data';
+export * from './analytics-type';
 export * from './avg-metric-per-day-stat';
 export * from './body-create-user-open-api-v1-users-open-post';
 export * from './body-reset-password-api-v1-reset-password-post';
