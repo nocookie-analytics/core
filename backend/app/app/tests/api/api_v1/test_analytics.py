@@ -1,3 +1,4 @@
+from app.schemas.analytics import AnalyticsType
 from datetime import datetime, timedelta
 
 import pytest
@@ -29,7 +30,7 @@ def test_get_analytics_success(
         "domain_name": mock_read_only_domain.domain_name,
         "start": start,
         "end": start + duration,
-        "include": "pageviews",
+        "include": [AnalyticsType.PAGEVIEWS.value, AnalyticsType.COUNTRIES.value],
     }
     response = client.get(
         f"{settings.API_V1_STR}/a/", params=data, headers=superuser_token_headers
