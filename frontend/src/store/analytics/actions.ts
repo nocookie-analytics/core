@@ -1,4 +1,4 @@
-import { AnalyticsApi } from '@/generated';
+import { AnalyticsApi, AnalyticsType } from '@/generated';
 import { getStoreAccessors } from 'typesafe-vuex';
 import { ActionContext } from 'vuex';
 import { State } from '../state';
@@ -27,7 +27,7 @@ export const actions = {
     try {
       const response = await analyticsApi.getAnalytics(
         domainName,
-        'countries',
+        [AnalyticsType.Countries, AnalyticsType.UtmTerms],
         '2020-03-11T17:11:24.931589+00:00',
       );
       const analyticsData = response.data;
