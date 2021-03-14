@@ -9,8 +9,8 @@
         <v-card-text>
           <div class="headline font-weight-light ma-5">
             {{ domainName }}
-            <span v-if="domainError"
-              >- {{ domainError }} (You might need to
+            <span v-if="analyticsError"
+              >- {{ analyticsError }} (You might need to
               <a href="/login">log-in</a>)</span
             >
           </div>
@@ -23,8 +23,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { AnalyticsApi, AnalyticsData, Domain, DomainsApi } from '@/generated';
 import ChoroplethMap from '@/components/ChoroplethMap.vue';
+import { dispatchUpdateActiveDomain } from '@/store/analytics/actions';
+import { readAnalyticsData } from '@/store/analytics/getters';
+import { AggregateStat } from '@/generated';
+import { AnalyticsState } from '@/store/analytics/state';
 
 @Component({
   components: {
@@ -32,40 +35,23 @@ import ChoroplethMap from '@/components/ChoroplethMap.vue';
   },
 })
 export default class ViewAnalytics extends Vue {
-  public domainInfo: Domain | null = null;
-  public analyticsData: AnalyticsData | null = null;
-  public domainError = '';
+  get domainName(): string {
+    return this.$router.currentRoute.params.domainName;
+  }
 
-  get mapData() {
-    return this.analyticsData?.countries;
+  get analyticsError(): string | null {
+    return (this.$store.state as AnalyticsState).analyticsError;
   }
 
   public async mounted(): Promise<void> {
-    const domainsApi: DomainsApi = this.$store.getters.domainsApi;
-    const analyticsApi: AnalyticsApi = this.$store.getters.analyticsApi;
-    try {
-      const domainInfoResponse = await domainsApi.readDomainByName(
-        this.domainName,
-      );
-      this.domainInfo = domainInfoResponse.data;
-    } catch (error) {
-      this.domainError = 'Domain not found';
-    }
-
-    try {
-      const response = await analyticsApi.getAnalytics(
-        this.domainName,
-        'countries',
-        '2020-03-11T17:11:24.931589+00:00',
-      );
-      this.analyticsData = response.data;
-    } catch (error) {
-      this.domainError = 'Domain not found';
-    }
+    dispatchUpdateActiveDomain(
+      this.$store,
+      this.$router.currentRoute.params.domainName,
+    );
   }
 
-  get domainName(): string {
-    return this.$router.currentRoute.params.domainName;
+  get mapData(): Array<AggregateStat> | undefined {
+    return readAnalyticsData(this.$store)?.countries;
   }
 }
 </script>

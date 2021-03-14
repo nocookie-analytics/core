@@ -7,7 +7,7 @@
       :options="mapOptions"
     >
       <l-choropleth-layer
-        :data="data"
+        :data="countryData"
         titleKey="value"
         idKey="value"
         :value="value"
@@ -32,6 +32,7 @@ import { InfoControl, ReferenceChart, ChoroplethLayer } from 'vue-choropleth';
 import geojson from './data/world.geo.json';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { LMap } from 'vue2-leaflet';
+import { AggregateStat } from '@/generated';
 
 @Component({
   components: {
@@ -42,11 +43,14 @@ import { LMap } from 'vue2-leaflet';
   },
 })
 export default class ChoroplethMap extends Vue {
-  @Prop(Array) public mapData: any;
+  @Prop(Array) public mapData!: Array<AggregateStat>;
 
-  data() {
+  get countryData(): Array<AggregateStat> {
+    return this.mapData || [];
+  }
+
+  data(): Record<string, unknown> {
     return {
-      data: this.mapData,
       geojson,
       colorScale: ['e7d090', 'e9ae7b', 'de7062'],
       value: {
@@ -61,7 +65,7 @@ export default class ChoroplethMap extends Vue {
   }
 }
 </script>
-<style src='leaflet/dist/leaflet.css'></style>
+<style src="leaflet/dist/leaflet.css"></style>
 <style>
 body {
   background-color: #e7d090;
