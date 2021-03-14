@@ -58,7 +58,7 @@ build-backend = "poetry.masonry.api"
 source = ["app"]
 
 [tool.coverage.report]
-fail_under = 80
+fail_under = 85
 
 [tool.pylint.MASTER]
 init-hook='import sys; sys.path.append("backend/app/")'
