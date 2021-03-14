@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import List, Optional
 
 import arrow
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app import crud
@@ -34,11 +34,17 @@ def get_start_date(
 def get_analytics(
     domain_name: str,
     *,
+    include: List[AnalyticsType] = Query(
+        ...,
+        description=(
+            "To include multiple fields in result use `include=` multiple times, "
+            "eg: `&include=pageviews&include=countries`"
+        ),
+    ),
     current_user: models.User = Depends(deps.get_current_active_user_silent),
     db: Session = Depends(deps.get_db),
     start: datetime = Depends(get_start_date),
     end: datetime = Depends(get_end_date),
-    include: List[AnalyticsType] = Depends(AnalyticsType.from_csv_string),
 ):
     # TODO: This section (getting domain/verifying ownership)
     # can be written as a reusable dependency

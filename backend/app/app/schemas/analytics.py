@@ -1,15 +1,16 @@
 from __future__ import annotations
-from app.models.location import Country
-from app.models.event import Event, MetricType
 import datetime
 from enum import Enum
-from typing import List, Optional, Set, Tuple, Union
+from typing import List, Optional, Set, Union
+
 import arrow
-from fastapi import HTTPException
+from fastapi import HTTPException, Query as FastAPIQuery
 from pydantic import BaseModel
-from sqlalchemy import func, cast, DATE
+from sqlalchemy import DATE, cast, func
 from sqlalchemy.orm import Query
 from starlette import status
+
+from app.models.event import Event, MetricType
 
 
 class AnalyticsType(Enum):
@@ -30,34 +31,6 @@ class AnalyticsType(Enum):
     FID_PER_DAY = "fid_per_day"
     FP_PER_DAY = "fp_per_day"
     CLS_PER_DAY = "cls_per_day"
-
-    @staticmethod
-    def from_csv_string(include) -> List[AnalyticsType]:
-        seq: Set[AnalyticsType] = set()
-        invalid = []
-        for item in include.split(","):
-            try:
-                seq.add(AnalyticsType(item))
-            except ValueError:
-                invalid.append(item)
-
-        if invalid:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail={
-                    "msg": f"Invalid fields: {', '.join(invalid)}",
-                    "hint": [t.value for t in AnalyticsType],
-                },
-            )
-        if not seq:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail={
-                    "msg": "No field specified, see hint",
-                    "hint": [t.value for t in AnalyticsType],
-                },
-            )
-        return list(seq)
 
 
 class PydanticArrow(datetime.datetime):
