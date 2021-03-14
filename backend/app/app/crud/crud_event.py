@@ -134,7 +134,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 data.browser_families = AggregateStat.from_base_query(
                     page_view_base_query, Event.browser_family
                 )
-            elif field == AnalyticsType.COUNTRY:
+            elif field == AnalyticsType.COUNTRIES:
                 data.countries = AggregateStat.from_base_query(
                     page_view_base_query, Event.ip_country_iso_code
                 )
