@@ -28,7 +28,6 @@ def create_random_page_view_event(
         "download_time": 5000,
         "time_to_first_byte": 5000,
         "total_time": 5000,
-        "ip_address": ip_address or "127.0.0.1",
         "page_view_id": uuid.uuid4(),
         **create_overrides,
     }
@@ -54,7 +53,6 @@ def create_random_metric_event(
         "download_time": 5000,
         "time_to_first_byte": 5000,
         "total_time": 5000,
-        "ip_address": ip_address or "127.0.0.1",
         "page_view_id": uuid.uuid4(),
         "metric_name": MetricType.LCP,
         "metric_value": 1234,

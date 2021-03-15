@@ -77,6 +77,16 @@ def override_testclient(monkeypatch):
     monkeypatch.setattr(Request, "client", Address("127.0.0.1", 5000))
 
 
+@pytest.fixture(autouse=True, scope="session")
+def mock_city_id(db):
+    country = Country(id="NA", name="NA")
+    city = City(id=5, name="Nowhere", country_id="NA")
+    db.add(city)
+    db.add(country)
+    db.commit()
+    return city
+
+
 @pytest.fixture(scope="session")
 def mock_ip_address(db):
     ip_address = socket.gethostbyname("gaganpreet.in")

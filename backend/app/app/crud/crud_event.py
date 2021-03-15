@@ -26,25 +26,6 @@ from app.utils.referer_parser import Referer
 
 class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
     @staticmethod
-    def _get_geolocation_info(
-        ip_address: IPvAnyAddress,
-    ) -> Dict[str, Optional[Union[int, str]]]:
-        data: Dict[str, Optional[Union[str, int]]] = {}
-        if ip_address:
-            geolocation = get_ip_gelocation(str(ip_address))
-            if not geolocation:
-                return data
-            city_id = geolocation.city.geoname_id
-            country_code = geolocation.country.iso_code
-            continent_code = geolocation.continent.code
-            if city_id:
-                data["ip_city_id"] = city_id
-            if country_code:
-                data["ip_country_iso_code"] = country_code
-            data["ip_continent_code"] = continent_code
-        return data
-
-    @staticmethod
     def _get_url_components(url: str) -> Dict:
         furled_url = furl(url)
         path = str(furled_url.path)
@@ -85,7 +66,6 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         obj_in_data = event_in.dict()
         obj_in_data = {
             **obj_in_data,
-            **self._get_geolocation_info(event_in.ip_address),
             **self._get_referrer_info(event_in.referrer, event_in.url),
             **(self._get_parsed_ua(event_in.ua_string)),
             **self._get_url_components(event_in.url),

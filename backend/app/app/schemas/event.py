@@ -1,6 +1,7 @@
 from __future__ import annotations
+from app.utils.geolocation import get_ip_gelocation
 from decimal import Decimal
-from typing import Optional
+from typing import Dict, Optional, Union
 from uuid import uuid4
 
 from fastapi import Query
@@ -38,7 +39,6 @@ class EventCreate(EventBase):
     referrer: Optional[str]
     user_timezone: Optional[str]
     user_timezone_offset: Optional[str]
-    ip_address: IPvAnyAddress
     page_view_id: UUID4
 
     download_time: Optional[Decimal]
@@ -47,6 +47,10 @@ class EventCreate(EventBase):
 
     metric_name: Optional[MetricType] = None
     metric_value: Optional[Decimal] = None
+
+    ip_city_id: Optional[int]
+    ip_country_iso_code: Optional[str]
+    ip_continent_code: Optional[str]
 
     @classmethod
     def depends(
@@ -89,16 +93,35 @@ class EventCreate(EventBase):
                 time_to_first_byte=ttfb,
                 total_time=tt,
                 download_time=dt,
-                ip_address=request.client.host,
                 ua_string=request.headers.get("user-agent"),
                 url=url,
                 page_view_id=pvid,
                 metric_name=mn,
                 metric_value=mv,
+                **cls._get_geolocation_info(request.client.host),
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception
             raise HTTPException(status_code=400, detail=e.errors())
+
+    @staticmethod
+    def _get_geolocation_info(
+        ip_address: IPvAnyAddress,
+    ) -> Dict[str, Optional[Union[int, str]]]:
+        data: Dict[str, Optional[Union[str, int]]] = {}
+        if ip_address:
+            geolocation = get_ip_gelocation(str(ip_address))
+            if not geolocation:
+                return data
+            city_id = geolocation.city.geoname_id
+            country_code = geolocation.country.iso_code
+            continent_code = geolocation.continent.code
+            if city_id:
+                data["ip_city_id"] = city_id
+            if country_code:
+                data["ip_country_iso_code"] = country_code
+            data["ip_continent_code"] = continent_code
+        return data
 
 
 class EventUpdate(EventBase):
