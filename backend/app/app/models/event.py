@@ -63,8 +63,6 @@ class Event(Base):
 
     event_type = Column(EventTypeEnum, nullable=False)
 
-    ip_address = Column(INET)
-
     ip_city_id = Column(Integer, ForeignKey("city.id", name="fk_event_city_id"))
     ip_city: City = relationship("City")  # type: ignore
     ip_country_iso_code = Column(

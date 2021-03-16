@@ -1,3 +1,4 @@
+from app.utils.geolocation import get_ip_gelocation
 import uuid
 from typing import Dict, Optional
 
@@ -17,6 +18,7 @@ def create_random_page_view_event(
 ) -> models.Event:
     if not create_overrides:
         create_overrides = {}
+    geolocation = get_ip_gelocation(ip_address)
     params = {
         "event_type": EventType.page_view,
         "url": "https://google.com",
@@ -28,8 +30,10 @@ def create_random_page_view_event(
         "download_time": 5000,
         "time_to_first_byte": 5000,
         "total_time": 5000,
-        "ip_address": ip_address or "127.0.0.1",
         "page_view_id": uuid.uuid4(),
+        "ip_city_id": geolocation.city.geoname_id if geolocation else None,
+        "ip_country_iso_code": geolocation.country.iso_code if geolocation else None,
+        "ip_continent_code": geolocation.continent.code if geolocation else None,
         **create_overrides,
     }
     event_in = EventCreate(**params)
@@ -43,6 +47,7 @@ def create_random_metric_event(
     ip_address: Optional[str] = None,
     create_overrides: Dict = None,
 ) -> models.Event:
+    geolocation = get_ip_gelocation(ip_address)
     event_in_data = {
         "event_type": EventType.metric,
         "url": "https://google.com",
@@ -54,10 +59,12 @@ def create_random_metric_event(
         "download_time": 5000,
         "time_to_first_byte": 5000,
         "total_time": 5000,
-        "ip_address": ip_address or "127.0.0.1",
         "page_view_id": uuid.uuid4(),
         "metric_name": MetricType.LCP,
         "metric_value": 1234,
+        "ip_city_id": geolocation.city.geoname_id if geolocation else None,
+        "ip_country_iso_code": geolocation.country.iso_code if geolocation else None,
+        "ip_continent_code": geolocation.continent.code if geolocation else None,
         **create_overrides,
     }
     event_in = EventCreate(**event_in_data)

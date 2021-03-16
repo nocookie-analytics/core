@@ -44,8 +44,10 @@ class TestCreatePageViewEvent:
             download_time=5000,
             time_to_first_byte=5000,
             total_time=5000,
-            ip_address=mock_ip_address,
             page_view_id=str(page_view_id),
+            ip_city_id=5,
+            ip_country_iso_code="US",
+            ip_continent_code="NA",
         )
         event = crud.event.create_with_domain(
             db=db, obj_in=event_in, domain_id=domain.id
