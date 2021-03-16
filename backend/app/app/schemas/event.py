@@ -110,7 +110,7 @@ class EventCreate(EventBase):
     ) -> Dict[str, Optional[Union[int, str]]]:
         data: Dict[str, Optional[Union[str, int]]] = {}
         if ip_address:
-            geolocation = get_ip_gelocation(str(ip_address))
+            geolocation = get_ip_gelocation(ip_address)
             if not geolocation:
                 return data
             city_id = geolocation.city.geoname_id
