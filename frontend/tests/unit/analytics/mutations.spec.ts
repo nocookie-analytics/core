@@ -6,7 +6,7 @@ const { setActiveDomain, setDomainData, setAnalyticsError } = mutations;
 
 describe('mutations', () => {
   it('sets active domain and unsets error', () => {
-    const state = { ...defaultState, error: 'error' };
+    const state = { ...defaultState, analyticsError: 'error' };
     setActiveDomain(state, 'newdomain.com');
     expect(state.currentDomain).to.equal('newdomain.com');
     expect(state.analyticsError).to.equal(null);
@@ -23,9 +23,11 @@ describe('mutations', () => {
     expect(state.analyticsError).to.equal(null);
   });
 
-  it('sets domain error', () => {
+  it('sets analytics error', () => {
     const state = { ...defaultState };
+    expect(state.analyticsError).to.equal(null);
     setAnalyticsError(state, 'something is wrong');
     expect(state.analyticsError).to.equal('something is wrong');
+    expect(state.analyticsData).to.equal(null);
   });
 });

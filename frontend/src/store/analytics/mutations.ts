@@ -6,12 +6,15 @@ import { AnalyticsData } from '@/generated';
 export const mutations = {
   setActiveDomain(state: AnalyticsState, domainName: string): void {
     state.currentDomain = domainName;
+    state.analyticsError = null; // New domain should not have any error to start off with
+    state.analyticsData = null;
   },
   setDomainData(state: AnalyticsState, analyticsData: AnalyticsData): void {
     state.analyticsData = analyticsData;
   },
   setAnalyticsError(state: AnalyticsState, error: string | null): void {
     state.analyticsError = error;
+    state.analyticsData = null;
   },
 };
 
