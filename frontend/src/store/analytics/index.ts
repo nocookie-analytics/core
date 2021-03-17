@@ -3,7 +3,7 @@ import { getters } from './getters';
 import { actions } from './actions';
 import { AnalyticsState } from './state';
 
-const defaultState: AnalyticsState = {
+export const defaultState: AnalyticsState = {
   currentDomain: null,
   analyticsData: null,
   analyticsError: null,
