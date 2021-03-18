@@ -1,5 +1,5 @@
 import { MainState } from './main/state';
 
-export interface State {
+export interface RootState {
   main: MainState;
 }

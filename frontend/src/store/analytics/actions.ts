@@ -1,7 +1,7 @@
 import { AnalyticsApi, AnalyticsType } from '@/generated';
 import { getStoreAccessors } from 'typesafe-vuex';
 import { ActionContext } from 'vuex';
-import { State } from '../state';
+import { RootState } from '../state';
 import {
   commitSetActiveDomain,
   commitSetAnalyticsData,
@@ -9,7 +9,7 @@ import {
 } from './mutations';
 import { AnalyticsState } from './state';
 
-type AnalyticsContext = ActionContext<AnalyticsState, State>;
+export type AnalyticsContext = ActionContext<AnalyticsState, RootState>;
 
 export const actions = {
   async updateActiveDomain(
@@ -41,7 +41,7 @@ export const actions = {
   },
 };
 
-const { dispatch } = getStoreAccessors<AnalyticsState, State>('');
+const { dispatch } = getStoreAccessors<AnalyticsState, RootState>('');
 
 export const dispatchUpdateActiveDomain = dispatch(actions.updateActiveDomain);
 export const dispatchFetchDomainAnalytics = dispatch(

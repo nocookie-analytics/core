@@ -1,6 +1,6 @@
 import { MainState } from './state';
 import { getStoreAccessors } from 'typesafe-vuex';
-import { State } from '../state';
+import { RootState } from '../state';
 
 export const getters = {
   hasAdminAccess: (state: MainState) => {
@@ -21,7 +21,7 @@ export const getters = {
     state.notifications.length > 0 && state.notifications[0],
 };
 
-const { read } = getStoreAccessors<MainState, State>('');
+const { read } = getStoreAccessors<MainState, RootState>('');
 
 export const readDashboardMiniDrawer = read(getters.dashboardMiniDrawer);
 export const readDashboardShowDrawer = read(getters.dashboardShowDrawer);

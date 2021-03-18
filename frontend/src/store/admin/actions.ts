@@ -1,7 +1,7 @@
 import { api } from '@/api';
 import { ActionContext } from 'vuex';
 import { IUserProfileCreate, IUserProfileUpdate } from '@/interfaces';
-import { State } from '../state';
+import { RootState } from '../state';
 import { AdminState } from './state';
 import { getStoreAccessors } from 'typesafe-vuex';
 import { commitSetUsers, commitSetUser } from './mutations';
@@ -11,7 +11,7 @@ import {
   commitRemoveNotification,
 } from '../main/mutations';
 
-type MainContext = ActionContext<AdminState, State>;
+type MainContext = ActionContext<AdminState, RootState>;
 
 export const actions = {
   async actionGetUsers(context: MainContext) {
@@ -77,7 +77,7 @@ export const actions = {
   },
 };
 
-const { dispatch } = getStoreAccessors<AdminState, State>('');
+const { dispatch } = getStoreAccessors<AdminState, RootState>('');
 
 export const dispatchCreateUser = dispatch(actions.actionCreateUser);
 export const dispatchGetUsers = dispatch(actions.actionGetUsers);
