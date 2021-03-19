@@ -15,14 +15,14 @@ import { apiUrl } from '@/env';
 
 Vue.use(Vuex);
 
-const storeOptions: StoreOptions<RootState> = {
+export const storeOptions: StoreOptions<RootState> = {
   modules: {
     main: mainModule,
     admin: adminModule,
     analytics: analyticsModule,
   },
   getters: {
-    apiConfig: (state): ConfigurationParameters => {
+    apiConfig: (state: RootState): ConfigurationParameters => {
       const apiConfig: ConfigurationParameters = {
         accessToken: state.main.token,
         basePath: apiUrl,
