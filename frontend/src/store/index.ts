@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex, { StoreOptions } from 'vuex';
 
 import { mainModule } from './main';
-import { State } from './state';
+import { RootState } from './state';
 import { adminModule } from './admin';
 import { analyticsModule } from './analytics';
 import {
@@ -15,14 +15,14 @@ import { apiUrl } from '@/env';
 
 Vue.use(Vuex);
 
-const storeOptions: StoreOptions<State> = {
+export const storeOptions: StoreOptions<RootState> = {
   modules: {
     main: mainModule,
     admin: adminModule,
     analytics: analyticsModule,
   },
   getters: {
-    apiConfig: (state): ConfigurationParameters => {
+    apiConfig: (state: RootState): ConfigurationParameters => {
       const apiConfig: ConfigurationParameters = {
         accessToken: state.main.token,
         basePath: apiUrl,
@@ -38,6 +38,6 @@ const storeOptions: StoreOptions<State> = {
   },
 };
 
-export const store = new Vuex.Store<State>(storeOptions);
+export const store = new Vuex.Store<RootState>(storeOptions);
 
 export default store;

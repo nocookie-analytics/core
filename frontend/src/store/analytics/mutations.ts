@@ -1,6 +1,6 @@
 import { AnalyticsState } from './state';
 import { getStoreAccessors } from 'typesafe-vuex';
-import { State } from '../state';
+import { RootState } from '../state';
 import { AnalyticsData } from '@/generated';
 
 export const mutations = {
@@ -18,7 +18,7 @@ export const mutations = {
   },
 };
 
-const { commit } = getStoreAccessors<AnalyticsState, State>('');
+const { commit } = getStoreAccessors<AnalyticsState, RootState>('');
 
 export const commitSetActiveDomain = commit(mutations.setActiveDomain);
 export const commitSetAnalyticsData = commit(mutations.setDomainData);

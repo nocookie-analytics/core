@@ -1,6 +1,6 @@
 import { AnalyticsState } from './state';
 import { getStoreAccessors } from 'typesafe-vuex';
-import { State } from '../state';
+import { RootState } from '../state';
 import { AnalyticsData } from '@/generated';
 
 export const getters = {
@@ -13,7 +13,7 @@ export const getters = {
   },
 };
 
-const { read } = getStoreAccessors<AnalyticsState, State>('');
+const { read } = getStoreAccessors<AnalyticsState, RootState>('');
 
 export const readAnalyticsData = read(getters.analyticsData);
 export const readCurrentDomain = read(getters.currentDomain);
