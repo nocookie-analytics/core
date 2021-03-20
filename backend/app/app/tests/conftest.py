@@ -79,8 +79,8 @@ def override_testclient(monkeypatch):
 
 @pytest.fixture(autouse=True, scope="session")
 def mock_city_id(db):
-    country = Country(id="NA", name="NA")
-    city = City(id=5, name="Nowhere", country_id="NA")
+    country = Country(id="XX", name="XX")
+    city = City(id=5, name="Nowhere", country_id="XX")
     db.add(city)
     db.add(country)
     db.commit()
