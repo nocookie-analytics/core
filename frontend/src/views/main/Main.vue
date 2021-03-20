@@ -8,40 +8,45 @@
       app
     >
       <v-layout column fill-height>
-        <v-list>
-          <v-subheader>Main menu</v-subheader>
-          <v-list-item to="/main/dashboard">
+        <v-list dense>
+          <v-list-item>Welcome {{ greetedUser }} </v-list-item>
+          <v-list-item to="/main/domains">
             <v-list-item-action>
-              <v-icon>web</v-icon>
+              <v-icon>dns</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>Dashboard</v-list-item-title>
+              <v-list-item-title>Domains</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item to="/main/profile/view">
-            <v-list-item-action>
-              <v-icon>person</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Profile</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item to="/main/profile/edit">
-            <v-list-item-action>
-              <v-icon>edit</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Edit Profile</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item to="/main/profile/password">
-            <v-list-item-action>
-              <v-icon>vpn_key</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Change Password</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+          <v-list-group value="true" prepend-icon="account_circle">
+            <template v-slot:activator>
+              <v-list-item-title>Account</v-list-item-title>
+            </template>
+            <v-list-item to="/main/profile/view">
+              <v-list-item-action>
+                <v-icon>person</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>Profile</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item to="/main/profile/edit">
+              <v-list-item-action>
+                <v-icon>edit</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>Edit Profile</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item to="/main/profile/password">
+              <v-list-item-action>
+                <v-icon>vpn_key</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>Change Password</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
         </v-list>
         <v-divider></v-divider>
         <v-list subheader v-show="hasAdminAccess">
@@ -135,6 +140,7 @@ import {
   readDashboardMiniDrawer,
   readDashboardShowDrawer,
   readHasAdminAccess,
+  readUserProfile,
 } from '@/store/main/getters';
 import {
   commitSetDashboardShowDrawer,
@@ -144,7 +150,7 @@ import { dispatchUserLogOut } from '@/store/main/actions';
 
 const routeGuardMain = async (to, from, next) => {
   if (to.path === '/main') {
-    next('/main/dashboard');
+    next('/main/');
   } else {
     next();
   }
@@ -194,6 +200,18 @@ export default class Main extends Vue {
 
   public async logout() {
     await dispatchUserLogOut(this.$store);
+  }
+
+  get greetedUser() {
+    const userProfile = readUserProfile(this.$store);
+    if (userProfile) {
+      if (userProfile.full_name) {
+        return userProfile.full_name;
+      } else {
+        return userProfile.email;
+      }
+    }
+    return '';
   }
 }
 </script>
