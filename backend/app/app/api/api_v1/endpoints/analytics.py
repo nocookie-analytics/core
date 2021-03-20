@@ -1,6 +1,4 @@
 from __future__ import annotations
-from app import models
-
 from datetime import datetime
 from typing import List, Optional
 
@@ -8,6 +6,7 @@ import arrow
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
+from app import models
 from app import crud
 from app.api import deps
 from app.schemas.analytics import AnalyticsData, AnalyticsType
@@ -15,19 +14,19 @@ from app.schemas.analytics import AnalyticsData, AnalyticsType
 router = APIRouter()
 
 
-def get_end_date(end: Optional[datetime] = None):
+def get_end_date(end: Optional[datetime] = None) -> arrow.Arrow:
     return arrow.get(end) if end else arrow.now()
 
 
 def get_start_date(
     end: arrow.Arrow = Depends(get_end_date), start: Optional[datetime] = None
-):
-    start = arrow.get(start) if start else end.shift(months=-1)
-    if start >= end:
+) -> arrow.Arrow:
+    start_arrow = arrow.get(start) if start else end.shift(months=-1)
+    if start_arrow >= end:
         raise HTTPException(
             status_code=400, detail="End date should be after start date"
         )
-    return start
+    return start_arrow
 
 
 @router.get("/", response_model=AnalyticsData, response_model_exclude_unset=True)
@@ -43,8 +42,8 @@ def get_analytics(
     ),
     current_user: models.User = Depends(deps.get_current_active_user_silent),
     db: Session = Depends(deps.get_db),
-    start: datetime = Depends(get_start_date),
-    end: datetime = Depends(get_end_date),
+    start: arrow.Arrow = Depends(get_start_date),
+    end: arrow.Arrow = Depends(get_end_date),
 ):
     # TODO: This section (getting domain/verifying ownership)
     # can be written as a reusable dependency
