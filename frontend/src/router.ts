@@ -111,15 +111,15 @@ export default new Router({
                 },
               ],
             },
+            {
+              // This route is a pokemon route, it should always be last
+              path: ':domainName',
+              component: () =>
+                import(
+                  /* webpackChunkName: "view-analytics" */ './views/main/ViewAnalytics.vue'
+                ),
+            },
           ],
-        },
-        {
-          // This route should always be last
-          path: ':domainName',
-          component: () =>
-            import(
-              /* webpackChunkName: "view-analytics" */ './views/main/ViewAnalytics.vue'
-            ),
         },
       ],
     },

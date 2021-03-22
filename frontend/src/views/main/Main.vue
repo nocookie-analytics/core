@@ -92,9 +92,24 @@
         </v-list>
       </v-layout>
     </v-navigation-drawer>
-    <v-app-bar dark color="primary" app>
-      <v-app-bar-nav-icon @click.stop="switchShowDrawer"></v-app-bar-nav-icon>
-      <v-toolbar-title v-text="appName"></v-toolbar-title>
+    <v-app-bar dark color="secondary" app>
+      <v-img
+        alt="No Cookie Analytics"
+        class="shrink mr-2"
+        contain
+        src="/img/logo.png"
+        transition="scale-transition"
+        width="40"
+      />
+
+      <v-img
+        alt="No Cookie Analytics"
+        src="/img/wordmark.png"
+        class="shrink mt-1 hidden-sm-and-down"
+        contain
+        min-width="200"
+        width="200"
+      />
       <v-spacer></v-spacer>
       <v-menu bottom left offset-y>
         <template v-slot:activator="{ on }">
