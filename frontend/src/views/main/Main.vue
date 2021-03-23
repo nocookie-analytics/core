@@ -145,7 +145,7 @@
       <span>&copy; {{ appName }}</span>
     </v-footer>
   </div>
-  <div v-else>
+  <div v-else class="pt-16">
     <router-view></router-view>
   </div>
 </template>
