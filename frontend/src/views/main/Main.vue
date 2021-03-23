@@ -171,19 +171,11 @@ import {
 } from '@/store/main/actions';
 import store from '@/store';
 
-const routeGuardMain = async (to, from, next) => {
-  if (to.path === '/main') {
-    next('/main/');
-  } else {
-    next();
-  }
-};
-
 const startRouteGuard = async (to, from, next) => {
   await dispatchCheckLoggedIn(store);
   if (readIsLoggedIn(store)) {
     if (to.path === '/login' || to.path === '/') {
-      next('/main');
+      next('/main/');
     } else {
       next();
     }
@@ -202,12 +194,10 @@ export default class Main extends Vue {
 
   public beforeRouteEnter(to, from, next) {
     startRouteGuard(to, from, next);
-    routeGuardMain(to, from, next);
   }
 
   public beforeRouteUpdate(to, from, next) {
     startRouteGuard(to, from, next);
-    routeGuardMain(to, from, next);
   }
 
   get miniDrawer() {
