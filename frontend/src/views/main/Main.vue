@@ -180,7 +180,11 @@ const startRouteGuard = async (to, from, next) => {
       next();
     }
   } else if (readIsLoggedIn(store) === false) {
-    if (to.path === '/' || (to.path as string).startsWith('/main')) {
+    if (
+      to.path === '/' ||
+      (to.path as string).startsWith('/main') ||
+      (to.path as string).startsWith('/domains')
+    ) {
       next('/login');
     } else {
       next();
