@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isLoggedIn">
     <v-navigation-drawer
       persistent
       :mini-variant="miniDrawer"
@@ -10,7 +10,7 @@
       <v-layout column fill-height>
         <v-list dense>
           <v-list-item>Welcome {{ greetedUser }} </v-list-item>
-          <v-list-item to="/main/domains">
+          <v-list-item to="/domains">
             <v-list-item-action>
               <v-icon>dns</v-icon>
             </v-list-item-action>
@@ -145,6 +145,9 @@
       <span>&copy; {{ appName }}</span>
     </v-footer>
   </div>
+  <div v-else>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script lang="ts">
@@ -155,13 +158,18 @@ import {
   readDashboardMiniDrawer,
   readDashboardShowDrawer,
   readHasAdminAccess,
+  readIsLoggedIn,
   readUserProfile,
 } from '@/store/main/getters';
 import {
   commitSetDashboardShowDrawer,
   commitSetDashboardMiniDrawer,
 } from '@/store/main/mutations';
-import { dispatchUserLogOut } from '@/store/main/actions';
+import {
+  dispatchCheckLoggedIn,
+  dispatchUserLogOut,
+} from '@/store/main/actions';
+import store from '@/store';
 
 const routeGuardMain = async (to, from, next) => {
   if (to.path === '/main') {
@@ -171,15 +179,34 @@ const routeGuardMain = async (to, from, next) => {
   }
 };
 
+const startRouteGuard = async (to, from, next) => {
+  await dispatchCheckLoggedIn(store);
+  if (readIsLoggedIn(store)) {
+    if (to.path === '/login' || to.path === '/') {
+      next('/main');
+    } else {
+      next();
+    }
+  } else if (readIsLoggedIn(store) === false) {
+    if (to.path === '/' || (to.path as string).startsWith('/main')) {
+      next('/login');
+    } else {
+      next();
+    }
+  }
+};
+
 @Component
 export default class Main extends Vue {
   public appName = appName;
 
   public beforeRouteEnter(to, from, next) {
+    startRouteGuard(to, from, next);
     routeGuardMain(to, from, next);
   }
 
   public beforeRouteUpdate(to, from, next) {
+    startRouteGuard(to, from, next);
     routeGuardMain(to, from, next);
   }
 
@@ -215,6 +242,10 @@ export default class Main extends Vue {
 
   public async logout() {
     await dispatchUserLogOut(this.$store);
+  }
+
+  get isLoggedIn() {
+    return readIsLoggedIn(this.$store);
   }
 
   get greetedUser() {

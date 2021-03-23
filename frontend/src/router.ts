@@ -12,7 +12,7 @@ export default new Router({
     {
       path: '/',
       component: () =>
-        import(/* webpackChunkName: "start" */ './views/main/Start.vue'),
+        import(/* webpackChunkName: "start" */ './views/main/Main.vue'),
       children: [
         {
           path: 'login',
@@ -44,7 +44,7 @@ export default new Router({
         {
           path: 'main',
           component: () =>
-            import(/* webpackChunkName: "main" */ './views/main/Main.vue'),
+            import(/* webpackChunkName: "dummy" */ './views/Dummy.vue'),
           children: [
             {
               path: 'profile',
@@ -111,15 +111,40 @@ export default new Router({
                 },
               ],
             },
+          ],
+        },
+        {
+          path: 'domains',
+          component: () =>
+            import(
+              /* webpackChunkName: "list-domains" */ './views/main/domains/ListDomains.vue'
+            ),
+          children: [
             {
-              // This route is a pokemon route, it should always be last
-              path: ':domainName',
+              path: 'domains',
+              name: 'list-domains',
               component: () =>
                 import(
-                  /* webpackChunkName: "view-analytics" */ './views/main/ViewAnalytics.vue'
+                  /* webpackChunkName: "list-domains" */ './views/main/domains/ListDomains.vue'
+                ),
+            },
+            {
+              path: 'domains/edit/:domainName',
+              name: 'edit-domain',
+              component: () =>
+                import(
+                  /* webpackChunkName: "edit-domain" */ './views/main/domains/EditDomain.vue'
                 ),
             },
           ],
+        },
+        {
+          // This route is a pokemon route, it should always be last
+          path: ':domainName',
+          component: () =>
+            import(
+              /* webpackChunkName: "view-analytics" */ './views/main/ViewAnalytics.vue'
+            ),
         },
       ],
     },
