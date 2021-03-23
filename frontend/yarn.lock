@@ -9998,10 +9998,10 @@ vue@^2.6.12:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
   integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
 
-vuetify@^2.4.3:
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.4.3.tgz#8d6f15dde396e81f64e130d8ac0bc272e030879c"
-  integrity sha512-i2/Df0U0sedlaCbft4NMbna7WXbTCBhKVYTMjBrLVzrYTTWqzSO7ZCxLuDRY7MjwQhn7AOec7ent9U/NyIICqA==
+vuetify@^2.4.8:
+  version "2.4.8"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.4.8.tgz#c6e883a9b2560f9906bd8b9f9eb58b001200aeef"
+  integrity sha512-rJYyzSO4Qsm/Q79W4FAUedgIDzUvx2uXzXXQ7OB2z9kAAkVOpTdMFY0CnpBcvlYbXOYy/mJ81/yUCV1ZAvJ3FQ==
 
 vuex@^3.6.2:
   version "3.6.2"
