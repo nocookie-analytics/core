@@ -34,9 +34,7 @@ export default class ListDomains extends Vue {
     const domainsApi = this.$store.getters.domainsApi as DomainsApi;
     try {
       const response = await domainsApi.readDomains(0, 50);
-      setTimeout(() => {
-        this.domainsList = response.data;
-      }, 1500);
+      this.domainsList = response.data;
     } catch (e) {
       this.fetchDomainsError =
         'Could not fetch list of domains, something went wrong. Please try again';
