@@ -9,7 +9,15 @@
         :items-per-page="50"
         class="elevation-1"
         :server-items-length="domainsList.length"
-      ></v-data-table>
+      >
+        <template #item.actions="{ item }">
+          <v-btn title="Edit" icon :to="'/domains/' + item.domain_name">
+            <span class="group pa-2">
+              <v-icon medium>edit</v-icon>
+            </span>
+          </v-btn>
+        </template>
+      </v-data-table>
     </v-container>
   </div>
 </template>
@@ -49,6 +57,7 @@ export default class ListDomains extends Vue {
         sortable: false,
         value: 'domain_name',
       },
+      { text: 'Actions', align: 'center', value: 'actions' },
     ];
   }
 

@@ -116,12 +116,10 @@ export default new Router({
         {
           path: 'domains',
           component: () =>
-            import(
-              /* webpackChunkName: "list-domains" */ './views/main/domains/ListDomains.vue'
-            ),
+            import(/* webpackChunkName: "domains" */ './views/Dummy.vue'),
           children: [
             {
-              path: 'domains',
+              path: '/',
               name: 'list-domains',
               component: () =>
                 import(
@@ -129,7 +127,7 @@ export default new Router({
                 ),
             },
             {
-              path: 'domains/edit/:domainName',
+              path: ':domainName',
               name: 'edit-domain',
               component: () =>
                 import(
