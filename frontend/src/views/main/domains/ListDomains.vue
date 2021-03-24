@@ -10,7 +10,7 @@
         class="elevation-1"
         :server-items-length="domainsList.length"
       >
-        <template #item.actions="{ item }">
+        <template #[`item.actions`]="{ item }">
           <v-btn title="Edit" icon :to="'/domains/' + item.domain_name">
             <span class="group pa-2">
               <v-icon medium>edit</v-icon>
