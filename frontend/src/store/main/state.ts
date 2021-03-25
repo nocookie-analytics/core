@@ -4,6 +4,7 @@ export interface AppNotification {
   content: string;
   color?: string;
   showProgress?: boolean;
+  timeout?: number;
 }
 
 export interface MainState {

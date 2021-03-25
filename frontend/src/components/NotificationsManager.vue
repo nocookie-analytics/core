@@ -5,6 +5,7 @@
         class="ma-2"
         indeterminate
         v-show="showProgress"
+        timeout="timeout"
       ></v-progress-circular
       >{{ currentNotificationContent }}
       <v-btn text @click.native="close">Close</v-btn>
