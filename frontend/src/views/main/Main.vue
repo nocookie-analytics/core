@@ -18,7 +18,7 @@
               <v-list-item-title>Domains</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-group value="true" prepend-icon="account_circle">
+          <v-list-group prepend-icon="account_circle">
             <template v-slot:activator>
               <v-list-item-title>Account</v-list-item-title>
             </template>
