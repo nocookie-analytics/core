@@ -127,6 +127,14 @@ export default new Router({
                 ),
             },
             {
+              path: 'create',
+              name: 'create-domain',
+              component: () =>
+                import(
+                  /* webpackChunkName: "create-domain" */ './views/main/domains/EditDomain.vue'
+                ),
+            },
+            {
               path: ':domainName',
               name: 'edit-domain',
               component: () =>

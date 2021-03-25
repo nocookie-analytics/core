@@ -1,5 +1,10 @@
 <template>
   <div>
+    <v-toolbar light>
+      <v-toolbar-title> Manage Domains </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn color="primary" to="/domains/create">Add new domain</v-btn>
+    </v-toolbar>
     <v-container fluid>
       <v-data-table
         loading="isLoading"
