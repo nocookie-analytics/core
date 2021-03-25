@@ -41,6 +41,8 @@ def create_domain(
     domain = crud.domain.create_with_owner(
         db=db, obj_in=domain_in, owner_id=current_user.id
     )
+    if not domain:
+        raise HTTPException(status_code=400, detail="Domain already exists")
     return domain
 
 

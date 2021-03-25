@@ -17,8 +17,10 @@ def test_create_domain(db: Session) -> None:
     assert domain.domain_name == domain_name
     assert domain.owner_id == user.id
 
-    with pytest.raises(sqlalchemy.exc.IntegrityError):
-        crud.domain.create_with_owner(db=db, obj_in=domain_in, owner_id=user.id)
+    # Doing it again should fail due to unique constraint on domain name
+    assert (
+        crud.domain.create_with_owner(db=db, obj_in=domain_in, owner_id=user.id) == None
+    )
 
 
 def test_get_domain(db: Session) -> None:
