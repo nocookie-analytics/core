@@ -1,13 +1,36 @@
 <template>
   <v-container fluid>
+    <router-view :key="$route.fullPath"></router-view>
     <v-card class="ma-3 pa-3">
       <v-card-title primary-title>
         <div class="headline primary--text" v-if="isCreate">Add new domain</div>
         <div class="headline primary--text" v-else>Edit domain</div>
       </v-card-title>
       <v-card-text>
+        <v-alert
+          :value="error"
+          transition="fade-transition"
+          type="error"
+          icon="error"
+        >
+          We are really sorry but something went wrong, please try again later
+        </v-alert>
+        <v-alert
+          :value="success"
+          transition="fade-transition"
+          type="success"
+          icon="check_circle"
+        >
+          Changes saved successfully
+        </v-alert>
         <template>
-          <v-form v-model="valid" ref="form" lazy-validation>
+          <v-form
+            v-model="valid"
+            ref="form"
+            lazy-validation
+            @submit="submit"
+            @submit.prevent=""
+          >
             <v-text-field
               label="Domain name"
               v-model="domainName"
@@ -21,7 +44,9 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn @click="cancel">Cancel</v-btn>
-        <v-btn @click="submit" :disabled="!valid" color="primary"> Save </v-btn>
+        <v-btn type="submit" @click="submit" :disabled="!valid" color="primary">
+          Save
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-container>
@@ -36,9 +61,10 @@ import { DomainsApi } from '@/generated';
 export default class EditDomain extends Vue {
   public valid = false;
   public domainName = '';
-  public error = '';
+  public error = false;
+  public success = false;
 
-  domainNameRules = [(name: string): boolean => isValidDomain(name)];
+  public domainNameRules = [(name: string): boolean => isValidDomain(name)];
 
   created(): void {
     this.domainName = this.$router.currentRoute.params.domainName;
@@ -51,17 +77,19 @@ export default class EditDomain extends Vue {
   }
 
   public async submit(): Promise<void> {
+    this.error = false;
+    this.success = false;
     if (await this.$validator.validateAll()) {
       const domainsApi = this.$store.getters.domainsApi as DomainsApi;
       try {
-        this.error = '';
         const response = await domainsApi.createDomain({
           domain_name: this.domainName,
         });
         const data = response.data;
         this.$router.push(`/domains/${data.domain_name}`);
+        this.success = true;
       } catch (e) {
-        this.error = 'Something went wrong, try again later';
+        this.error = true;
       }
     }
   }
