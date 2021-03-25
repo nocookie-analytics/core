@@ -5819,6 +5819,11 @@ is-url@^1.2.4:
   resolved "https://registry.yarnpkg.com/is-url/-/is-url-1.2.4.tgz#04a4df46d28c4cff3d73d01ff06abeb318a1aa52"
   integrity sha512-ITvGim8FhRiYe4IQ5uHSkj7pVaPDrCTkNd3yq3cV7iZAcJdHTUMPMEHcqSOy9xZ9qFenQCvi+2wjH9a1nXqHww==
 
+is-valid-domain@^0.0.17:
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/is-valid-domain/-/is-valid-domain-0.0.17.tgz#2cc19d576b4feebcf4ce5edd99dc8f0280e9d058"
+  integrity sha512-w0UWEXyrgPeWWwj9FVT14y4/dSIqWgjDkzxbsGDFpT+QRbyS9HTwwNvGus2IOR/03GzCpeChzSWK9Bo9WlStDA==
+
 is-whitespace@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/is-whitespace/-/is-whitespace-0.3.0.tgz#1639ecb1be036aec69a54cbb401cfbed7114ab7f"
