@@ -15,21 +15,13 @@
         >
           We are really sorry but something went wrong, please try again later
         </v-alert>
-        <v-alert
-          :value="success"
-          transition="fade-transition"
-          type="success"
-          icon="check_circle"
-        >
-          Changes saved successfully
-        </v-alert>
         <template>
           <v-form
             v-model="valid"
             ref="form"
-            lazy-validation
             @submit="submit"
             @submit.prevent=""
+            @keyup.enter="submit"
           >
             <v-text-field
               label="Domain name"
@@ -56,13 +48,13 @@
 import { Component, Vue } from 'vue-property-decorator';
 import isValidDomain from 'is-valid-domain';
 import { DomainsApi } from '@/generated';
+import { commitAddNotification } from '@/store/main/mutations';
 
 @Component
 export default class EditDomain extends Vue {
   public valid = false;
   public domainName = '';
   public error = false;
-  public success = false;
 
   public domainNameRules = [(name: string): boolean => isValidDomain(name)];
 
@@ -78,16 +70,20 @@ export default class EditDomain extends Vue {
 
   public async submit(): Promise<void> {
     this.error = false;
-    this.success = false;
     if (await this.$validator.validateAll()) {
+      console.log('no error');
       const domainsApi = this.$store.getters.domainsApi as DomainsApi;
       try {
         const response = await domainsApi.createDomain({
           domain_name: this.domainName,
         });
         const data = response.data;
-        this.$router.push(`/domains/${data.domain_name}`);
-        this.success = true;
+        this.$router.push(`/domains/`);
+        commitAddNotification(this.$store, {
+          content: 'Changes saved successfully',
+          color: 'success',
+          timeout: 5000,
+        });
       } catch (e) {
         this.error = true;
       }
