@@ -52,7 +52,9 @@ def test_update_domain(client: TestClient, db: Session) -> None:
         json={"public": True},
     )
     assert response.status_code == 200, response.text
+    content = response.json()
     db.refresh(domain)
+    assert content["public"] is True, content
 
     assert domain.public is True
 
@@ -71,6 +73,8 @@ def test_update_domain_by_name(client: TestClient, db: Session) -> None:
         json={"public": True},
     )
     assert response.status_code == 200, response.text
+    content = response.json()
     db.refresh(domain)
+    assert content["public"] is True, content
 
     assert domain.public is True
