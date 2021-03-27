@@ -71,22 +71,44 @@ export default class EditDomain extends Vue {
   public async submit(): Promise<void> {
     this.error = false;
     if (await this.$validator.validateAll()) {
-      console.log('no error');
-      const domainsApi = this.$store.getters.domainsApi as DomainsApi;
-      try {
-        const response = await domainsApi.createDomain({
-          domain_name: this.domainName,
-        });
-        const data = response.data;
+      if (this.$router.currentRoute.name === 'create-domain') {
+        this.createDomain();
+      } else {
+        this.updateDomain();
+      }
+      if (this.error === false) {
         this.$router.push(`/domains/`);
         commitAddNotification(this.$store, {
           content: 'Changes saved successfully',
           color: 'success',
           timeout: 5000,
         });
-      } catch (e) {
-        this.error = true;
       }
+    }
+  }
+
+  private async createDomain(): Promise<void> {
+    const domainsApi = this.$store.getters.domainsApi as DomainsApi;
+    try {
+      await domainsApi.createDomain({
+        domain_name: this.domainName,
+      });
+    } catch (e) {
+      this.error = true;
+    }
+  }
+
+  private async updateDomain(): Promise<void> {
+    const domainsApi = this.$store.getters.domainsApi as DomainsApi;
+    try {
+      await domainsApi.updateDomainByName(
+        this.$router.currentRoute.params.domainName,
+        {
+          domain_name: this.domainName,
+        },
+      );
+    } catch (e) {
+      this.error = true;
     }
   }
 
