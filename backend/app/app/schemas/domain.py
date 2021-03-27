@@ -6,6 +6,7 @@ from pydantic import BaseModel
 # Shared properties
 class DomainBase(BaseModel):
     domain_name: Optional[str] = None
+    public: bool = False
 
 
 # Properties to receive on item creation
@@ -22,6 +23,7 @@ class DomainUpdate(DomainBase):
 class DomainInDBBase(DomainBase):
     id: int
     domain_name: str
+    public: bool
     owner_id: int
 
     class Config:
