@@ -88,24 +88,6 @@ def read_domain(
     return domain
 
 
-@router.get("/by-name/{name}", response_model=schemas.Domain)
-def read_domain_by_name(
-    *,
-    db: Session = Depends(deps.get_db),
-    name: str,
-    current_user: models.User = Depends(deps.get_current_active_user_silent),
-) -> Any:
-    """
-    Get domain by name.
-    """
-    domain = crud.domain.get_by_name_check_permission(
-        db=db, name=name, current_user=current_user
-    )
-    if not domain:
-        raise HTTPException(status_code=404, detail="Domain not found")
-    return domain
-
-
 @router.put("/by-name/{name}", response_model=schemas.Domain)
 def update_domain_by_name(
     *,
