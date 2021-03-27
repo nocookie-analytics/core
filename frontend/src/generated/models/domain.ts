@@ -28,6 +28,12 @@ export interface Domain {
     domain_name: string;
     /**
      * 
+     * @type {boolean}
+     * @memberof Domain
+     */
+    _public: boolean;
+    /**
+     * 
      * @type {number}
      * @memberof Domain
      */

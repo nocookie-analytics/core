@@ -26,6 +26,12 @@ export interface DomainCreate {
      * @memberof DomainCreate
      */
     domain_name: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof DomainCreate
+     */
+    _public?: boolean;
 }
 
 

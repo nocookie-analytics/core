@@ -75,7 +75,7 @@ export const DomainsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Delete an domain.
+         * Delete a domain.
          * @summary Delete Domain
          * @param {number} id 
          * @param {*} [options] Override http request option.
@@ -151,44 +151,6 @@ export const DomainsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Get domain by name.
-         * @summary Read Domain By Name
-         * @param {string} name 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        readDomainByName: async (name: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'name' is not null or undefined
-            assertParamExists('readDomainByName', 'name', name)
-            const localVarPath = `/api/v1/domains/by-name/{name}`
-                .replace(`{${"name"}}`, encodeURIComponent(String(name)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * Retrieve domains.
          * @summary Read Domains
          * @param {number} [skip] 
@@ -233,7 +195,7 @@ export const DomainsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Update an domain.
+         * Update a domain.
          * @summary Update Domain
          * @param {number} id 
          * @param {DomainUpdate} domainUpdate 
@@ -247,6 +209,50 @@ export const DomainsApiAxiosParamCreator = function (configuration?: Configurati
             assertParamExists('updateDomain', 'domainUpdate', domainUpdate)
             const localVarPath = `/api/v1/domains/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(domainUpdate, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update a domain by name
+         * @summary Update Domain By Name
+         * @param {string} name 
+         * @param {DomainUpdate} domainUpdate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateDomainByName: async (name: string, domainUpdate: DomainUpdate, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'name' is not null or undefined
+            assertParamExists('updateDomainByName', 'name', name)
+            // verify required parameter 'domainUpdate' is not null or undefined
+            assertParamExists('updateDomainByName', 'domainUpdate', domainUpdate)
+            const localVarPath = `/api/v1/domains/by-name/{name}`
+                .replace(`{${"name"}}`, encodeURIComponent(String(name)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -298,7 +304,7 @@ export const DomainsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Delete an domain.
+         * Delete a domain.
          * @summary Delete Domain
          * @param {number} id 
          * @param {*} [options] Override http request option.
@@ -320,17 +326,6 @@ export const DomainsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Get domain by name.
-         * @summary Read Domain By Name
-         * @param {string} name 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async readDomainByName(name: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Domain>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.readDomainByName(name, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
          * Retrieve domains.
          * @summary Read Domains
          * @param {number} [skip] 
@@ -343,7 +338,7 @@ export const DomainsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Update an domain.
+         * Update a domain.
          * @summary Update Domain
          * @param {number} id 
          * @param {DomainUpdate} domainUpdate 
@@ -352,6 +347,18 @@ export const DomainsApiFp = function(configuration?: Configuration) {
          */
         async updateDomain(id: number, domainUpdate: DomainUpdate, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Domain>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateDomain(id, domainUpdate, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Update a domain by name
+         * @summary Update Domain By Name
+         * @param {string} name 
+         * @param {DomainUpdate} domainUpdate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateDomainByName(name: string, domainUpdate: DomainUpdate, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Domain>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateDomainByName(name, domainUpdate, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -375,7 +382,7 @@ export const DomainsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.createDomain(domainCreate, options).then((request) => request(axios, basePath));
         },
         /**
-         * Delete an domain.
+         * Delete a domain.
          * @summary Delete Domain
          * @param {number} id 
          * @param {*} [options] Override http request option.
@@ -395,16 +402,6 @@ export const DomainsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.readDomain(id, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get domain by name.
-         * @summary Read Domain By Name
-         * @param {string} name 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        readDomainByName(name: string, options?: any): AxiosPromise<Domain> {
-            return localVarFp.readDomainByName(name, options).then((request) => request(axios, basePath));
-        },
-        /**
          * Retrieve domains.
          * @summary Read Domains
          * @param {number} [skip] 
@@ -416,7 +413,7 @@ export const DomainsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.readDomains(skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
-         * Update an domain.
+         * Update a domain.
          * @summary Update Domain
          * @param {number} id 
          * @param {DomainUpdate} domainUpdate 
@@ -425,6 +422,17 @@ export const DomainsApiFactory = function (configuration?: Configuration, basePa
          */
         updateDomain(id: number, domainUpdate: DomainUpdate, options?: any): AxiosPromise<Domain> {
             return localVarFp.updateDomain(id, domainUpdate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update a domain by name
+         * @summary Update Domain By Name
+         * @param {string} name 
+         * @param {DomainUpdate} domainUpdate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateDomainByName(name: string, domainUpdate: DomainUpdate, options?: any): AxiosPromise<Domain> {
+            return localVarFp.updateDomainByName(name, domainUpdate, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -446,7 +454,7 @@ export interface DomainsApiInterface {
     createDomain(domainCreate: DomainCreate, options?: any): AxiosPromise<Domain>;
 
     /**
-     * Delete an domain.
+     * Delete a domain.
      * @summary Delete Domain
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -466,16 +474,6 @@ export interface DomainsApiInterface {
     readDomain(id: number, options?: any): AxiosPromise<Domain>;
 
     /**
-     * Get domain by name.
-     * @summary Read Domain By Name
-     * @param {string} name 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApiInterface
-     */
-    readDomainByName(name: string, options?: any): AxiosPromise<Domain>;
-
-    /**
      * Retrieve domains.
      * @summary Read Domains
      * @param {number} [skip] 
@@ -487,7 +485,7 @@ export interface DomainsApiInterface {
     readDomains(skip?: number, limit?: number, options?: any): AxiosPromise<Array<Domain>>;
 
     /**
-     * Update an domain.
+     * Update a domain.
      * @summary Update Domain
      * @param {number} id 
      * @param {DomainUpdate} domainUpdate 
@@ -496,6 +494,17 @@ export interface DomainsApiInterface {
      * @memberof DomainsApiInterface
      */
     updateDomain(id: number, domainUpdate: DomainUpdate, options?: any): AxiosPromise<Domain>;
+
+    /**
+     * Update a domain by name
+     * @summary Update Domain By Name
+     * @param {string} name 
+     * @param {DomainUpdate} domainUpdate 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DomainsApiInterface
+     */
+    updateDomainByName(name: string, domainUpdate: DomainUpdate, options?: any): AxiosPromise<Domain>;
 
 }
 
@@ -519,7 +528,7 @@ export class DomainsApi extends BaseAPI implements DomainsApiInterface {
     }
 
     /**
-     * Delete an domain.
+     * Delete a domain.
      * @summary Delete Domain
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -543,18 +552,6 @@ export class DomainsApi extends BaseAPI implements DomainsApiInterface {
     }
 
     /**
-     * Get domain by name.
-     * @summary Read Domain By Name
-     * @param {string} name 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApi
-     */
-    public readDomainByName(name: string, options?: any) {
-        return DomainsApiFp(this.configuration).readDomainByName(name, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
      * Retrieve domains.
      * @summary Read Domains
      * @param {number} [skip] 
@@ -568,7 +565,7 @@ export class DomainsApi extends BaseAPI implements DomainsApiInterface {
     }
 
     /**
-     * Update an domain.
+     * Update a domain.
      * @summary Update Domain
      * @param {number} id 
      * @param {DomainUpdate} domainUpdate 
@@ -578,5 +575,18 @@ export class DomainsApi extends BaseAPI implements DomainsApiInterface {
      */
     public updateDomain(id: number, domainUpdate: DomainUpdate, options?: any) {
         return DomainsApiFp(this.configuration).updateDomain(id, domainUpdate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update a domain by name
+     * @summary Update Domain By Name
+     * @param {string} name 
+     * @param {DomainUpdate} domainUpdate 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DomainsApi
+     */
+    public updateDomainByName(name: string, domainUpdate: DomainUpdate, options?: any) {
+        return DomainsApiFp(this.configuration).updateDomainByName(name, domainUpdate, options).then((request) => request(this.axios, this.basePath));
     }
 }

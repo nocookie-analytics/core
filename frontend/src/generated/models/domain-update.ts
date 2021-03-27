@@ -26,6 +26,12 @@ export interface DomainUpdate {
      * @memberof DomainUpdate
      */
     domain_name?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof DomainUpdate
+     */
+    _public?: boolean;
 }
 
 
