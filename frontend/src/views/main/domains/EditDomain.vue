@@ -22,6 +22,7 @@
             @submit="submit"
             @submit.prevent=""
             @keyup.enter="submit"
+            v-if="finishedLoading"
           >
             <v-text-field
               label="Domain name"
@@ -30,6 +31,11 @@
               :rules="domainNameRules"
               append-icon="web"
             ></v-text-field>
+
+            <v-checkbox
+              label="Make my website analytics page public and viewable by anyone"
+              v-model="public_"
+            ></v-checkbox>
           </v-form>
         </template>
       </v-card-text>
@@ -47,25 +53,36 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import isValidDomain from 'is-valid-domain';
-import { DomainsApi } from '@/generated';
+import { DomainCreate, DomainsApi, DomainUpdate } from '@/generated';
 import { commitAddNotification } from '@/store/main/mutations';
 
 @Component
 export default class EditDomain extends Vue {
-  public valid = false;
   public domainName = '';
+  public public_ = false;
+  public checkbox = false;
+
+  public finishedLoading = false;
+  public valid = false;
   public error = false;
 
   public domainNameRules = [(name: string): boolean => isValidDomain(name)];
-
-  created(): void {
-    this.domainName = this.$router.currentRoute.params.domainName;
-  }
 
   data(): Record<string, boolean | string> {
     return {
       isCreate: this.$router.currentRoute.name === 'create-domain',
     };
+  }
+
+  public async mounted() {
+    const domainsApi = this.$store.getters.domainsApi as DomainsApi;
+    const response = await domainsApi.readDomainByName(
+      this.$router.currentRoute.params.domainName,
+    );
+    const data = response.data;
+    this.domainName = data.domain_name;
+    this.public_ = data.public;
+    this.finishedLoading = true;
   }
 
   public async submit(): Promise<void> {
@@ -77,7 +94,6 @@ export default class EditDomain extends Vue {
         this.updateDomain();
       }
       if (this.error === false) {
-        this.$router.push(`/domains/`);
         commitAddNotification(this.$store, {
           content: 'Changes saved successfully',
           color: 'success',
@@ -87,12 +103,17 @@ export default class EditDomain extends Vue {
     }
   }
 
+  private get domainData() {
+    return {
+      domain_name: this.domainName,
+      public: this.public_,
+    };
+  }
+
   private async createDomain(): Promise<void> {
     const domainsApi = this.$store.getters.domainsApi as DomainsApi;
     try {
-      await domainsApi.createDomain({
-        domain_name: this.domainName,
-      });
+      await domainsApi.createDomain(this.domainData);
     } catch (e) {
       this.error = true;
     }
@@ -103,9 +124,7 @@ export default class EditDomain extends Vue {
     try {
       await domainsApi.updateDomainByName(
         this.$router.currentRoute.params.domainName,
-        {
-          domain_name: this.domainName,
-        },
+        this.domainData,
       );
     } catch (e) {
       this.error = true;
