@@ -11,3 +11,6 @@ bash $HOME/bin/openapi-generator/run.sh generate \
     -g typescript-axios \
     -o ./src/generated/ \
     -p withSeparateModelsAndApi=true,apiPackage=api,modelPackage=models,withInterfaces=true
+
+# https://github.com/OpenAPITools/openapi-generator/issues/7474
+sed -i 's/_public/public/' ./src/generated/models/*.ts
