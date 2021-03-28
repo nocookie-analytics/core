@@ -1,3 +1,4 @@
+from typing import Dict
 from app.tests.utils.utils import random_lower_string
 from app.tests.utils.user import create_random_user, user_authentication_headers
 from fastapi.testclient import TestClient
@@ -59,7 +60,9 @@ def test_update_domain(client: TestClient, db: Session) -> None:
     assert domain.public is True
 
 
-def test_update_domain_by_name(client: TestClient, db: Session) -> None:
+def test_update_domain_by_name(
+    client: TestClient, db: Session, normal_user_token_headers: Dict[str, str]
+) -> None:
     password = random_lower_string()
     user = create_random_user(db, password=password)
     domain = create_random_domain(db, owner_id=user.id)
@@ -77,4 +80,34 @@ def test_update_domain_by_name(client: TestClient, db: Session) -> None:
     db.refresh(domain)
     assert content["public"] is True, content
 
-    assert domain.public is True
+    response = client.put(
+        f"{settings.API_V1_STR}/domains/by-name/{domain.domain_name}",
+        headers=normal_user_token_headers,
+        json={"public": True},
+    )
+    assert response.status_code == 400
+
+
+def test_get_domain_by_name(
+    client: TestClient, db: Session, normal_user_token_headers: Dict[str, str]
+) -> None:
+    password = random_lower_string()
+    user = create_random_user(db, password=password)
+    domain = create_random_domain(db, owner_id=user.id)
+    headers = user_authentication_headers(
+        client=client, email=user.email, password=password
+    )
+    response = client.get(
+        f"{settings.API_V1_STR}/domains/by-name/{domain.domain_name}",
+        headers=headers,
+    )
+    assert response.status_code == 200, response.text
+    content = response.json()
+    assert content["public"] == domain.public
+    assert content["domain_name"] == domain.domain_name
+
+    response = client.get(
+        f"{settings.API_V1_STR}/domains/by-name/{domain.domain_name}",
+        headers=normal_user_token_headers,
+    )
+    assert response.status_code == 400
