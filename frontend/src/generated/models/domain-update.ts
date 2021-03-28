@@ -31,7 +31,7 @@ export interface DomainUpdate {
      * @type {boolean}
      * @memberof DomainUpdate
      */
-    _public?: boolean;
+    public?: boolean;
 }
 
 

@@ -31,7 +31,7 @@ export interface Domain {
      * @type {boolean}
      * @memberof Domain
      */
-    _public: boolean;
+    public: boolean;
     /**
      * 
      * @type {number}

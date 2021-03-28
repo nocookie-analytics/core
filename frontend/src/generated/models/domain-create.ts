@@ -31,7 +31,7 @@ export interface DomainCreate {
      * @type {boolean}
      * @memberof DomainCreate
      */
-    _public?: boolean;
+    public?: boolean;
 }
 
 
