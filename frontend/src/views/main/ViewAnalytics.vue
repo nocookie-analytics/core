@@ -1,23 +1,21 @@
 <template>
   <div>
-    <v-app-bar dark color="primary"></v-app-bar>
     <v-container fluid>
-      <v-card class="ma-3 pa-3">
-        <v-card-title primary-title>
-          <div class="headline primary--text">View Analytics</div>
-        </v-card-title>
-        <v-card-text>
-          <div class="headline font-weight-light ma-5">
-            {{ domainName }}
-            <span v-if="analyticsError"
-              >- {{ analyticsError }} (You might need to
-              <a href="/login">log-in</a>)</span
-            >
-          </div>
-        </v-card-text>
-      </v-card>
+      <span v-if="analyticsError">
+        <v-card class="ma-3 pa-3">
+          <v-card-text>
+            <div class="headline font-weight-light ma-5">
+              {{ analyticsError }} (You might need to
+              <a href="/login">log-in</a>
+              >
+            </div>
+          </v-card-text>
+        </v-card>
+      </span>
     </v-container>
-    <ChoroplethMap :mapData="mapData"></ChoroplethMap>
+    <span v-if="mapData">
+      <ChoroplethMap :mapData="mapData"></ChoroplethMap>
+    </span>
   </div>
 </template>
 

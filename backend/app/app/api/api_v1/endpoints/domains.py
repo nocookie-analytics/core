@@ -41,6 +41,8 @@ def create_domain(
     domain = crud.domain.create_with_owner(
         db=db, obj_in=domain_in, owner_id=current_user.id
     )
+    if not domain:
+        raise HTTPException(status_code=400, detail="Domain already exists")
     return domain
 
 
@@ -53,7 +55,7 @@ def update_domain(
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Update an domain.
+    Update a domain.
     """
     domain = crud.domain.get(db=db, id=id)
     if not domain:
@@ -91,16 +93,36 @@ def read_domain_by_name(
     *,
     db: Session = Depends(deps.get_db),
     name: str,
-    current_user: models.User = Depends(deps.get_current_active_user_silent),
+    current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Get domain by name.
+    Get domain by name
     """
-    domain = crud.domain.get_by_name_check_permission(
-        db=db, name=name, current_user=current_user
-    )
+    domain = crud.domain.get_by_name(db=db, name=name)
     if not domain:
         raise HTTPException(status_code=404, detail="Domain not found")
+    if domain.owner_id != current_user.id:
+        raise HTTPException(status_code=400, detail="Not enough permissions")
+    return domain
+
+
+@router.put("/by-name/{name}", response_model=schemas.Domain)
+def update_domain_by_name(
+    *,
+    db: Session = Depends(deps.get_db),
+    name: str,
+    domain_in: schemas.DomainUpdate,
+    current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Update a domain by name
+    """
+    domain = crud.domain.get_by_name(db=db, name=name)
+    if not domain:
+        raise HTTPException(status_code=404, detail="Domain not found")
+    if domain.owner_id != current_user.id:
+        raise HTTPException(status_code=400, detail="Not enough permissions")
+    domain = crud.domain.update(db=db, db_obj=domain, obj_in=domain_in)
     return domain
 
 
@@ -112,7 +134,7 @@ def delete_domain(
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Delete an domain.
+    Delete a domain.
     """
     domain = crud.domain.get(db=db, id=id)
     if not domain:

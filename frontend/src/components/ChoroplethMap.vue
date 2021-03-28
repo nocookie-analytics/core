@@ -1,5 +1,5 @@
 <template>
-  <div id="map">
+  <div id="choropleth-map">
     <l-map
       :center="[20, 0]"
       :zoom="2"
@@ -67,12 +67,7 @@ export default class ChoroplethMap extends Vue {
 </script>
 <style src="leaflet/dist/leaflet.css"></style>
 <style>
-body {
-  background-color: #e7d090;
-  margin-left: 100px;
-  margin-right: 100px;
-}
-#map {
+#choropleth-map {
   background-color: #eee;
 }
 </style>

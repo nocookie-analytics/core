@@ -2,6 +2,7 @@ from typing import List, Optional
 
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
+import sqlalchemy
 from sqlalchemy.orm import Session
 
 from app import crud
@@ -14,12 +15,15 @@ from app.schemas.domain import DomainCreate, DomainUpdate
 class CRUDDomain(CRUDBase[Domain, DomainCreate, DomainUpdate]):
     def create_with_owner(
         self, db: Session, *, obj_in: DomainCreate, owner_id: int
-    ) -> Domain:
+    ) -> Optional[Domain]:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data, owner_id=owner_id)
         db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
+        try:
+            db.commit()
+            db.refresh(db_obj)
+        except sqlalchemy.exc.IntegrityError:
+            return None
         return db_obj
 
     def get_multi_by_owner(

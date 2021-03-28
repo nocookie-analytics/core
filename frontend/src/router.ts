@@ -12,7 +12,7 @@ export default new Router({
     {
       path: '/',
       component: () =>
-        import(/* webpackChunkName: "start" */ './views/main/Start.vue'),
+        import(/* webpackChunkName: "start" */ './views/main/Main.vue'),
       children: [
         {
           path: 'login',
@@ -44,7 +44,7 @@ export default new Router({
         {
           path: 'main',
           component: () =>
-            import(/* webpackChunkName: "main" */ './views/main/Main.vue'),
+            import(/* webpackChunkName: "dummy" */ './views/Dummy.vue'),
           children: [
             {
               path: 'profile',
@@ -114,7 +114,38 @@ export default new Router({
           ],
         },
         {
-          // This route should always be last
+          path: 'domains',
+          component: () =>
+            import(/* webpackChunkName: "domains" */ './views/Dummy.vue'),
+          children: [
+            {
+              path: '/',
+              name: 'list-domains',
+              component: () =>
+                import(
+                  /* webpackChunkName: "list-domains" */ './views/main/domains/ListDomains.vue'
+                ),
+            },
+            {
+              path: 'create',
+              name: 'create-domain',
+              component: () =>
+                import(
+                  /* webpackChunkName: "create-domain" */ './views/main/domains/EditDomain.vue'
+                ),
+            },
+            {
+              path: ':domainName',
+              name: 'edit-domain',
+              component: () =>
+                import(
+                  /* webpackChunkName: "edit-domain" */ './views/main/domains/EditDomain.vue'
+                ),
+            },
+          ],
+        },
+        {
+          // This route is a pokemon route, it should always be last
           path: ':domainName',
           component: () =>
             import(
