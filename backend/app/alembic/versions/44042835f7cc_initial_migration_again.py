@@ -6,7 +6,7 @@ Create Date: 2020-09-05 16:27:38.928637
 
 """
 import sqlalchemy as sa
-import sqlalchemy_enum34
+from app.models.sqlalchemy_enum34 import EnumType
 from alembic import op
 from sqlalchemy.dialects import postgresql
 
