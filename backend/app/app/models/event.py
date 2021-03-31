@@ -14,11 +14,10 @@ from sqlalchemy import (
     PrimaryKeyConstraint,
     String,
     func,
-    Enum as SQLAlchemyEnum,
 )
 from sqlalchemy.dialects.postgresql import INET, JSONB, UUID
 from sqlalchemy.orm import relationship
-from sqlalchemy_enum34 import EnumType
+from app.models.sqlalchemy_enum34 import EnumType
 
 from app.db.base_class import Base
 
