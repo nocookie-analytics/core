@@ -1,6 +1,4 @@
-""":mod:`sqlalchemy_enum34` --- SQLAlchemy :class:`enum` type
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"""
+"""This code was imported from https://github.com/spoqa/sqlalchemy-enum34/"""
 import enum
 
 from sqlalchemy.types import Enum as BaseEnum, SchemaType, TypeDecorator
