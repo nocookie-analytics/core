@@ -18,7 +18,7 @@
         <template #[`item.actions`]="{ item }">
           <v-btn title="Edit" icon :to="'/domains/' + item.domain_name">
             <span class="group pa-2">
-              <v-icon medium>edit</v-icon>
+              <v-icon medium>mdi-pencil</v-icon>
             </span>
           </v-btn>
         </template>

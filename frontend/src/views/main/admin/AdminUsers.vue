@@ -10,9 +10,9 @@
         <td>{{ props.item.name }}</td>
         <td>{{ props.item.email }}</td>
         <td>{{ props.item.full_name }}</td>
-        <td><v-icon v-if="props.item.is_active">checkmark</v-icon></td>
+        <td><v-icon v-if="props.item.is_active">mdi-check</v-icon></td>
         <td>
-          <v-icon v-if="props.item.is_superuser">checkmark</v-icon>
+          <v-icon v-if="props.item.is_superuser">mdi-check</v-icon>
         </td>
         <td class="justify-center layout px-0">
           <v-tooltip top>
@@ -26,7 +26,7 @@
                   params: { id: props.item.id },
                 }"
               >
-                <v-icon>edit</v-icon>
+                <v-icon>mdi-account-edit</v-icon>
               </v-btn>
             </template>
           </v-tooltip>

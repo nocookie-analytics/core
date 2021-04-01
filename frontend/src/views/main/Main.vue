@@ -12,19 +12,19 @@
           <v-list-item>Welcome {{ greetedUser }} </v-list-item>
           <v-list-item to="/domains">
             <v-list-item-action>
-              <v-icon>dns</v-icon>
+              <v-icon>mdi-dns</v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>Domains</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-group prepend-icon="account_circle">
+          <v-list-group prepend-icon="mdi-account-circle">
             <template v-slot:activator>
               <v-list-item-title>Account</v-list-item-title>
             </template>
             <v-list-item to="/main/profile/view">
               <v-list-item-action>
-                <v-icon>person</v-icon>
+                <v-icon>mdi-account</v-icon>
               </v-list-item-action>
               <v-list-item-content>
                 <v-list-item-title>Profile</v-list-item-title>
@@ -32,7 +32,7 @@
             </v-list-item>
             <v-list-item to="/main/profile/edit">
               <v-list-item-action>
-                <v-icon>edit</v-icon>
+                <v-icon>mdi-account-edit</v-icon>
               </v-list-item-action>
               <v-list-item-content>
                 <v-list-item-title>Edit Profile</v-list-item-title>
@@ -40,7 +40,7 @@
             </v-list-item>
             <v-list-item to="/main/profile/password">
               <v-list-item-action>
-                <v-icon>vpn_key</v-icon>
+                <v-icon>mdi-lock</v-icon>
               </v-list-item-action>
               <v-list-item-content>
                 <v-list-item-title>Change Password</v-list-item-title>
@@ -53,7 +53,7 @@
           <v-subheader>Admin</v-subheader>
           <v-list-item to="/main/admin/users/all">
             <v-list-item-action>
-              <v-icon>group</v-icon>
+              <v-icon>mdi-group</v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>Manage Users</v-list-item-title>
@@ -61,7 +61,7 @@
           </v-list-item>
           <v-list-item to="/main/admin/users/create">
             <v-list-item-action>
-              <v-icon>person_add</v-icon>
+              <v-icon>mdi-person_add</v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>Create User</v-list-item-title>
@@ -72,7 +72,7 @@
         <v-list>
           <v-list-item @click="logout">
             <v-list-item-action>
-              <v-icon>close</v-icon>
+              <v-icon>mdi-close</v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>Logout</v-list-item-title>
@@ -82,7 +82,7 @@
           <v-list-item @click="switchMiniDrawer">
             <v-list-item-action>
               <v-icon
-                v-html="miniDrawer ? 'chevron_right' : 'chevron_left'"
+                v-html="miniDrawer ? 'mdi-chevron-right' : 'mdi-chevron-left'"
               ></v-icon>
             </v-list-item-action>
             <v-list-item-content>
@@ -114,7 +114,7 @@
       <v-menu bottom left offset-y>
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" icon>
-            <v-icon>more_vert</v-icon>
+            <v-icon>mdi-more-vert</v-icon>
           </v-btn>
         </template>
         <v-list>
@@ -123,7 +123,7 @@
               <v-list-item-title>Profile</v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
-              <v-icon>person</v-icon>
+              <v-icon>mdi-person</v-icon>
             </v-list-item-action>
           </v-list-item>
           <v-list-item @click="logout">
@@ -131,7 +131,7 @@
               <v-list-item-title>Logout</v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
-              <v-icon>close</v-icon>
+              <v-icon>mdi-close</v-icon>
             </v-list-item-action>
           </v-list-item>
         </v-list>
