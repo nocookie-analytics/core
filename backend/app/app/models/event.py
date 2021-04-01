@@ -15,9 +15,9 @@ from sqlalchemy import (
     String,
     func,
 )
-from sqlalchemy.dialects.postgresql import INET, JSONB, UUID
+from sqlalchemy.dialects.postgresql import JSONB, UUID, ENUM
 from sqlalchemy.orm import relationship
-from app.models.sqlalchemy_enum34 import EnumType
+from sqlalchemy.sql.sqltypes import Enum as SQLAlchemyEnum
 
 from app.db.base_class import Base
 
@@ -47,9 +47,9 @@ class MetricType(Enum):
     LCP_FINAL = "lcpFinal"
 
 
-EventTypeEnum = EnumType(EventType, name="event_type")
-ReferrerMediumTypeEnum = EnumType(ReferrerMediumType, name="referrer_medium_type")
-MetricTypeEnum = EnumType(MetricType, native_enum=False)
+EventTypeEnum = ENUM(EventType, name="event_type")
+ReferrerMediumTypeEnum = ENUM(ReferrerMediumType, name="referrer_medium_type")
+MetricTypeEnum = SQLAlchemyEnum(MetricType, native_enum=False)
 
 
 class Event(Base):

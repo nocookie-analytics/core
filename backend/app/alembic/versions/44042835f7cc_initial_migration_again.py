@@ -6,7 +6,6 @@ Create Date: 2020-09-05 16:27:38.928637
 
 """
 import sqlalchemy as sa
-from app.models.sqlalchemy_enum34 import EnumType
 from alembic import op
 from sqlalchemy.dialects import postgresql
 
@@ -26,7 +25,10 @@ def upgrade():
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("domain_name", sa.String(), nullable=True),
         sa.Column("owner_id", sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(["owner_id"], ["user.id"],),
+        sa.ForeignKeyConstraint(
+            ["owner_id"],
+            ["user.id"],
+        ),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(
