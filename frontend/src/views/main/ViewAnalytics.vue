@@ -13,9 +13,41 @@
         </v-card>
       </span>
     </v-container>
+    <v-container>
+      <v-row>
+        <v-datetime-picker
+          class="mb-6"
+          label="Start"
+          v-model="datetime"
+          okText="Set start date"
+        >
+          <template slot="dateIcon">
+            <v-icon>mdi-calendar</v-icon>
+          </template>
+          <template slot="timeIcon">
+            <v-icon>mdi-clock-outline</v-icon>
+          </template>
+        </v-datetime-picker>
+        <v-datetime-picker
+          class="mb-6"
+          label="End"
+          v-model="datetime"
+          okText="Set end date"
+        >
+          <template slot="dateIcon">
+            <v-icon>mdi-calendar</v-icon>
+          </template>
+          <template slot="timeIcon">
+            <v-icon>mdi-clock-outline</v-icon>
+          </template>
+        </v-datetime-picker>
+      </v-row>
+    </v-container>
+    <!--
     <span v-if="mapData">
       <ChoroplethMap :mapData="mapData"></ChoroplethMap>
     </span>
+    -->
   </div>
 </template>
 
