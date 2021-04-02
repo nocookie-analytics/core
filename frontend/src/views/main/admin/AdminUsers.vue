@@ -6,31 +6,28 @@
       <v-btn color="primary" to="/main/admin/users/create">Create User</v-btn>
     </v-toolbar>
     <v-data-table :headers="headers" :items="users">
-      <template slot="items" slot-scope="props">
-        <td>{{ props.item.name }}</td>
-        <td>{{ props.item.email }}</td>
-        <td>{{ props.item.full_name }}</td>
-        <td><v-icon v-if="props.item.is_active">mdi-check</v-icon></td>
-        <td>
-          <v-icon v-if="props.item.is_superuser">mdi-check</v-icon>
-        </td>
-        <td class="justify-center layout px-0">
-          <v-tooltip top>
-            <span>Edit</span>
-            <template v-slot:activator="{ on }">
-              <v-btn
-                v-on="on"
-                text
-                :to="{
-                  name: 'main-admin-users-edit',
-                  params: { id: props.item.id },
-                }"
-              >
-                <v-icon>mdi-account-edit</v-icon>
-              </v-btn>
-            </template>
-          </v-tooltip>
-        </td>
+      <template #[`item.isActive`]="{ item }">
+        <v-icon v-if="item.is_active">mdi-check</v-icon>
+      </template>
+      <template #[`item.isSuperuser`]="{ item }">
+        <v-icon v-if="item.is_superuser">mdi-check</v-icon>
+      </template>
+      <template #[`item.id`]="{ item }">
+        <v-tooltip top>
+          <span>Edit</span>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              v-on="on"
+              text
+              :to="{
+                name: 'main-admin-users-edit',
+                params: { id: item.id },
+              }"
+            >
+              <v-icon>mdi-account-edit</v-icon>
+            </v-btn>
+          </template>
+        </v-tooltip>
       </template>
     </v-data-table>
   </div>
@@ -46,12 +43,6 @@ import { dispatchGetUsers } from '@/store/admin/actions';
 @Component
 export default class AdminUsers extends Vue {
   public headers = [
-    {
-      text: 'Name',
-      sortable: true,
-      value: 'name',
-      align: 'left',
-    },
     {
       text: 'Email',
       sortable: true,
