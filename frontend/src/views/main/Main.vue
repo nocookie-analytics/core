@@ -61,7 +61,7 @@
           </v-list-item>
           <v-list-item to="/main/admin/users/create">
             <v-list-item-action>
-              <v-icon>mdi-person_add</v-icon>
+              <v-icon>mdi-account-plus</v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>Create User</v-list-item-title>
