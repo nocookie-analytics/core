@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar light>
-      <v-toolbar-title> Manage Domains </v-toolbar-title>
+      <v-toolbar-title> Domains </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn color="primary" to="/domains/create">Add new domain</v-btn>
     </v-toolbar>
@@ -15,6 +15,11 @@
         class="elevation-1"
         :server-items-length="domainsList.length"
       >
+        <template #[`item.domain_name`]="{ item }">
+          <a v-on:click.stop="goToAnalytics('/' + item.domain_name)">
+            {{ item.domain_name }}
+          </a>
+        </template>
         <template #[`item.actions`]="{ item }">
           <v-btn title="Edit" icon :to="'/domains/' + item.domain_name">
             <span class="group pa-2">
@@ -73,6 +78,10 @@ export default class ListDomains extends Vue {
       return 'Nothing found';
     }
     return '';
+  }
+
+  public goToAnalytics(url: string): void {
+    this.$router.push(url);
   }
 }
 </script>
