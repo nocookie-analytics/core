@@ -57,7 +57,10 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import ChoroplethMap from '@/components/ChoroplethMap.vue';
-import { dispatchUpdateActiveDomain } from '@/store/analytics/actions';
+import {
+  dispatchFetchDomainAnalytics,
+  dispatchUpdateActiveDomain,
+} from '@/store/analytics/actions';
 import {
   readAnalyticsData,
   readAnalyticsError,
@@ -87,6 +90,7 @@ export default class ViewAnalytics extends Vue {
 
   set startDate(value: Date) {
     commitSetStartDate(this.$store, value);
+    dispatchFetchDomainAnalytics(this.$store);
   }
 
   get endDate(): Date {
@@ -94,6 +98,7 @@ export default class ViewAnalytics extends Vue {
   }
   set endDate(value: Date) {
     commitSetEndDate(this.$store, value);
+    dispatchFetchDomainAnalytics(this.$store);
   }
 
   get analyticsError(): string | null {
