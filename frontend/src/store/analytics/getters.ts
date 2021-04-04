@@ -11,9 +11,23 @@ export const getters = {
   currentDomain: (state: AnalyticsState): string | null => {
     return state.currentDomain;
   },
+
+  analyticsError: (state: AnalyticsState): string | null => {
+    return state.analyticsError;
+  },
+
+  startDate: (state: AnalyticsState): Date => {
+    return state.startDate;
+  },
+  endDate: (state: AnalyticsState): Date => {
+    return state.endDate;
+  },
 };
 
 const { read } = getStoreAccessors<AnalyticsState, RootState>('');
 
 export const readAnalyticsData = read(getters.analyticsData);
 export const readCurrentDomain = read(getters.currentDomain);
+export const readStartDate = read(getters.startDate);
+export const readEndDate = read(getters.endDate);
+export const readAnalyticsError = read(getters.analyticsError);

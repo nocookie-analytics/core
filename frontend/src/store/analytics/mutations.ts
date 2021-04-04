@@ -2,6 +2,7 @@ import { AnalyticsState } from './state';
 import { getStoreAccessors } from 'typesafe-vuex';
 import { RootState } from '../state';
 import { AnalyticsData } from '@/generated';
+import { commitAddNotification } from '../main/mutations';
 
 export const mutations = {
   setActiveDomain(state: AnalyticsState, domainName: string): void {
@@ -16,6 +17,12 @@ export const mutations = {
     state.analyticsError = error;
     state.analyticsData = null;
   },
+  setStartDate(state: AnalyticsState, startDate: Date): void {
+    state.startDate = startDate;
+  },
+  setEndDate(state: AnalyticsState, endDate: Date): void {
+    state.endDate = endDate;
+  },
 };
 
 const { commit } = getStoreAccessors<AnalyticsState, RootState>('');
@@ -23,3 +30,5 @@ const { commit } = getStoreAccessors<AnalyticsState, RootState>('');
 export const commitSetActiveDomain = commit(mutations.setActiveDomain);
 export const commitSetAnalyticsData = commit(mutations.setDomainData);
 export const commitSetAnalyticsError = commit(mutations.setAnalyticsError);
+export const commitSetStartDate = commit(mutations.setStartDate);
+export const commitSetEndDate = commit(mutations.setEndDate);
