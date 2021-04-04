@@ -29,7 +29,7 @@
               v-model="domainName"
               required
               :rules="domainNameRules"
-              append-icon="web"
+              append-icon="mdi-web"
             ></v-text-field>
 
             <v-checkbox
