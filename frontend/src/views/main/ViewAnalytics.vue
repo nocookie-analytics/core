@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import ChoroplethMap from '@/components/ChoroplethMap.vue';
 import {
   dispatchFetchDomainAnalytics,
@@ -90,19 +90,24 @@ export default class ViewAnalytics extends Vue {
 
   set startDate(value: Date) {
     commitSetStartDate(this.$store, value);
-    dispatchFetchDomainAnalytics(this.$store);
   }
 
   get endDate(): Date {
     return readEndDate(this.$store);
   }
+
   set endDate(value: Date) {
     commitSetEndDate(this.$store, value);
-    dispatchFetchDomainAnalytics(this.$store);
   }
 
   get analyticsError(): string | null {
     return readAnalyticsError(this.$store);
+  }
+
+  @Watch('startDate')
+  @Watch('endDate')
+  async updateData(): Promise<void> {
+    await dispatchFetchDomainAnalytics(this.$store);
   }
 
   public async mounted(): Promise<void> {
