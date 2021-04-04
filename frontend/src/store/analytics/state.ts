@@ -4,4 +4,7 @@ export interface AnalyticsState {
   currentDomain: string | null;
   analyticsData: AnalyticsData | null;
   analyticsError: string | null;
+
+  startDate: Date;
+  endDate: Date;
 }
