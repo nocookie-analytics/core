@@ -15,32 +15,35 @@
     </v-container>
     <v-container>
       <v-row>
-        <v-datetime-picker
-          class="mb-6"
-          label="Start"
-          v-model="datetime"
-          okText="Set start date"
-        >
-          <template slot="dateIcon">
-            <v-icon>mdi-calendar</v-icon>
-          </template>
-          <template slot="timeIcon">
-            <v-icon>mdi-clock-outline</v-icon>
-          </template>
-        </v-datetime-picker>
-        <v-datetime-picker
-          class="mb-6"
-          label="End"
-          v-model="datetime"
-          okText="Set end date"
-        >
-          <template slot="dateIcon">
-            <v-icon>mdi-calendar</v-icon>
-          </template>
-          <template slot="timeIcon">
-            <v-icon>mdi-clock-outline</v-icon>
-          </template>
-        </v-datetime-picker>
+        <v-col cols="2">
+          <v-datetime-picker
+            class="mb-3"
+            label="Start"
+            v-model="startDate"
+            okText="Set start date"
+          >
+            <template slot="dateIcon">
+              <v-icon>mdi-calendar</v-icon>
+            </template>
+            <template slot="timeIcon">
+              <v-icon>mdi-clock-outline</v-icon>
+            </template>
+          </v-datetime-picker>
+        </v-col>
+        <v-col cols="2">
+          <v-datetime-picker
+            label="End"
+            v-model="endDate"
+            okText="Set end date"
+          >
+            <template slot="dateIcon">
+              <v-icon>mdi-calendar</v-icon>
+            </template>
+            <template slot="timeIcon">
+              <v-icon>mdi-clock-outline</v-icon>
+            </template>
+          </v-datetime-picker>
+        </v-col>
       </v-row>
     </v-container>
     <!--
@@ -55,9 +58,18 @@
 import { Component, Vue } from 'vue-property-decorator';
 import ChoroplethMap from '@/components/ChoroplethMap.vue';
 import { dispatchUpdateActiveDomain } from '@/store/analytics/actions';
-import { readAnalyticsData } from '@/store/analytics/getters';
+import {
+  readAnalyticsData,
+  readAnalyticsError,
+  readEndDate,
+  readStartDate,
+} from '@/store/analytics/getters';
 import { AggregateStat } from '@/generated';
 import { AnalyticsState } from '@/store/analytics/state';
+import {
+  commitSetEndDate,
+  commitSetStartDate,
+} from '@/store/analytics/mutations';
 
 @Component({
   components: {
@@ -69,8 +81,23 @@ export default class ViewAnalytics extends Vue {
     return this.$router.currentRoute.params.domainName;
   }
 
+  get startDate(): Date {
+    return readStartDate(this.$store);
+  }
+
+  set startDate(value: Date) {
+    commitSetStartDate(this.$store, value);
+  }
+
+  get endDate(): Date {
+    return readEndDate(this.$store);
+  }
+  set endDate(value: Date) {
+    commitSetEndDate(this.$store, value);
+  }
+
   get analyticsError(): string | null {
-    return (this.$store.state as AnalyticsState).analyticsError;
+    return readAnalyticsError(this.$store);
   }
 
   public async mounted(): Promise<void> {
