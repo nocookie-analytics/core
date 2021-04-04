@@ -32,7 +32,8 @@ export const actions = {
       const response = await analyticsApi.getAnalytics(
         domainName,
         [AnalyticsType.Countries, AnalyticsType.UtmTerms],
-        '2020-03-11T17:11:24.931589+00:00',
+        context.state.startDate.toISOString(),
+        context.state.endDate.toISOString(),
       );
       const analyticsData = response.data;
       commitSetAnalyticsData(context, analyticsData);

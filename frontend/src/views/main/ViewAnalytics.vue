@@ -101,7 +101,7 @@ export default class ViewAnalytics extends Vue {
   }
 
   public async mounted(): Promise<void> {
-    dispatchUpdateActiveDomain(
+    await dispatchUpdateActiveDomain(
       this.$store,
       this.$router.currentRoute.params.domainName,
     );
