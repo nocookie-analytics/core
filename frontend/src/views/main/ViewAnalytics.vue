@@ -49,17 +49,15 @@
         </v-col>
       </v-row>
     </v-container>
-    <!--
-    <span v-if="mapData">
-      <ChoroplethMap :mapData="mapData"></ChoroplethMap>
-    </span>
-    -->
+    <v-container>
+      <AnalyticsContainer :analyticsData="analyticsData" />
+    </v-container>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import ChoroplethMap from '@/components/ChoroplethMap.vue';
+import AnalyticsContainer from '@/components/AnalyticsContainer.vue';
 import {
   dispatchFetchDomainAnalytics,
   dispatchUpdateActiveDomain,
@@ -70,8 +68,7 @@ import {
   readEndDate,
   readStartDate,
 } from '@/store/analytics/getters';
-import { AggregateStat } from '@/generated';
-import { AnalyticsState } from '@/store/analytics/state';
+import { AnalyticsData } from '@/generated';
 import {
   commitSetEndDate,
   commitSetStartDate,
@@ -79,7 +76,7 @@ import {
 
 @Component({
   components: {
-    ChoroplethMap,
+    AnalyticsContainer,
   },
 })
 export default class ViewAnalytics extends Vue {
@@ -126,8 +123,8 @@ export default class ViewAnalytics extends Vue {
     );
   }
 
-  get mapData(): Array<AggregateStat> | undefined {
-    return readAnalyticsData(this.$store)?.countries;
+  get analyticsData(): AnalyticsData | null {
+    return readAnalyticsData(this.$store);
   }
 }
 </script>
