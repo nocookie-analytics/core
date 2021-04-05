@@ -93,6 +93,7 @@ export default class ViewAnalytics extends Vue {
 
   set startDate(value: Date) {
     commitSetStartDate(this.$store, value);
+    this.setQueryParam('start', value.toISOString());
   }
 
   get endDate(): Date {
@@ -101,10 +102,15 @@ export default class ViewAnalytics extends Vue {
 
   set endDate(value: Date) {
     commitSetEndDate(this.$store, value);
+    this.setQueryParam('end', value.toISOString());
   }
 
   get analyticsError(): string | null {
     return readAnalyticsError(this.$store);
+  }
+
+  setQueryParam(key: string, value: string): void {
+    this.$router.replace({ query: { ...this.$route.query, [key]: value } });
   }
 
   @Watch('startDate')
