@@ -14,7 +14,10 @@
       </span>
     </v-container>
     <v-container>
-      <v-row>
+      <v-row align="baseline">
+        <v-col cols="2">
+          {{ domainName }}
+        </v-col>
         <v-col cols="2">
           <v-datetime-picker
             class="mb-3"
