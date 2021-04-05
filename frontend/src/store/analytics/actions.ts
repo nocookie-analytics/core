@@ -31,8 +31,30 @@ export const actions = {
     try {
       const response = await analyticsApi.getAnalytics(
         domainName,
-        [AnalyticsType.Countries, AnalyticsType.UtmTerms],
-        '2020-03-11T17:11:24.931589+00:00',
+        [
+          AnalyticsType.Pageviews,
+          AnalyticsType.Countries,
+
+          AnalyticsType.ReferrerNames,
+          AnalyticsType.ReferrerMediums,
+
+          AnalyticsType.OsFamilies,
+          AnalyticsType.BrowserFamilies,
+          AnalyticsType.DeviceFamilies,
+
+          AnalyticsType.PageviewsPerDay,
+          AnalyticsType.LcpPerDay,
+          AnalyticsType.FpPerDay,
+          AnalyticsType.ClsPerDay,
+
+          AnalyticsType.UtmSources,
+          AnalyticsType.UtmTerms,
+          AnalyticsType.UtmMediums,
+          AnalyticsType.UtmContents,
+          AnalyticsType.UtmCampaigns,
+        ],
+        context.state.startDate.toISOString(),
+        context.state.endDate.toISOString(),
       );
       const analyticsData = response.data;
       commitSetAnalyticsData(context, analyticsData);

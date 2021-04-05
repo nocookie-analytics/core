@@ -13,23 +13,70 @@
         </v-card>
       </span>
     </v-container>
-    <span v-if="mapData">
-      <ChoroplethMap :mapData="mapData"></ChoroplethMap>
-    </span>
+    <v-container>
+      <v-row align="baseline">
+        <v-col cols="2">
+          {{ domainName }}
+        </v-col>
+        <v-col cols="2">
+          <v-datetime-picker
+            class="mb-3"
+            label="Start"
+            v-model="startDate"
+            okText="Set start date"
+          >
+            <template slot="dateIcon">
+              <v-icon>mdi-calendar</v-icon>
+            </template>
+            <template slot="timeIcon">
+              <v-icon>mdi-clock-outline</v-icon>
+            </template>
+          </v-datetime-picker>
+        </v-col>
+        <v-col cols="2">
+          <v-datetime-picker
+            label="End"
+            v-model="endDate"
+            okText="Set end date"
+          >
+            <template slot="dateIcon">
+              <v-icon>mdi-calendar</v-icon>
+            </template>
+            <template slot="timeIcon">
+              <v-icon>mdi-clock-outline</v-icon>
+            </template>
+          </v-datetime-picker>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-container>
+      <AnalyticsContainer :analyticsData="analyticsData" />
+    </v-container>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import ChoroplethMap from '@/components/ChoroplethMap.vue';
-import { dispatchUpdateActiveDomain } from '@/store/analytics/actions';
-import { readAnalyticsData } from '@/store/analytics/getters';
-import { AggregateStat } from '@/generated';
-import { AnalyticsState } from '@/store/analytics/state';
+import { Component, Vue, Watch } from 'vue-property-decorator';
+import AnalyticsContainer from '@/components/AnalyticsContainer.vue';
+import {
+  dispatchFetchDomainAnalytics,
+  dispatchUpdateActiveDomain,
+} from '@/store/analytics/actions';
+import {
+  readAnalyticsData,
+  readAnalyticsError,
+  readEndDate,
+  readStartDate,
+} from '@/store/analytics/getters';
+import { AnalyticsData } from '@/generated';
+import {
+  commitSetEndDate,
+  commitSetStartDate,
+} from '@/store/analytics/mutations';
 
 @Component({
   components: {
-    ChoroplethMap,
+    AnalyticsContainer,
   },
 })
 export default class ViewAnalytics extends Vue {
@@ -37,19 +84,47 @@ export default class ViewAnalytics extends Vue {
     return this.$router.currentRoute.params.domainName;
   }
 
+  get startDate(): Date {
+    return readStartDate(this.$store);
+  }
+
+  set startDate(value: Date) {
+    commitSetStartDate(this.$store, value);
+    this.setQueryParam('start', value.toISOString());
+  }
+
+  get endDate(): Date {
+    return readEndDate(this.$store);
+  }
+
+  set endDate(value: Date) {
+    commitSetEndDate(this.$store, value);
+    this.setQueryParam('end', value.toISOString());
+  }
+
   get analyticsError(): string | null {
-    return (this.$store.state as AnalyticsState).analyticsError;
+    return readAnalyticsError(this.$store);
+  }
+
+  setQueryParam(key: string, value: string): void {
+    this.$router.replace({ query: { ...this.$route.query, [key]: value } });
+  }
+
+  @Watch('startDate')
+  @Watch('endDate')
+  async updateData(): Promise<void> {
+    await dispatchFetchDomainAnalytics(this.$store);
   }
 
   public async mounted(): Promise<void> {
-    dispatchUpdateActiveDomain(
+    await dispatchUpdateActiveDomain(
       this.$store,
       this.$router.currentRoute.params.domainName,
     );
   }
 
-  get mapData(): Array<AggregateStat> | undefined {
-    return readAnalyticsData(this.$store)?.countries;
+  get analyticsData(): AnalyticsData | null {
+    return readAnalyticsData(this.$store);
   }
 }
 </script>

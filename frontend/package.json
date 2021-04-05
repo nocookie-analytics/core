@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "date-fns": "^2.19.0",
     "is-valid-domain": "^0.0.17",
     "leaflet": "^1.7.1",
     "lodash": "^4.17.21",
@@ -24,9 +25,11 @@
     "vue-property-decorator": "^9.1.2",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.8",
+    "vuetify-datetime-picker": "^2.1.1",
     "vuex": "^3.6.2"
   },
   "devDependencies": {
+    "@mdi/font": "^5.9.55",
     "@types/chai": "^4.2.11",
     "@types/mocha": "^5.2.4",
     "@types/sinon": "^9.0.11",
