@@ -24,7 +24,7 @@
                   @keyup.enter="submit"
                   label="Username"
                   type="text"
-                  prepend-icon="person"
+                  prepend-icon="mdi-account"
                   v-model="username"
                   v-validate="'required'"
                   data-vv-name="username"
