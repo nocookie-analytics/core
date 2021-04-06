@@ -47,8 +47,14 @@ class MetricType(Enum):
     LCP_FINAL = "lcpFinal"
 
 
-EventTypeEnum = ENUM(EventType, name="event_type")
-ReferrerMediumTypeEnum = ENUM(ReferrerMediumType, name="referrer_medium_type")
+EventTypeEnum = ENUM(
+    EventType, name="event_type", values_callable=lambda x: [e.value for e in x]
+)
+ReferrerMediumTypeEnum = ENUM(
+    ReferrerMediumType,
+    name="referrer_medium_type",
+    values_callable=lambda x: [e.value for e in x],
+)
 MetricTypeEnum = SQLAlchemyEnum(MetricType, native_enum=False)
 
 
