@@ -6,7 +6,7 @@ from typing import List, Optional, Set, Union
 import arrow
 from fastapi import HTTPException, Query as FastAPIQuery
 from pydantic import BaseModel
-from sqlalchemy import DATE, cast, func
+from sqlalchemy import DATE, cast, func, column
 from sqlalchemy.orm import Query
 from starlette import status
 
@@ -69,9 +69,14 @@ class PageViewsPerDayStat(BaseModel):
     date: datetime.date
 
     @staticmethod
-    def from_base_query(base_query: Query) -> List[PageViewsPerDayStat]:
-        rows = base_query.group_by(cast(Event.timestamp, DATE)).with_entities(
-            cast(Event.timestamp, DATE), func.count()
+    def from_base_query(
+        base_query: Query, start: datetime.datetime, end: datetime.datetime
+    ) -> List[PageViewsPerDayStat]:
+        rows = base_query.group_by(column("one_day")).with_entities(
+            func.time_bucket_gapfill(
+                "1 day", Event.timestamp, start.date(), end.date()
+            ).label("one_day"),
+            func.coalesce(func.count(), 0),
         )
         return [PageViewsPerDayStat(date=row[0], total_visits=row[1]) for row in rows]
 
@@ -82,11 +87,19 @@ class AvgMetricPerDayStat(BaseModel):
 
     @staticmethod
     def from_base_query(
-        base_query: Query, metric_name: MetricType
+        base_query: Query,
+        metric_name: MetricType,
+        start: datetime.datetime,
+        end: datetime.datetime,
     ) -> List[AvgMetricPerDayStat]:
         rows = (
-            base_query.group_by(cast(Event.timestamp, DATE))
-            .with_entities(cast(Event.timestamp, DATE), func.avg(Event.metric_value))
+            base_query.group_by(column("one_day"))
+            .with_entities(
+                func.time_bucket_gapfill(
+                    "1 day", Event.timestamp, start.date(), end.date()
+                ).label("one_day"),
+                func.coalesce(func.avg(Event.metric_value), 0),
+            )
             .filter(Event.metric_name == metric_name)
         )
         return [AvgMetricPerDayStat(date=row[0], value=row[1]) for row in rows]

@@ -6,6 +6,7 @@ from furl.furl import furl
 from pydantic import IPvAnyAddress
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
@@ -101,8 +102,15 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
     ) -> AnalyticsData:
         data = AnalyticsData(start=start, end=end)
         for field in fields:
-            base_query = domain.events.filter(
-                and_(Event.timestamp >= start.datetime, Event.timestamp <= end.datetime)
+            base_query = (
+                db.query(Event)
+                .filter(Domain.id == domain.id)
+                .filter(
+                    and_(
+                        Event.timestamp >= start.datetime,
+                        Event.timestamp <= end.datetime,
+                    )
+                )
             )
             page_view_base_query = base_query.filter(
                 Event.event_type == EventType.page_view
@@ -167,22 +175,36 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                     filter_none=True,
                 )
             elif field == AnalyticsType.PAGEVIEWS_PER_DAY:
-                data.pageviews_per_day = PageViewsPerDayStat.from_base_query(base_query)
+                data.pageviews_per_day = PageViewsPerDayStat.from_base_query(
+                    base_query, start=start.datetime, end=end.datetime
+                )
             elif field == AnalyticsType.LCP_PER_DAY:
                 data.lcp_per_day = AvgMetricPerDayStat.from_base_query(
-                    metric_base_query, MetricType.LCP
+                    metric_base_query,
+                    MetricType.LCP,
+                    start=start.datetime,
+                    end=end.datetime,
                 )
             elif field == AnalyticsType.FID_PER_DAY:
                 data.fid_per_day = AvgMetricPerDayStat.from_base_query(
-                    metric_base_query, MetricType.FID
+                    metric_base_query,
+                    MetricType.FID,
+                    start=start.datetime,
+                    end=end.datetime,
                 )
             elif field == AnalyticsType.FP_PER_DAY:
                 data.fp_per_day = AvgMetricPerDayStat.from_base_query(
-                    metric_base_query, MetricType.FP
+                    metric_base_query,
+                    MetricType.FP,
+                    start=start.datetime,
+                    end=end.datetime,
                 )
             elif field == AnalyticsType.CLS_PER_DAY:
                 data.cls_per_day = AvgMetricPerDayStat.from_base_query(
-                    metric_base_query, MetricType.CLS
+                    metric_base_query,
+                    MetricType.CLS,
+                    start=start.datetime,
+                    end=end.datetime,
                 )
             else:
                 raise HTTPException(status_code=400)
