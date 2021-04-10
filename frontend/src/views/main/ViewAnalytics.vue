@@ -56,7 +56,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import AnalyticsContainer from '@/components/AnalyticsContainer.vue';
+import AnalyticsContainer from '@/components/analytics/AnalyticsContainer.vue';
 import {
   dispatchFetchDomainAnalytics,
   dispatchUpdateActiveDomain,
