@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime, timedelta
 import pytest
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm.session import Session
@@ -110,10 +110,20 @@ class TestAvgMetricPerDayStat:
                 "metric_name": MetricType.LCP,
             },
         )
-        base_query = domain.events.filter(Event.event_type == EventType.metric)
-        lcp_per_day = AvgMetricPerDayStat.from_base_query(base_query, MetricType.LCP)
-        assert len(lcp_per_day) == 1
-        assert lcp_per_day[0].value == 5
+        start = datetime.now() - timedelta(days=30)
+        end = datetime.now() + timedelta(
+            minutes=5
+        )  # end date a little longer than now since we'll be adding events in the test
+        base_query = domain.events.filter(Event.event_type == EventType.metric).filter(
+            Event.timestamp.between(start, end)
+        )
+        lcp_per_day = AvgMetricPerDayStat.from_base_query(
+            base_query, MetricType.LCP, start=start, end=end
+        )
+        assert len(lcp_per_day) == 31
+        for lcp in lcp_per_day[:-1]:
+            assert lcp.value == 0
+        assert lcp_per_day[-1].value == 5
 
         create_random_metric_event(
             db,
@@ -125,8 +135,16 @@ class TestAvgMetricPerDayStat:
             },
         )
 
-        lcp_per_day = AvgMetricPerDayStat.from_base_query(base_query, MetricType.LCP)
-        fid_per_day = AvgMetricPerDayStat.from_base_query(base_query, MetricType.FID)
-        assert len(lcp_per_day) == 1
-        assert not fid_per_day
-        assert lcp_per_day[0].value == 7.5
+        lcp_per_day = AvgMetricPerDayStat.from_base_query(
+            base_query, MetricType.LCP, start=start, end=end
+        )
+        fid_per_day = AvgMetricPerDayStat.from_base_query(
+            base_query, MetricType.FID, start=start, end=end
+        )
+        assert len(lcp_per_day) == 31
+        assert len(fid_per_day) == 31
+        for lcp, fid in zip(lcp_per_day[:-1], fid_per_day[:-1]):
+            assert lcp.value == 0
+            assert fid.value == 0
+        assert lcp_per_day[-1].value == 7.5
+        assert fid_per_day[-1].value == 0
