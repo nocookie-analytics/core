@@ -95,9 +95,9 @@ class AvgMetricPerDayStat(BaseModel):
         rows = (
             base_query.group_by(column("one_day"))
             .with_entities(
-                func.time_bucket_gapfill(
-                    "1 day", Event.timestamp, start.date(), end.date()
-                ).label("one_day"),
+                func.time_bucket_gapfill("1 day", Event.timestamp, start, end).label(
+                    "one_day"
+                ),
                 func.coalesce(func.avg(Event.metric_value), 0),
             )
             .filter(Event.metric_name == metric_name)
