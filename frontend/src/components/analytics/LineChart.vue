@@ -35,6 +35,11 @@ export default class LineChart extends Mixins(Line) {
 
   get options(): ChartOptions {
     const options: ChartOptions = {
+      maintainAspectRatio: false,
+      legend: {
+        display: false,
+      },
+      responsive: true,
       scales: {
         yAxes: [
           {

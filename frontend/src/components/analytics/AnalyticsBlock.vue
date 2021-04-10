@@ -18,6 +18,7 @@
         :blockData="blockData"
         :startDate="startDate"
         :endDate="endDate"
+        :styles="styles"
       />
     </v-card>
   </v-col>
@@ -54,5 +55,12 @@ export default class AnalyticsBlock extends Vue {
 
   @Prop() public startDate!: Date;
   @Prop() public endDate!: Date;
+
+  get styles(): Record<string, string> {
+    return {
+      height: '500px',
+      position: 'relative',
+    };
+  }
 }
 </script>
