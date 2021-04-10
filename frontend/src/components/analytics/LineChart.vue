@@ -59,8 +59,7 @@ export default class LineChart extends Mixins(Line) {
     return options;
   }
 
-  mounted() {
-    console.log(this.options);
+  mounted(): void {
     this.renderChart(this.chartData, this.options);
   }
 }
