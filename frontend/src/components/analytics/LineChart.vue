@@ -33,8 +33,8 @@ export default class LineChart extends Mixins(Line) {
     };
   }
 
-  get options() {
-    const options = {
+  get options(): ChartOptions {
+    const options: ChartOptions = {
       scales: {
         yAxes: [
           {
@@ -50,7 +50,7 @@ export default class LineChart extends Mixins(Line) {
         xAxes: [
           {
             gridLines: {
-              display: true,
+              display: false,
             },
           },
         ],
