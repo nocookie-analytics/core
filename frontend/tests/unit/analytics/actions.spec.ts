@@ -39,6 +39,7 @@ describe('actions', () => {
   });
 
   it('fetch domain analytics - successful', async () => {
+    store.state.analytics.analyticsError = 'some error';
     sinon.stub(AnalyticsApi.prototype, 'getAnalytics').returns(
       Promise.resolve({
         ...axiosResponse,

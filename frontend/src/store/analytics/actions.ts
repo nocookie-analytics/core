@@ -24,6 +24,7 @@ export const actions = {
   async fetchDomainAnalytics(context: AnalyticsContext): Promise<void> {
     const analyticsApi = context.getters.analyticsApi as AnalyticsApi;
     const domainName = context.state.currentDomain as string;
+    commitSetAnalyticsError(context, null);
     if (domainName === null) {
       console.error('Cannot fetch analytics data without a domain');
       return Promise.resolve();

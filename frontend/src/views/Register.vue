@@ -13,7 +13,7 @@
                 <v-text-field
                   @keyup.enter="register"
                   v-model="email"
-                  prepend-icon="person"
+                  prepend-icon="mdi-account"
                   name="register"
                   label="E-mail"
                   type="text"
@@ -21,7 +21,7 @@
                 <v-text-field
                   @keyup.enter="register"
                   v-model="password"
-                  prepend-icon="lock"
+                  prepend-icon="mdi-lock"
                   name="password"
                   label="Password"
                   id="password"

@@ -6,8 +6,7 @@
           <v-card-text>
             <div class="headline font-weight-light ma-5">
               {{ analyticsError }} (You might need to
-              <a href="/login">log-in</a>
-              >
+              <a href="/login">log-in)</a>
             </div>
           </v-card-text>
         </v-card>
@@ -57,7 +56,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import AnalyticsContainer from '@/components/AnalyticsContainer.vue';
+import AnalyticsContainer from '@/components/analytics/AnalyticsContainer.vue';
 import {
   dispatchFetchDomainAnalytics,
   dispatchUpdateActiveDomain,
