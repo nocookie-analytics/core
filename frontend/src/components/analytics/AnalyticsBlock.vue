@@ -8,18 +8,21 @@
     >
       Aggregate Stat: Not implemented
     </v-card>
+    <v-card-title>Page views</v-card-title>
     <v-card
       class="pa-2"
       outlined
       tile
       v-if="blockType == BlockType.ArrayPageViewsPerDayStat"
     >
-      <LineChart
-        :blockData="blockData"
-        :startDate="startDate"
-        :endDate="endDate"
-        :styles="styles"
-      />
+      <v-card-text>
+        <LineChart
+          :blockData="blockData"
+          :startDate="startDate"
+          :endDate="endDate"
+          :styles="styles"
+        />
+      </v-card-text>
     </v-card>
   </v-col>
 </template>
