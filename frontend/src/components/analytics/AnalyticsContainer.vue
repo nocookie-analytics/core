@@ -9,6 +9,14 @@
           :endDate="endDate"
         />
       </v-row>
+      <v-row>
+        <AnalyticsBlock
+          :blockData="analyticsData.browser_families"
+          :blockType="BlockType.AggregateStat"
+          :startDate="startDate"
+          :endDate="endDate"
+        />
+      </v-row>
     </v-container>
     <v-container v-else> Loading, please wait </v-container>
   </div>
