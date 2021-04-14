@@ -3,7 +3,11 @@
     <v-container v-if="blockType == BlockType.AggregateStat">
       <v-card-title><slot name="blockTitle"></slot></v-card-title>
       <v-card class="pa-2" outlined tile>
-        <Tabular :data="blockData" />
+        <Tabular :data="blockData">
+          <template v-slot:itemName="{ item }">
+            <slot name="itemName" v-bind:item="item" />
+          </template>
+        </Tabular>
       </v-card>
     </v-container>
 

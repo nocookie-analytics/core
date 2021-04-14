@@ -10,7 +10,7 @@
         />
       </v-row>
       <v-row>
-        <v-col cols="2">
+        <v-col cols="3">
           <AnalyticsBlock
             :blockData="analyticsData.browser_families"
             :blockType="BlockType.AggregateStat"
@@ -18,9 +18,13 @@
             :endDate="endDate"
           >
             <template v-slot:blockTitle>Browser</template>
+            <template v-slot:itemName="{ item }"
+              ><v-icon>mdi-{{ item.value.toLowerCase() }}</v-icon>
+              {{ item.value }}</template
+            >
           </AnalyticsBlock>
         </v-col>
-        <v-col cols="2">
+        <v-col cols="3">
           <AnalyticsBlock
             :blockData="analyticsData.os_families"
             :blockType="BlockType.AggregateStat"
@@ -28,9 +32,13 @@
             :endDate="endDate"
           >
             <template v-slot:blockTitle>OS</template>
+            <template v-slot:itemName="{ item }"
+              ><v-icon>mdi-{{ item.value.toLowerCase() }}</v-icon>
+              {{ item.value }}</template
+            >
           </AnalyticsBlock>
         </v-col>
-        <v-col cols="2">
+        <v-col cols="3">
           <AnalyticsBlock
             :blockData="analyticsData.device_families"
             :blockType="BlockType.AggregateStat"
@@ -38,9 +46,13 @@
             :endDate="endDate"
           >
             <template v-slot:blockTitle>Device type</template>
+            <template v-slot:itemName="{ item }"
+              ><v-icon>mdi-{{ item.value.toLowerCase() }}</v-icon>
+              {{ item.value }}</template
+            >
           </AnalyticsBlock>
         </v-col>
-        <v-col cols="2">
+        <v-col cols="3">
           <AnalyticsBlock
             :blockData="analyticsData.referrer_names"
             :blockType="BlockType.AggregateStat"
@@ -50,7 +62,7 @@
             <template v-slot:blockTitle>Referrer name</template>
           </AnalyticsBlock>
         </v-col>
-        <v-col cols="2">
+        <v-col cols="3">
           <AnalyticsBlock
             :blockData="analyticsData.referrer_mediums"
             :blockType="BlockType.AggregateStat"

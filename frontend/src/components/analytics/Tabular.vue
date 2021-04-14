@@ -9,7 +9,9 @@
       </thead>
       <tbody>
         <tr v-for="item in data" :key="item.value">
-          <td>{{ item.value }}</td>
+          <td>
+            <slot name="itemName" v-bind:item="item">{{ item.value }}</slot>
+          </td>
           <td>{{ item.total_visits }}</td>
         </tr>
       </tbody>
