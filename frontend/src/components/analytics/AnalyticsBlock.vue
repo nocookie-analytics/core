@@ -1,7 +1,7 @@
 <template>
   <v-col>
     <v-container v-if="blockType == BlockType.AggregateStat">
-      <v-card-title>Title</v-card-title>
+      <v-card-title><slot name="blockTitle"></slot></v-card-title>
       <v-card class="pa-2" outlined tile>
         <Tabular :data="blockData" />
       </v-card>

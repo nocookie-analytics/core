@@ -10,12 +10,56 @@
         />
       </v-row>
       <v-row>
-        <AnalyticsBlock
-          :blockData="analyticsData.browser_families"
-          :blockType="BlockType.AggregateStat"
-          :startDate="startDate"
-          :endDate="endDate"
-        />
+        <v-col cols="2">
+          <AnalyticsBlock
+            :blockData="analyticsData.browser_families"
+            :blockType="BlockType.AggregateStat"
+            :startDate="startDate"
+            :endDate="endDate"
+          >
+            <template v-slot:blockTitle>Browser</template>
+          </AnalyticsBlock>
+        </v-col>
+        <v-col cols="2">
+          <AnalyticsBlock
+            :blockData="analyticsData.os_families"
+            :blockType="BlockType.AggregateStat"
+            :startDate="startDate"
+            :endDate="endDate"
+          >
+            <template v-slot:blockTitle>OS</template>
+          </AnalyticsBlock>
+        </v-col>
+        <v-col cols="2">
+          <AnalyticsBlock
+            :blockData="analyticsData.device_families"
+            :blockType="BlockType.AggregateStat"
+            :startDate="startDate"
+            :endDate="endDate"
+          >
+            <template v-slot:blockTitle>Device type</template>
+          </AnalyticsBlock>
+        </v-col>
+        <v-col cols="2">
+          <AnalyticsBlock
+            :blockData="analyticsData.referrer_names"
+            :blockType="BlockType.AggregateStat"
+            :startDate="startDate"
+            :endDate="endDate"
+          >
+            <template v-slot:blockTitle>Referrer name</template>
+          </AnalyticsBlock>
+        </v-col>
+        <v-col cols="2">
+          <AnalyticsBlock
+            :blockData="analyticsData.referrer_mediums"
+            :blockType="BlockType.AggregateStat"
+            :startDate="startDate"
+            :endDate="endDate"
+          >
+            <template v-slot:blockTitle>Referrer medium</template>
+          </AnalyticsBlock>
+        </v-col>
       </v-row>
     </v-container>
     <v-container v-else> Loading, please wait </v-container>
