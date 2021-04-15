@@ -1,5 +1,5 @@
 <template>
-  <v-col>
+  <v-col v-if="hasData">
     <v-container v-if="blockType == BlockType.AggregateStat">
       <v-card-title><slot name="blockTitle"></slot></v-card-title>
       <v-card class="pa-2" outlined tile>
@@ -59,6 +59,13 @@ export default class AnalyticsBlock extends Vue {
 
   @Prop() public startDate!: Date;
   @Prop() public endDate!: Date;
+
+  get hasData(): boolean {
+    if (this.blockData && Array.isArray(this.blockData)) {
+      return this.blockData.length !== 0;
+    }
+    return Boolean(this.blockData);
+  }
 
   get styles(): Record<string, string> {
     return {
