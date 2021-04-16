@@ -72,6 +72,20 @@
             <template v-slot:blockTitle>Referrer medium</template>
           </AnalyticsBlock>
         </v-col>
+        <v-col cols="3">
+          <AnalyticsBlock
+            :blockData="analyticsData.countries"
+            :blockType="BlockType.AggregateStat"
+            :startDate="startDate"
+            :endDate="endDate"
+          >
+            <template v-slot:blockTitle>Country</template>
+            <template v-slot:itemName="{ item }">
+              <v-icon>mdi-{{ item.value.toLowerCase() }}</v-icon>
+              {{ countryCodeToCountryName(item.value) }}
+            </template>
+          </AnalyticsBlock>
+        </v-col>
       </v-row>
     </v-container>
     <v-container v-else> Loading, please wait </v-container>
@@ -85,6 +99,7 @@ import AnalyticsBlock, {
   BlockType,
 } from '@/components/analytics/AnalyticsBlock.vue';
 import { parseISO } from 'date-fns';
+import countryCodes from '@/components/data/countryCodes';
 
 @Component({
   components: {
@@ -101,6 +116,10 @@ export default class AnalyticsContainer extends Vue {
 
   get endDate(): Date {
     return parseISO(this.analyticsData.end);
+  }
+
+  countryCodeToCountryName(countryCode: string): string {
+    return countryCodes[countryCode];
   }
 }
 </script>
