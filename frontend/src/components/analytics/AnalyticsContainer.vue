@@ -119,7 +119,7 @@ export default class AnalyticsContainer extends Vue {
   }
 
   countryCodeToCountryName(countryCode: string): string {
-    return countryCodes[countryCode];
+    return countryCodes[countryCode] || countryCode;
   }
 }
 </script>
