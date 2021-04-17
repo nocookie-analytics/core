@@ -72,7 +72,7 @@
             <template v-slot:blockTitle>Referrer medium</template>
           </AnalyticsBlock>
         </v-col>
-        <v-col cols="3">
+        <v-col cols="4">
           <AnalyticsBlock
             :blockData="analyticsData.countries"
             :blockType="BlockType.AggregateStat"
@@ -81,7 +81,11 @@
           >
             <template v-slot:blockTitle>Country</template>
             <template v-slot:itemName="{ item }">
-              <v-icon>mdi-{{ item.value.toLowerCase() }}</v-icon>
+              <country-flag
+                :country="item.value.toLowerCase()"
+                rounded
+                size="normal"
+              />
               {{ countryCodeToCountryName(item.value) }}
             </template>
           </AnalyticsBlock>
@@ -100,10 +104,12 @@ import AnalyticsBlock, {
 } from '@/components/analytics/AnalyticsBlock.vue';
 import { parseISO } from 'date-fns';
 import countryCodes from '@/components/data/countryCodes';
+import CountryFlag from 'vue-country-flag';
 
 @Component({
   components: {
     AnalyticsBlock,
+    CountryFlag,
   },
 })
 export default class AnalyticsContainer extends Vue {
