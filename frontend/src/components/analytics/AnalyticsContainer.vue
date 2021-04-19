@@ -91,6 +91,58 @@
           </AnalyticsBlock>
         </v-col>
       </v-row>
+      <v-row>
+        <v-col cols="2">
+          <AnalyticsBlock
+            :blockData="analyticsData.utm_terms"
+            :blockType="BlockType.AggregateStat"
+            :startDate="startDate"
+            :endDate="endDate"
+          >
+            <template v-slot:blockTitle>UTM Term</template>
+          </AnalyticsBlock>
+        </v-col>
+        <v-col cols="2">
+          <AnalyticsBlock
+            :blockData="analyticsData.utm_sources"
+            :blockType="BlockType.AggregateStat"
+            :startDate="startDate"
+            :endDate="endDate"
+          >
+            <template v-slot:blockTitle>UTM Source</template>
+          </AnalyticsBlock>
+        </v-col>
+        <v-col cols="2">
+          <AnalyticsBlock
+            :blockData="analyticsData.utm_mediums"
+            :blockType="BlockType.AggregateStat"
+            :startDate="startDate"
+            :endDate="endDate"
+          >
+            <template v-slot:blockTitle>UTM Medium</template>
+          </AnalyticsBlock>
+        </v-col>
+        <v-col cols="2">
+          <AnalyticsBlock
+            :blockData="analyticsData.utm_contents"
+            :blockType="BlockType.AggregateStat"
+            :startDate="startDate"
+            :endDate="endDate"
+          >
+            <template v-slot:blockTitle>UTM Content</template>
+          </AnalyticsBlock>
+        </v-col>
+      </v-row>
+      <v-col cols="2">
+        <AnalyticsBlock
+          :blockData="analyticsData.utm_campaigns"
+          :blockType="BlockType.AggregateStat"
+          :startDate="startDate"
+          :endDate="endDate"
+        >
+          <template v-slot:blockTitle>UTM Campaign</template>
+        </AnalyticsBlock>
+      </v-col>
     </v-container>
     <v-container v-else> Loading, please wait </v-container>
   </div>
