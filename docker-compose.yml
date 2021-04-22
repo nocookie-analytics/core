@@ -24,22 +24,16 @@ services:
       - --log
       # Enable the Dashboard and API
       - --api
-    ports:
-      - target: 80
-        published: 80
-        mode: host
-      - target: 443
-        published: 443
-        mode: host
     deploy:
       placement:
         constraints:
           - node.role == manager
       labels:
+        # Enable Traefik for this service, to make it available in the public network
         - traefik.enable=true
         # Use the traefik-public network (declared below)
         - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK}
-                # Use the custom label "traefik.constraint-label=traefik-public"
+        # Use the custom label "traefik.constraint-label=traefik-public"
         # This public Traefik will only use services with this label
         - traefik.constraint-label=${TRAEFIK_PUBLIC_TAG}
         # traefik-http set up only to use the middleware to redirect to https
@@ -129,13 +123,17 @@ services:
       # - "--broker_api=http://guest:guest@queue:15672/api//"
     deploy:
       labels:
-        - traefik.frontend.rule=Host:flower.${DOMAIN}
         - traefik.enable=true
-        - traefik.port=5555
-        - traefik.tags=${TRAEFIK_PUBLIC_TAG}
         - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK}
-        - traefik.frontend.entryPoints=http,https
-        - traefik.frontend.redirect.entryPoint=https
+        - traefik.constraint-label=${TRAEFIK_PUBLIC_TAG}
+        - traefik.http.routers.${STACK_NAME}-flower-http.rule=Host(`flower.${DOMAIN}`)
+        - traefik.http.routers.${STACK_NAME}-flower-http.entrypoints=http
+        - traefik.http.routers.${STACK_NAME}-flower-http.middlewares=${STACK_NAME}-https-redirect
+        - traefik.http.routers.${STACK_NAME}-flower-https.rule=Host(`flower.${DOMAIN}`)
+        - traefik.http.routers.${STACK_NAME}-flower-https.entrypoints=https
+        - traefik.http.routers.${STACK_NAME}-flower-https.tls=true
+        - traefik.http.routers.${STACK_NAME}-flower-https.tls.certresolver=le
+        - traefik.http.services.${STACK_NAME}-flower.loadbalancer.server.port=5555
 
   backend:
     image: '${DOCKER_IMAGE_BACKEND}:${TAG-latest}'
