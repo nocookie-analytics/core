@@ -22,5 +22,7 @@ if (env === 'production') {
   envApiUrl = `http://${process.env.VUE_APP_DOMAIN_DEV}`;
 }
 
+console.log(env, envApiUrl);
+
 export const apiUrl = envApiUrl;
 export const appName = 'No Cookie Analytics';
