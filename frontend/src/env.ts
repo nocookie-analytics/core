@@ -1,14 +1,8 @@
-const env = process.env.VUE_APP_ENV;
+const domain = document.domain;
 
-let envApiUrl = '';
+const protocol = process.env.VUE_APP_ENV === 'development' ? 'http' : 'https';
 
-if (env === 'production') {
-  envApiUrl = `https://${process.env.VUE_APP_DOMAIN_PROD}`;
-} else if (env === 'staging') {
-  envApiUrl = `https://${process.env.VUE_APP_DOMAIN_STAG}`;
-} else {
-  envApiUrl = `http://${process.env.VUE_APP_DOMAIN_DEV}`;
-}
+const envApiUrl = `${protocol}://${domain}`;
 
 export const apiUrl = envApiUrl;
 export const appName = 'No Cookie Analytics';

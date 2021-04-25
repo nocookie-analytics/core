@@ -71,20 +71,20 @@ jobs:
       run: |
         export BRANCH_TAG=$(echo "$GITHUB_REF" | sed 's|/|-|g')
         docker-compose pull db flower pgadmin queue proxy &
-        docker pull $DOCKER_IMAGE_BACKEND:$BRANCH_TAG&
-        docker pull $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG&
-        docker pull $DOCKER_IMAGE_BACKEND:master&
-        docker pull $DOCKER_IMAGE_FRONTEND:master&
-        docker pull $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$BRANCH_TAG&
-        docker pull $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:master&
+        docker pull -q $DOCKER_IMAGE_BACKEND:$BRANCH_TAG&
+        docker pull -q $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG&
+        docker pull -q $DOCKER_IMAGE_BACKEND:refs-heads-master&
+        docker pull -q $DOCKER_IMAGE_FRONTEND:refs-heads-master&
+        docker pull -q $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$BRANCH_TAG&
+        docker pull -q $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:refs-heads-master&
         wait
 
     - name: Build docker images
       run: |
         export BRANCH_TAG=$(echo "$GITHUB_REF" | sed 's|/|-|g')
-        docker build backend/ --progress=plain -t $DOCKER_IMAGE_BACKEND:$GITHUB_SHA --cache-from $DOCKER_IMAGE_BACKEND:$BRANCH_TAG --cache-from $DOCKER_IMAGE_BACKEND:master --build-arg INSTALL_DEV=true &
-        docker build frontend/ --progress=plain --target build-stage -t $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$GITHUB_SHA --cache-from $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$BRANCH_TAG --cache-from $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:master --build-arg INSTALL_DEV=true && \
-        docker build frontend/ --progress=plain -t $DOCKER_IMAGE_FRONTEND:$GITHUB_SHA --cache-from $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$GITHUB_SHA --cache-from $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG --cache-from $DOCKER_IMAGE_FRONTEND:master --build-arg INSTALL_DEV=true &
+        docker build backend/ --progress=plain -t $DOCKER_IMAGE_BACKEND:$GITHUB_SHA --cache-from $DOCKER_IMAGE_BACKEND:$BRANCH_TAG --cache-from $DOCKER_IMAGE_BACKEND:refs-heads-master --build-arg INSTALL_DEV=true &
+        docker build frontend/ --progress=plain --target build-stage -t $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$GITHUB_SHA --cache-from $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$BRANCH_TAG --cache-from $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:refs-heads-master --build-arg INSTALL_DEV=true && \
+        docker build frontend/ --progress=plain -t $DOCKER_IMAGE_FRONTEND:$GITHUB_SHA --cache-from $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$GITHUB_SHA --cache-from $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG --cache-from $DOCKER_IMAGE_FRONTEND:refs-heads-master --build-arg INSTALL_DEV=true &
         wait
 
     - name: Push docker
@@ -94,9 +94,14 @@ jobs:
         docker tag $DOCKER_IMAGE_BACKEND:$GITHUB_SHA $DOCKER_IMAGE_BACKEND:$BRANCH_TAG
         docker tag $DOCKER_IMAGE_FRONTEND:$GITHUB_SHA $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG
         docker tag $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$GITHUB_SHA $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$BRANCH_TAG
+
         docker push $DOCKER_IMAGE_BACKEND:$BRANCH_TAG&
         docker push $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG&
         docker push $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$BRANCH_TAG&
+
+        docker push $DOCKER_IMAGE_BACKEND:$GITHUB_SHA&
+        docker push $DOCKER_IMAGE_FRONTEND:$GITHUB_SHA&
+        docker push $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$GITHUB_SHA&
         wait
 
     - name: Start docker
