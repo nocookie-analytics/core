@@ -71,12 +71,12 @@ jobs:
       run: |
         export BRANCH_TAG=$(echo "$GITHUB_REF" | sed 's|/|-|g')
         docker-compose pull db flower pgadmin queue proxy &
-        docker pull $DOCKER_IMAGE_BACKEND:$BRANCH_TAG&
-        docker pull $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG&
-        docker pull $DOCKER_IMAGE_BACKEND:refs-heads-master&
-        docker pull $DOCKER_IMAGE_FRONTEND:refs-heads-master&
-        docker pull $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$BRANCH_TAG&
-        docker pull $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:refs-heads-master&
+        docker pull -q $DOCKER_IMAGE_BACKEND:$BRANCH_TAG&
+        docker pull -q $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG&
+        docker pull -q $DOCKER_IMAGE_BACKEND:refs-heads-master&
+        docker pull -q $DOCKER_IMAGE_FRONTEND:refs-heads-master&
+        docker pull -q $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:$BRANCH_TAG&
+        docker pull -q $DOCKER_IMAGE_FRONTEND_BUILD_STAGE:refs-heads-master&
         wait
 
     - name: Build docker images
