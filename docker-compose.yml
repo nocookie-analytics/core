@@ -81,59 +81,8 @@ services:
         constraints:
           - node.labels.${STACK_NAME}.app-db-data == true
 
-  pgadmin:
-    image: dpage/pgadmin4
-    networks:
-      - ${TRAEFIK_PUBLIC_NETWORK}
-      - default
-    env_file:
-      - .env
-    deploy:
-      labels:
-        - traefik.enable=true
-        - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK}
-        - traefik.constraint-label=${TRAEFIK_PUBLIC_TAG}
-        - traefik.http.routers.${STACK_NAME}-pgadmin-http.rule=Host(`pgadmin.${DOMAIN}`)
-        - traefik.http.routers.${STACK_NAME}-pgadmin-http.entrypoints=http
-        - traefik.http.routers.${STACK_NAME}-pgadmin-http.middlewares=${STACK_NAME}-https-redirect
-        - traefik.http.routers.${STACK_NAME}-pgadmin-https.rule=Host(`pgadmin.${DOMAIN}`)
-        - traefik.http.routers.${STACK_NAME}-pgadmin-https.entrypoints=https
-        - traefik.http.routers.${STACK_NAME}-pgadmin-https.tls=true
-        - traefik.http.routers.${STACK_NAME}-pgadmin-https.tls.certresolver=le
-        - traefik.http.services.${STACK_NAME}-pgadmin.loadbalancer.server.port=5050
-
   queue:
     image: rabbitmq:3
-    # Using the below image instead is required to enable the "Broker" tab in the flower UI:
-    # image: rabbitmq:3-management
-    #
-    # You also have to change the flower command
-
-  flower:
-    image: mher/flower
-    networks:
-      - ${TRAEFIK_PUBLIC_NETWORK}
-      - default
-    env_file:
-      - .env
-    command:
-      - "--broker=amqp://guest@queue:5672//"
-      # For the "Broker" tab to work in the flower UI, uncomment the following command argument,
-      # and change the queue service's image as well
-      # - "--broker_api=http://guest:guest@queue:15672/api//"
-    deploy:
-      labels:
-        - traefik.enable=true
-        - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK}
-        - traefik.constraint-label=${TRAEFIK_PUBLIC_TAG}
-        - traefik.http.routers.${STACK_NAME}-flower-http.rule=Host(`flower.${DOMAIN}`)
-        - traefik.http.routers.${STACK_NAME}-flower-http.entrypoints=http
-        - traefik.http.routers.${STACK_NAME}-flower-http.middlewares=${STACK_NAME}-https-redirect
-        - traefik.http.routers.${STACK_NAME}-flower-https.rule=Host(`flower.${DOMAIN}`)
-        - traefik.http.routers.${STACK_NAME}-flower-https.entrypoints=https
-        - traefik.http.routers.${STACK_NAME}-flower-https.tls=true
-        - traefik.http.routers.${STACK_NAME}-flower-https.tls.certresolver=le
-        - traefik.http.services.${STACK_NAME}-flower.loadbalancer.server.port=5555
 
   backend:
     image: '${DOCKER_IMAGE_BACKEND}:${TAG-latest}'
