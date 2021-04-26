@@ -153,6 +153,14 @@ services:
         BUILDKIT_INLINE_CACHE: 1
         INSTALL_DEV: ${INSTALL_DEV-false}
     deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+      restart_policy:
+        window: 30s
+        condition: on-failure
       labels:
         - traefik.enable=true
         - traefik.constraint-label-stack=${TRAEFIK_TAG}
@@ -183,6 +191,14 @@ services:
         FRONTEND_ENV: ${FRONTEND_ENV-production}
         BUILDKIT_INLINE_CACHE: 1
     deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+      restart_policy:
+        window: 30s
+        condition: on-failure
       labels:
         - traefik.enable=true
         - traefik.constraint-label-stack=${TRAEFIK_TAG}
