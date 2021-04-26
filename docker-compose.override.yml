@@ -28,16 +28,6 @@ services:
       - traefik.http.routers.${STACK_NAME}-traefik-public-http.rule=Host(`${DOMAIN}`)
       - traefik.http.services.${STACK_NAME}-traefik-public.loadbalancer.server.port=80
 
-  pgadmin:
-    ports:
-      - "5050:5050"
-    depends_on:
-      - db
-
-  flower:
-    ports:
-      - "5555:5555"
-
   backend:
     ports:
       - "8888:8888"
