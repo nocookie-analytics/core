@@ -1,8 +1,27 @@
 import Vue from 'vue';
 import { expect } from 'chai';
-import { createLocalVue, mount, shallowMount } from '@vue/test-utils';
+import Vuex from 'vuex';
+import { createLocalVue, mount } from '@vue/test-utils';
 import EditDomain from '@/views/main/domains/EditDomain.vue';
 import Vuetify from 'vuetify';
+import sinon from 'sinon';
+
+const domainResponse = {
+  data: {
+    domain_name: 'example.com',
+    public: true,
+    id: 1,
+    owner_id: 1,
+  },
+};
+
+const $store = {
+  getters: {
+    domainsApi: {
+      readDomainByName: () => domainResponse,
+    },
+  },
+};
 
 describe('EditDomain.vue', () => {
   let localVue;
@@ -11,18 +30,42 @@ describe('EditDomain.vue', () => {
   beforeEach(() => {
     vuetify = new Vuetify();
     localVue = createLocalVue();
+    localVue.use(Vuex);
+  });
+
+  afterEach(function() {
+    sinon.restore();
   });
 
   it('renders "Add new domain"', async () => {
     const $route = {
-      fullPath: '/some-route',
       name: 'create-domain',
     };
 
     const wrapper = mount(EditDomain, {
       localVue,
       vuetify,
+      stubs: ['router-link', 'router-view'],
       mocks: { $route },
+    });
+    await Vue.nextTick();
+
+    expect(wrapper.html()).to.include('Make my website analytics page public');
+  });
+
+  it('renders edit domain', async () => {
+    const $route = {
+      name: 'edit-domain',
+      params: {
+        domainName: 'example.com',
+      },
+    };
+
+    const wrapper = mount(EditDomain, {
+      localVue,
+      vuetify,
+      stubs: ['router-link', 'router-view'],
+      mocks: { $route, $store },
     });
     await Vue.nextTick();
 
