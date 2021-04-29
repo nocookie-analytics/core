@@ -3,7 +3,10 @@ import Router from 'vue-router';
 
 import RouterComponent from './components/RouterComponent.vue';
 
-Vue.use(Router);
+if (process.env.NODE_ENV !== 'test') {
+  // Using vue router in tests means we cannot mock it
+  Vue.use(Router);
+}
 
 export default new Router({
   mode: 'history',
