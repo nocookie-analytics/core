@@ -28,8 +28,8 @@ describe('EditDomain.vue', () => {
   let vuetify;
 
   beforeEach(() => {
-    vuetify = new Vuetify();
     localVue = createLocalVue();
+    vuetify = new Vuetify();
     localVue.use(Vuex);
   });
 
@@ -67,6 +67,8 @@ describe('EditDomain.vue', () => {
       stubs: ['router-link', 'router-view'],
       mocks: { $route, $store },
     });
+    // Have to wait two ticks, not sure why
+    await Vue.nextTick();
     await Vue.nextTick();
 
     expect(wrapper.html()).to.include('Make my website analytics page public');
