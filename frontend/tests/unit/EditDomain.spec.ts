@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { expect } from 'chai';
 import Vuex from 'vuex';
-import { createLocalVue, mount } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 import EditDomain from '@/views/main/domains/EditDomain.vue';
 import Vuetify from 'vuetify';
 import sinon from 'sinon';
@@ -42,7 +42,7 @@ describe('EditDomain.vue', () => {
       name: 'create-domain',
     };
 
-    const wrapper = mount(EditDomain, {
+    const wrapper = shallowMount(EditDomain, {
       localVue,
       vuetify,
       stubs: ['router-link', 'router-view'],
@@ -61,14 +61,12 @@ describe('EditDomain.vue', () => {
       },
     };
 
-    const wrapper = mount(EditDomain, {
+    const wrapper = shallowMount(EditDomain, {
       localVue,
       vuetify,
       stubs: ['router-link', 'router-view'],
       mocks: { $route, $store },
     });
-    // Have to wait two ticks, not sure why
-    await Vue.nextTick();
     await Vue.nextTick();
 
     expect(wrapper.html()).to.include('Make my website analytics page public');
