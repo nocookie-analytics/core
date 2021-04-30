@@ -92,6 +92,7 @@ export default class EditDomain extends Vue {
         this.updateDomain();
       }
       if (this.error === false) {
+        this.$router.push(`/domains/`);
         commitAddNotification(this.$store, {
           content: 'Changes saved successfully',
           color: 'success',
@@ -119,11 +120,9 @@ export default class EditDomain extends Vue {
 
   private async updateDomain(): Promise<void> {
     const domainsApi = this.$store.getters.domainsApi as DomainsApi;
+    const domainName = this.$route.params.domainName; // this.domainName points to the current form value, so we have to get the current domain name from the route
     try {
-      await domainsApi.updateDomainByName(
-        this.$router.currentRoute.params.domainName,
-        this.domainData,
-      );
+      await domainsApi.updateDomainByName(domainName, this.domainData);
     } catch (e) {
       this.error = true;
     }
