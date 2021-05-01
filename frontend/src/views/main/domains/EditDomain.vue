@@ -124,6 +124,7 @@ export default class EditDomain extends Vue {
     try {
       await domainsApi.updateDomainByName(domainName, this.domainData);
     } catch (e) {
+      console.debug(e);
       this.error = true;
     }
   }
