@@ -11,35 +11,33 @@
           :value="error"
           transition="fade-transition"
           type="error"
-          icon="error"
+          icon="mdi-alert-circle"
         >
           We are really sorry but something went wrong, please try again later
         </v-alert>
-        <template>
-          <v-form
-            v-model="valid"
-            ref="form"
-            @submit="submit"
-            @submit.prevent=""
-            @keyup.enter="submit"
-            v-if="finishedLoading"
-          >
-            <v-text-field
-              label="Domain name"
-              v-model="domainName"
-              required
-              :rules="domainNameRules"
-              append-icon="mdi-web"
-            ></v-text-field>
+        <v-form
+          v-model="valid"
+          ref="form"
+          @submit="submit"
+          @submit.prevent=""
+          @keyup.enter="submit"
+          v-if="finishedLoading"
+        >
+          <v-text-field
+            label="Domain name"
+            v-model="domainName"
+            required
+            :rules="domainNameRules"
+            append-icon="mdi-web"
+          ></v-text-field>
 
-            <v-checkbox
-              label="Make my website analytics page public and viewable by anyone"
-              v-model="public_"
-            ></v-checkbox>
-          </v-form>
-        </template>
+          <v-checkbox
+            label="Make my website analytics page public and viewable by anyone"
+            v-model="public_"
+          ></v-checkbox>
+        </v-form>
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions v-if="!error">
         <v-spacer></v-spacer>
         <v-btn @click="cancel">Cancel</v-btn>
         <v-btn type="submit" @click="submit" :disabled="!valid" color="primary">
@@ -53,7 +51,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import isValidDomain from 'is-valid-domain';
-import { DomainCreate, DomainsApi, DomainUpdate } from '@/generated';
+import { DomainsApi } from '@/generated';
 import { commitAddNotification } from '@/store/main/mutations';
 
 @Component
@@ -68,32 +66,33 @@ export default class EditDomain extends Vue {
 
   public domainNameRules = [(name: string): boolean => isValidDomain(name)];
 
-  data(): Record<string, boolean | string> {
-    return {
-      isCreate: this.$router.currentRoute.name === 'create-domain',
-    };
+  private get isCreate(): boolean {
+    return this.$route.name === 'create-domain';
   }
 
-  public async mounted() {
-    const domainsApi = this.$store.getters.domainsApi as DomainsApi;
-    const response = await domainsApi.readDomainByName(
-      this.$router.currentRoute.params.domainName,
-    );
-    const data = response.data;
-    this.domainName = data.domain_name;
-    this.public_ = data.public;
+  public async mounted(): Promise<void> {
+    if (!this.isCreate) {
+      const domainsApi = this.$store.getters.domainsApi as DomainsApi;
+      const response = await domainsApi.readDomainByName(
+        this.$route.params.domainName,
+      );
+      const data = response.data;
+      this.domainName = data.domain_name;
+      this.public_ = data.public;
+    }
     this.finishedLoading = true;
   }
 
   public async submit(): Promise<void> {
     this.error = false;
     if (await this.$validator.validateAll()) {
-      if (this.$router.currentRoute.name === 'create-domain') {
+      if (this.isCreate) {
         this.createDomain();
       } else {
         this.updateDomain();
       }
       if (this.error === false) {
+        this.$router.push(`/domains/`);
         commitAddNotification(this.$store, {
           content: 'Changes saved successfully',
           color: 'success',
@@ -121,12 +120,11 @@ export default class EditDomain extends Vue {
 
   private async updateDomain(): Promise<void> {
     const domainsApi = this.$store.getters.domainsApi as DomainsApi;
+    const domainName = this.$route.params.domainName; // this.domainName points to the current form value, so we have to get the current domain name from the route
     try {
-      await domainsApi.updateDomainByName(
-        this.$router.currentRoute.params.domainName,
-        this.domainData,
-      );
+      await domainsApi.updateDomainByName(domainName, this.domainData);
     } catch (e) {
+      console.debug(e);
       this.error = true;
     }
   }
