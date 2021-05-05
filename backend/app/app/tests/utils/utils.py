@@ -9,7 +9,12 @@ from app.core.config import settings
 
 
 def random_lower_string() -> str:
-    return "".join(random.choices(string.ascii_lowercase, k=32))
+    # Hypothesis overrides random seed, which results in subsequent calls to this function generating the same string, causing unique constraints to fail sometimes, so we override the state to use random and restore it right away
+    old_state = random.getstate()
+    random.seed()
+    random_string = "".join(random.choices(string.ascii_lowercase, k=32))
+    random.setstate(old_state)
+    return random_string
 
 
 def random_email() -> str:

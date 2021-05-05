@@ -63,7 +63,7 @@ class EventCreate(EventBase):
         psb: Optional[int] = Query(None, description="Page size bytes"),
         tz: Optional[str] = Query(None, description="Timezone"),
         tzo: Optional[int] = Query(None, description="Timezone offset"),
-        ref: Optional[HttpUrl] = Query(None, description="Referrer"),
+        ref: Optional[str] = Query(None, description="Referrer"),
         ttfb: Optional[Decimal] = Query(None, description="Time to first-byte"),
         tt: Optional[Decimal] = Query(None, description="Total time"),
         dt: Optional[Decimal] = Query(None, description="Download time"),
@@ -85,10 +85,10 @@ class EventCreate(EventBase):
         try:
             return cls(
                 event_type=event_type,
-                page_title=pt,
+                page_title=pt or None,
                 page_size_bytes=psb,
-                referrer=ref,
-                user_timezone=tz,
+                referrer=ref or None,
+                user_timezone=tz or None,
                 user_timezone_offset=tzo,
                 time_to_first_byte=ttfb,
                 total_time=tt,
