@@ -1,6 +1,10 @@
-import pytest
+from datetime import timedelta
 from uuid import uuid4
+
 from fastapi.testclient import TestClient
+from hypothesis import given, settings as hypothesis_settings
+from hypothesis.provisional import urls
+import pytest
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
@@ -29,9 +33,21 @@ def create_event(db, **kwargs):
     return event
 
 
+@given(urls())
+@hypothesis_settings(deadline=timedelta(milliseconds=300))
 @pytest.mark.usefixtures("override_testclient")
-def test_create_page_view_event(client: TestClient, db: Session) -> None:
-    data = create_event(db)
+def test_create_page_view_event(client: TestClient, db: Session, url: str) -> None:
+    data = create_event(db, ref=url)
+    response = client.get(f"{settings.API_V1_STR}/e/", params=data)
+    assert response.status_code == 200, response.json()
+    content = response.json()
+    assert content["success"] is True
+    assert content["pvid"]
+
+
+@pytest.mark.usefixtures("override_testclient")
+def test_create_page_view_event_no_ref(client: TestClient, db: Session) -> None:
+    data = create_event(db, ref="")
     response = client.get(f"{settings.API_V1_STR}/e/", params=data)
     assert response.status_code == 200, response.json()
     content = response.json()
