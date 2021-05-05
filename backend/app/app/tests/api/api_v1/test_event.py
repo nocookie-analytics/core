@@ -34,7 +34,7 @@ def create_event(db, **kwargs):
 
 
 @given(urls())
-@hypothesis_settings(deadline=timedelta(milliseconds=300))
+@hypothesis_settings(deadline=timedelta(milliseconds=500))
 @pytest.mark.usefixtures("override_testclient")
 def test_create_page_view_event(client: TestClient, db: Session, url: str) -> None:
     data = create_event(db, ref=url)
