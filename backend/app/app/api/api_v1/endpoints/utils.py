@@ -1,6 +1,7 @@
-from typing import Any
+import json
+from typing import Any, Dict
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from pydantic.networks import EmailStr
 
 from app import models, schemas
@@ -40,3 +41,17 @@ def test_email(
     """
     send_test_email(email_to=email_to)
     return {"msg": "Test email sent"}
+
+
+@router.get(
+    "/debug-request/",
+    status_code=200,
+)
+def debug_request(
+    request: Request,
+    current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Dict:
+    """
+    Debug request
+    """
+    return dict(request.headers.items(), remote_ip=request.client.host)
