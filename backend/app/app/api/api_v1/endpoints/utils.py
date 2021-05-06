@@ -54,4 +54,8 @@ def debug_request(
     """
     Debug request
     """
-    return dict(request.headers.items(), remote_ip=request.client.host)
+    return dict(
+        request.headers.items(),
+        remote_ip=request.client.host,
+        raw=json.dumps(request.headers.items()),
+    )
