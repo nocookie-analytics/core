@@ -59,21 +59,41 @@ class TestCreatePageViewEvent:
         assert event.ip_country
         assert event.ip_continent_code
 
+    @pytest.mark.parametrize(
+        "referrer, expected_referrer_medium, expected_referrer_name",
+        [
+            ("https://www.google.com", ReferrerMediumType.SEARCH, "Google"),
+            ("https://www.facebook.com", ReferrerMediumType.SOCIAL, "Facebook"),
+            ("https://mail.google.com", ReferrerMediumType.EMAIL, "Gmail"),
+            ("https://somerandomdomain.com", ReferrerMediumType.UNKNOWN, None),
+            ("INTERNAL", ReferrerMediumType.INTERNAL, None),
+            ("", ReferrerMediumType.UNKNOWN, None),
+            (None, ReferrerMediumType.UNKNOWN, None),
+        ],
+    )
     def test_create_page_view_event_referrer(
         self,
         db: Session,
         mock_read_only_domain: Domain,
         mock_ip_address: str,
+        referrer: str,
+        expected_referrer_medium: ReferrerMediumType,
+        expected_referrer_name: str,
     ) -> None:
         domain = mock_read_only_domain
+        if referrer == "INTERNAL":
+            referrer = f"https://{mock_read_only_domain.domain_name}"
         event = create_random_page_view_event(
             db,
             domain_id=domain.id,
             ip_address=mock_ip_address,
-            create_overrides={"referrer": "https://www.google.com/"},
+            create_overrides={
+                "referrer": referrer,
+                "url": f"https://{mock_read_only_domain.domain_name}/path",
+            },
         )
-        assert event.referrer_medium == ReferrerMediumType.SEARCH
-        assert event.referrer_name == "Google"
+        assert event.referrer_medium == expected_referrer_medium
+        assert event.referrer_name == expected_referrer_name
 
     def test_create_url_components(
         self,
