@@ -18,11 +18,11 @@ def migrate_enum(
 
     tmp_type.create(op.get_bind(), checkfirst=False)
     op.execute(
-        f"ALTER TABLE {table_name} ALTER COLUMN {column_name} TYPE {enum_name_temp} USING {enum_name}::text::{enum_name_temp}"
+        f"ALTER TABLE {table_name} ALTER COLUMN {column_name} TYPE {enum_name_temp} USING {column_name}::text::{enum_name_temp}"
     )
     old_type.drop(op.get_bind(), checkfirst=False)
     new_type.create(op.get_bind(), checkfirst=False)
     op.execute(
-        f"ALTER TABLE {table_name} ALTER COLUMN {column_name} TYPE {enum_name} USING {enum_name}::text::{enum_name}"
+        f"ALTER TABLE {table_name} ALTER COLUMN {column_name} TYPE {enum_name} USING {column_name}::text::{enum_name}"
     )
     tmp_type.drop(op.get_bind(), checkfirst=False)

@@ -34,6 +34,7 @@ class EventType(Enum):
 
 class ReferrerMediumType(Enum):
     UNKNOWN = "unknown"
+    INTERNAL = "internal"
     EMAIL = "email"
     SOCIAL = "social"
     SEARCH = "search"
