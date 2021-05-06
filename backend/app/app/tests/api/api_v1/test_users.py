@@ -114,6 +114,9 @@ def test_retrieve_users(
     user_in2 = UserCreate(email=username2, password=password2)
     crud.user.create(db, obj_in=user_in2)
 
+    resp_without_headers = client.get(f"{settings.API_V1_STR}/users/")
+    assert resp_without_headers.status_code == 400
+    assert "have enough privileges" in resp_without_headers.json()["detail"]
     r = client.get(f"{settings.API_V1_STR}/users/", headers=superuser_token_headers)
     all_users = r.json()
 
