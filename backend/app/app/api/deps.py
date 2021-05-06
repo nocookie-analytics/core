@@ -49,10 +49,8 @@ def get_current_user(
 def get_current_active_user_silent(
     current_user: models.User = Depends(get_current_user),
 ):
-    if not current_user:
+    if not current_user or not crud.user.is_active(current_user):
         return None
-    if not crud.user.is_active(current_user):
-        raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
 
 
