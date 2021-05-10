@@ -8,6 +8,7 @@ from app import models, schemas
 from app.api import deps
 from app.core.celery_app import celery_app
 from app.utils.email import send_test_email
+from app.utils.geolocation import get_ip_from_request
 
 router = APIRouter()
 
@@ -56,6 +57,6 @@ def debug_request(
     """
     return dict(
         request.headers.items(),
-        remote_ip=request.client.host,
+        remote_ip=get_ip_from_request(request),
         raw=json.dumps(request.headers.items()),
     )
