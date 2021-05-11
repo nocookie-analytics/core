@@ -104,7 +104,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         for field in fields:
             base_query = (
                 db.query(Event)
-                .filter(Domain.id == domain.id)
+                .filter(Event.domain_id == domain.id)
                 .filter(
                     and_(
                         Event.timestamp >= start.datetime,
