@@ -1,5 +1,5 @@
 from __future__ import annotations
-from app.utils.geolocation import get_ip_gelocation
+from app.utils.geolocation import get_ip_from_request, get_ip_gelocation
 from decimal import Decimal
 from typing import Dict, Optional, Union
 from uuid import uuid4
@@ -98,7 +98,7 @@ class EventCreate(EventBase):
                 page_view_id=pvid,
                 metric_name=mn,
                 metric_value=mv,
-                **cls._get_geolocation_info(request.client.host),
+                **cls._get_geolocation_info(get_ip_from_request(request)),
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception
@@ -106,7 +106,7 @@ class EventCreate(EventBase):
 
     @staticmethod
     def _get_geolocation_info(
-        ip_address: IPvAnyAddress,
+        ip_address: str,
     ) -> Dict[str, Optional[Union[int, str]]]:
         data: Dict[str, Optional[Union[str, int]]] = {}
         if ip_address:

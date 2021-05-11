@@ -1,12 +1,14 @@
-from typing import Any
+import json
+from typing import Any, Dict
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from pydantic.networks import EmailStr
 
 from app import models, schemas
 from app.api import deps
 from app.core.celery_app import celery_app
 from app.utils.email import send_test_email
+from app.utils.geolocation import get_ip_from_request
 
 router = APIRouter()
 
@@ -40,3 +42,21 @@ def test_email(
     """
     send_test_email(email_to=email_to)
     return {"msg": "Test email sent"}
+
+
+@router.get(
+    "/debug-request/",
+    status_code=200,
+)
+def debug_request(
+    request: Request,
+    current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Dict:
+    """
+    Debug request
+    """
+    return dict(
+        request.headers.items(),
+        remote_ip=get_ip_from_request(request),
+        raw=json.dumps(request.headers.items()),
+    )
