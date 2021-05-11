@@ -1,15 +1,19 @@
-from app.schemas.analytics import AnalyticsType
 from datetime import datetime, timedelta
 
-import pytest
 from fastapi.testclient import TestClient
 from hypothesis import given
 from hypothesis.extra.pytz import timezones
 from hypothesis.strategies import datetimes, timedeltas
+import pytest
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.models.domain import Domain
+from app.schemas.analytics import AnalyticsType
+from app.tests.utils.domain import create_random_domain
+from app.tests.utils.event import create_random_page_view_event
+from app.tests.utils.user import create_random_user, user_authentication_headers
+from app.tests.utils.utils import random_lower_string
 
 aware_datetimes = datetimes(timezones=timezones(), min_value=datetime(1500, 1, 1))
 
@@ -66,6 +70,32 @@ def test_get_analytics_invalid_domain(
         f"{settings.API_V1_STR}/a/", params=data, headers=superuser_token_headers
     )
     assert response.status_code == 404, response.json()
+
+
+@pytest.mark.usefixtures("override_testclient")
+def test_get_analytics_success_with_data(db: Session, client: TestClient) -> None:
+    # The other test is hypothesis based with no real event data, this one includes an event
+    password = random_lower_string()
+    user = create_random_user(db, password=password)
+    domain = create_random_domain(db, owner_id=user.id)
+    headers = user_authentication_headers(
+        client=client, email=user.email, password=password
+    )
+    domain2 = create_random_domain(db)
+
+    create_random_page_view_event(db, domain_id=domain.id)
+    create_random_page_view_event(db, domain_id=domain2.id)
+
+    data = {
+        "domain_name": domain.domain_name,
+        "start": datetime.now() - timedelta(minutes=1),
+        "end": datetime.now() + timedelta(minutes=1),
+        "include": [AnalyticsType.PAGEVIEWS.value, AnalyticsType.COUNTRIES.value],
+    }
+    response = client.get(f"{settings.API_V1_STR}/a/", params=data, headers=headers)
+    assert response.status_code == 200, response.json()
+    json = response.json()
+    assert json["pageviews"]["total_visits"] == 1
 
 
 @pytest.mark.usefixtures("override_testclient")
