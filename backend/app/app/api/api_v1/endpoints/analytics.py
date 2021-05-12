@@ -40,6 +40,8 @@ def get_analytics(
             "eg: `&include=pageviews&include=countries`"
         ),
     ),
+    page: str = Query(None),
+    country: str = Query(None),
     current_user: models.User = Depends(deps.get_current_active_user_silent),
     db: Session = Depends(deps.get_db),
     start: arrow.Arrow = Depends(get_start_date),
@@ -54,5 +56,11 @@ def get_analytics(
         raise HTTPException(status_code=404, detail="Domain not found")
 
     return crud.event.get_analytics_from_fields(
-        db=db, fields=include, start=start, end=end, domain=domain
+        db=db,
+        fields=include,
+        start=start,
+        end=end,
+        domain=domain,
+        country=country,
+        page=page,
     )

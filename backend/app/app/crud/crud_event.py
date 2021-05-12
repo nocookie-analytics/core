@@ -21,7 +21,6 @@ from app.schemas.analytics import (
     PageViewStat,
 )
 from app.schemas.event import EventCreate, EventUpdate
-from app.utils.geolocation import get_ip_gelocation
 from app.utils.referer_parser import Referer
 
 
@@ -99,6 +98,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         start: Arrow,
         end: Arrow,
         domain: Domain,
+        country: str,
+        page: str,
     ) -> AnalyticsData:
         data = AnalyticsData(start=start, end=end)
         for field in fields:
@@ -112,6 +113,10 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                     )
                 )
             )
+            if country is not None:
+                base_query = base_query.filter(Event.ip_country_iso_code == country)
+            if page is not None:
+                base_query = base_query.filter(Event.path == page)
             page_view_base_query = base_query.filter(
                 Event.event_type == EventType.page_view
             )
