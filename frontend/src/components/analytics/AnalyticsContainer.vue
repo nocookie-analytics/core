@@ -18,8 +18,8 @@
             :endDate="endDate"
           >
             <template v-slot:blockTitle>Browser</template>
-            <template v-slot:itemName="{ item }"
-              ><v-icon>mdi-{{ item.value.toLowerCase() }}</v-icon>
+            <template v-slot:itemName="{ item }">
+              <Icon :value="item.value" />
               {{ item.value }}</template
             >
           </AnalyticsBlock>
@@ -32,8 +32,8 @@
             :endDate="endDate"
           >
             <template v-slot:blockTitle>OS</template>
-            <template v-slot:itemName="{ item }"
-              ><v-icon>mdi-{{ item.value.toLowerCase() }}</v-icon>
+            <template v-slot:itemName="{ item }">
+              <Icon :value="item.value" />
               {{ item.value }}</template
             >
           </AnalyticsBlock>
@@ -46,8 +46,8 @@
             :endDate="endDate"
           >
             <template v-slot:blockTitle>Device type</template>
-            <template v-slot:itemName="{ item }"
-              ><v-icon>mdi-{{ item.value.toLowerCase() }}</v-icon>
+            <template v-slot:itemName="{ item }">
+              <Icon :value="item.value" />
               {{ item.value }}</template
             >
           </AnalyticsBlock>
@@ -154,6 +154,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import AnalyticsBlock, {
   BlockType,
 } from '@/components/analytics/AnalyticsBlock.vue';
+import Icon from '@/components/analytics/Icon.vue';
 import { parseISO } from 'date-fns';
 import countryCodes from '@/components/data/countryCodes';
 import CountryFlag from 'vue-country-flag';
@@ -162,6 +163,7 @@ import CountryFlag from 'vue-country-flag';
   components: {
     AnalyticsBlock,
     CountryFlag,
+    Icon,
   },
 })
 export default class AnalyticsContainer extends Vue {

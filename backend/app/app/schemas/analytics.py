@@ -1,14 +1,12 @@
 from __future__ import annotations
 import datetime
 from enum import Enum
-from typing import List, Optional, Set, Union
+from typing import List, Optional, Union
 
 import arrow
-from fastapi import HTTPException, Query as FastAPIQuery
 from pydantic import BaseModel
-from sqlalchemy import DATE, cast, func, column
+from sqlalchemy import func, column
 from sqlalchemy.orm import Query
-from starlette import status
 
 from app.models.event import Event, MetricType
 
@@ -52,8 +50,10 @@ class AggregateStat(BaseModel):
     def from_base_query(
         base_query: Query, group_by_column, *, filter_none: bool = False
     ) -> List[AggregateStat]:
-        query = base_query.group_by(group_by_column).with_entities(
-            group_by_column, func.count()
+        query = (
+            base_query.group_by(group_by_column)
+            .with_entities(group_by_column, func.count())
+            .order_by(func.count().desc())
         )
         if filter_none is True:
             query = query.filter(group_by_column.isnot(None))
@@ -72,11 +72,15 @@ class PageViewsPerDayStat(BaseModel):
     def from_base_query(
         base_query: Query, start: datetime.datetime, end: datetime.datetime
     ) -> List[PageViewsPerDayStat]:
-        rows = base_query.group_by(column("one_day")).with_entities(
-            func.time_bucket_gapfill(
-                "1 day", Event.timestamp, start.date(), end.date()
-            ).label("one_day"),
-            func.coalesce(func.count(), 0),
+        rows = (
+            base_query.group_by(column("one_day"))
+            .with_entities(
+                func.time_bucket_gapfill(
+                    "1 day", Event.timestamp, start.date(), end.date()
+                ).label("one_day"),
+                func.coalesce(func.count(), 0),
+            )
+            .order_by("one_day")
         )
         return [PageViewsPerDayStat(date=row[0], total_visits=row[1]) for row in rows]
 
@@ -98,9 +102,10 @@ class AvgMetricPerDayStat(BaseModel):
                 func.time_bucket_gapfill("1 day", Event.timestamp, start, end).label(
                     "one_day"
                 ),
-                func.coalesce(func.avg(Event.metric_value), 0),
+                func.coalesce(func.avg(Event.metric_value), 0).label("average"),
             )
             .filter(Event.metric_name == metric_name)
+            .order_by("one_day")
         )
         return [AvgMetricPerDayStat(date=row[0], value=row[1]) for row in rows]
 
