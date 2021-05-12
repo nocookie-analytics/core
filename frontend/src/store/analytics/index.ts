@@ -28,6 +28,8 @@ export const defaultState: AnalyticsState = {
 
   startDate: readDateFromURLParam('start', addDays(now, -30)),
   endDate: readDateFromURLParam('end', now),
+  page: undefined,
+  country: undefined,
 };
 
 export const analyticsModule = {

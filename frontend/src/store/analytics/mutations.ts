@@ -23,6 +23,12 @@ export const mutations = {
   setEndDate(state: AnalyticsState, endDate: Date): void {
     state.endDate = endDate;
   },
+  setPage(state: AnalyticsState, page: string | undefined): void {
+    state.page = page;
+  },
+  setCountry(state: AnalyticsState, country: string | undefined): void {
+    state.country = country;
+  },
 };
 
 const { commit } = getStoreAccessors<AnalyticsState, RootState>('');
@@ -32,3 +38,5 @@ export const commitSetAnalyticsData = commit(mutations.setDomainData);
 export const commitSetAnalyticsError = commit(mutations.setAnalyticsError);
 export const commitSetStartDate = commit(mutations.setStartDate);
 export const commitSetEndDate = commit(mutations.setEndDate);
+export const commitSetPage = commit(mutations.setPage);
+export const commitSetCountry = commit(mutations.setCountry);
