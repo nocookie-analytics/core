@@ -4,12 +4,16 @@ import { actions } from './actions';
 import { AnalyticsState } from './state';
 import { addDays, isValid, parseISO } from 'date-fns';
 
+const getURLParamValue = (urlParamName: string): string | undefined => {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(urlParamName) || undefined;
+};
+
 const readDateFromURLParam = (
   urlParamName: string,
   defaultValue: Date,
 ): Date => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const dateString = urlParams.get(urlParamName);
+  const dateString = getURLParamValue(urlParamName);
   if (dateString) {
     const parsedDate = parseISO(dateString);
     if (isValid(parsedDate)) {
@@ -28,10 +32,11 @@ export const defaultState: AnalyticsState = {
 
   startDate: readDateFromURLParam('start', addDays(now, -30)),
   endDate: readDateFromURLParam('end', now),
-  page: undefined,
-  country: undefined,
+  page: getURLParamValue('page'),
+  country: getURLParamValue('country'),
 };
 
+console.log(defaultState);
 export const analyticsModule = {
   state: defaultState,
   mutations,

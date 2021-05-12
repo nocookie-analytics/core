@@ -208,10 +208,12 @@ export default class AnalyticsContainer extends Vue {
 
   filterPage(item) {
     dispatchUpdatePage(this.$store, item.value);
+    this.$router.push({ query: { page: item.value } });
   }
 
   filterCountry(item) {
     dispatchUpdateCountry(this.$store, item.value);
+    this.$router.push({ query: { country: item.value } });
   }
 
   countryCodeToCountryName(countryCode: string): string {
