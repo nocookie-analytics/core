@@ -20,6 +20,7 @@
  * @enum {string}
  */
 export enum AnalyticsType {
+    Pages = 'pages',
     Pageviews = 'pageviews',
     PageviewsPerDay = 'pageviews_per_day',
     Countries = 'countries',

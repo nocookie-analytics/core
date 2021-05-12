@@ -12,6 +12,16 @@
       <v-row>
         <v-col cols="3">
           <AnalyticsBlock
+            :blockData="analyticsData.pages"
+            :blockType="BlockType.AggregateStat"
+            :startDate="startDate"
+            :endDate="endDate"
+          >
+            <template v-slot:blockTitle>Pages</template>
+          </AnalyticsBlock>
+        </v-col>
+        <v-col cols="3">
+          <AnalyticsBlock
             :blockData="analyticsData.browser_families"
             :blockType="BlockType.AggregateStat"
             :startDate="startDate"
