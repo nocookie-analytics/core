@@ -98,8 +98,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         start: Arrow,
         end: Arrow,
         domain: Domain,
-        country: str,
-        page: str,
+        country: str = None,
+        page: str = None,
     ) -> AnalyticsData:
         data = AnalyticsData(start=start, end=end)
         for field in fields:
