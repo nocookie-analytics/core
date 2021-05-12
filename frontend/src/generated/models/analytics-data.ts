@@ -38,6 +38,12 @@ export interface AnalyticsData {
     end: string;
     /**
      * 
+     * @type {Array<AggregateStat>}
+     * @memberof AnalyticsData
+     */
+    pages?: Array<AggregateStat>;
+    /**
+     * 
      * @type {PageViewStat}
      * @memberof AnalyticsData
      */
