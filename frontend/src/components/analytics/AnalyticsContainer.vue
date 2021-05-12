@@ -18,6 +18,11 @@
             :endDate="endDate"
           >
             <template v-slot:blockTitle>Pages</template>
+            <template v-slot:itemName="{ item }"
+              ><a v-on:click.stop="filterPage(item)">{{
+                item.value
+              }}</a></template
+            >
           </AnalyticsBlock>
         </v-col>
         <v-col cols="3">
@@ -95,12 +100,17 @@
           >
             <template v-slot:blockTitle>Country</template>
             <template v-slot:itemName="{ item }">
-              <country-flag
-                :country="item.value.toLowerCase()"
-                rounded
-                size="normal"
-              />
-              {{ countryCodeToCountryName(item.value) }}
+              <a
+                v-on:click.stop="filterCountry(item)"
+                v-if="item.value !== 'Unknown'"
+              >
+                <country-flag
+                  :country="item.value.toLowerCase()"
+                  rounded
+                  size="normal"
+                />
+                {{ countryCodeToCountryName(item.value) }}
+              </a>
             </template>
           </AnalyticsBlock>
         </v-col>
@@ -172,6 +182,10 @@ import Icon from '@/components/analytics/Icon.vue';
 import { parseISO } from 'date-fns';
 import countryCodes from '@/components/data/countryCodes';
 import CountryFlag from 'vue-country-flag';
+import {
+  dispatchUpdateCountry,
+  dispatchUpdatePage,
+} from '@/store/analytics/actions';
 
 @Component({
   components: {
@@ -190,6 +204,14 @@ export default class AnalyticsContainer extends Vue {
 
   get endDate(): Date {
     return parseISO(this.analyticsData.end);
+  }
+
+  filterPage(item) {
+    dispatchUpdatePage(this.$store, item.value);
+  }
+
+  filterCountry(item) {
+    dispatchUpdateCountry(this.$store, item.value);
   }
 
   countryCodeToCountryName(countryCode: string): string {
