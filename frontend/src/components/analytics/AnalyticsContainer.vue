@@ -17,9 +17,14 @@
             :startDate="startDate"
             :endDate="endDate"
           >
-            <template v-slot:blockTitle>Pages</template>
+            <template v-slot:blockTitle>
+              Page
+              <v-icon v-if="page" v-on:click.stop="filterPage(undefined)">
+                mdi-delete
+              </v-icon>
+            </template>
             <template v-slot:itemName="{ item }"
-              ><a v-on:click.stop="filterPage(item)">{{
+              ><a v-on:click.stop="filterPage(item.value)">{{
                 item.value
               }}</a></template
             >
@@ -98,10 +103,15 @@
             :startDate="startDate"
             :endDate="endDate"
           >
-            <template v-slot:blockTitle>Country</template>
+            <template v-slot:blockTitle>
+              Country
+              <v-icon v-if="country" v-on:click.stop="filterCountry(undefined)">
+                mdi-delete
+              </v-icon>
+            </template>
             <template v-slot:itemName="{ item }">
               <a
-                v-on:click.stop="filterCountry(item)"
+                v-on:click.stop="filterCountry(item.value)"
                 v-if="item.value !== 'Unknown'"
               >
                 <country-flag
@@ -173,7 +183,7 @@
 </template>
 
 <script lang="ts">
-import { AnalyticsData } from '@/generated';
+import { AggregateStat, AnalyticsData } from '@/generated';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import AnalyticsBlock, {
   BlockType,
@@ -186,6 +196,7 @@ import {
   dispatchUpdateCountry,
   dispatchUpdatePage,
 } from '@/store/analytics/actions';
+import { readCountry, readPage } from '@/store/analytics/getters';
 
 @Component({
   components: {
@@ -206,14 +217,22 @@ export default class AnalyticsContainer extends Vue {
     return parseISO(this.analyticsData.end);
   }
 
-  filterPage(item) {
-    dispatchUpdatePage(this.$store, item.value);
-    this.$router.push({ query: { page: item.value } });
+  get page(): string | undefined {
+    return readPage(this.$store);
   }
 
-  filterCountry(item) {
-    dispatchUpdateCountry(this.$store, item.value);
-    this.$router.push({ query: { country: item.value } });
+  get country(): string | undefined {
+    return readCountry(this.$store);
+  }
+
+  filterPage(value: string | undefined): void {
+    this.$router.push({ query: { page: value } });
+    dispatchUpdatePage(this.$store, value);
+  }
+
+  filterCountry(value: string | undefined): void {
+    this.$router.push({ query: { country: value } });
+    dispatchUpdateCountry(this.$store, value);
   }
 
   countryCodeToCountryName(countryCode: string): string {
