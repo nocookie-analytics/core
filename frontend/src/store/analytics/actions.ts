@@ -33,6 +33,7 @@ export const actions = {
       const response = await analyticsApi.getAnalytics(
         domainName,
         [
+          AnalyticsType.Pages,
           AnalyticsType.Pageviews,
           AnalyticsType.Countries,
 
