@@ -25,7 +25,6 @@ export default class AnalyticsContainer extends Vue {
   @Prop() public value!: string;
 
   get iconName(): string | undefined {
-    console.log(iconMap[this.value], this.value);
     if (iconMap[this.value]) {
       return iconMap[this.value];
     }

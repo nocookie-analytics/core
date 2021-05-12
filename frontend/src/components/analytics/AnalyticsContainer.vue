@@ -60,6 +60,10 @@
             :endDate="endDate"
           >
             <template v-slot:blockTitle>Referrer name</template>
+            <template v-slot:itemName="{ item }">
+              <Icon :value="item.value" />
+              {{ item.value }}</template
+            >
           </AnalyticsBlock>
         </v-col>
         <v-col cols="3">
