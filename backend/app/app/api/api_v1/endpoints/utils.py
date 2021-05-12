@@ -47,6 +47,7 @@ def test_email(
 @router.get(
     "/debug-request/",
     status_code=200,
+    include_in_schema=False,
 )
 def debug_request(
     request: Request,
