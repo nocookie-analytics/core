@@ -1,14 +1,12 @@
 from __future__ import annotations
 import datetime
 from enum import Enum
-from typing import List, Optional, Set, Union
+from typing import List, Optional, Union
 
 import arrow
-from fastapi import HTTPException, Query as FastAPIQuery
 from pydantic import BaseModel
-from sqlalchemy import DATE, cast, func, column, desc
+from sqlalchemy import func, column
 from sqlalchemy.orm import Query
-from starlette import status
 
 from app.models.event import Event, MetricType
 
@@ -107,7 +105,7 @@ class AvgMetricPerDayStat(BaseModel):
                 func.coalesce(func.avg(Event.metric_value), 0).label("average"),
             )
             .filter(Event.metric_name == metric_name)
-            .order_by(desc("average"))
+            .order_by("one_day")
         )
         return [AvgMetricPerDayStat(date=row[0], value=row[1]) for row in rows]
 
