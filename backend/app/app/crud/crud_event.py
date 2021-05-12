@@ -138,6 +138,11 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 data.referrer_mediums = AggregateStat.from_base_query(
                     page_view_base_query, Event.referrer_medium
                 )
+            elif field == AnalyticsType.PAGES:
+                data.pages = AggregateStat.from_base_query(
+                    page_view_base_query, Event.path
+                )
+                ...
             elif field == AnalyticsType.REFERRER_NAMES:
                 data.referrer_names = AggregateStat.from_base_query(
                     page_view_base_query,

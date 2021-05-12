@@ -12,6 +12,7 @@ from app.models.event import Event, MetricType
 
 
 class AnalyticsType(Enum):
+    PAGES = "pages"
     PAGEVIEWS = "pageviews"
     PAGEVIEWS_PER_DAY = "pageviews_per_day"
     COUNTRIES = "countries"
@@ -121,6 +122,7 @@ class PageViewStat(BaseModel):
 class AnalyticsData(BaseModel):
     start: PydanticArrow
     end: PydanticArrow
+    pages: Optional[List[AggregateStat]]
     pageviews: Optional[PageViewStat]
 
     lcp_per_day: Optional[List[AvgMetricPerDayStat]]
