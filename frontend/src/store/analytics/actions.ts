@@ -6,6 +6,8 @@ import {
   commitSetActiveDomain,
   commitSetAnalyticsData,
   commitSetAnalyticsError,
+  commitSetCountry,
+  commitSetPage,
 } from './mutations';
 import { AnalyticsState } from './state';
 
@@ -17,6 +19,24 @@ export const actions = {
     domainName: string,
   ): Promise<void> {
     commitSetActiveDomain(context, domainName);
+    commitSetAnalyticsError(context, null);
+    await dispatchFetchDomainAnalytics(context);
+  },
+
+  async updatePage(
+    context: AnalyticsContext,
+    page: string | undefined,
+  ): Promise<void> {
+    commitSetPage(context, page);
+    commitSetAnalyticsError(context, null);
+    await dispatchFetchDomainAnalytics(context);
+  },
+
+  async updateCountry(
+    context: AnalyticsContext,
+    page: string | undefined,
+  ): Promise<void> {
+    commitSetCountry(context, page);
     commitSetAnalyticsError(context, null);
     await dispatchFetchDomainAnalytics(context);
   },
@@ -55,6 +75,8 @@ export const actions = {
           AnalyticsType.UtmContents,
           AnalyticsType.UtmCampaigns,
         ],
+        context.state.page,
+        context.state.country,
         context.state.startDate.toISOString(),
         context.state.endDate.toISOString(),
       );
@@ -75,3 +97,5 @@ export const dispatchUpdateActiveDomain = dispatch(actions.updateActiveDomain);
 export const dispatchFetchDomainAnalytics = dispatch(
   actions.fetchDomainAnalytics,
 );
+export const dispatchUpdatePage = dispatch(actions.updatePage);
+export const dispatchUpdateCountry = dispatch(actions.updateCountry);

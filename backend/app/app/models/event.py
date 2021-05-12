@@ -147,10 +147,8 @@ class Event(Base):
     ix_referrer = Index(
         "ix_referrer", domain_id, referrer_medium, referrer_name, timestamp
     )
+    ix_path = Index("id_path", domain_id, path, timestamp)
 
-    # Choosing this as a primary key so the table is partitioned by domain first,
-    # then timestamp but the combination of domain and timestamp won't be unique,
-    # serial id makes it so
     __table_args__: Tuple = (
         ix_domain_timestamp,
         Index(
@@ -189,6 +187,9 @@ class Event(Base):
             postgresql_where=utm_content.isnot(None),
         ),
         ix_timestamp,
+        # Choosing this as a primary key so the table is partitioned by domain first,
+        # then timestamp but the combination of domain and timestamp won't be unique,
+        # serial id makes it so
         PrimaryKeyConstraint(domain_id, timestamp, id),
         {},
     )
