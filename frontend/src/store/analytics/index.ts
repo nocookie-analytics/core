@@ -34,6 +34,10 @@ export const defaultState: AnalyticsState = {
   endDate: readDateFromURLParam('end', now),
   page: getURLParamValue('page'),
   country: getURLParamValue('country'),
+  browser: getURLParamValue('browser'),
+  device: getURLParamValue('device'),
+  os: getURLParamValue('os'),
+  referrerName: getURLParamValue('referrerName'),
 };
 
 console.log(defaultState);

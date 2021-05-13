@@ -7,6 +7,7 @@ import {
   commitSetAnalyticsData,
   commitSetAnalyticsError,
   commitSetCountry,
+  commitSetFilter,
   commitSetPage,
 } from './mutations';
 import { AnalyticsState } from './state';
@@ -19,6 +20,15 @@ export const actions = {
     domainName: string,
   ): Promise<void> {
     commitSetActiveDomain(context, domainName);
+    commitSetAnalyticsError(context, null);
+    await dispatchFetchDomainAnalytics(context);
+  },
+
+  async updateAnalyticsFilter(
+    context: AnalyticsContext,
+    { value, key }: { value: string | undefined; key: string },
+  ): Promise<void> {
+    commitSetFilter(context, { key, value });
     commitSetAnalyticsError(context, null);
     await dispatchFetchDomainAnalytics(context);
   },
@@ -97,5 +107,6 @@ export const dispatchUpdateActiveDomain = dispatch(actions.updateActiveDomain);
 export const dispatchFetchDomainAnalytics = dispatch(
   actions.fetchDomainAnalytics,
 );
-export const dispatchUpdatePage = dispatch(actions.updatePage);
-export const dispatchUpdateCountry = dispatch(actions.updateCountry);
+export const dispatchUpdateAnalyticsFilter = dispatch(
+  actions.updateAnalyticsFilter,
+);

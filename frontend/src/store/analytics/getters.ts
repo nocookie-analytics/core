@@ -26,9 +26,20 @@ export const getters = {
   page: (state: AnalyticsState): string | undefined => {
     return state.page;
   },
-
   country: (state: AnalyticsState): string | undefined => {
     return state.country;
+  },
+  browser: (state: AnalyticsState): string | undefined => {
+    return state.browser;
+  },
+  os: (state: AnalyticsState): string | undefined => {
+    return state.os;
+  },
+  device: (state: AnalyticsState): string | undefined => {
+    return state.device;
+  },
+  referrerName: (state: AnalyticsState): string | undefined => {
+    return state.referrerName;
   },
 };
 
@@ -41,3 +52,7 @@ export const readEndDate = read(getters.endDate);
 export const readAnalyticsError = read(getters.analyticsError);
 export const readPage = read(getters.page);
 export const readCountry = read(getters.country);
+export const readBrowser = read(getters.browser);
+export const readOs = read(getters.os);
+export const readDevice = read(getters.device);
+export const readReferrerName = read(getters.referrerName);

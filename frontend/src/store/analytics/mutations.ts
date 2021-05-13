@@ -23,6 +23,14 @@ export const mutations = {
   setEndDate(state: AnalyticsState, endDate: Date): void {
     state.endDate = endDate;
   },
+
+  setFilter(
+    state: AnalyticsState,
+    { key, value }: { key: string; value: string | undefined },
+  ): void {
+    state[key] = value;
+  },
+
   setPage(state: AnalyticsState, page: string | undefined): void {
     state.page = page;
   },
@@ -38,5 +46,6 @@ export const commitSetAnalyticsData = commit(mutations.setDomainData);
 export const commitSetAnalyticsError = commit(mutations.setAnalyticsError);
 export const commitSetStartDate = commit(mutations.setStartDate);
 export const commitSetEndDate = commit(mutations.setEndDate);
+export const commitSetFilter = commit(mutations.setFilter);
 export const commitSetPage = commit(mutations.setPage);
 export const commitSetCountry = commit(mutations.setCountry);
