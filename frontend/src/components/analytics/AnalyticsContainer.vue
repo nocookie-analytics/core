@@ -19,15 +19,16 @@
           >
             <template v-slot:blockTitle>
               Page
-              <v-icon v-if="page" v-on:click.stop="filterPage(undefined)">
+              <v-icon
+                v-if="page"
+                v-on:click.stop="updateFilter('page')"
+              >
                 mdi-delete
               </v-icon>
             </template>
-            <template v-slot:itemName="{ item }"
-              ><a v-on:click.stop="filterPage(item.value)">{{
+            <template v-slot:itemName="{ item }"><a v-on:click.stop="updateFilter('page', item.value)">{{
                 item.value
-              }}</a></template
-            >
+              }}</a></template>
           </AnalyticsBlock>
         </v-col>
         <v-col cols="3">
@@ -37,11 +38,22 @@
             :startDate="startDate"
             :endDate="endDate"
           >
-            <template v-slot:blockTitle>Browser</template>
+            <template v-slot:blockTitle>Browser
+              <v-icon
+                v-if="browser"
+                v-on:click.stop="updateFilter('browser')"
+              >
+                mdi-delete
+              </v-icon>
+            </template>
             <template v-slot:itemName="{ item }">
-              <Icon :value="item.value" />
-              {{ item.value }}</template
-            >
+              <a
+                v-on:click.stop="updateFilter('browser', item.value)"
+                v-if="item.value !== 'Unknown'"
+              >
+                <Icon :value="item.value" />
+                {{ item.value }}
+              </a></template>
           </AnalyticsBlock>
         </v-col>
         <v-col cols="3">
@@ -51,11 +63,24 @@
             :startDate="startDate"
             :endDate="endDate"
           >
-            <template v-slot:blockTitle>OS</template>
+            <template v-slot:blockTitle>
+              <v-icon
+                v-if="os"
+                v-on:click.stop="updateFilter('os')"
+              >
+                mdi-delete
+              </v-icon>
+              OS
+            </template>
             <template v-slot:itemName="{ item }">
-              <Icon :value="item.value" />
-              {{ item.value }}</template
-            >
+              <a
+                v-on:click.stop="updateFilter('os', item.value)"
+                v-if="item.value !== 'Unknown'"
+              >
+                <Icon :value="item.value" />
+                {{ item.value }}
+              </a>
+            </template>
           </AnalyticsBlock>
         </v-col>
         <v-col cols="3">
@@ -65,11 +90,23 @@
             :startDate="startDate"
             :endDate="endDate"
           >
-            <template v-slot:blockTitle>Device type</template>
+            <template v-slot:blockTitle>
+              <v-icon
+                v-if="device"
+                v-on:click.stop="updateFilter('device')"
+              >
+                Device type
+              </v-icon>
+            </template>
             <template v-slot:itemName="{ item }">
-              <Icon :value="item.value" />
-              {{ item.value }}</template
-            >
+              <a
+                v-on:click.stop="updateFilter('device', item.value)"
+                v-if="item.value !== 'Unknown'"
+              >
+                <Icon :value="item.value" />
+                {{ item.value }}
+              </a>
+            </template>
           </AnalyticsBlock>
         </v-col>
         <v-col cols="3">
@@ -79,11 +116,23 @@
             :startDate="startDate"
             :endDate="endDate"
           >
-            <template v-slot:blockTitle>Referrer name</template>
+            <template v-slot:blockTitle>
+              <v-icon
+                v-if="referrerName"
+                v-on:click.stop="updateFilter('referrerName')"
+              >
+                Referrer name
+              </v-icon>
+            </template>
             <template v-slot:itemName="{ item }">
-              <Icon :value="item.value" />
-              {{ item.value }}</template
-            >
+              <a
+                v-on:click.stop="updateFilter('referrerName', item.value)"
+                v-if="item.value !== 'Unknown'"
+              >
+                <Icon :value="item.value" />
+                {{ item.value }}
+              </a>
+            </template>
           </AnalyticsBlock>
         </v-col>
         <v-col cols="3">
@@ -105,13 +154,16 @@
           >
             <template v-slot:blockTitle>
               Country
-              <v-icon v-if="country" v-on:click.stop="filterCountry(undefined)">
+              <v-icon
+                v-if="country"
+                v-on:click.stop="updateFilter('country')"
+              >
                 mdi-delete
               </v-icon>
             </template>
             <template v-slot:itemName="{ item }">
               <a
-                v-on:click.stop="filterCountry(item.value)"
+                v-on:click.stop="updateFilter('country', item.value)"
                 v-if="item.value !== 'Unknown'"
               >
                 <country-flag
@@ -192,11 +244,15 @@ import Icon from '@/components/analytics/Icon.vue';
 import { parseISO } from 'date-fns';
 import countryCodes from '@/components/data/countryCodes';
 import CountryFlag from 'vue-country-flag';
+import { dispatchUpdateAnalyticsFilter } from '@/store/analytics/actions';
 import {
-  dispatchUpdateCountry,
-  dispatchUpdatePage,
-} from '@/store/analytics/actions';
-import { readCountry, readPage } from '@/store/analytics/getters';
+  readBrowser,
+  readCountry,
+  readDevice,
+  readOs,
+  readPage,
+  readReferrerName,
+} from '@/store/analytics/getters';
 
 @Component({
   components: {
@@ -225,14 +281,25 @@ export default class AnalyticsContainer extends Vue {
     return readCountry(this.$store);
   }
 
-  filterPage(value: string | undefined): void {
-    this.$router.push({ query: { page: value } });
-    dispatchUpdatePage(this.$store, value);
+  get browser(): string | undefined {
+    return readBrowser(this.$store);
   }
 
-  filterCountry(value: string | undefined): void {
-    this.$router.push({ query: { country: value } });
-    dispatchUpdateCountry(this.$store, value);
+  get os(): string | undefined {
+    return readOs(this.$store);
+  }
+
+  get device(): string | undefined {
+    return readDevice(this.$store);
+  }
+
+  get referrerName(): string | undefined {
+    return readReferrerName(this.$store);
+  }
+
+  updateFilter(key: string, value: string | undefined = undefined): void {
+    this.$router.replace({ query: { ...this.$route.query, [key]: value } });
+    dispatchUpdateAnalyticsFilter(this.$store, { key, value });
   }
 
   countryCodeToCountryName(countryCode: string): string {
