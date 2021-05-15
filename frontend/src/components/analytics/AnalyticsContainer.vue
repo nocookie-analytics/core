@@ -5,237 +5,37 @@
         <AnalyticsBlock
           :blockData="analyticsData.pageviews_per_day"
           :blockType="BlockType.ArrayPageViewsPerDayStat"
-          :startDate="startDate"
-          :endDate="endDate"
         />
       </v-row>
       <v-row>
-        <v-col cols="3">
-          <AnalyticsBlock
-            :blockData="analyticsData.pages"
-            :blockType="BlockType.AggregateStat"
-            :startDate="startDate"
-            :endDate="endDate"
-          >
+        <v-col v-for="block in blocks" :key="block.title" :cols="block.cols">
+          <AnalyticsBlock :blockData="block.data" :blockType="block.type">
             <template v-slot:blockTitle>
-              Page
-              <v-icon
-                v-if="page"
-                v-on:click.stop="updateFilter('page')"
+              {{ block.title }}
+              <router-link
+                :to="{ query: filterURL(block.urlParamName) }"
+                v-if="isFilterActive(block.urlParamName)"
               >
-                mdi-delete
-              </v-icon>
-            </template>
-            <template v-slot:itemName="{ item }"><a v-on:click.stop="updateFilter('page', item.value)">{{
-                item.value
-              }}</a></template>
-          </AnalyticsBlock>
-        </v-col>
-        <v-col cols="3">
-          <AnalyticsBlock
-            :blockData="analyticsData.browser_families"
-            :blockType="BlockType.AggregateStat"
-            :startDate="startDate"
-            :endDate="endDate"
-          >
-            <template v-slot:blockTitle>Browser
-              <v-icon
-                v-if="browser"
-                v-on:click.stop="updateFilter('browser')"
-              >
-                mdi-delete
-              </v-icon>
+                <v-icon> mdi-delete </v-icon>
+              </router-link>
             </template>
             <template v-slot:itemName="{ item }">
-              <a
-                v-on:click.stop="updateFilter('browser', item.value)"
-                v-if="item.value !== 'Unknown'"
+              <router-link
+                :to="{ query: filterURL(block.urlParamName, item.value) }"
               >
-                <Icon :value="item.value" />
                 {{ item.value }}
-              </a></template>
-          </AnalyticsBlock>
-        </v-col>
-        <v-col cols="3">
-          <AnalyticsBlock
-            :blockData="analyticsData.os_families"
-            :blockType="BlockType.AggregateStat"
-            :startDate="startDate"
-            :endDate="endDate"
-          >
-            <template v-slot:blockTitle>
-              <v-icon
-                v-if="os"
-                v-on:click.stop="updateFilter('os')"
-              >
-                mdi-delete
-              </v-icon>
-              OS
-            </template>
-            <template v-slot:itemName="{ item }">
-              <a
-                v-on:click.stop="updateFilter('os', item.value)"
-                v-if="item.value !== 'Unknown'"
-              >
-                <Icon :value="item.value" />
-                {{ item.value }}
-              </a>
-            </template>
-          </AnalyticsBlock>
-        </v-col>
-        <v-col cols="3">
-          <AnalyticsBlock
-            :blockData="analyticsData.device_families"
-            :blockType="BlockType.AggregateStat"
-            :startDate="startDate"
-            :endDate="endDate"
-          >
-            <template v-slot:blockTitle>
-              <v-icon
-                v-if="device"
-                v-on:click.stop="updateFilter('device')"
-              >
-                Device type
-              </v-icon>
-            </template>
-            <template v-slot:itemName="{ item }">
-              <a
-                v-on:click.stop="updateFilter('device', item.value)"
-                v-if="item.value !== 'Unknown'"
-              >
-                <Icon :value="item.value" />
-                {{ item.value }}
-              </a>
-            </template>
-          </AnalyticsBlock>
-        </v-col>
-        <v-col cols="3">
-          <AnalyticsBlock
-            :blockData="analyticsData.referrer_names"
-            :blockType="BlockType.AggregateStat"
-            :startDate="startDate"
-            :endDate="endDate"
-          >
-            <template v-slot:blockTitle>
-              <v-icon
-                v-if="referrerName"
-                v-on:click.stop="updateFilter('referrerName')"
-              >
-                Referrer name
-              </v-icon>
-            </template>
-            <template v-slot:itemName="{ item }">
-              <a
-                v-on:click.stop="updateFilter('referrerName', item.value)"
-                v-if="item.value !== 'Unknown'"
-              >
-                <Icon :value="item.value" />
-                {{ item.value }}
-              </a>
-            </template>
-          </AnalyticsBlock>
-        </v-col>
-        <v-col cols="3">
-          <AnalyticsBlock
-            :blockData="analyticsData.referrer_mediums"
-            :blockType="BlockType.AggregateStat"
-            :startDate="startDate"
-            :endDate="endDate"
-          >
-            <template v-slot:blockTitle>Referrer medium</template>
-          </AnalyticsBlock>
-        </v-col>
-        <v-col cols="4">
-          <AnalyticsBlock
-            :blockData="analyticsData.countries"
-            :blockType="BlockType.AggregateStat"
-            :startDate="startDate"
-            :endDate="endDate"
-          >
-            <template v-slot:blockTitle>
-              Country
-              <v-icon
-                v-if="country"
-                v-on:click.stop="updateFilter('country')"
-              >
-                mdi-delete
-              </v-icon>
-            </template>
-            <template v-slot:itemName="{ item }">
-              <a
-                v-on:click.stop="updateFilter('country', item.value)"
-                v-if="item.value !== 'Unknown'"
-              >
-                <country-flag
-                  :country="item.value.toLowerCase()"
-                  rounded
-                  size="normal"
-                />
-                {{ countryCodeToCountryName(item.value) }}
-              </a>
+              </router-link>
             </template>
           </AnalyticsBlock>
         </v-col>
       </v-row>
-      <v-row>
-        <v-col cols="2">
-          <AnalyticsBlock
-            :blockData="analyticsData.utm_terms"
-            :blockType="BlockType.AggregateStat"
-            :startDate="startDate"
-            :endDate="endDate"
-          >
-            <template v-slot:blockTitle>UTM Term</template>
-          </AnalyticsBlock>
-        </v-col>
-        <v-col cols="2">
-          <AnalyticsBlock
-            :blockData="analyticsData.utm_sources"
-            :blockType="BlockType.AggregateStat"
-            :startDate="startDate"
-            :endDate="endDate"
-          >
-            <template v-slot:blockTitle>UTM Source</template>
-          </AnalyticsBlock>
-        </v-col>
-        <v-col cols="2">
-          <AnalyticsBlock
-            :blockData="analyticsData.utm_mediums"
-            :blockType="BlockType.AggregateStat"
-            :startDate="startDate"
-            :endDate="endDate"
-          >
-            <template v-slot:blockTitle>UTM Medium</template>
-          </AnalyticsBlock>
-        </v-col>
-        <v-col cols="2">
-          <AnalyticsBlock
-            :blockData="analyticsData.utm_contents"
-            :blockType="BlockType.AggregateStat"
-            :startDate="startDate"
-            :endDate="endDate"
-          >
-            <template v-slot:blockTitle>UTM Content</template>
-          </AnalyticsBlock>
-        </v-col>
-      </v-row>
-      <v-col cols="2">
-        <AnalyticsBlock
-          :blockData="analyticsData.utm_campaigns"
-          :blockType="BlockType.AggregateStat"
-          :startDate="startDate"
-          :endDate="endDate"
-        >
-          <template v-slot:blockTitle>UTM Campaign</template>
-        </AnalyticsBlock>
-      </v-col>
     </v-container>
     <v-container v-else> Loading, please wait </v-container>
   </div>
 </template>
 
 <script lang="ts">
-import { AggregateStat, AnalyticsData } from '@/generated';
+import { AnalyticsData } from '@/generated';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import AnalyticsBlock, {
   BlockType,
@@ -297,8 +97,109 @@ export default class AnalyticsContainer extends Vue {
     return readReferrerName(this.$store);
   }
 
+  get blocks() {
+    const blocks = [
+      {
+        data: this.analyticsData.pages,
+        type: BlockType.AggregateStat,
+        title: 'Page',
+        urlParamName: 'page',
+        cols: 3,
+      },
+      {
+        data: this.analyticsData.browser_families,
+        type: BlockType.AggregateStat,
+        title: 'Browser',
+        urlParamName: 'browser',
+        cols: 3,
+      },
+      {
+        data: this.analyticsData.os_families,
+        type: BlockType.AggregateStat,
+        title: 'OS',
+        urlParamName: 'os',
+        cols: 3,
+      },
+      {
+        data: this.analyticsData.device_families,
+        type: BlockType.AggregateStat,
+        title: 'Device type',
+        urlParamName: 'device',
+        cols: 3,
+      },
+      {
+        data: this.analyticsData.referrer_names,
+        type: BlockType.AggregateStat,
+        title: 'Referrer name',
+        urlParamName: 'referrerName',
+        cols: 3,
+      },
+      {
+        data: this.analyticsData.referrer_mediums,
+        type: BlockType.AggregateStat,
+        title: 'Referrer medium',
+        urlParamName: 'referrerMedium',
+        cols: 3,
+      },
+      {
+        data: this.analyticsData.countries,
+        type: BlockType.AggregateStat,
+        title: 'Country',
+        urlParamName: 'country',
+        cols: 4,
+      },
+      {
+        data: this.analyticsData.utm_terms,
+        type: BlockType.AggregateStat,
+        title: 'UTM Term',
+        cols: 2,
+      },
+      {
+        data: this.analyticsData.utm_sources,
+        type: BlockType.AggregateStat,
+        title: 'UTM Source',
+        cols: 2,
+      },
+      {
+        data: this.analyticsData.utm_mediums,
+        type: BlockType.AggregateStat,
+        title: 'UTM Medium',
+        cols: 2,
+      },
+      {
+        data: this.analyticsData.utm_contents,
+        type: BlockType.AggregateStat,
+        title: 'UTM Content',
+        cols: 2,
+      },
+      {
+        data: this.analyticsData.utm_campaigns,
+        type: BlockType.AggregateStat,
+        title: 'UTM Campaign',
+        cols: 2,
+      },
+    ];
+    const hasData = (block) => {
+      if (block.data && Array.isArray(block.data)) {
+        return block.data.length !== 0;
+      }
+      return true;
+    };
+    return blocks.filter((block) => hasData(block));
+  }
+
+  isFilterActive(key: string): boolean {
+    return Boolean(this.$route.query[key]);
+  }
+
+  filterURL(key: string, value: string | undefined = undefined) {
+    return {
+      ...this.$route.query,
+      [key]: value,
+    };
+  }
+
   updateFilter(key: string, value: string | undefined = undefined): void {
-    this.$router.replace({ query: { ...this.$route.query, [key]: value } });
     dispatchUpdateAnalyticsFilter(this.$store, { key, value });
   }
 
