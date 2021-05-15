@@ -51,7 +51,7 @@ export default class ListDomains extends Vue {
   async fetchDomains(): Promise<void> {
     const domainsApi = this.$store.getters.domainsApi as DomainsApi;
     try {
-      const response = await domainsApi.readDomains(0, 50);
+      const response = await domainsApi.readDomains({ skip: 0, limit: 50 });
       this.domainsList = response.data;
     } catch (e) {
       this.fetchDomainsError =

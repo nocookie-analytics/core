@@ -60,9 +60,9 @@ export const actions = {
       return Promise.resolve();
     }
     try {
-      const response = await analyticsApi.getAnalytics(
+      const response = await analyticsApi.getAnalytics({
         domainName,
-        [
+        include: [
           AnalyticsType.Pages,
           AnalyticsType.Pageviews,
           AnalyticsType.Countries,
@@ -85,11 +85,11 @@ export const actions = {
           AnalyticsType.UtmContents,
           AnalyticsType.UtmCampaigns,
         ],
-        context.state.page,
-        context.state.country,
-        context.state.startDate.toISOString(),
-        context.state.endDate.toISOString(),
-      );
+        page: context.state.page,
+        country: context.state.country,
+        start: context.state.startDate.toISOString(),
+        end: context.state.endDate.toISOString(),
+      });
       const analyticsData = response.data;
       commitSetAnalyticsData(context, analyticsData);
     } catch (e) {
