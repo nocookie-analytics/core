@@ -200,36 +200,6 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
 };
 
 /**
- * EventsApi - interface
- * @export
- * @interface EventsApi
- */
-export interface EventsApiInterface {
-    /**
-     * Report a new event.
-     * @summary New Event
-     * @param {string} url 
-     * @param {EventType} [et] Event type
-     * @param {string} [pt] Page title
-     * @param {string} [pvid] Page view ID
-     * @param {number} [psb] Page size bytes
-     * @param {string} [tz] Timezone
-     * @param {number} [tzo] Timezone offset
-     * @param {string} [ref] Referrer
-     * @param {number} [ttfb] Time to first-byte
-     * @param {number} [tt] Total time
-     * @param {number} [dt] Download time
-     * @param {MetricType} [mn] Metric name
-     * @param {number} [mv] Metric value
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof EventsApiInterface
-     */
-    newEvent(url: string, et?: EventType, pt?: string, pvid?: string, psb?: number, tz?: string, tzo?: number, ref?: string, ttfb?: number, tt?: number, dt?: number, mn?: MetricType, mv?: number, options?: any): AxiosPromise<EventCreated>;
-
-}
-
-/**
  * Request parameters for newEvent operation in EventsApi.
  * @export
  * @interface EventsApiNewEventRequest
@@ -333,7 +303,7 @@ export interface EventsApiNewEventRequest {
  * @class EventsApi
  * @extends {BaseAPI}
  */
-export class EventsApi extends BaseAPI implements EventsApiInterface {
+export class EventsApi extends BaseAPI {
     /**
      * Report a new event.
      * @summary New Event

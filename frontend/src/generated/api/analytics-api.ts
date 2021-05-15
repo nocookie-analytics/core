@@ -187,33 +187,6 @@ export const AnalyticsApiFactory = function (configuration?: Configuration, base
 };
 
 /**
- * AnalyticsApi - interface
- * @export
- * @interface AnalyticsApi
- */
-export interface AnalyticsApiInterface {
-    /**
-     * 
-     * @summary Get Analytics
-     * @param {string} domainName 
-     * @param {Array<AnalyticsType>} include To include multiple fields in result use &#x60;include&#x3D;&#x60; multiple times, eg: &#x60;&amp;include&#x3D;pageviews&amp;include&#x3D;countries&#x60;
-     * @param {string} [page] 
-     * @param {string} [country] 
-     * @param {string} [browser] 
-     * @param {string} [os] 
-     * @param {string} [device] 
-     * @param {string} [referrerName] 
-     * @param {string} [start] 
-     * @param {string} [end] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AnalyticsApiInterface
-     */
-    getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: string, referrerName?: string, start?: string, end?: string, options?: any): AxiosPromise<AnalyticsData>;
-
-}
-
-/**
  * Request parameters for getAnalytics operation in AnalyticsApi.
  * @export
  * @interface AnalyticsApiGetAnalyticsRequest
@@ -296,7 +269,7 @@ export interface AnalyticsApiGetAnalyticsRequest {
  * @class AnalyticsApi
  * @extends {BaseAPI}
  */
-export class AnalyticsApi extends BaseAPI implements AnalyticsApiInterface {
+export class AnalyticsApi extends BaseAPI {
     /**
      * 
      * @summary Get Analytics

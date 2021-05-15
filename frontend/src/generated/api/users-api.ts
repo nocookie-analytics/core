@@ -485,85 +485,6 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
 };
 
 /**
- * UsersApi - interface
- * @export
- * @interface UsersApi
- */
-export interface UsersApiInterface {
-    /**
-     * Create new user.
-     * @summary Create User
-     * @param {UserCreate} userCreate 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UsersApiInterface
-     */
-    createUser(userCreate: UserCreate, options?: any): AxiosPromise<User>;
-
-    /**
-     * Create new user without the need to be logged in.
-     * @summary Create User Open
-     * @param {BodyCreateUserOpenApiV1UsersOpenPost} bodyCreateUserOpenApiV1UsersOpenPost 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UsersApiInterface
-     */
-    createUserOpen(bodyCreateUserOpenApiV1UsersOpenPost: BodyCreateUserOpenApiV1UsersOpenPost, options?: any): AxiosPromise<User>;
-
-    /**
-     * Get a specific user by id.
-     * @summary Read User By Id
-     * @param {number} userId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UsersApiInterface
-     */
-    readUserById(userId: number, options?: any): AxiosPromise<User>;
-
-    /**
-     * Get current user.
-     * @summary Read User Me
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UsersApiInterface
-     */
-    readUserMe(options?: any): AxiosPromise<User>;
-
-    /**
-     * Retrieve users.
-     * @summary Read Users
-     * @param {number} [skip] 
-     * @param {number} [limit] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UsersApiInterface
-     */
-    readUsers(skip?: number, limit?: number, options?: any): AxiosPromise<Array<User>>;
-
-    /**
-     * Update a user.
-     * @summary Update User
-     * @param {number} userId 
-     * @param {UserUpdate} userUpdate 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UsersApiInterface
-     */
-    updateUser(userId: number, userUpdate: UserUpdate, options?: any): AxiosPromise<User>;
-
-    /**
-     * Update own user.
-     * @summary Update User Me
-     * @param {BodyUpdateUserMeApiV1UsersMePut} [bodyUpdateUserMeApiV1UsersMePut] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UsersApiInterface
-     */
-    updateUserMe(bodyUpdateUserMeApiV1UsersMePut?: BodyUpdateUserMeApiV1UsersMePut, options?: any): AxiosPromise<User>;
-
-}
-
-/**
  * Request parameters for createUser operation in UsersApi.
  * @export
  * @interface UsersApiCreateUserRequest
@@ -667,7 +588,7 @@ export interface UsersApiUpdateUserMeRequest {
  * @class UsersApi
  * @extends {BaseAPI}
  */
-export class UsersApi extends BaseAPI implements UsersApiInterface {
+export class UsersApi extends BaseAPI {
     /**
      * Create new user.
      * @summary Create User

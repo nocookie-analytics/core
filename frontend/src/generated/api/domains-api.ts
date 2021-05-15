@@ -497,87 +497,6 @@ export const DomainsApiFactory = function (configuration?: Configuration, basePa
 };
 
 /**
- * DomainsApi - interface
- * @export
- * @interface DomainsApi
- */
-export interface DomainsApiInterface {
-    /**
-     * Create new domain.
-     * @summary Create Domain
-     * @param {DomainCreate} domainCreate 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApiInterface
-     */
-    createDomain(domainCreate: DomainCreate, options?: any): AxiosPromise<Domain>;
-
-    /**
-     * Delete a domain.
-     * @summary Delete Domain
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApiInterface
-     */
-    deleteDomain(id: number, options?: any): AxiosPromise<Domain>;
-
-    /**
-     * Get domain by ID.
-     * @summary Read Domain
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApiInterface
-     */
-    readDomain(id: number, options?: any): AxiosPromise<Domain>;
-
-    /**
-     * Get domain by name
-     * @summary Read Domain By Name
-     * @param {string} name 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApiInterface
-     */
-    readDomainByName(name: string, options?: any): AxiosPromise<Domain>;
-
-    /**
-     * Retrieve domains.
-     * @summary Read Domains
-     * @param {number} [skip] 
-     * @param {number} [limit] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApiInterface
-     */
-    readDomains(skip?: number, limit?: number, options?: any): AxiosPromise<Array<Domain>>;
-
-    /**
-     * Update a domain.
-     * @summary Update Domain
-     * @param {number} id 
-     * @param {DomainUpdate} domainUpdate 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApiInterface
-     */
-    updateDomain(id: number, domainUpdate: DomainUpdate, options?: any): AxiosPromise<Domain>;
-
-    /**
-     * Update a domain by name
-     * @summary Update Domain By Name
-     * @param {string} name 
-     * @param {DomainUpdate} domainUpdate 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApiInterface
-     */
-    updateDomainByName(name: string, domainUpdate: DomainUpdate, options?: any): AxiosPromise<Domain>;
-
-}
-
-/**
  * Request parameters for createDomain operation in DomainsApi.
  * @export
  * @interface DomainsApiCreateDomainRequest
@@ -702,7 +621,7 @@ export interface DomainsApiUpdateDomainByNameRequest {
  * @class DomainsApi
  * @extends {BaseAPI}
  */
-export class DomainsApi extends BaseAPI implements DomainsApiInterface {
+export class DomainsApi extends BaseAPI {
     /**
      * Create new domain.
      * @summary Create Domain

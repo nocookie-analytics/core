@@ -10,7 +10,7 @@ bash $HOME/bin/openapi-generator/run.sh generate \
     -i <(curl "http://localhost/api/v1/openapi.json") \
     -g typescript-axios \
     -o ./src/generated/ \
-    -p withSeparateModelsAndApi=true,apiPackage=api,modelPackage=models,withInterfaces=true,useSingleRequestParameter=true
+    -p withSeparateModelsAndApi=true,apiPackage=api,modelPackage=models,useSingleRequestParameter=true
 
 # https://github.com/OpenAPITools/openapi-generator/issues/7474
 sed -i 's/_public/public/' ./src/generated/models/*.ts

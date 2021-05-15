@@ -324,58 +324,6 @@ export const LoginApiFactory = function (configuration?: Configuration, basePath
 };
 
 /**
- * LoginApi - interface
- * @export
- * @interface LoginApi
- */
-export interface LoginApiInterface {
-    /**
-     * OAuth2 compatible token login, get an access token for future requests
-     * @summary Login Access Token
-     * @param {string} username 
-     * @param {string} password 
-     * @param {string} [grantType] 
-     * @param {string} [scope] 
-     * @param {string} [clientId] 
-     * @param {string} [clientSecret] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof LoginApiInterface
-     */
-    loginAccessToken(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: any): AxiosPromise<Token>;
-
-    /**
-     * Password Recovery
-     * @summary Recover Password
-     * @param {string} email 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof LoginApiInterface
-     */
-    recoverPassword(email: string, options?: any): AxiosPromise<Msg>;
-
-    /**
-     * Reset password
-     * @summary Reset Password
-     * @param {BodyResetPasswordApiV1ResetPasswordPost} bodyResetPasswordApiV1ResetPasswordPost 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof LoginApiInterface
-     */
-    resetPassword(bodyResetPasswordApiV1ResetPasswordPost: BodyResetPasswordApiV1ResetPasswordPost, options?: any): AxiosPromise<Msg>;
-
-    /**
-     * Test access token
-     * @summary Test Token
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof LoginApiInterface
-     */
-    testToken(options?: any): AxiosPromise<User>;
-
-}
-
-/**
  * Request parameters for loginAccessToken operation in LoginApi.
  * @export
  * @interface LoginApiLoginAccessTokenRequest
@@ -458,7 +406,7 @@ export interface LoginApiResetPasswordRequest {
  * @class LoginApi
  * @extends {BaseAPI}
  */
-export class LoginApi extends BaseAPI implements LoginApiInterface {
+export class LoginApi extends BaseAPI {
     /**
      * OAuth2 compatible token login, get an access token for future requests
      * @summary Login Access Token
