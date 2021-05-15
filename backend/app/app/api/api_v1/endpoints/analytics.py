@@ -40,6 +40,8 @@ def get_analytics(
             "eg: `&include=pageviews&include=countries`"
         ),
     ),
+    start: arrow.Arrow = Depends(get_start_date),
+    end: arrow.Arrow = Depends(get_end_date),
     page: str = None,
     country: str = None,
     browser: str = None,
@@ -48,8 +50,6 @@ def get_analytics(
     referrer_name: str = None,
     current_user: models.User = Depends(deps.get_current_active_user_silent),
     db: Session = Depends(deps.get_db),
-    start: arrow.Arrow = Depends(get_start_date),
-    end: arrow.Arrow = Depends(get_end_date),
 ):
     # TODO: This section (getting domain/verifying ownership)
     # can be written as a reusable dependency
@@ -67,4 +67,8 @@ def get_analytics(
         domain=domain,
         country=country,
         page=page,
+        browser=browser,
+        os=os,
+        device=device,
+        referrer_name=referrer_name,
     )
