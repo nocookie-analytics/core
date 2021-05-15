@@ -564,6 +564,104 @@ export interface UsersApiInterface {
 }
 
 /**
+ * Request parameters for createUser operation in UsersApi.
+ * @export
+ * @interface UsersApiCreateUserRequest
+ */
+export interface UsersApiCreateUserRequest {
+    /**
+     * 
+     * @type {UserCreate}
+     * @memberof UsersApiCreateUser
+     */
+    readonly userCreate: UserCreate
+}
+
+/**
+ * Request parameters for createUserOpen operation in UsersApi.
+ * @export
+ * @interface UsersApiCreateUserOpenRequest
+ */
+export interface UsersApiCreateUserOpenRequest {
+    /**
+     * 
+     * @type {BodyCreateUserOpenApiV1UsersOpenPost}
+     * @memberof UsersApiCreateUserOpen
+     */
+    readonly bodyCreateUserOpenApiV1UsersOpenPost: BodyCreateUserOpenApiV1UsersOpenPost
+}
+
+/**
+ * Request parameters for readUserById operation in UsersApi.
+ * @export
+ * @interface UsersApiReadUserByIdRequest
+ */
+export interface UsersApiReadUserByIdRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof UsersApiReadUserById
+     */
+    readonly userId: number
+}
+
+/**
+ * Request parameters for readUsers operation in UsersApi.
+ * @export
+ * @interface UsersApiReadUsersRequest
+ */
+export interface UsersApiReadUsersRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof UsersApiReadUsers
+     */
+    readonly skip?: number
+
+    /**
+     * 
+     * @type {number}
+     * @memberof UsersApiReadUsers
+     */
+    readonly limit?: number
+}
+
+/**
+ * Request parameters for updateUser operation in UsersApi.
+ * @export
+ * @interface UsersApiUpdateUserRequest
+ */
+export interface UsersApiUpdateUserRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof UsersApiUpdateUser
+     */
+    readonly userId: number
+
+    /**
+     * 
+     * @type {UserUpdate}
+     * @memberof UsersApiUpdateUser
+     */
+    readonly userUpdate: UserUpdate
+}
+
+/**
+ * Request parameters for updateUserMe operation in UsersApi.
+ * @export
+ * @interface UsersApiUpdateUserMeRequest
+ */
+export interface UsersApiUpdateUserMeRequest {
+    /**
+     * 
+     * @type {BodyUpdateUserMeApiV1UsersMePut}
+     * @memberof UsersApiUpdateUserMe
+     */
+    readonly bodyUpdateUserMeApiV1UsersMePut?: BodyUpdateUserMeApiV1UsersMePut
+}
+
+/**
  * UsersApi - object-oriented interface
  * @export
  * @class UsersApi
@@ -573,37 +671,37 @@ export class UsersApi extends BaseAPI implements UsersApiInterface {
     /**
      * Create new user.
      * @summary Create User
-     * @param {UserCreate} userCreate 
+     * @param {UsersApiCreateUserRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public createUser(userCreate: UserCreate, options?: any) {
-        return UsersApiFp(this.configuration).createUser(userCreate, options).then((request) => request(this.axios, this.basePath));
+    public createUser(requestParameters: UsersApiCreateUserRequest, options?: any) {
+        return UsersApiFp(this.configuration).createUser(requestParameters.userCreate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Create new user without the need to be logged in.
      * @summary Create User Open
-     * @param {BodyCreateUserOpenApiV1UsersOpenPost} bodyCreateUserOpenApiV1UsersOpenPost 
+     * @param {UsersApiCreateUserOpenRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public createUserOpen(bodyCreateUserOpenApiV1UsersOpenPost: BodyCreateUserOpenApiV1UsersOpenPost, options?: any) {
-        return UsersApiFp(this.configuration).createUserOpen(bodyCreateUserOpenApiV1UsersOpenPost, options).then((request) => request(this.axios, this.basePath));
+    public createUserOpen(requestParameters: UsersApiCreateUserOpenRequest, options?: any) {
+        return UsersApiFp(this.configuration).createUserOpen(requestParameters.bodyCreateUserOpenApiV1UsersOpenPost, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Get a specific user by id.
      * @summary Read User By Id
-     * @param {number} userId 
+     * @param {UsersApiReadUserByIdRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public readUserById(userId: number, options?: any) {
-        return UsersApiFp(this.configuration).readUserById(userId, options).then((request) => request(this.axios, this.basePath));
+    public readUserById(requestParameters: UsersApiReadUserByIdRequest, options?: any) {
+        return UsersApiFp(this.configuration).readUserById(requestParameters.userId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -620,38 +718,36 @@ export class UsersApi extends BaseAPI implements UsersApiInterface {
     /**
      * Retrieve users.
      * @summary Read Users
-     * @param {number} [skip] 
-     * @param {number} [limit] 
+     * @param {UsersApiReadUsersRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public readUsers(skip?: number, limit?: number, options?: any) {
-        return UsersApiFp(this.configuration).readUsers(skip, limit, options).then((request) => request(this.axios, this.basePath));
+    public readUsers(requestParameters: UsersApiReadUsersRequest = {}, options?: any) {
+        return UsersApiFp(this.configuration).readUsers(requestParameters.skip, requestParameters.limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Update a user.
      * @summary Update User
-     * @param {number} userId 
-     * @param {UserUpdate} userUpdate 
+     * @param {UsersApiUpdateUserRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public updateUser(userId: number, userUpdate: UserUpdate, options?: any) {
-        return UsersApiFp(this.configuration).updateUser(userId, userUpdate, options).then((request) => request(this.axios, this.basePath));
+    public updateUser(requestParameters: UsersApiUpdateUserRequest, options?: any) {
+        return UsersApiFp(this.configuration).updateUser(requestParameters.userId, requestParameters.userUpdate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Update own user.
      * @summary Update User Me
-     * @param {BodyUpdateUserMeApiV1UsersMePut} [bodyUpdateUserMeApiV1UsersMePut] 
+     * @param {UsersApiUpdateUserMeRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public updateUserMe(bodyUpdateUserMeApiV1UsersMePut?: BodyUpdateUserMeApiV1UsersMePut, options?: any) {
-        return UsersApiFp(this.configuration).updateUserMe(bodyUpdateUserMeApiV1UsersMePut, options).then((request) => request(this.axios, this.basePath));
+    public updateUserMe(requestParameters: UsersApiUpdateUserMeRequest = {}, options?: any) {
+        return UsersApiFp(this.configuration).updateUserMe(requestParameters.bodyUpdateUserMeApiV1UsersMePut, options).then((request) => request(this.axios, this.basePath));
     }
 }

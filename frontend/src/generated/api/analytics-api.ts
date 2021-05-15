@@ -214,6 +214,83 @@ export interface AnalyticsApiInterface {
 }
 
 /**
+ * Request parameters for getAnalytics operation in AnalyticsApi.
+ * @export
+ * @interface AnalyticsApiGetAnalyticsRequest
+ */
+export interface AnalyticsApiGetAnalyticsRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly domainName: string
+
+    /**
+     * To include multiple fields in result use &#x60;include&#x3D;&#x60; multiple times, eg: &#x60;&amp;include&#x3D;pageviews&amp;include&#x3D;countries&#x60;
+     * @type {Array<AnalyticsType>}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly include: Array<AnalyticsType>
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly page?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly country?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly browser?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly os?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly device?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly referrerName?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly start?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly end?: string
+}
+
+/**
  * AnalyticsApi - object-oriented interface
  * @export
  * @class AnalyticsApi
@@ -223,21 +300,12 @@ export class AnalyticsApi extends BaseAPI implements AnalyticsApiInterface {
     /**
      * 
      * @summary Get Analytics
-     * @param {string} domainName 
-     * @param {Array<AnalyticsType>} include To include multiple fields in result use &#x60;include&#x3D;&#x60; multiple times, eg: &#x60;&amp;include&#x3D;pageviews&amp;include&#x3D;countries&#x60;
-     * @param {string} [page] 
-     * @param {string} [country] 
-     * @param {string} [browser] 
-     * @param {string} [os] 
-     * @param {string} [device] 
-     * @param {string} [referrerName] 
-     * @param {string} [start] 
-     * @param {string} [end] 
+     * @param {AnalyticsApiGetAnalyticsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AnalyticsApi
      */
-    public getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: string, referrerName?: string, start?: string, end?: string, options?: any) {
-        return AnalyticsApiFp(this.configuration).getAnalytics(domainName, include, page, country, browser, os, device, referrerName, start, end, options).then((request) => request(this.axios, this.basePath));
+    public getAnalytics(requestParameters: AnalyticsApiGetAnalyticsRequest, options?: any) {
+        return AnalyticsApiFp(this.configuration).getAnalytics(requestParameters.domainName, requestParameters.include, requestParameters.page, requestParameters.country, requestParameters.browser, requestParameters.os, requestParameters.device, requestParameters.referrerName, requestParameters.start, requestParameters.end, options).then((request) => request(this.axios, this.basePath));
     }
 }
