@@ -16,9 +16,9 @@
         :server-items-length="domainsList.length"
       >
         <template #[`item.domain_name`]="{ item }">
-          <a v-on:click.stop="goToAnalytics('/' + item.domain_name)">
+          <router-link :to="'/' + item.domain_name">
             {{ item.domain_name }}
-          </a>
+          </router-link>
         </template>
         <template #[`item.actions`]="{ item }">
           <v-btn title="Edit" icon :to="'/domains/' + item.domain_name">
