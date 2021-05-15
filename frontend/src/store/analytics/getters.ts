@@ -24,22 +24,22 @@ export const getters = {
   },
 
   page: (state: AnalyticsState): string | undefined => {
-    return state.page;
+    return state.filters.page;
   },
   country: (state: AnalyticsState): string | undefined => {
-    return state.country;
+    return state.filters.country;
   },
   browser: (state: AnalyticsState): string | undefined => {
-    return state.browser;
+    return state.filters.browser;
   },
   os: (state: AnalyticsState): string | undefined => {
-    return state.os;
+    return state.filters.os;
   },
   device: (state: AnalyticsState): string | undefined => {
-    return state.device;
+    return state.filters.device;
   },
   referrerName: (state: AnalyticsState): string | undefined => {
-    return state.referrerName;
+    return state.filters.referrerName;
   },
 };
 

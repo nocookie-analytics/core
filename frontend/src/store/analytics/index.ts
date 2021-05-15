@@ -1,7 +1,7 @@
 import { mutations } from './mutations';
 import { getters } from './getters';
 import { actions } from './actions';
-import { AnalyticsState } from './state';
+import { AnalyticsFilterState, AnalyticsState } from './state';
 import { addDays, isValid, parseISO } from 'date-fns';
 
 const getURLParamValue = (urlParamName: string): string | undefined => {
@@ -32,15 +32,16 @@ export const defaultState: AnalyticsState = {
 
   startDate: readDateFromURLParam('start', addDays(now, -30)),
   endDate: readDateFromURLParam('end', now),
-  page: getURLParamValue('page'),
-  country: getURLParamValue('country'),
-  browser: getURLParamValue('browser'),
-  device: getURLParamValue('device'),
-  os: getURLParamValue('os'),
-  referrerName: getURLParamValue('referrerName'),
+  filters: {
+    page: getURLParamValue('page'),
+    country: getURLParamValue('country'),
+    browser: getURLParamValue('browser'),
+    device: getURLParamValue('device'),
+    os: getURLParamValue('os'),
+    referrerName: getURLParamValue('referrerName'),
+  },
 };
 
-console.log(defaultState);
 export const analyticsModule = {
   state: defaultState,
   mutations,

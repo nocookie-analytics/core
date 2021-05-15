@@ -1,4 +1,4 @@
-import { AnalyticsState } from './state';
+import { AnalyticsFilterState, AnalyticsState } from './state';
 import { getStoreAccessors } from 'typesafe-vuex';
 import { RootState } from '../state';
 import { AnalyticsData } from '@/generated';
@@ -26,16 +26,12 @@ export const mutations = {
 
   setFilter(
     state: AnalyticsState,
-    { key, value }: { key: string; value: string | undefined },
+    {
+      key,
+      value,
+    }: { key: keyof AnalyticsFilterState; value: string | undefined },
   ): void {
-    state[key] = value;
-  },
-
-  setPage(state: AnalyticsState, page: string | undefined): void {
-    state.page = page;
-  },
-  setCountry(state: AnalyticsState, country: string | undefined): void {
-    state.country = country;
+    state.filters[key] = value;
   },
 };
 
@@ -47,5 +43,3 @@ export const commitSetAnalyticsError = commit(mutations.setAnalyticsError);
 export const commitSetStartDate = commit(mutations.setStartDate);
 export const commitSetEndDate = commit(mutations.setEndDate);
 export const commitSetFilter = commit(mutations.setFilter);
-export const commitSetPage = commit(mutations.setPage);
-export const commitSetCountry = commit(mutations.setCountry);
