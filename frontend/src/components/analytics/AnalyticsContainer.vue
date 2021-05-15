@@ -14,17 +14,21 @@
               {{ block.title }}
               <router-link
                 :to="{ query: filterURL(block.urlParamName) }"
-                v-if="isFilterActive(block.urlParamName)"
+                v-if="block.urlParamName && isFilterActive(block.urlParamName)"
               >
                 <v-icon> mdi-delete </v-icon>
               </router-link>
             </template>
             <template v-slot:itemName="{ item }">
               <router-link
+                v-if="block.urlParamName && block.data && block.data.length > 1"
                 :to="{ query: filterURL(block.urlParamName, item.value) }"
               >
                 {{ item.value }}
               </router-link>
+              <span v-else>
+                {{ item.value }}
+              </span>
             </template>
           </AnalyticsBlock>
         </v-col>
@@ -53,6 +57,7 @@ import {
   readPage,
   readReferrerName,
 } from '@/store/analytics/getters';
+import { AnalyticsFilterState } from '@/store/analytics/state';
 
 @Component({
   components: {
@@ -199,7 +204,10 @@ export default class AnalyticsContainer extends Vue {
     };
   }
 
-  updateFilter(key: string, value: string | undefined = undefined): void {
+  updateFilter(
+    key: keyof AnalyticsFilterState,
+    value: string | undefined = undefined,
+  ): void {
     dispatchUpdateAnalyticsFilter(this.$store, { key, value });
   }
 
