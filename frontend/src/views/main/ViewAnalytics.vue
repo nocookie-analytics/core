@@ -1,5 +1,6 @@
 <template>
   <div>
+    <router-view :key="$route.fullPath"></router-view>
     <v-container fluid>
       <span v-if="analyticsError">
         <v-card class="ma-3 pa-3">
@@ -60,6 +61,7 @@ import AnalyticsContainer from '@/components/analytics/AnalyticsContainer.vue';
 import {
   dispatchFetchDomainAnalytics,
   dispatchUpdateActiveDomain,
+  dispatchOverwriteAnalyticsFilters,
 } from '@/store/analytics/actions';
 import {
   readAnalyticsData,
@@ -72,6 +74,8 @@ import {
   commitSetEndDate,
   commitSetStartDate,
 } from '@/store/analytics/mutations';
+import { Route } from 'vue-router';
+import { AnalyticsFilterState } from '@/store/analytics/state';
 
 @Component({
   components: {
@@ -107,6 +111,14 @@ export default class ViewAnalytics extends Vue {
 
   setQueryParam(key: string, value: string): void {
     this.$router.replace({ query: { ...this.$route.query, [key]: value } });
+  }
+
+  @Watch('$route', { immediate: true, deep: true })
+  async onUrlChange(newVal: Route): Promise<void> {
+    dispatchOverwriteAnalyticsFilters(
+      this.$store,
+      (newVal.query as unknown) as AnalyticsFilterState,
+    );
   }
 
   @Watch('startDate')
