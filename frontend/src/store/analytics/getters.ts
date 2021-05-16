@@ -17,10 +17,10 @@ export const getters = {
   },
 
   startDate: (state: AnalyticsState): Date => {
-    return state.startDate;
+    return state.filters.start;
   },
   endDate: (state: AnalyticsState): Date => {
-    return state.endDate;
+    return state.filters.end;
   },
 
   page: (state: AnalyticsState): string | undefined => {
