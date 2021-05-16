@@ -6,45 +6,22 @@ import {
   commitSetActiveDomain,
   commitSetAnalyticsData,
   commitSetAnalyticsError,
-  commitSetFilter,
+  commitSetFilters,
 } from './mutations';
 import { AnalyticsFilterState, AnalyticsState } from './state';
 
 export type AnalyticsContext = ActionContext<AnalyticsState, RootState>;
 
 export const actions = {
-  async updateActiveDomain(
-    context: AnalyticsContext,
-    domainName: string,
-  ): Promise<void> {
-    commitSetActiveDomain(context, domainName);
-    commitSetAnalyticsError(context, null);
-    await dispatchFetchDomainAnalytics(context);
-  },
-
   async overwriteAnalyticsFilters(
     context: AnalyticsContext,
-    filters: AnalyticsFilterState,
-  ): Promise<void> {
-    Object.entries(filters).forEach(([key, value]) => {
-      commitSetFilter(context, {
-        key: key as keyof AnalyticsFilterState,
-        value,
-      });
-    });
-    console.log(context.state.filters, filters);
-    commitSetAnalyticsError(context, null);
-    await dispatchFetchDomainAnalytics(context);
-  },
-
-  async updateAnalyticsFilter(
-    context: AnalyticsContext,
     {
-      value,
-      key,
-    }: { value: string | undefined; key: keyof AnalyticsFilterState },
+      filters,
+      domainName,
+    }: { filters: AnalyticsFilterState; domainName: string },
   ): Promise<void> {
-    commitSetFilter(context, { key, value });
+    commitSetActiveDomain(context, domainName);
+    commitSetFilters(context, filters);
     commitSetAnalyticsError(context, null);
     await dispatchFetchDomainAnalytics(context);
   },
@@ -83,9 +60,11 @@ export const actions = {
           AnalyticsType.UtmContents,
           AnalyticsType.UtmCampaigns,
         ],
-        start: context.state.startDate.toISOString(),
-        end: context.state.endDate.toISOString(),
         ...context.state.filters,
+        // start and end are already part of destructured filters, but as Date type
+        // The API needs them as string
+        start: context.state.filters.start.toISOString(),
+        end: context.state.filters.end.toISOString(),
       });
       const analyticsData = response.data;
       commitSetAnalyticsData(context, analyticsData);
@@ -100,12 +79,8 @@ export const actions = {
 
 const { dispatch } = getStoreAccessors<AnalyticsState, RootState>('');
 
-export const dispatchUpdateActiveDomain = dispatch(actions.updateActiveDomain);
 export const dispatchFetchDomainAnalytics = dispatch(
   actions.fetchDomainAnalytics,
-);
-export const dispatchUpdateAnalyticsFilter = dispatch(
-  actions.updateAnalyticsFilter,
 );
 export const dispatchOverwriteAnalyticsFilters = dispatch(
   actions.overwriteAnalyticsFilters,

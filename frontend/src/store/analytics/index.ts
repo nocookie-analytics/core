@@ -25,21 +25,24 @@ const readDateFromURLParam = (
 
 const now = new Date();
 
-export const defaultState: AnalyticsState = {
-  currentDomain: null,
-  analyticsData: null,
-  analyticsError: null,
-
-  startDate: readDateFromURLParam('start', addDays(now, -30)),
-  endDate: readDateFromURLParam('end', now),
-  filters: {
+export const getFiltersFromUrl = (): AnalyticsFilterState => {
+  return {
     page: getURLParamValue('page'),
     country: getURLParamValue('country'),
     browser: getURLParamValue('browser'),
     device: getURLParamValue('device'),
     os: getURLParamValue('os'),
     referrerName: getURLParamValue('referrerName'),
-  },
+    start: readDateFromURLParam('start', addDays(now, -30)),
+    end: readDateFromURLParam('end', now),
+  };
+};
+
+export const defaultState: AnalyticsState = {
+  currentDomain: null,
+  analyticsData: null,
+  analyticsError: null,
+  filters: getFiltersFromUrl(),
 };
 
 export const analyticsModule = {

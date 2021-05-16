@@ -48,7 +48,6 @@ import Icon from '@/components/analytics/Icon.vue';
 import { parseISO } from 'date-fns';
 import countryCodes from '@/components/data/countryCodes';
 import CountryFlag from 'vue-country-flag';
-import { dispatchUpdateAnalyticsFilter } from '@/store/analytics/actions';
 import {
   readBrowser,
   readCountry,
@@ -57,7 +56,6 @@ import {
   readPage,
   readReferrerName,
 } from '@/store/analytics/getters';
-import { AnalyticsFilterState } from '@/store/analytics/state';
 
 @Component({
   components: {
@@ -202,13 +200,6 @@ export default class AnalyticsContainer extends Vue {
       ...this.$route.query,
       [key]: value,
     };
-  }
-
-  updateFilter(
-    key: keyof AnalyticsFilterState,
-    value: string | undefined = undefined,
-  ): void {
-    dispatchUpdateAnalyticsFilter(this.$store, { key, value });
   }
 
   countryCodeToCountryName(countryCode: string): string {

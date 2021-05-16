@@ -58,11 +58,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import AnalyticsContainer from '@/components/analytics/AnalyticsContainer.vue';
-import {
-  dispatchFetchDomainAnalytics,
-  dispatchUpdateActiveDomain,
-  dispatchOverwriteAnalyticsFilters,
-} from '@/store/analytics/actions';
+import { dispatchOverwriteAnalyticsFilters } from '@/store/analytics/actions';
 import {
   readAnalyticsData,
   readAnalyticsError,
@@ -70,12 +66,8 @@ import {
   readStartDate,
 } from '@/store/analytics/getters';
 import { AnalyticsData } from '@/generated';
-import {
-  commitSetEndDate,
-  commitSetStartDate,
-} from '@/store/analytics/mutations';
 import { Route } from 'vue-router';
-import { AnalyticsFilterState } from '@/store/analytics/state';
+import { getFiltersFromUrl } from '@/store/analytics';
 
 @Component({
   components: {
@@ -92,7 +84,6 @@ export default class ViewAnalytics extends Vue {
   }
 
   set startDate(value: Date) {
-    commitSetStartDate(this.$store, value);
     this.setQueryParam('start', value.toISOString());
   }
 
@@ -101,7 +92,6 @@ export default class ViewAnalytics extends Vue {
   }
 
   set endDate(value: Date) {
-    commitSetEndDate(this.$store, value);
     this.setQueryParam('end', value.toISOString());
   }
 
@@ -115,23 +105,10 @@ export default class ViewAnalytics extends Vue {
 
   @Watch('$route', { immediate: true, deep: true })
   async onUrlChange(newVal: Route): Promise<void> {
-    dispatchOverwriteAnalyticsFilters(
-      this.$store,
-      (newVal.query as unknown) as AnalyticsFilterState,
-    );
-  }
-
-  @Watch('startDate')
-  @Watch('endDate')
-  async updateData(): Promise<void> {
-    await dispatchFetchDomainAnalytics(this.$store);
-  }
-
-  public async mounted(): Promise<void> {
-    await dispatchUpdateActiveDomain(
-      this.$store,
-      this.$router.currentRoute.params.domainName,
-    );
+    await dispatchOverwriteAnalyticsFilters(this.$store, {
+      filters: getFiltersFromUrl(),
+      domainName: this.$router.currentRoute.params.domainName,
+    });
   }
 
   get analyticsData(): AnalyticsData | null {
