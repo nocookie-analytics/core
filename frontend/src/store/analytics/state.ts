@@ -1,6 +1,6 @@
 import { AnalyticsData } from '@/generated';
 
-export interface AnalyticsFilterState {
+export interface BaseAnalyticsFilterState {
   page: string | undefined;
   country: string | undefined;
   browser: string | undefined;
@@ -9,12 +9,14 @@ export interface AnalyticsFilterState {
   referrerName: string | undefined;
 }
 
+export interface AnalyticsFilterState extends BaseAnalyticsFilterState {
+  start: Date;
+  end: Date;
+}
+
 export interface AnalyticsState {
   currentDomain: string | null;
   filters: AnalyticsFilterState;
   analyticsData: AnalyticsData | null;
   analyticsError: string | null;
-
-  startDate: Date;
-  endDate: Date;
 }
