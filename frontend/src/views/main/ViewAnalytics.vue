@@ -66,7 +66,6 @@ import {
   readStartDate,
 } from '@/store/analytics/getters';
 import { AnalyticsData } from '@/generated';
-import { Route } from 'vue-router';
 import { getFiltersFromUrl } from '@/store/analytics';
 
 @Component({
@@ -104,7 +103,7 @@ export default class ViewAnalytics extends Vue {
   }
 
   @Watch('$route', { immediate: true, deep: true })
-  async onUrlChange(newVal: Route): Promise<void> {
+  async onUrlChange(): Promise<void> {
     await dispatchOverwriteAnalyticsFilters(this.$store, {
       filters: getFiltersFromUrl(),
       domainName: this.$router.currentRoute.params.domainName,
