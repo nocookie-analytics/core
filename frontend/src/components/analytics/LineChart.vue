@@ -43,7 +43,7 @@ export default class LineChart extends Mixins(Line) {
           {
             ticks: {
               beginAtZero: true,
-              stepSize: 1,
+              precision: 0,
             },
             gridLines: {
               display: false,
