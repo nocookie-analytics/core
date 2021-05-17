@@ -24,10 +24,29 @@
                 v-if="block.urlParamName && block.data && block.data.length > 1"
                 :to="{ query: filterURL(block.urlParamName, item.value) }"
               >
-                {{ item.value }}
+                <span v-if="block.urlParamName === 'country'">
+                  <country-flag
+                    :country="item.value.toLowerCase()"
+                    rounded
+                    size="normal"
+                  />{{ countryCodeToCountryName(item.value) }}
+                </span>
+                <span v-else>
+                  <Icon :value="item.value" />
+                  {{ item.value }}
+                </span>
               </router-link>
               <span v-else>
-                {{ item.value }}
+                <span v-if="block.urlParamName === 'country'">
+                  <country-flag
+                    :country="item.value.toLowerCase()"
+                    rounded
+                    size="normal"
+                  />{{ countryCodeToCountryName(item.value) }}
+                </span>
+                <span v-else>
+                  {{ item.value }}
+                </span>
               </span>
             </template>
           </AnalyticsBlock>
