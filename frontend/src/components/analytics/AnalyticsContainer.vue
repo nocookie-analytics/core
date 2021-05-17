@@ -20,8 +20,18 @@
               </router-link>
             </template>
             <template v-slot:itemName="{ item }">
+              <Icon
+                :value="item.value"
+                v-if="block.urlParamName !== 'country'"
+              />&nbsp;
               <router-link
-                v-if="block.urlParamName && block.data && block.data.length > 1"
+                v-if="
+                  block.urlParamName &&
+                  block.data &&
+                  block.data.length > 1 &&
+                  block.urlExclude &&
+                  !block.urlExclude.includes(item.value)
+                "
                 :to="{ query: filterURL(block.urlParamName, item.value) }"
               >
                 <span v-if="block.urlParamName === 'country'">
@@ -32,7 +42,6 @@
                   />{{ countryCodeToCountryName(item.value) }}
                 </span>
                 <span v-else>
-                  <Icon :value="item.value" />
                   {{ item.value }}
                 </span>
               </router-link>
@@ -126,6 +135,7 @@ export default class AnalyticsContainer extends Vue {
         type: BlockType.AggregateStat,
         title: 'Page',
         urlParamName: 'page',
+        urlExclude: [],
         cols: 3,
       },
       {
@@ -133,6 +143,7 @@ export default class AnalyticsContainer extends Vue {
         type: BlockType.AggregateStat,
         title: 'Browser',
         urlParamName: 'browser',
+        urlExclude: [],
         cols: 3,
       },
       {
@@ -140,6 +151,7 @@ export default class AnalyticsContainer extends Vue {
         type: BlockType.AggregateStat,
         title: 'OS',
         urlParamName: 'os',
+        urlExclude: ['Other'],
         cols: 3,
       },
       {
@@ -147,6 +159,7 @@ export default class AnalyticsContainer extends Vue {
         type: BlockType.AggregateStat,
         title: 'Device type',
         urlParamName: 'device',
+        urlExclude: ['Other'],
         cols: 3,
       },
       {
@@ -154,6 +167,7 @@ export default class AnalyticsContainer extends Vue {
         type: BlockType.AggregateStat,
         title: 'Referrer name',
         urlParamName: 'referrerName',
+        urlExclude: [],
         cols: 3,
       },
       {
@@ -161,6 +175,7 @@ export default class AnalyticsContainer extends Vue {
         type: BlockType.AggregateStat,
         title: 'Referrer medium',
         urlParamName: 'referrerMedium',
+        urlExclude: ['unknown'],
         cols: 3,
       },
       {
@@ -168,6 +183,7 @@ export default class AnalyticsContainer extends Vue {
         type: BlockType.AggregateStat,
         title: 'Country',
         urlParamName: 'country',
+        urlExclude: ['Unknown'],
         cols: 4,
       },
       {
