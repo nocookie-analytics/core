@@ -45,7 +45,6 @@ class TestCreatePageViewEvent:
             time_to_first_byte=5000,
             total_time=5000,
             page_view_id=str(page_view_id),
-            ip_city_id=5,
             ip_country_iso_code="US",
             ip_continent_code="NA",
         )

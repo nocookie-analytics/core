@@ -69,8 +69,6 @@ class Event(Base):
 
     event_type = Column(EventTypeEnum, nullable=False)
 
-    ip_city_id = Column(Integer, ForeignKey("city.id", name="fk_event_city_id"))
-    ip_city: City = relationship("City")  # type: ignore
     ip_country_iso_code = Column(
         String(length=2), ForeignKey("country.id", name="fk_event_country_id")
     )
@@ -129,9 +127,7 @@ class Event(Base):
     ix_domain_timestamp = Index("ix_domain_timestamp", domain_id, timestamp)
     ix_timestamp = Index("ix_timestamp", timestamp)
     ix_browser_family = Index("ix_browser_family", domain_id, browser_family, timestamp)
-    ix_location = Index(
-        "ix_location", domain_id, ip_country_iso_code, ip_city_id, timestamp
-    )
+    ix_location = Index("ix_location", domain_id, ip_country_iso_code, timestamp)
     ix_os_family = Index(
         "ix_os_family",
         domain_id,

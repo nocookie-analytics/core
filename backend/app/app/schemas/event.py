@@ -48,7 +48,6 @@ class EventCreate(EventBase):
     metric_name: Optional[MetricType] = None
     metric_value: Optional[Decimal] = None
 
-    ip_city_id: Optional[int]
     ip_country_iso_code: Optional[str]
     ip_continent_code: Optional[str]
 
@@ -113,11 +112,8 @@ class EventCreate(EventBase):
             geolocation = get_ip_gelocation(ip_address)
             if not geolocation:
                 return data
-            city_id = geolocation.city.geoname_id
             country_code = geolocation.country.iso_code
             continent_code = geolocation.continent.code
-            if city_id:
-                data["ip_city_id"] = city_id
             if country_code:
                 data["ip_country_iso_code"] = country_code
             data["ip_continent_code"] = continent_code

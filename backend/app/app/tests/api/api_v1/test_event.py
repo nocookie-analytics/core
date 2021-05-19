@@ -25,7 +25,6 @@ def create_event(db, **kwargs):
         "psb": 300000,
         "ref": None,
         "ut": "Europe/Amsterdam",
-        "ip_city_id": 5,
         "ip_country_iso_code": "US",
         "ip_continent_code": "NA",
         **kwargs,
