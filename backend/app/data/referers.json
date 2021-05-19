@@ -2219,6 +2219,15 @@
                 "q"
             ]
         }, 
+        "Startpage": {
+            "domains": [
+                "www.startpage.com",
+                "startpage.com"
+            ],
+            "parameters": [
+                "query"
+            ]
+        },
         "Baidu": {
             "domains": [
                 "www.baidu.com", 
@@ -2227,7 +2236,8 @@
                 "tieba.baidu.com", 
                 "news.baidu.com", 
                 "web.gougou.com", 
-                "m.baidu.com"
+                "m.baidu.com",
+                "baidu.com"
             ], 
             "parameters": [
                 "wd", 
