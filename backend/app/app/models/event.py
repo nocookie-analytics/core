@@ -23,7 +23,7 @@ from app.db.base_class import Base
 
 if TYPE_CHECKING:
     from .domain import Domain
-    from .location import City, Country
+    from .location import Country
 
 
 class EventType(Enum):

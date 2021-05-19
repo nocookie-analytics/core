@@ -11,7 +11,7 @@ from typing import Dict, Generator
 from starlette.datastructures import Address
 from starlette.requests import Request
 
-from app.models.location import City, Country
+from app.models.location import Country
 from app.utils.geolocation import get_ip_gelocation
 
 import pytest
