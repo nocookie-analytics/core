@@ -81,9 +81,7 @@ def override_testclient(monkeypatch):
 def mock_ip_address(db):
     ip_address = socket.gethostbyname("gaganpreet.in")
     location = get_ip_gelocation(ip_address)
-    db.add(
-        Country(id=location.country.iso_code, name=location.country.name),
-    )
+    db.add(Country(id=location.country.iso_code, name=location.country.name))
     db.commit()
     return ip_address
 
