@@ -54,7 +54,6 @@ class TestCreatePageViewEvent:
         assert event.domain_id == domain.id
         assert event.ua_string == event_in.ua_string
         assert event.browser_family == "Firefox"
-        assert event.ip_city
         assert event.ip_country
         assert event.ip_continent_code
 
