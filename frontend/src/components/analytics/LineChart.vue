@@ -9,8 +9,6 @@ import { PageViewsPerDayStat } from '@/generated';
 })
 export default class LineChart extends Mixins(Line) {
   @Prop() blockData!: Array<PageViewsPerDayStat>;
-  @Prop() startDate!: Date;
-  @Prop() endDate!: Date;
 
   get chartData(): ChartData {
     const labels: Array<string> = [];
@@ -45,7 +43,7 @@ export default class LineChart extends Mixins(Line) {
           {
             ticks: {
               beginAtZero: true,
-              stepSize: 1,
+              precision: 0,
             },
             gridLines: {
               display: false,

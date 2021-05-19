@@ -200,33 +200,101 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
 };
 
 /**
- * EventsApi - interface
+ * Request parameters for newEvent operation in EventsApi.
  * @export
- * @interface EventsApi
+ * @interface EventsApiNewEventRequest
  */
-export interface EventsApiInterface {
+export interface EventsApiNewEventRequest {
     /**
-     * Report a new event.
-     * @summary New Event
-     * @param {string} url 
-     * @param {EventType} [et] Event type
-     * @param {string} [pt] Page title
-     * @param {string} [pvid] Page view ID
-     * @param {number} [psb] Page size bytes
-     * @param {string} [tz] Timezone
-     * @param {number} [tzo] Timezone offset
-     * @param {string} [ref] Referrer
-     * @param {number} [ttfb] Time to first-byte
-     * @param {number} [tt] Total time
-     * @param {number} [dt] Download time
-     * @param {MetricType} [mn] Metric name
-     * @param {number} [mv] Metric value
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof EventsApiInterface
+     * 
+     * @type {string}
+     * @memberof EventsApiNewEvent
      */
-    newEvent(url: string, et?: EventType, pt?: string, pvid?: string, psb?: number, tz?: string, tzo?: number, ref?: string, ttfb?: number, tt?: number, dt?: number, mn?: MetricType, mv?: number, options?: any): AxiosPromise<EventCreated>;
+    readonly url: string
 
+    /**
+     * Event type
+     * @type {EventType}
+     * @memberof EventsApiNewEvent
+     */
+    readonly et?: EventType
+
+    /**
+     * Page title
+     * @type {string}
+     * @memberof EventsApiNewEvent
+     */
+    readonly pt?: string
+
+    /**
+     * Page view ID
+     * @type {string}
+     * @memberof EventsApiNewEvent
+     */
+    readonly pvid?: string
+
+    /**
+     * Page size bytes
+     * @type {number}
+     * @memberof EventsApiNewEvent
+     */
+    readonly psb?: number
+
+    /**
+     * Timezone
+     * @type {string}
+     * @memberof EventsApiNewEvent
+     */
+    readonly tz?: string
+
+    /**
+     * Timezone offset
+     * @type {number}
+     * @memberof EventsApiNewEvent
+     */
+    readonly tzo?: number
+
+    /**
+     * Referrer
+     * @type {string}
+     * @memberof EventsApiNewEvent
+     */
+    readonly ref?: string
+
+    /**
+     * Time to first-byte
+     * @type {number}
+     * @memberof EventsApiNewEvent
+     */
+    readonly ttfb?: number
+
+    /**
+     * Total time
+     * @type {number}
+     * @memberof EventsApiNewEvent
+     */
+    readonly tt?: number
+
+    /**
+     * Download time
+     * @type {number}
+     * @memberof EventsApiNewEvent
+     */
+    readonly dt?: number
+
+    /**
+     * Metric name
+     * @type {MetricType}
+     * @memberof EventsApiNewEvent
+     */
+    readonly mn?: MetricType
+
+    /**
+     * Metric value
+     * @type {number}
+     * @memberof EventsApiNewEvent
+     */
+    readonly mv?: number
 }
 
 /**
@@ -235,28 +303,16 @@ export interface EventsApiInterface {
  * @class EventsApi
  * @extends {BaseAPI}
  */
-export class EventsApi extends BaseAPI implements EventsApiInterface {
+export class EventsApi extends BaseAPI {
     /**
      * Report a new event.
      * @summary New Event
-     * @param {string} url 
-     * @param {EventType} [et] Event type
-     * @param {string} [pt] Page title
-     * @param {string} [pvid] Page view ID
-     * @param {number} [psb] Page size bytes
-     * @param {string} [tz] Timezone
-     * @param {number} [tzo] Timezone offset
-     * @param {string} [ref] Referrer
-     * @param {number} [ttfb] Time to first-byte
-     * @param {number} [tt] Total time
-     * @param {number} [dt] Download time
-     * @param {MetricType} [mn] Metric name
-     * @param {number} [mv] Metric value
+     * @param {EventsApiNewEventRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EventsApi
      */
-    public newEvent(url: string, et?: EventType, pt?: string, pvid?: string, psb?: number, tz?: string, tzo?: number, ref?: string, ttfb?: number, tt?: number, dt?: number, mn?: MetricType, mv?: number, options?: any) {
-        return EventsApiFp(this.configuration).newEvent(url, et, pt, pvid, psb, tz, tzo, ref, ttfb, tt, dt, mn, mv, options).then((request) => request(this.axios, this.basePath));
+    public newEvent(requestParameters: EventsApiNewEventRequest, options?: any) {
+        return EventsApiFp(this.configuration).newEvent(requestParameters.url, requestParameters.et, requestParameters.pt, requestParameters.pvid, requestParameters.psb, requestParameters.tz, requestParameters.tzo, requestParameters.ref, requestParameters.ttfb, requestParameters.tt, requestParameters.dt, requestParameters.mn, requestParameters.mv, options).then((request) => request(this.axios, this.basePath));
     }
 }

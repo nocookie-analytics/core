@@ -324,55 +324,80 @@ export const LoginApiFactory = function (configuration?: Configuration, basePath
 };
 
 /**
- * LoginApi - interface
+ * Request parameters for loginAccessToken operation in LoginApi.
  * @export
- * @interface LoginApi
+ * @interface LoginApiLoginAccessTokenRequest
  */
-export interface LoginApiInterface {
+export interface LoginApiLoginAccessTokenRequest {
     /**
-     * OAuth2 compatible token login, get an access token for future requests
-     * @summary Login Access Token
-     * @param {string} username 
-     * @param {string} password 
-     * @param {string} [grantType] 
-     * @param {string} [scope] 
-     * @param {string} [clientId] 
-     * @param {string} [clientSecret] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof LoginApiInterface
+     * 
+     * @type {string}
+     * @memberof LoginApiLoginAccessToken
      */
-    loginAccessToken(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: any): AxiosPromise<Token>;
+    readonly username: string
 
     /**
-     * Password Recovery
-     * @summary Recover Password
-     * @param {string} email 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof LoginApiInterface
+     * 
+     * @type {string}
+     * @memberof LoginApiLoginAccessToken
      */
-    recoverPassword(email: string, options?: any): AxiosPromise<Msg>;
+    readonly password: string
 
     /**
-     * Reset password
-     * @summary Reset Password
-     * @param {BodyResetPasswordApiV1ResetPasswordPost} bodyResetPasswordApiV1ResetPasswordPost 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof LoginApiInterface
+     * 
+     * @type {string}
+     * @memberof LoginApiLoginAccessToken
      */
-    resetPassword(bodyResetPasswordApiV1ResetPasswordPost: BodyResetPasswordApiV1ResetPasswordPost, options?: any): AxiosPromise<Msg>;
+    readonly grantType?: string
 
     /**
-     * Test access token
-     * @summary Test Token
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof LoginApiInterface
+     * 
+     * @type {string}
+     * @memberof LoginApiLoginAccessToken
      */
-    testToken(options?: any): AxiosPromise<User>;
+    readonly scope?: string
 
+    /**
+     * 
+     * @type {string}
+     * @memberof LoginApiLoginAccessToken
+     */
+    readonly clientId?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof LoginApiLoginAccessToken
+     */
+    readonly clientSecret?: string
+}
+
+/**
+ * Request parameters for recoverPassword operation in LoginApi.
+ * @export
+ * @interface LoginApiRecoverPasswordRequest
+ */
+export interface LoginApiRecoverPasswordRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof LoginApiRecoverPassword
+     */
+    readonly email: string
+}
+
+/**
+ * Request parameters for resetPassword operation in LoginApi.
+ * @export
+ * @interface LoginApiResetPasswordRequest
+ */
+export interface LoginApiResetPasswordRequest {
+    /**
+     * 
+     * @type {BodyResetPasswordApiV1ResetPasswordPost}
+     * @memberof LoginApiResetPassword
+     */
+    readonly bodyResetPasswordApiV1ResetPasswordPost: BodyResetPasswordApiV1ResetPasswordPost
 }
 
 /**
@@ -381,46 +406,41 @@ export interface LoginApiInterface {
  * @class LoginApi
  * @extends {BaseAPI}
  */
-export class LoginApi extends BaseAPI implements LoginApiInterface {
+export class LoginApi extends BaseAPI {
     /**
      * OAuth2 compatible token login, get an access token for future requests
      * @summary Login Access Token
-     * @param {string} username 
-     * @param {string} password 
-     * @param {string} [grantType] 
-     * @param {string} [scope] 
-     * @param {string} [clientId] 
-     * @param {string} [clientSecret] 
+     * @param {LoginApiLoginAccessTokenRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof LoginApi
      */
-    public loginAccessToken(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: any) {
-        return LoginApiFp(this.configuration).loginAccessToken(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(this.axios, this.basePath));
+    public loginAccessToken(requestParameters: LoginApiLoginAccessTokenRequest, options?: any) {
+        return LoginApiFp(this.configuration).loginAccessToken(requestParameters.username, requestParameters.password, requestParameters.grantType, requestParameters.scope, requestParameters.clientId, requestParameters.clientSecret, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Password Recovery
      * @summary Recover Password
-     * @param {string} email 
+     * @param {LoginApiRecoverPasswordRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof LoginApi
      */
-    public recoverPassword(email: string, options?: any) {
-        return LoginApiFp(this.configuration).recoverPassword(email, options).then((request) => request(this.axios, this.basePath));
+    public recoverPassword(requestParameters: LoginApiRecoverPasswordRequest, options?: any) {
+        return LoginApiFp(this.configuration).recoverPassword(requestParameters.email, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Reset password
      * @summary Reset Password
-     * @param {BodyResetPasswordApiV1ResetPasswordPost} bodyResetPasswordApiV1ResetPasswordPost 
+     * @param {LoginApiResetPasswordRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof LoginApi
      */
-    public resetPassword(bodyResetPasswordApiV1ResetPasswordPost: BodyResetPasswordApiV1ResetPasswordPost, options?: any) {
-        return LoginApiFp(this.configuration).resetPassword(bodyResetPasswordApiV1ResetPasswordPost, options).then((request) => request(this.axios, this.basePath));
+    public resetPassword(requestParameters: LoginApiResetPasswordRequest, options?: any) {
+        return LoginApiFp(this.configuration).resetPassword(requestParameters.bodyResetPasswordApiV1ResetPasswordPost, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

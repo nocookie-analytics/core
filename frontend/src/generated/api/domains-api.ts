@@ -497,84 +497,122 @@ export const DomainsApiFactory = function (configuration?: Configuration, basePa
 };
 
 /**
- * DomainsApi - interface
+ * Request parameters for createDomain operation in DomainsApi.
  * @export
- * @interface DomainsApi
+ * @interface DomainsApiCreateDomainRequest
  */
-export interface DomainsApiInterface {
+export interface DomainsApiCreateDomainRequest {
     /**
-     * Create new domain.
-     * @summary Create Domain
-     * @param {DomainCreate} domainCreate 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApiInterface
+     * 
+     * @type {DomainCreate}
+     * @memberof DomainsApiCreateDomain
      */
-    createDomain(domainCreate: DomainCreate, options?: any): AxiosPromise<Domain>;
+    readonly domainCreate: DomainCreate
+}
+
+/**
+ * Request parameters for deleteDomain operation in DomainsApi.
+ * @export
+ * @interface DomainsApiDeleteDomainRequest
+ */
+export interface DomainsApiDeleteDomainRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof DomainsApiDeleteDomain
+     */
+    readonly id: number
+}
+
+/**
+ * Request parameters for readDomain operation in DomainsApi.
+ * @export
+ * @interface DomainsApiReadDomainRequest
+ */
+export interface DomainsApiReadDomainRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof DomainsApiReadDomain
+     */
+    readonly id: number
+}
+
+/**
+ * Request parameters for readDomainByName operation in DomainsApi.
+ * @export
+ * @interface DomainsApiReadDomainByNameRequest
+ */
+export interface DomainsApiReadDomainByNameRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof DomainsApiReadDomainByName
+     */
+    readonly name: string
+}
+
+/**
+ * Request parameters for readDomains operation in DomainsApi.
+ * @export
+ * @interface DomainsApiReadDomainsRequest
+ */
+export interface DomainsApiReadDomainsRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof DomainsApiReadDomains
+     */
+    readonly skip?: number
 
     /**
-     * Delete a domain.
-     * @summary Delete Domain
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApiInterface
+     * 
+     * @type {number}
+     * @memberof DomainsApiReadDomains
      */
-    deleteDomain(id: number, options?: any): AxiosPromise<Domain>;
+    readonly limit?: number
+}
+
+/**
+ * Request parameters for updateDomain operation in DomainsApi.
+ * @export
+ * @interface DomainsApiUpdateDomainRequest
+ */
+export interface DomainsApiUpdateDomainRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof DomainsApiUpdateDomain
+     */
+    readonly id: number
 
     /**
-     * Get domain by ID.
-     * @summary Read Domain
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApiInterface
+     * 
+     * @type {DomainUpdate}
+     * @memberof DomainsApiUpdateDomain
      */
-    readDomain(id: number, options?: any): AxiosPromise<Domain>;
+    readonly domainUpdate: DomainUpdate
+}
+
+/**
+ * Request parameters for updateDomainByName operation in DomainsApi.
+ * @export
+ * @interface DomainsApiUpdateDomainByNameRequest
+ */
+export interface DomainsApiUpdateDomainByNameRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof DomainsApiUpdateDomainByName
+     */
+    readonly name: string
 
     /**
-     * Get domain by name
-     * @summary Read Domain By Name
-     * @param {string} name 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApiInterface
+     * 
+     * @type {DomainUpdate}
+     * @memberof DomainsApiUpdateDomainByName
      */
-    readDomainByName(name: string, options?: any): AxiosPromise<Domain>;
-
-    /**
-     * Retrieve domains.
-     * @summary Read Domains
-     * @param {number} [skip] 
-     * @param {number} [limit] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApiInterface
-     */
-    readDomains(skip?: number, limit?: number, options?: any): AxiosPromise<Array<Domain>>;
-
-    /**
-     * Update a domain.
-     * @summary Update Domain
-     * @param {number} id 
-     * @param {DomainUpdate} domainUpdate 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApiInterface
-     */
-    updateDomain(id: number, domainUpdate: DomainUpdate, options?: any): AxiosPromise<Domain>;
-
-    /**
-     * Update a domain by name
-     * @summary Update Domain By Name
-     * @param {string} name 
-     * @param {DomainUpdate} domainUpdate 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DomainsApiInterface
-     */
-    updateDomainByName(name: string, domainUpdate: DomainUpdate, options?: any): AxiosPromise<Domain>;
-
+    readonly domainUpdate: DomainUpdate
 }
 
 /**
@@ -583,91 +621,88 @@ export interface DomainsApiInterface {
  * @class DomainsApi
  * @extends {BaseAPI}
  */
-export class DomainsApi extends BaseAPI implements DomainsApiInterface {
+export class DomainsApi extends BaseAPI {
     /**
      * Create new domain.
      * @summary Create Domain
-     * @param {DomainCreate} domainCreate 
+     * @param {DomainsApiCreateDomainRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DomainsApi
      */
-    public createDomain(domainCreate: DomainCreate, options?: any) {
-        return DomainsApiFp(this.configuration).createDomain(domainCreate, options).then((request) => request(this.axios, this.basePath));
+    public createDomain(requestParameters: DomainsApiCreateDomainRequest, options?: any) {
+        return DomainsApiFp(this.configuration).createDomain(requestParameters.domainCreate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Delete a domain.
      * @summary Delete Domain
-     * @param {number} id 
+     * @param {DomainsApiDeleteDomainRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DomainsApi
      */
-    public deleteDomain(id: number, options?: any) {
-        return DomainsApiFp(this.configuration).deleteDomain(id, options).then((request) => request(this.axios, this.basePath));
+    public deleteDomain(requestParameters: DomainsApiDeleteDomainRequest, options?: any) {
+        return DomainsApiFp(this.configuration).deleteDomain(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Get domain by ID.
      * @summary Read Domain
-     * @param {number} id 
+     * @param {DomainsApiReadDomainRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DomainsApi
      */
-    public readDomain(id: number, options?: any) {
-        return DomainsApiFp(this.configuration).readDomain(id, options).then((request) => request(this.axios, this.basePath));
+    public readDomain(requestParameters: DomainsApiReadDomainRequest, options?: any) {
+        return DomainsApiFp(this.configuration).readDomain(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Get domain by name
      * @summary Read Domain By Name
-     * @param {string} name 
+     * @param {DomainsApiReadDomainByNameRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DomainsApi
      */
-    public readDomainByName(name: string, options?: any) {
-        return DomainsApiFp(this.configuration).readDomainByName(name, options).then((request) => request(this.axios, this.basePath));
+    public readDomainByName(requestParameters: DomainsApiReadDomainByNameRequest, options?: any) {
+        return DomainsApiFp(this.configuration).readDomainByName(requestParameters.name, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Retrieve domains.
      * @summary Read Domains
-     * @param {number} [skip] 
-     * @param {number} [limit] 
+     * @param {DomainsApiReadDomainsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DomainsApi
      */
-    public readDomains(skip?: number, limit?: number, options?: any) {
-        return DomainsApiFp(this.configuration).readDomains(skip, limit, options).then((request) => request(this.axios, this.basePath));
+    public readDomains(requestParameters: DomainsApiReadDomainsRequest = {}, options?: any) {
+        return DomainsApiFp(this.configuration).readDomains(requestParameters.skip, requestParameters.limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Update a domain.
      * @summary Update Domain
-     * @param {number} id 
-     * @param {DomainUpdate} domainUpdate 
+     * @param {DomainsApiUpdateDomainRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DomainsApi
      */
-    public updateDomain(id: number, domainUpdate: DomainUpdate, options?: any) {
-        return DomainsApiFp(this.configuration).updateDomain(id, domainUpdate, options).then((request) => request(this.axios, this.basePath));
+    public updateDomain(requestParameters: DomainsApiUpdateDomainRequest, options?: any) {
+        return DomainsApiFp(this.configuration).updateDomain(requestParameters.id, requestParameters.domainUpdate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Update a domain by name
      * @summary Update Domain By Name
-     * @param {string} name 
-     * @param {DomainUpdate} domainUpdate 
+     * @param {DomainsApiUpdateDomainByNameRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DomainsApi
      */
-    public updateDomainByName(name: string, domainUpdate: DomainUpdate, options?: any) {
-        return DomainsApiFp(this.configuration).updateDomainByName(name, domainUpdate, options).then((request) => request(this.axios, this.basePath));
+    public updateDomainByName(requestParameters: DomainsApiUpdateDomainByNameRequest, options?: any) {
+        return DomainsApiFp(this.configuration).updateDomainByName(requestParameters.name, requestParameters.domainUpdate, options).then((request) => request(this.axios, this.basePath));
     }
 }

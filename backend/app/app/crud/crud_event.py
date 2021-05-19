@@ -100,6 +100,10 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         domain: Domain,
         country: str = None,
         page: str = None,
+        browser: str = None,
+        os: str = None,
+        device: str = None,
+        referrer_name: str = None,
     ) -> AnalyticsData:
         data = AnalyticsData(start=start, end=end)
         for field in fields:
@@ -117,6 +121,14 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 base_query = base_query.filter(Event.ip_country_iso_code == country)
             if page is not None:
                 base_query = base_query.filter(Event.path == page)
+            if browser is not None:
+                base_query = base_query.filter(Event.browser_family == browser)
+            if os is not None:
+                base_query = base_query.filter(Event.os_family == os)
+            if device is not None:
+                base_query = base_query.filter(Event.device_family == device)
+            if referrer_name is not None:
+                base_query = base_query.filter(Event.referrer_name == referrer_name)
             page_view_base_query = base_query.filter(
                 Event.event_type == EventType.page_view
             )

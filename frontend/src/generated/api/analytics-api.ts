@@ -39,12 +39,16 @@ export const AnalyticsApiAxiosParamCreator = function (configuration?: Configura
          * @param {Array<AnalyticsType>} include To include multiple fields in result use &#x60;include&#x3D;&#x60; multiple times, eg: &#x60;&amp;include&#x3D;pageviews&amp;include&#x3D;countries&#x60;
          * @param {string} [page] 
          * @param {string} [country] 
+         * @param {string} [browser] 
+         * @param {string} [os] 
+         * @param {string} [device] 
+         * @param {string} [referrerName] 
          * @param {string} [start] 
          * @param {string} [end] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAnalytics: async (domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, start?: string, end?: string, options: any = {}): Promise<RequestArgs> => {
+        getAnalytics: async (domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: string, referrerName?: string, start?: string, end?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'domainName' is not null or undefined
             assertParamExists('getAnalytics', 'domainName', domainName)
             // verify required parameter 'include' is not null or undefined
@@ -79,6 +83,22 @@ export const AnalyticsApiAxiosParamCreator = function (configuration?: Configura
 
             if (country !== undefined) {
                 localVarQueryParameter['country'] = country;
+            }
+
+            if (browser !== undefined) {
+                localVarQueryParameter['browser'] = browser;
+            }
+
+            if (os !== undefined) {
+                localVarQueryParameter['os'] = os;
+            }
+
+            if (device !== undefined) {
+                localVarQueryParameter['device'] = device;
+            }
+
+            if (referrerName !== undefined) {
+                localVarQueryParameter['referrer_name'] = referrerName;
             }
 
             if (start !== undefined) {
@@ -121,13 +141,17 @@ export const AnalyticsApiFp = function(configuration?: Configuration) {
          * @param {Array<AnalyticsType>} include To include multiple fields in result use &#x60;include&#x3D;&#x60; multiple times, eg: &#x60;&amp;include&#x3D;pageviews&amp;include&#x3D;countries&#x60;
          * @param {string} [page] 
          * @param {string} [country] 
+         * @param {string} [browser] 
+         * @param {string} [os] 
+         * @param {string} [device] 
+         * @param {string} [referrerName] 
          * @param {string} [start] 
          * @param {string} [end] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, start?: string, end?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AnalyticsData>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAnalytics(domainName, include, page, country, start, end, options);
+        async getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: string, referrerName?: string, start?: string, end?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AnalyticsData>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAnalytics(domainName, include, page, country, browser, os, device, referrerName, start, end, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -147,38 +171,96 @@ export const AnalyticsApiFactory = function (configuration?: Configuration, base
          * @param {Array<AnalyticsType>} include To include multiple fields in result use &#x60;include&#x3D;&#x60; multiple times, eg: &#x60;&amp;include&#x3D;pageviews&amp;include&#x3D;countries&#x60;
          * @param {string} [page] 
          * @param {string} [country] 
+         * @param {string} [browser] 
+         * @param {string} [os] 
+         * @param {string} [device] 
+         * @param {string} [referrerName] 
          * @param {string} [start] 
          * @param {string} [end] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, start?: string, end?: string, options?: any): AxiosPromise<AnalyticsData> {
-            return localVarFp.getAnalytics(domainName, include, page, country, start, end, options).then((request) => request(axios, basePath));
+        getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: string, referrerName?: string, start?: string, end?: string, options?: any): AxiosPromise<AnalyticsData> {
+            return localVarFp.getAnalytics(domainName, include, page, country, browser, os, device, referrerName, start, end, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * AnalyticsApi - interface
+ * Request parameters for getAnalytics operation in AnalyticsApi.
  * @export
- * @interface AnalyticsApi
+ * @interface AnalyticsApiGetAnalyticsRequest
  */
-export interface AnalyticsApiInterface {
+export interface AnalyticsApiGetAnalyticsRequest {
     /**
      * 
-     * @summary Get Analytics
-     * @param {string} domainName 
-     * @param {Array<AnalyticsType>} include To include multiple fields in result use &#x60;include&#x3D;&#x60; multiple times, eg: &#x60;&amp;include&#x3D;pageviews&amp;include&#x3D;countries&#x60;
-     * @param {string} [page] 
-     * @param {string} [country] 
-     * @param {string} [start] 
-     * @param {string} [end] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AnalyticsApiInterface
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
      */
-    getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, start?: string, end?: string, options?: any): AxiosPromise<AnalyticsData>;
+    readonly domainName: string
 
+    /**
+     * To include multiple fields in result use &#x60;include&#x3D;&#x60; multiple times, eg: &#x60;&amp;include&#x3D;pageviews&amp;include&#x3D;countries&#x60;
+     * @type {Array<AnalyticsType>}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly include: Array<AnalyticsType>
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly page?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly country?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly browser?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly os?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly device?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly referrerName?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly start?: string
+
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly end?: string
 }
 
 /**
@@ -187,21 +269,16 @@ export interface AnalyticsApiInterface {
  * @class AnalyticsApi
  * @extends {BaseAPI}
  */
-export class AnalyticsApi extends BaseAPI implements AnalyticsApiInterface {
+export class AnalyticsApi extends BaseAPI {
     /**
      * 
      * @summary Get Analytics
-     * @param {string} domainName 
-     * @param {Array<AnalyticsType>} include To include multiple fields in result use &#x60;include&#x3D;&#x60; multiple times, eg: &#x60;&amp;include&#x3D;pageviews&amp;include&#x3D;countries&#x60;
-     * @param {string} [page] 
-     * @param {string} [country] 
-     * @param {string} [start] 
-     * @param {string} [end] 
+     * @param {AnalyticsApiGetAnalyticsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AnalyticsApi
      */
-    public getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, start?: string, end?: string, options?: any) {
-        return AnalyticsApiFp(this.configuration).getAnalytics(domainName, include, page, country, start, end, options).then((request) => request(this.axios, this.basePath));
+    public getAnalytics(requestParameters: AnalyticsApiGetAnalyticsRequest, options?: any) {
+        return AnalyticsApiFp(this.configuration).getAnalytics(requestParameters.domainName, requestParameters.include, requestParameters.page, requestParameters.country, requestParameters.browser, requestParameters.os, requestParameters.device, requestParameters.referrerName, requestParameters.start, requestParameters.end, options).then((request) => request(this.axios, this.basePath));
     }
 }

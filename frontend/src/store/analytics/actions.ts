@@ -6,37 +6,22 @@ import {
   commitSetActiveDomain,
   commitSetAnalyticsData,
   commitSetAnalyticsError,
-  commitSetCountry,
-  commitSetPage,
+  commitSetFilters,
 } from './mutations';
-import { AnalyticsState } from './state';
+import { AnalyticsFilterState, AnalyticsState } from './state';
 
 export type AnalyticsContext = ActionContext<AnalyticsState, RootState>;
 
 export const actions = {
-  async updateActiveDomain(
+  async overwriteAnalyticsFilters(
     context: AnalyticsContext,
-    domainName: string,
+    {
+      filters,
+      domainName,
+    }: { filters: AnalyticsFilterState; domainName: string },
   ): Promise<void> {
     commitSetActiveDomain(context, domainName);
-    commitSetAnalyticsError(context, null);
-    await dispatchFetchDomainAnalytics(context);
-  },
-
-  async updatePage(
-    context: AnalyticsContext,
-    page: string | undefined,
-  ): Promise<void> {
-    commitSetPage(context, page);
-    commitSetAnalyticsError(context, null);
-    await dispatchFetchDomainAnalytics(context);
-  },
-
-  async updateCountry(
-    context: AnalyticsContext,
-    page: string | undefined,
-  ): Promise<void> {
-    commitSetCountry(context, page);
+    commitSetFilters(context, filters);
     commitSetAnalyticsError(context, null);
     await dispatchFetchDomainAnalytics(context);
   },
@@ -50,9 +35,9 @@ export const actions = {
       return Promise.resolve();
     }
     try {
-      const response = await analyticsApi.getAnalytics(
+      const response = await analyticsApi.getAnalytics({
         domainName,
-        [
+        include: [
           AnalyticsType.Pages,
           AnalyticsType.Pageviews,
           AnalyticsType.Countries,
@@ -75,11 +60,12 @@ export const actions = {
           AnalyticsType.UtmContents,
           AnalyticsType.UtmCampaigns,
         ],
-        context.state.page,
-        context.state.country,
-        context.state.startDate.toISOString(),
-        context.state.endDate.toISOString(),
-      );
+        ...context.state.filters,
+        // start and end are already part of destructured filters, but as Date type
+        // The API needs them as string
+        start: context.state.filters.start.toISOString(),
+        end: context.state.filters.end.toISOString(),
+      });
       const analyticsData = response.data;
       commitSetAnalyticsData(context, analyticsData);
     } catch (e) {
@@ -93,9 +79,9 @@ export const actions = {
 
 const { dispatch } = getStoreAccessors<AnalyticsState, RootState>('');
 
-export const dispatchUpdateActiveDomain = dispatch(actions.updateActiveDomain);
 export const dispatchFetchDomainAnalytics = dispatch(
   actions.fetchDomainAnalytics,
 );
-export const dispatchUpdatePage = dispatch(actions.updatePage);
-export const dispatchUpdateCountry = dispatch(actions.updateCountry);
+export const dispatchOverwriteAnalyticsFilters = dispatch(
+  actions.overwriteAnalyticsFilters,
+);

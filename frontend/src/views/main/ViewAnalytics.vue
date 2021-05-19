@@ -1,5 +1,6 @@
 <template>
   <div>
+    <router-view :key="$route.fullPath"></router-view>
     <v-container fluid>
       <span v-if="analyticsError">
         <v-card class="ma-3 pa-3">
@@ -57,10 +58,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import AnalyticsContainer from '@/components/analytics/AnalyticsContainer.vue';
-import {
-  dispatchFetchDomainAnalytics,
-  dispatchUpdateActiveDomain,
-} from '@/store/analytics/actions';
+import { dispatchOverwriteAnalyticsFilters } from '@/store/analytics/actions';
 import {
   readAnalyticsData,
   readAnalyticsError,
@@ -68,10 +66,7 @@ import {
   readStartDate,
 } from '@/store/analytics/getters';
 import { AnalyticsData } from '@/generated';
-import {
-  commitSetEndDate,
-  commitSetStartDate,
-} from '@/store/analytics/mutations';
+import { getFiltersFromUrl } from '@/store/analytics';
 
 @Component({
   components: {
@@ -88,7 +83,6 @@ export default class ViewAnalytics extends Vue {
   }
 
   set startDate(value: Date) {
-    commitSetStartDate(this.$store, value);
     this.setQueryParam('start', value.toISOString());
   }
 
@@ -97,7 +91,6 @@ export default class ViewAnalytics extends Vue {
   }
 
   set endDate(value: Date) {
-    commitSetEndDate(this.$store, value);
     this.setQueryParam('end', value.toISOString());
   }
 
@@ -109,17 +102,12 @@ export default class ViewAnalytics extends Vue {
     this.$router.replace({ query: { ...this.$route.query, [key]: value } });
   }
 
-  @Watch('startDate')
-  @Watch('endDate')
-  async updateData(): Promise<void> {
-    await dispatchFetchDomainAnalytics(this.$store);
-  }
-
-  public async mounted(): Promise<void> {
-    await dispatchUpdateActiveDomain(
-      this.$store,
-      this.$router.currentRoute.params.domainName,
-    );
+  @Watch('$route', { immediate: true, deep: true })
+  async onUrlChange(): Promise<void> {
+    await dispatchOverwriteAnalyticsFilters(this.$store, {
+      filters: getFiltersFromUrl(),
+      domainName: this.$router.currentRoute.params.domainName,
+    });
   }
 
   get analyticsData(): AnalyticsData | null {

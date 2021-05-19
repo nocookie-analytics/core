@@ -16,9 +16,9 @@
         :server-items-length="domainsList.length"
       >
         <template #[`item.domain_name`]="{ item }">
-          <a v-on:click.stop="goToAnalytics('/' + item.domain_name)">
+          <router-link :to="'/' + item.domain_name">
             {{ item.domain_name }}
-          </a>
+          </router-link>
         </template>
         <template #[`item.actions`]="{ item }">
           <v-btn title="Edit" icon :to="'/domains/' + item.domain_name">
@@ -51,7 +51,7 @@ export default class ListDomains extends Vue {
   async fetchDomains(): Promise<void> {
     const domainsApi = this.$store.getters.domainsApi as DomainsApi;
     try {
-      const response = await domainsApi.readDomains(0, 50);
+      const response = await domainsApi.readDomains({ skip: 0, limit: 50 });
       this.domainsList = response.data;
     } catch (e) {
       this.fetchDomainsError =

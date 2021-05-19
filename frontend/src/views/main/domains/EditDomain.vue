@@ -73,9 +73,9 @@ export default class EditDomain extends Vue {
   public async mounted(): Promise<void> {
     if (!this.isCreate) {
       const domainsApi = this.$store.getters.domainsApi as DomainsApi;
-      const response = await domainsApi.readDomainByName(
-        this.$route.params.domainName,
-      );
+      const response = await domainsApi.readDomainByName({
+        name: this.$route.params.domainName,
+      });
       const data = response.data;
       this.domainName = data.domain_name;
       this.public_ = data.public;
@@ -112,7 +112,7 @@ export default class EditDomain extends Vue {
   private async createDomain(): Promise<void> {
     const domainsApi = this.$store.getters.domainsApi as DomainsApi;
     try {
-      await domainsApi.createDomain(this.domainData);
+      await domainsApi.createDomain({ domainCreate: this.domainData });
     } catch (e) {
       this.error = true;
     }
@@ -122,7 +122,10 @@ export default class EditDomain extends Vue {
     const domainsApi = this.$store.getters.domainsApi as DomainsApi;
     const domainName = this.$route.params.domainName; // this.domainName points to the current form value, so we have to get the current domain name from the route
     try {
-      await domainsApi.updateDomainByName(domainName, this.domainData);
+      await domainsApi.updateDomainByName({
+        name: domainName,
+        domainUpdate: this.domainData,
+      });
     } catch (e) {
       console.debug(e);
       this.error = true;

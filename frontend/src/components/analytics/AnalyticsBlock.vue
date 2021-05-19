@@ -1,7 +1,9 @@
 <template>
   <v-col v-if="hasData">
     <v-container v-if="blockType == BlockType.AggregateStat">
-      <v-card-title><slot name="blockTitle"></slot></v-card-title>
+      <v-card-title>
+        <slot name="blockTitle"></slot>
+      </v-card-title>
       <v-card class="pa-2" outlined tile>
         <Tabular :data="blockData">
           <template v-slot:itemName="{ item }">
@@ -15,12 +17,7 @@
       <v-card-title>Page views</v-card-title>
       <v-card class="pa-2" outlined tile>
         <v-card-text>
-          <LineChart
-            :blockData="blockData"
-            :startDate="startDate"
-            :endDate="endDate"
-            :styles="styles"
-          />
+          <LineChart :blockData="blockData" :styles="styles" />
         </v-card-text>
       </v-card>
     </v-container>
@@ -56,9 +53,6 @@ export default class AnalyticsBlock extends Vue {
     | Array<PageViewsPerDayStat>;
 
   @Prop() public blockType!: BlockType;
-
-  @Prop() public startDate!: Date;
-  @Prop() public endDate!: Date;
 
   get hasData(): boolean {
     if (this.blockData && Array.isArray(this.blockData)) {
