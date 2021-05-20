@@ -7,6 +7,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 const iconMap = {
   Android: 'mdi-android',
+  Apple: 'mdi-apple',
   Bing: 'mdi-microsoft-bing',
   Chrome: 'mdi-google-chrome',
   'Chrome OS': 'mdi-google-chrome',
@@ -14,7 +15,8 @@ const iconMap = {
   Facebook: 'mdi-facebook',
   Fedora: 'mdi-fedora',
   Firefox: 'mdi-firefox',
-  Github: 'mdi-github',
+  GitHub: 'mdi-github',
+  Google: 'mdi-google',
   Googlebot: 'mdi-google',
   Instagram: 'mdi-instagram',
   Linux: 'mdi-linux',
@@ -22,6 +24,7 @@ const iconMap = {
   'Mac OS X': 'mdi-apple',
   Opera: 'mdi-opera',
   Safari: 'mdi-apple-safari',
+  Spider: 'mdi-spider',
   Twitter: 'mdi-twitter',
   Ubuntu: 'mdi-ubuntu',
   Windows: 'mdi-microsoft-windows',
