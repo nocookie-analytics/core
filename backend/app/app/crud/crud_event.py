@@ -29,11 +29,15 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
     def _get_url_components(url: str) -> Dict:
         furled_url = furl(url)
         path = str(furled_url.path)
-        url_params = dict(furled_url.args)
-        for param_name in url_params.keys():
-            if param_name not in ["ref", "lang"]:
-                # We don't store all url params for privacy
-                del url_params[param_name]
+        url_params = {}
+        params_to_keep = [
+            "ref",
+            "lang",
+            "language",
+        ]  # TODO: This can be extended with a domain configurable list, eg: affiliates etc
+        for param_name in params_to_keep:
+            if param_name in furled_url.args:
+                url_params[param_name] = furled_url.args[param_name]
         utm_param_list = [
             "utm_source",
             "utm_medium",
@@ -43,7 +47,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         ]
         utm_params = {}
         for utm_param in utm_param_list:
-            utm_params[utm_param] = url_params.pop(utm_param, None)
+            utm_params[utm_param] = furled_url.args.get(utm_param, None)
         return {"url_params": url_params, "path": path, **utm_params}
 
     @staticmethod
@@ -73,6 +77,9 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             **self._get_url_components(event_in.url),
             "page_view_id": event_in.page_view_id.hex,
         }
+        del obj_in_data["referrer"]
+        del obj_in_data["ua_string"]
+        del obj_in_data["url"]
         db_obj = self.model(**obj_in_data)
         return db_obj
 
