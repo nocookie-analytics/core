@@ -26,16 +26,23 @@ class ParsedUA(BaseModel):
     def from_ua_string(cls, ua_string: str) -> ParsedUA:
         parsed_ua = parse(ua_string)
         browser = parsed_ua.browser
-        os = parsed_ua.os
-        device = parsed_ua.device
+        os_family: str = parsed_ua.os.family
+        device_brand: str = parsed_ua.device.brand
+        if os_family:
+            if os_family == "Linux":
+                os_family = "Generic Linux"
+            elif os_family == "Other" and parsed_ua.is_bot:
+                os_family = "Generic spider"
+        if device_brand and device_brand.startswith("Generic"):
+            device_brand = "Generic device"
         return ParsedUA(
             # Browser
             browser_family=browser.family,
             browser_version_major=cls.parse_version(browser.version)[0],
             # OS
-            os_family=os.family if os.family != "Linux" else "Generic Linux",
+            os_family=os_family,
             # Device
-            device_brand=device.brand,
+            device_brand=device_brand,
             # Booleans
             is_mobile=parsed_ua.is_mobile,
             is_tablet=parsed_ua.is_tablet,
