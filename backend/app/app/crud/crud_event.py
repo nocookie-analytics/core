@@ -69,14 +69,17 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         return {}
 
     def build_db_obj(self, event_in: EventCreate) -> Event:
-        obj_in_data = event_in.dict()
         obj_in_data = {
-            **obj_in_data,
-            **self._get_referrer_info(event_in.referrer, event_in.url),
-            **(self._get_parsed_ua(event_in.ua_string)),
-            **self._get_url_components(event_in.url),
+            **event_in.dict(),
             "page_view_id": event_in.page_view_id.hex,
         }
+        if event_in.event_type == EventType.page_view:
+            obj_in_data = {
+                **obj_in_data,
+                **self._get_referrer_info(event_in.referrer, event_in.url),
+                **(self._get_parsed_ua(event_in.ua_string)),
+                **self._get_url_components(event_in.url),
+            }
         del obj_in_data["referrer"]
         del obj_in_data["ua_string"]
         del obj_in_data["url"]
