@@ -29,9 +29,11 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
     def _get_url_components(url: str) -> Dict:
         furled_url = furl(url)
         path = str(furled_url.path)
-        url_params = dict(
-            furled_url.args
-        )  # TODO: furl.args is multidict, this conversion is lossy
+        url_params = dict(furled_url.args)
+        for param_name in url_params.keys():
+            if param_name not in ["ref", "lang"]:
+                # We don't store all url params for privacy
+                del url_params[param_name]
         utm_param_list = [
             "utm_source",
             "utm_medium",
