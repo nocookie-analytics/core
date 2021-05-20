@@ -128,7 +128,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             if os is not None:
                 base_query = base_query.filter(Event.os_family == os)
             if device is not None:
-                base_query = base_query.filter(Event.device_family == device)
+                base_query = base_query.filter(Event.device_brand == device)
             if referrer_name is not None:
                 base_query = base_query.filter(Event.referrer_name == referrer_name)
             page_view_base_query = base_query.filter(
@@ -151,7 +151,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 )
             elif field == AnalyticsType.DEVICES:
                 data.device_families = AggregateStat.from_base_query(
-                    page_view_base_query, Event.device_family
+                    page_view_base_query, Event.device_brand
                 )
             elif field == AnalyticsType.REFERRER_MEDIUMS:
                 data.referrer_mediums = AggregateStat.from_base_query(

@@ -80,10 +80,7 @@ class Event(Base):
     browser_version_major = Column(String)
 
     os_family = Column(String)
-
-    device_family = Column(String)
     device_brand = Column(String)
-    device_model = Column(String)
 
     is_mobile = Column(Boolean)
     is_tablet = Column(Boolean)
@@ -103,7 +100,6 @@ class Event(Base):
     utm_term = Column(String)
     utm_content = Column(String)
 
-    referrer = Column(String)
     referrer_medium = Column(ReferrerMediumTypeEnum)
     referrer_name = Column(String)
 
@@ -125,9 +121,7 @@ class Event(Base):
         os_family,
         timestamp,
     )
-    ix_device_family = Index("ix_device_family", domain_id, device_family, timestamp)
     ix_device_brand = Index("ix_device_brand", domain_id, device_brand, timestamp)
-    ix_device_model = Index("ix_device_model", domain_id, device_model, timestamp)
     ix_custom_metric = Index("ix_custom_metric", domain_id, metric_name, timestamp)
     ix_referrer = Index(
         "ix_referrer", domain_id, referrer_medium, referrer_name, timestamp

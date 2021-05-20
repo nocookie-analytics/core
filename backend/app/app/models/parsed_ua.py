@@ -7,13 +7,10 @@ from user_agents import parse
 class ParsedUA(BaseModel):
     browser_family: str
     browser_version_major: str
-    browser_version_minor: str
 
     os_family: str
 
-    device_family: str
     device_brand: Optional[str]
-    device_model: Optional[str]
 
     is_mobile: bool
     is_tablet: bool
@@ -35,13 +32,10 @@ class ParsedUA(BaseModel):
             # Browser
             browser_family=browser.family,
             browser_version_major=cls.parse_version(browser.version)[0],
-            browser_version_minor=cls.parse_version(browser.version)[1],
             # OS
             os_family=os.family if os.family != "Linux" else "Generic Linux",
             # Device
-            device_family=device.family,
             device_brand=device.brand,
-            device_model=device.model,
             # Booleans
             is_mobile=parsed_ua.is_mobile,
             is_tablet=parsed_ua.is_tablet,
