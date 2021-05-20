@@ -150,7 +150,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 )
             elif field == AnalyticsType.COUNTRIES:
                 data.countries = AggregateStat.from_base_query(
-                    page_view_base_query, Event.ip_country_iso_code
+                    page_view_base_query, Event.ip_country_iso_code, filter_none=True
                 )
             elif field == AnalyticsType.OS:
                 data.os_families = AggregateStat.from_base_query(
@@ -158,17 +158,16 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 )
             elif field == AnalyticsType.DEVICES:
                 data.device_families = AggregateStat.from_base_query(
-                    page_view_base_query, Event.device_brand
+                    page_view_base_query, Event.device_brand, filter_none=True
                 )
             elif field == AnalyticsType.REFERRER_MEDIUMS:
                 data.referrer_mediums = AggregateStat.from_base_query(
-                    page_view_base_query, Event.referrer_medium
+                    page_view_base_query, Event.referrer_medium, filter_none=True
                 )
             elif field == AnalyticsType.PAGES:
                 data.pages = AggregateStat.from_base_query(
                     page_view_base_query, Event.path
                 )
-                ...
             elif field == AnalyticsType.REFERRER_NAMES:
                 data.referrer_names = AggregateStat.from_base_query(
                     page_view_base_query,
