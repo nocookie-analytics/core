@@ -76,15 +76,10 @@ class Event(Base):
     ip_continent_code = Column(String(length=2))
     ip_timezone = Column(String)
 
-    ua_string = Column(String)
-
     browser_family = Column(String)
     browser_version_major = Column(String)
-    browser_version_minor = Column(String)
 
     os_family = Column(String)
-    os_version_major = Column(String)
-    os_version_minor = Column(String)
 
     device_family = Column(String)
     device_brand = Column(String)
@@ -96,13 +91,11 @@ class Event(Base):
     is_pc = Column(Boolean)
     is_bot = Column(Boolean)
 
-    url = Column(String)
     path = Column(String)
+    url_params = Column(JSONB)
 
     metric_name = Column(MetricTypeEnum)
     metric_value = Column(NUMERIC)
-
-    url_params = Column(JSONB)
 
     utm_source = Column(String)
     utm_medium = Column(String)
@@ -110,12 +103,10 @@ class Event(Base):
     utm_term = Column(String)
     utm_content = Column(String)
 
-    page_title = Column(String)
-
-    page_size_bytes = Column(Integer)
     referrer = Column(String)
     referrer_medium = Column(ReferrerMediumTypeEnum)
     referrer_name = Column(String)
+
     user_timezone = Column(String)
     user_timezone_offset = Column(Integer)
 
@@ -132,8 +123,6 @@ class Event(Base):
         "ix_os_family",
         domain_id,
         os_family,
-        os_version_major,
-        os_version_minor,
         timestamp,
     )
     ix_device_family = Index("ix_device_family", domain_id, device_family, timestamp)

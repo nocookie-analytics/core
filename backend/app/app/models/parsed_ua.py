@@ -10,8 +10,6 @@ class ParsedUA(BaseModel):
     browser_version_minor: str
 
     os_family: str
-    os_version_major: str
-    os_version_minor: str
 
     device_family: str
     device_brand: Optional[str]
@@ -39,9 +37,7 @@ class ParsedUA(BaseModel):
             browser_version_major=cls.parse_version(browser.version)[0],
             browser_version_minor=cls.parse_version(browser.version)[1],
             # OS
-            os_family=os.family,
-            os_version_major=cls.parse_version(os.version)[0],
-            os_version_minor=cls.parse_version(os.version)[1],
+            os_family=os.family if os.family != "Linux" else "Generic Linux",
             # Device
             device_family=device.family,
             device_brand=device.brand,
