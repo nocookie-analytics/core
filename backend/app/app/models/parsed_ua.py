@@ -29,12 +29,13 @@ class ParsedUA(BaseModel):
         os_family: str = parsed_ua.os.family
         device_brand: str = parsed_ua.device.brand
         if os_family:
-            if os_family == "Linux":
-                os_family = "Generic Linux"
-            elif os_family == "Other" and parsed_ua.is_bot:
-                os_family = "Generic spider"
-        if device_brand and device_brand.startswith("Generic"):
-            device_brand = "Generic device"
+            if os_family == "Other" and parsed_ua.is_bot:
+                os_family = "Bot"
+        if device_brand:
+            if device_brand.startswith("Generic"):
+                device_brand = "Unknown"
+            elif device_brand == "Spider":
+                device_brand = "Bot"
         return ParsedUA(
             # Browser
             browser_family=browser.family,
