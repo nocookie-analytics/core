@@ -74,11 +74,12 @@ class Event(Base):
     )
     ip_country: Country = relationship("Country")  # type: ignore
     ip_continent_code = Column(String(length=2))
-    ip_timezone = Column(String)
+
+    metric_name = Column(MetricTypeEnum)
+    metric_value = Column(NUMERIC)
 
     browser_family = Column(String)
     browser_version_major = Column(String)
-
     os_family = Column(String)
     device_brand = Column(String)
 
@@ -90,9 +91,8 @@ class Event(Base):
 
     path = Column(String)
     url_params = Column(JSONB)
-
-    metric_name = Column(MetricTypeEnum)
-    metric_value = Column(NUMERIC)
+    referrer_medium = Column(ReferrerMediumTypeEnum)
+    referrer_name = Column(String)
 
     utm_source = Column(String)
     utm_medium = Column(String)
@@ -100,16 +100,7 @@ class Event(Base):
     utm_term = Column(String)
     utm_content = Column(String)
 
-    referrer_medium = Column(ReferrerMediumTypeEnum)
-    referrer_name = Column(String)
-
     user_timezone = Column(String)
-    user_timezone_offset = Column(Integer)
-
-    # All time values in microseconds
-    download_time = Column(NUMERIC)
-    time_to_first_byte = Column(NUMERIC)
-    total_time = Column(NUMERIC)
 
     ix_domain_timestamp = Index("ix_domain_timestamp", domain_id, timestamp)
     ix_timestamp = Index("ix_timestamp", timestamp)

@@ -34,16 +34,9 @@ class EventCreate(EventBase):
     event_type: EventType
     ua_string: str
     url: str
-    page_title: Optional[str]
-    page_size_bytes: Optional[int]
     referrer: Optional[str]
     user_timezone: Optional[str]
-    user_timezone_offset: Optional[str]
     page_view_id: UUID4
-
-    download_time: Optional[Decimal]
-    time_to_first_byte: Optional[Decimal]
-    total_time: Optional[Decimal]
 
     metric_name: Optional[MetricType] = None
     metric_value: Optional[Decimal] = None
@@ -84,14 +77,8 @@ class EventCreate(EventBase):
         try:
             return cls(
                 event_type=event_type,
-                page_title=pt or None,
-                page_size_bytes=psb,
                 referrer=ref or None,
                 user_timezone=tz or None,
-                user_timezone_offset=tzo,
-                time_to_first_byte=ttfb,
-                total_time=tt,
-                download_time=dt,
                 ua_string=request.headers.get("user-agent"),
                 url=url,
                 page_view_id=pvid,
