@@ -32,11 +32,11 @@ class EventCreate(EventBase):
         extra = "forbid"
 
     event_type: EventType
+    page_view_id: UUID4
     ua_string: str
-    url: str
+    url: Optional[str]
     referrer: Optional[str]
     user_timezone: Optional[str]
-    page_view_id: UUID4
 
     metric_name: Optional[MetricType] = None
     metric_value: Optional[Decimal] = None
@@ -49,9 +49,9 @@ class EventCreate(EventBase):
         cls: EventCreate,
         request: Request,
         et: EventType = Query(None, description="Event type"),
-        url: HttpUrl = Query(None, description="URL"),
         pvid: Optional[UUID4] = Query(None, description="Page view ID"),
         tz: Optional[str] = Query(None, description="Timezone"),
+        url: Optional[str] = Query(None, description="Current page URL"),
         ref: Optional[str] = Query(None, description="Referrer"),
         mn: Optional[MetricType] = Query(None, description="Metric name"),
         mv: Optional[Decimal] = Query(
