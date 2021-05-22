@@ -43,7 +43,6 @@ export const actions = {
           AnalyticsType.Countries,
 
           AnalyticsType.ReferrerNames,
-          AnalyticsType.ReferrerMediums,
 
           AnalyticsType.OsFamilies,
           AnalyticsType.BrowserFamilies,
