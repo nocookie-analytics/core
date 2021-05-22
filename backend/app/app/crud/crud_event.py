@@ -29,9 +29,15 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
     def _get_url_components(url: str) -> Dict:
         furled_url = furl(url)
         path = str(furled_url.path)
-        url_params = dict(
-            furled_url.args
-        )  # TODO: furl.args is multidict, this conversion is lossy
+        url_params = {}
+        params_to_keep = [
+            "ref",
+            "lang",
+            "language",
+        ]  # TODO: This can be extended with a domain configurable list, eg: affiliates etc
+        for param_name in params_to_keep:
+            if param_name in furled_url.args:
+                url_params[param_name] = furled_url.args[param_name]
         utm_param_list = [
             "utm_source",
             "utm_medium",
@@ -41,7 +47,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         ]
         utm_params = {}
         for utm_param in utm_param_list:
-            utm_params[utm_param] = url_params.pop(utm_param, None)
+            utm_params[utm_param] = furled_url.args.get(utm_param, None)
         return {"url_params": url_params, "path": path, **utm_params}
 
     @staticmethod
@@ -63,14 +69,20 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         return {}
 
     def build_db_obj(self, event_in: EventCreate) -> Event:
-        obj_in_data = event_in.dict()
         obj_in_data = {
-            **obj_in_data,
-            **self._get_referrer_info(event_in.referrer, event_in.url),
-            **(self._get_parsed_ua(event_in.ua_string)),
-            **self._get_url_components(event_in.url),
+            **event_in.dict(),
             "page_view_id": event_in.page_view_id.hex,
         }
+        if event_in.event_type == EventType.page_view:
+            obj_in_data = {
+                **obj_in_data,
+                **self._get_referrer_info(event_in.referrer, event_in.url),
+                **(self._get_parsed_ua(event_in.ua_string)),
+                **self._get_url_components(event_in.url),
+            }
+        del obj_in_data["referrer"]
+        del obj_in_data["ua_string"]
+        del obj_in_data["url"]
         db_obj = self.model(**obj_in_data)
         return db_obj
 
@@ -126,7 +138,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             if os is not None:
                 base_query = base_query.filter(Event.os_family == os)
             if device is not None:
-                base_query = base_query.filter(Event.device_family == device)
+                base_query = base_query.filter(Event.device_brand == device)
             if referrer_name is not None:
                 base_query = base_query.filter(Event.referrer_name == referrer_name)
             page_view_base_query = base_query.filter(
@@ -141,7 +153,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 )
             elif field == AnalyticsType.COUNTRIES:
                 data.countries = AggregateStat.from_base_query(
-                    page_view_base_query, Event.ip_country_iso_code
+                    page_view_base_query, Event.ip_country_iso_code, filter_none=True
                 )
             elif field == AnalyticsType.OS:
                 data.os_families = AggregateStat.from_base_query(
@@ -149,17 +161,16 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 )
             elif field == AnalyticsType.DEVICES:
                 data.device_families = AggregateStat.from_base_query(
-                    page_view_base_query, Event.device_family
-                )
-            elif field == AnalyticsType.REFERRER_MEDIUMS:
-                data.referrer_mediums = AggregateStat.from_base_query(
-                    page_view_base_query, Event.referrer_medium
+                    page_view_base_query, Event.device_brand, filter_none=True
                 )
             elif field == AnalyticsType.PAGES:
                 data.pages = AggregateStat.from_base_query(
                     page_view_base_query, Event.path
                 )
-                ...
+            elif field == AnalyticsType.REFERRER_MEDIUMS:
+                data.referrer_mediums = AggregateStat.from_base_query(
+                    page_view_base_query, Event.referrer_medium, filter_none=True
+                )
             elif field == AnalyticsType.REFERRER_NAMES:
                 data.referrer_names = AggregateStat.from_base_query(
                     page_view_base_query,

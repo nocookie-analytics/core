@@ -7,29 +7,7 @@ import requests
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
-from app.models import City, Country
-
-city_field_names = [
-    "geonameid",
-    "name",
-    "asciiname",
-    "alternatenames",
-    "latitude",
-    "longitude",
-    "feature class",
-    "feature code",
-    "country code",
-    "cc2",
-    "admin1 code",
-    "admin2 code",
-    "admin3 code",
-    "admin4 code",
-    "population",
-    "elevation",
-    "dem",
-    "timezone",
-    "modification date",
-]
+from app.models import Country
 
 country_field_names = [
     "iso",
@@ -82,41 +60,9 @@ async def countries(db: Session):
         db.commit()
 
 
-async def cities(db: Session):
-    url = "https://download.geonames.org/export/dump/cities500.zip"
-    filename = "./cities500.zip"
-    download_file(url, filename)
-    with zipfile.ZipFile(filename, mode="r") as zipped:
-        files = zipped.namelist()
-        assert len(files) == 1
-        unzipped_byte_stream = zipped.open(files[0])
-        unzipped_text_stream = TextIOWrapper(unzipped_byte_stream)
-        existing_city_ids = set(row[0] for row in db.query(City.id).all())
-        for index, line in enumerate(
-            csv.DictReader(
-                unzipped_text_stream, delimiter="\t", fieldnames=city_field_names
-            )
-        ):
-            assert None not in line, "File format has changed"
-            if int(line["geonameid"]) in existing_city_ids:
-                continue
-            city = City(
-                id=line["geonameid"],
-                name=line["name"],
-                asciiname=line["asciiname"],
-                latitude=line["latitude"],
-                longitude=line["longitude"],
-                country_id=line["country code"],
-            )
-            db.add(city)
-            if index % 1000 == 0:
-                db.commit()
-
-
 async def main():
     db = next(get_db())
     await countries(db)
-    await cities(db)
 
 
 if __name__ == "__main__":

@@ -36,16 +36,10 @@ class TestCreatePageViewEvent:
         event_in = EventCreate(
             event_type=EventType.page_view,
             url=url,
-            page_title="Title",
-            page_size_bytes=150,
             referrer="abc",
             user_timezone="Europe/Amsterdam",
             ua_string="Mozilla/5.0 (X11; Linux x86_64; rv:9000.0) Gecko/20100101 Firefox/9000.0",
-            download_time=5000,
-            time_to_first_byte=5000,
-            total_time=5000,
             page_view_id=str(page_view_id),
-            ip_city_id=5,
             ip_country_iso_code="US",
             ip_continent_code="NA",
         )
@@ -53,9 +47,7 @@ class TestCreatePageViewEvent:
             db=db, obj_in=event_in, domain_id=domain.id
         )
         assert event.domain_id == domain.id
-        assert event.ua_string == event_in.ua_string
         assert event.browser_family == "Firefox"
-        assert event.ip_city
         assert event.ip_country
         assert event.ip_continent_code
 

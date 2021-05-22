@@ -157,7 +157,7 @@ export default class AnalyticsContainer extends Vue {
       {
         data: this.analyticsData.device_families,
         type: BlockType.AggregateStat,
-        title: 'Device type',
+        title: 'Device',
         urlParamName: 'device',
         urlExclude: ['Other'],
         cols: 3,

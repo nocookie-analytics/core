@@ -51,7 +51,7 @@ jobs:
           git checkout -b geolite-update
           git config --global user.email me@gaganpreet.in
           git config --global user.name "Gaganpreet Arora"
-          git commit backend/app/data/*.mmdb -m "Update geolite db"
+          git commit backend/app/data/*Country.mmdb -m "Update geolite db"
           git push origin geolite-update
           gh pr create --title "Update geolite db" -B master --assignee gaganpreet -b "Update geolite db"
         env:

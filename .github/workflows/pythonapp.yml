@@ -70,7 +70,7 @@ jobs:
     - name: Pull docker cache
       run: |
         export BRANCH_TAG=$(echo "$GITHUB_REF" | sed 's|/|-|g')
-        docker-compose pull db flower pgadmin queue proxy &
+        docker-compose pull db queue proxy &
         docker pull -q $DOCKER_IMAGE_BACKEND:$BRANCH_TAG&
         docker pull -q $DOCKER_IMAGE_FRONTEND:$BRANCH_TAG&
         docker pull -q $DOCKER_IMAGE_BACKEND:refs-heads-master&

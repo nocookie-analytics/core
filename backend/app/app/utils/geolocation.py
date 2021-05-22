@@ -4,19 +4,19 @@ from starlette.requests import Request
 from app.core.config import settings
 from typing import Optional, Union
 from geoip2.errors import AddressNotFoundError
-from geoip2.models import City
+from geoip2.models import Country
 
 
 def get_ip_gelocation(
     ip_address: Optional[Union[IPvAnyAddress, str]]
-) -> Optional[City]:
+) -> Optional[Country]:
     if not ip_address:
         return None
     if isinstance(ip_address, IPvAnyAddress):
         ip_address = str(ip_address)
     try:
-        city = GEOLITE_INSTANCE.city(str(ip_address))
-        return city
+        country = GEOLITE_INSTANCE.country(str(ip_address))
+        return country
     except AddressNotFoundError:
         return None
 

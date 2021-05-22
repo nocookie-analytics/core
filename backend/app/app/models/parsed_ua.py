@@ -7,15 +7,10 @@ from user_agents import parse
 class ParsedUA(BaseModel):
     browser_family: str
     browser_version_major: str
-    browser_version_minor: str
 
     os_family: str
-    os_version_major: str
-    os_version_minor: str
 
-    device_family: str
     device_brand: Optional[str]
-    device_model: Optional[str]
 
     is_mobile: bool
     is_tablet: bool
@@ -31,21 +26,24 @@ class ParsedUA(BaseModel):
     def from_ua_string(cls, ua_string: str) -> ParsedUA:
         parsed_ua = parse(ua_string)
         browser = parsed_ua.browser
-        os = parsed_ua.os
-        device = parsed_ua.device
+        os_family: str = parsed_ua.os.family
+        device_brand: str = parsed_ua.device.brand
+        if os_family:
+            if os_family == "Other" and parsed_ua.is_bot:
+                os_family = "Bot"
+        if device_brand:
+            if device_brand.startswith("Generic"):
+                device_brand = "Unknown"
+            elif device_brand == "Spider":
+                device_brand = "Bot"
         return ParsedUA(
             # Browser
             browser_family=browser.family,
             browser_version_major=cls.parse_version(browser.version)[0],
-            browser_version_minor=cls.parse_version(browser.version)[1],
             # OS
-            os_family=os.family,
-            os_version_major=cls.parse_version(os.version)[0],
-            os_version_minor=cls.parse_version(os.version)[1],
+            os_family=os_family,
             # Device
-            device_family=device.family,
-            device_brand=device.brand,
-            device_model=device.model,
+            device_brand=device_brand,
             # Booleans
             is_mobile=parsed_ua.is_mobile,
             is_tablet=parsed_ua.is_tablet,
