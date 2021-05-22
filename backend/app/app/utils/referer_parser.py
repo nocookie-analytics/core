@@ -42,7 +42,7 @@ class Referer:
     def __init__(self, ref_url, curr_url=None, referers=REFERERS):
         self.known = False
         self.referer = None
-        self.medium = "unknown"
+        self.medium = None
         self.search_parameter = None
         self.search_term = None
         self._referers = referers
@@ -66,7 +66,7 @@ class Referer:
         if not referer:
             referer = self._lookup_referer(ref_host, ref_uri.path, False)
             if not referer:
-                self.medium = "unknown"
+                self.medium = None
                 return
 
         self.referer = referer["name"]
