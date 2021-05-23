@@ -159,7 +159,7 @@ export default class AnalyticsContainer extends Vue {
         type: BlockType.AggregateStat,
         title: 'Device',
         urlParamName: 'device',
-        urlExclude: ['Other'],
+        urlExclude: ['Other', 'Unknown'],
         cols: 3,
       },
       {
@@ -168,14 +168,6 @@ export default class AnalyticsContainer extends Vue {
         title: 'Referrer name',
         urlParamName: 'referrerName',
         urlExclude: [],
-        cols: 3,
-      },
-      {
-        data: this.analyticsData.referrer_mediums,
-        type: BlockType.AggregateStat,
-        title: 'Referrer medium',
-        urlParamName: 'referrerMedium',
-        urlExclude: ['unknown'],
         cols: 3,
       },
       {
