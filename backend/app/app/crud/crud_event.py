@@ -51,13 +51,22 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         return {"url_params": url_params, "path": path, **utm_params}
 
     @staticmethod
-    def _get_referrer_info(ref: Optional[str], curr_url: Optional[str] = None):
+    def _get_referrer_info(ref_url: Optional[str], curr_url: Optional[str] = None):
         referrer_medium, referrer_name = ReferrerMediumType.UNKNOWN, None
-        furled_ref = furl(ref)
-        if ref:
-            parsed_ref = Referer(ref, curr_url)
+        try:
+            furled_ref = furl(ref_url)
+        except ValueError:
+            furled_ref = None
+        if ref_url:
+            parsed_ref = Referer(ref_url, curr_url)
             referrer_medium = ReferrerMediumType(parsed_ref.medium)
-            referrer_name = parsed_ref.referer or furled_ref.host
+            referrer_name = parsed_ref.referer
+            if (
+                not referrer_name
+                and referrer_medium != ReferrerMediumType.INTERNAL
+                and furled_ref
+            ):
+                referrer_name = furled_ref.host
         return {
             "referrer_name": referrer_name,
             "referrer_medium": referrer_medium,

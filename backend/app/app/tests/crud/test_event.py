@@ -57,7 +57,11 @@ class TestCreatePageViewEvent:
             ("https://www.google.com", ReferrerMediumType.SEARCH, "Google"),
             ("https://www.facebook.com", ReferrerMediumType.SOCIAL, "Facebook"),
             ("https://mail.google.com", ReferrerMediumType.EMAIL, "Gmail"),
-            ("https://somerandomdomain.com", ReferrerMediumType.UNKNOWN, None),
+            (
+                "https://somerandomdomain.com",
+                ReferrerMediumType.UNKNOWN,
+                "somerandomdomain.com",
+            ),
             ("INTERNAL", ReferrerMediumType.INTERNAL, None),
             ("", ReferrerMediumType.UNKNOWN, None),
             (None, ReferrerMediumType.UNKNOWN, None),
