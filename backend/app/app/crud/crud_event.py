@@ -1,5 +1,7 @@
+from app.utils.geolocation import get_ip_from_request, get_ip_gelocation
 from typing import Dict, List, Optional, Union
 
+from hashlib import sha3_256
 from arrow.arrow import Arrow
 from fastapi.exceptions import HTTPException
 from furl.furl import furl
@@ -51,6 +53,11 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         return {"url_params": url_params, "path": path, **utm_params}
 
     @staticmethod
+    def _get_visitor_fingerprint(user_agent: str, domain: Domain, ip: str) -> str:
+        data = "-".join([str(domain.id), domain.salt, ip, user_agent])
+        return sha3_256(data.encode("utf-8")).hexdigest()
+
+    @staticmethod
     def _get_referrer_info(ref_url: Optional[str], curr_url: Optional[str] = None):
         referrer_medium, referrer_name = ReferrerMediumType.UNKNOWN, None
         try:
@@ -78,6 +85,22 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             return ParsedUA.from_ua_string(ua_string).dict()
         return {}
 
+    @staticmethod
+    def _get_geolocation_info(
+        ip_address: str,
+    ) -> Dict[str, Optional[Union[int, str]]]:
+        data: Dict[str, Optional[Union[str, int]]] = {}
+        if ip_address:
+            geolocation = get_ip_gelocation(ip_address)
+            if not geolocation:
+                return data
+            country_code = geolocation.country.iso_code
+            continent_code = geolocation.continent.code
+            if country_code:
+                data["ip_country_iso_code"] = country_code
+            data["ip_continent_code"] = continent_code
+        return data
+
     def build_db_obj(self, event_in: EventCreate) -> Event:
         obj_in_data = {
             **event_in.dict(),
@@ -89,10 +112,12 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 **self._get_referrer_info(event_in.referrer, event_in.url),
                 **(self._get_parsed_ua(event_in.ua_string)),
                 **self._get_url_components(event_in.url),
+                **self._get_geolocation_info(event_in.ip),
             }
         del obj_in_data["referrer"]
         del obj_in_data["ua_string"]
         del obj_in_data["url"]
+        del obj_in_data["ip"]
         db_obj = self.model(**obj_in_data)
         return db_obj
 
