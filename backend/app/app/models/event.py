@@ -66,6 +66,7 @@ class Event(Base):
 
     domain_id = Column(Integer, ForeignKey("domain.id", name="fk_event_domain_id"))
     domain: Domain = relationship("Domain")  # type: ignore
+    visitor_fingerprint = Column(String)
 
     event_type = Column(EventTypeEnum, nullable=False)
 
@@ -120,7 +121,13 @@ class Event(Base):
     ix_path = Index("id_path", domain_id, path, timestamp)
 
     __table_args__: Tuple = (
-        ix_domain_timestamp,
+        Index(
+            "ix_visitor_fingerprint",
+            domain_id,
+            visitor_fingerprint,
+            timestamp,
+            postgresql_where=visitor_fingerprint.isnot(None),
+        ),
         Index(
             "ix_utm_source",
             domain_id,
