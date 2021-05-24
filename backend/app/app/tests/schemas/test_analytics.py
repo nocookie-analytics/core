@@ -37,7 +37,7 @@ class PageViewsPerDayStatTest:
         assert per_day_data[0].total_visits == 2
 
         # With two page view events and one metric event
-        create_random_metric_event(db, domain=domain.id, ip_address=mock_ip_address)
+        create_random_metric_event(db, domain=domain, ip_address=mock_ip_address)
         data = PageViewStat.from_base_query(base_query)
         per_day_data = PageViewsPerDayStat.from_base_query(base_query)
         assert data.total_visits == 2
@@ -97,7 +97,7 @@ class TestAvgMetricPerDayStat:
         )
         create_random_metric_event(
             db,
-            domain=domain.id,
+            domain=domain,
             create_overrides={
                 "page_view_id": event.page_view_id,
                 "metric_value": 5,
@@ -121,7 +121,7 @@ class TestAvgMetricPerDayStat:
 
         create_random_metric_event(
             db,
-            domain=domain.id,
+            domain=domain,
             create_overrides={
                 "page_view_id": event.page_view_id,
                 "metric_value": 10,

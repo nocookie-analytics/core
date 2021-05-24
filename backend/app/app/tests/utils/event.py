@@ -50,8 +50,7 @@ def create_random_metric_event(
         "page_view_id": uuid.uuid4(),
         "metric_name": MetricType.LCP,
         "metric_value": 1234,
-        "ip_country_iso_code": geolocation.country.iso_code if geolocation else None,
-        "ip_continent_code": geolocation.continent.code if geolocation else None,
+        "ip": ip_address or "8.8.8.8",
         **create_overrides,
     }
     event_in = EventCreate(**event_in_data)
