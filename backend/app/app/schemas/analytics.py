@@ -67,6 +67,7 @@ class AggregateStat(BaseModel):
 
 class PageViewsPerDayStat(BaseModel):
     total_visits: int
+    visitors: int
     date: datetime.date
 
     @staticmethod
@@ -80,10 +81,14 @@ class PageViewsPerDayStat(BaseModel):
                     "1 day", Event.timestamp, start.date(), end.date()
                 ).label("one_day"),
                 func.coalesce(func.count(), 0),
+                func.coalesce(func.count(func.distinct(Event.visitor_fingerprint)), 0),
             )
             .order_by("one_day")
         )
-        return [PageViewsPerDayStat(date=row[0], total_visits=row[1]) for row in rows]
+        return [
+            PageViewsPerDayStat(date=row[0], total_visits=row[1], visitors=row[2])
+            for row in rows
+        ]
 
 
 class AvgMetricPerDayStat(BaseModel):
