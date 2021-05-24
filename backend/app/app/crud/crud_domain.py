@@ -1,9 +1,11 @@
+from crypt import mksalt
 from typing import List, Optional
+from arrow.arrow import Arrow
 
 from fastapi.encoders import jsonable_encoder
-from fastapi.exceptions import HTTPException
 import sqlalchemy
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 
 from app import crud
 from app.crud.base import CRUDBase
@@ -52,6 +54,16 @@ class CRUDDomain(CRUDBase[Domain, DomainCreate, DomainUpdate]):
             if crud.user.is_superuser(current_user) or obj.owner_id == current_user.id:
                 return obj
         return None
+
+    def refresh_domain_salts(self, db: Session):
+        filter_before = Arrow.now().shift(days=-1).datetime
+        domains = db.query(Domain).filter(
+            or_(Domain.salt_last_changed <= filter_before, Domain.salt.is_(None))
+        )
+        for domain in domains:
+            domain.salt = mksalt()
+            db.add(domain)
+        db.commit()
 
 
 domain = CRUDDomain(Domain)
