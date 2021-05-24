@@ -120,17 +120,6 @@ services:
     volumes:
       - root-home:/root/
 
-  celeryworker:
-    image: '${DOCKER_IMAGE_BACKEND}:${TAG-latest}'
-    env_file:
-      - .env
-    environment:
-      - SERVER_NAME=${DOMAIN}
-      - SERVER_HOST=https://${DOMAIN}
-      # Allow explicit env var override for tests
-      - SMTP_HOST=${SMTP_HOST}
-    command: bash /app/worker-start.sh
-
   frontend:
     image: '${DOCKER_IMAGE_FRONTEND}:${TAG-latest}'
     build:
