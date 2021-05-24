@@ -1,8 +1,8 @@
 """add salt and fingerprint column
 
-Revision ID: 5ac5050aa186
+Revision ID: eb48b4fcc2ec
 Revises: 60d6fb1b4bda
-Create Date: 2021-05-24 12:29:35.773577
+Create Date: 2021-05-24 12:42:58.092429
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '5ac5050aa186'
+revision = 'eb48b4fcc2ec'
 down_revision = '60d6fb1b4bda'
 branch_labels = None
 depends_on = None
