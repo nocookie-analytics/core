@@ -10,7 +10,7 @@ from starlette.middleware.cors import CORSMiddleware
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 from app import crud
-from app.logging import logger
+from app.logger import logger
 from app.api.api_v1.api import api_router
 from app.core.config import settings
 

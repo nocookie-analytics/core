@@ -10,7 +10,7 @@ from sqlalchemy.sql.functions import func
 
 from app import crud
 from app.crud.base import CRUDBase
-from app.logging import logger
+from app.logger import logger
 from app.models.domain import Domain
 from app.models.user import User
 from app.schemas.domain import DomainCreate, DomainUpdate
