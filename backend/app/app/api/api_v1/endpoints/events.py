@@ -22,6 +22,6 @@ def new_event(
     crud.event.create_with_domain(
         db,
         obj_in=event_in,
-        domain_id=request_domain.id,
+        domain=request_domain,
     )
     return schemas.EventCreated(success=True, pvid=event_in.page_view_id)

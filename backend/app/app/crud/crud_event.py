@@ -101,7 +101,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             data["ip_continent_code"] = continent_code
         return data
 
-    def build_db_obj(self, event_in: EventCreate) -> Event:
+    def build_db_obj(self, event_in: EventCreate, domain: Domain) -> Event:
         obj_in_data = {
             **event_in.dict(),
             "page_view_id": event_in.page_view_id.hex,
@@ -113,6 +113,9 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 **(self._get_parsed_ua(event_in.ua_string)),
                 **self._get_url_components(event_in.url),
                 **self._get_geolocation_info(event_in.ip),
+                "visitor_fingerprint": self._get_visitor_fingerprint(
+                    event_in.ua_string, domain, event_in.ip
+                ),
             }
         del obj_in_data["referrer"]
         del obj_in_data["ua_string"]
@@ -126,13 +129,13 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         db: Session,
         *,
         obj_in: EventCreate,
-        domain_id: int,
+        domain: Domain,
     ) -> Event:
         """
         Create an event
         """
-        db_obj = self.build_db_obj(obj_in)
-        db_obj.domain_id = domain_id
+        db_obj = self.build_db_obj(obj_in, domain=domain)
+        db_obj.domain_id = domain.id
         db.add(db_obj)
         db.commit()
         return db_obj

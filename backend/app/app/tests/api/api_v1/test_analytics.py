@@ -83,8 +83,8 @@ def test_get_analytics_success_with_data(db: Session, client: TestClient) -> Non
     )
     domain2 = create_random_domain(db)
 
-    create_random_page_view_event(db, domain_id=domain.id)
-    create_random_page_view_event(db, domain_id=domain2.id)
+    create_random_page_view_event(db, domain=domain)
+    create_random_page_view_event(db, domain=domain2)
 
     data = {
         "domain_name": domain.domain_name,

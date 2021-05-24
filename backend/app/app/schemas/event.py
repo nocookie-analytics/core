@@ -41,8 +41,6 @@ class EventCreate(EventBase):
     metric_value: Optional[Decimal] = None
 
     ip: Optional[str]
-    ip_country_iso_code: Optional[str]
-    ip_continent_code: Optional[str]
 
     @classmethod
     def depends(
