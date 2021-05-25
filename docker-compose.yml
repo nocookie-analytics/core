@@ -83,9 +83,6 @@ services:
         constraints:
           - node.labels.${STACK_NAME}.app-db-data == true
 
-  queue:
-    image: rabbitmq:3
-
   backend:
     image: '${DOCKER_IMAGE_BACKEND}:${TAG-latest}'
     env_file:
