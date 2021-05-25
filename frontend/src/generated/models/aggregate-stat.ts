@@ -28,6 +28,12 @@ export interface AggregateStat {
     total_visits: number;
     /**
      * 
+     * @type {number}
+     * @memberof AggregateStat
+     */
+    visitors: number;
+    /**
+     * 
      * @type {string}
      * @memberof AggregateStat
      */
