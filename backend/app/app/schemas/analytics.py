@@ -45,6 +45,7 @@ class PydanticArrow(datetime.datetime):
 
 class AggregateStat(BaseModel):
     total_visits: int
+    visitors: int
     value: Union[str, Enum]
 
     @staticmethod
@@ -53,14 +54,20 @@ class AggregateStat(BaseModel):
     ) -> List[AggregateStat]:
         query = (
             base_query.group_by(group_by_column)
-            .with_entities(group_by_column, func.count())
+            .with_entities(
+                group_by_column,
+                func.count(),
+                func.count(func.distinct(Event.visitor_fingerprint)),
+            )
             .order_by(func.count().desc())
         )
         if filter_none is True:
             query = query.filter(group_by_column.isnot(None))
         query = query.limit(10)
         return [
-            AggregateStat(value=row[0] or "Unknown", total_visits=row[1])
+            AggregateStat(
+                value=row[0] or "Unknown", total_visits=row[1], visitors=row[2]
+            )
             for row in query
         ]
 
