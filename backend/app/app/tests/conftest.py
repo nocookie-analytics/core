@@ -77,7 +77,7 @@ def override_testclient(monkeypatch):
     monkeypatch.setattr(Request, "client", Address("127.0.0.1", 5000))
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="session", autouse=True)
 def mock_ip_address(db):
     ip_address = socket.gethostbyname("gaganpreet.in")
     location = get_ip_gelocation(ip_address)

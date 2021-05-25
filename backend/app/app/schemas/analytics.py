@@ -45,6 +45,7 @@ class PydanticArrow(datetime.datetime):
 
 class AggregateStat(BaseModel):
     total_visits: int
+    visitors: int
     value: Union[str, Enum]
 
     @staticmethod
@@ -53,20 +54,27 @@ class AggregateStat(BaseModel):
     ) -> List[AggregateStat]:
         query = (
             base_query.group_by(group_by_column)
-            .with_entities(group_by_column, func.count())
+            .with_entities(
+                group_by_column,
+                func.count(),
+                func.count(func.distinct(Event.visitor_fingerprint)),
+            )
             .order_by(func.count().desc())
         )
         if filter_none is True:
             query = query.filter(group_by_column.isnot(None))
         query = query.limit(10)
         return [
-            AggregateStat(value=row[0] or "Unknown", total_visits=row[1])
+            AggregateStat(
+                value=row[0] or "Unknown", total_visits=row[1], visitors=row[2]
+            )
             for row in query
         ]
 
 
 class PageViewsPerDayStat(BaseModel):
     total_visits: int
+    visitors: int
     date: datetime.date
 
     @staticmethod
@@ -80,10 +88,14 @@ class PageViewsPerDayStat(BaseModel):
                     "1 day", Event.timestamp, start.date(), end.date()
                 ).label("one_day"),
                 func.coalesce(func.count(), 0),
+                func.coalesce(func.count(func.distinct(Event.visitor_fingerprint)), 0),
             )
             .order_by("one_day")
         )
-        return [PageViewsPerDayStat(date=row[0], total_visits=row[1]) for row in rows]
+        return [
+            PageViewsPerDayStat(date=row[0], total_visits=row[1], visitors=row[2])
+            for row in rows
+        ]
 
 
 class AvgMetricPerDayStat(BaseModel):

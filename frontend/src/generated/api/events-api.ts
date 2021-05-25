@@ -39,21 +39,15 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
          * @summary New Event
          * @param {string} url 
          * @param {EventType} [et] Event type
-         * @param {string} [pt] Page title
          * @param {string} [pvid] Page view ID
-         * @param {number} [psb] Page size bytes
          * @param {string} [tz] Timezone
-         * @param {number} [tzo] Timezone offset
          * @param {string} [ref] Referrer
-         * @param {number} [ttfb] Time to first-byte
-         * @param {number} [tt] Total time
-         * @param {number} [dt] Download time
          * @param {MetricType} [mn] Metric name
          * @param {number} [mv] Metric value
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newEvent: async (url: string, et?: EventType, pt?: string, pvid?: string, psb?: number, tz?: string, tzo?: number, ref?: string, ttfb?: number, tt?: number, dt?: number, mn?: MetricType, mv?: number, options: any = {}): Promise<RequestArgs> => {
+        newEvent: async (url: string, et?: EventType, pvid?: string, tz?: string, ref?: string, mn?: MetricType, mv?: number, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'url' is not null or undefined
             assertParamExists('newEvent', 'url', url)
             const localVarPath = `/api/v1/e/`;
@@ -72,44 +66,20 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['et'] = et;
             }
 
-            if (url !== undefined) {
-                localVarQueryParameter['url'] = url;
-            }
-
-            if (pt !== undefined) {
-                localVarQueryParameter['pt'] = pt;
-            }
-
             if (pvid !== undefined) {
                 localVarQueryParameter['pvid'] = pvid;
-            }
-
-            if (psb !== undefined) {
-                localVarQueryParameter['psb'] = psb;
             }
 
             if (tz !== undefined) {
                 localVarQueryParameter['tz'] = tz;
             }
 
-            if (tzo !== undefined) {
-                localVarQueryParameter['tzo'] = tzo;
+            if (url !== undefined) {
+                localVarQueryParameter['url'] = url;
             }
 
             if (ref !== undefined) {
                 localVarQueryParameter['ref'] = ref;
-            }
-
-            if (ttfb !== undefined) {
-                localVarQueryParameter['ttfb'] = ttfb;
-            }
-
-            if (tt !== undefined) {
-                localVarQueryParameter['tt'] = tt;
-            }
-
-            if (dt !== undefined) {
-                localVarQueryParameter['dt'] = dt;
             }
 
             if (mn !== undefined) {
@@ -146,22 +116,16 @@ export const EventsApiFp = function(configuration?: Configuration) {
          * @summary New Event
          * @param {string} url 
          * @param {EventType} [et] Event type
-         * @param {string} [pt] Page title
          * @param {string} [pvid] Page view ID
-         * @param {number} [psb] Page size bytes
          * @param {string} [tz] Timezone
-         * @param {number} [tzo] Timezone offset
          * @param {string} [ref] Referrer
-         * @param {number} [ttfb] Time to first-byte
-         * @param {number} [tt] Total time
-         * @param {number} [dt] Download time
          * @param {MetricType} [mn] Metric name
          * @param {number} [mv] Metric value
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newEvent(url: string, et?: EventType, pt?: string, pvid?: string, psb?: number, tz?: string, tzo?: number, ref?: string, ttfb?: number, tt?: number, dt?: number, mn?: MetricType, mv?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EventCreated>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.newEvent(url, et, pt, pvid, psb, tz, tzo, ref, ttfb, tt, dt, mn, mv, options);
+        async newEvent(url: string, et?: EventType, pvid?: string, tz?: string, ref?: string, mn?: MetricType, mv?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EventCreated>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.newEvent(url, et, pvid, tz, ref, mn, mv, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -179,22 +143,16 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
          * @summary New Event
          * @param {string} url 
          * @param {EventType} [et] Event type
-         * @param {string} [pt] Page title
          * @param {string} [pvid] Page view ID
-         * @param {number} [psb] Page size bytes
          * @param {string} [tz] Timezone
-         * @param {number} [tzo] Timezone offset
          * @param {string} [ref] Referrer
-         * @param {number} [ttfb] Time to first-byte
-         * @param {number} [tt] Total time
-         * @param {number} [dt] Download time
          * @param {MetricType} [mn] Metric name
          * @param {number} [mv] Metric value
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newEvent(url: string, et?: EventType, pt?: string, pvid?: string, psb?: number, tz?: string, tzo?: number, ref?: string, ttfb?: number, tt?: number, dt?: number, mn?: MetricType, mv?: number, options?: any): AxiosPromise<EventCreated> {
-            return localVarFp.newEvent(url, et, pt, pvid, psb, tz, tzo, ref, ttfb, tt, dt, mn, mv, options).then((request) => request(axios, basePath));
+        newEvent(url: string, et?: EventType, pvid?: string, tz?: string, ref?: string, mn?: MetricType, mv?: number, options?: any): AxiosPromise<EventCreated> {
+            return localVarFp.newEvent(url, et, pvid, tz, ref, mn, mv, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -220,25 +178,11 @@ export interface EventsApiNewEventRequest {
     readonly et?: EventType
 
     /**
-     * Page title
-     * @type {string}
-     * @memberof EventsApiNewEvent
-     */
-    readonly pt?: string
-
-    /**
      * Page view ID
      * @type {string}
      * @memberof EventsApiNewEvent
      */
     readonly pvid?: string
-
-    /**
-     * Page size bytes
-     * @type {number}
-     * @memberof EventsApiNewEvent
-     */
-    readonly psb?: number
 
     /**
      * Timezone
@@ -248,39 +192,11 @@ export interface EventsApiNewEventRequest {
     readonly tz?: string
 
     /**
-     * Timezone offset
-     * @type {number}
-     * @memberof EventsApiNewEvent
-     */
-    readonly tzo?: number
-
-    /**
      * Referrer
      * @type {string}
      * @memberof EventsApiNewEvent
      */
     readonly ref?: string
-
-    /**
-     * Time to first-byte
-     * @type {number}
-     * @memberof EventsApiNewEvent
-     */
-    readonly ttfb?: number
-
-    /**
-     * Total time
-     * @type {number}
-     * @memberof EventsApiNewEvent
-     */
-    readonly tt?: number
-
-    /**
-     * Download time
-     * @type {number}
-     * @memberof EventsApiNewEvent
-     */
-    readonly dt?: number
 
     /**
      * Metric name
@@ -313,6 +229,6 @@ export class EventsApi extends BaseAPI {
      * @memberof EventsApi
      */
     public newEvent(requestParameters: EventsApiNewEventRequest, options?: any) {
-        return EventsApiFp(this.configuration).newEvent(requestParameters.url, requestParameters.et, requestParameters.pt, requestParameters.pvid, requestParameters.psb, requestParameters.tz, requestParameters.tzo, requestParameters.ref, requestParameters.ttfb, requestParameters.tt, requestParameters.dt, requestParameters.mn, requestParameters.mv, options).then((request) => request(this.axios, this.basePath));
+        return EventsApiFp(this.configuration).newEvent(requestParameters.url, requestParameters.et, requestParameters.pvid, requestParameters.tz, requestParameters.ref, requestParameters.mn, requestParameters.mv, options).then((request) => request(this.axios, this.basePath));
     }
 }

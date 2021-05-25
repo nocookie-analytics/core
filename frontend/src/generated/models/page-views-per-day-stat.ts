@@ -28,6 +28,12 @@ export interface PageViewsPerDayStat {
     total_visits: number;
     /**
      * 
+     * @type {number}
+     * @memberof PageViewsPerDayStat
+     */
+    visitors: number;
+    /**
+     * 
      * @type {string}
      * @memberof PageViewsPerDayStat
      */

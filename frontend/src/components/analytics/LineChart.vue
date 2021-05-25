@@ -12,20 +12,28 @@ export default class LineChart extends Mixins(Line) {
 
   get chartData(): ChartData {
     const labels: Array<string> = [];
-    const data: Array<number> = [];
+    const totalVisits: Array<number> = [];
+    const visitors: Array<number> = [];
 
     this.blockData.forEach((row) => {
       labels.push(row.date);
-      data.push(row.total_visits);
+      totalVisits.push(row.total_visits);
+      visitors.push(row.visitors);
     });
     return {
       labels,
       datasets: [
         {
-          backgroundColor: 'red',
-          label: 'Page views',
+          backgroundColor: '#4d698c',
+          label: 'Visitors',
           fill: true,
-          data,
+          data: visitors,
+        },
+        {
+          backgroundColor: '#94d2ee',
+          label: 'Total visits',
+          fill: true,
+          data: totalVisits,
         },
       ],
     };

@@ -26,7 +26,6 @@ class EventCreated(BaseModel):
     pvid: Optional[UUID4] = None
 
 
-# Properties to receive on item creation
 class EventCreate(EventBase):
     class Config:
         extra = "forbid"
@@ -41,8 +40,7 @@ class EventCreate(EventBase):
     metric_name: Optional[MetricType] = None
     metric_value: Optional[Decimal] = None
 
-    ip_country_iso_code: Optional[str]
-    ip_continent_code: Optional[str]
+    ip: Optional[str]
 
     @classmethod
     def depends(
@@ -78,27 +76,11 @@ class EventCreate(EventBase):
                 page_view_id=pvid,
                 metric_name=mn,
                 metric_value=mv,
-                **cls._get_geolocation_info(get_ip_from_request(request)),
+                ip=get_ip_from_request(request),
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception
             raise HTTPException(status_code=400, detail=e.errors())
-
-    @staticmethod
-    def _get_geolocation_info(
-        ip_address: str,
-    ) -> Dict[str, Optional[Union[int, str]]]:
-        data: Dict[str, Optional[Union[str, int]]] = {}
-        if ip_address:
-            geolocation = get_ip_gelocation(ip_address)
-            if not geolocation:
-                return data
-            country_code = geolocation.country.iso_code
-            continent_code = geolocation.continent.code
-            if country_code:
-                data["ip_country_iso_code"] = country_code
-            data["ip_continent_code"] = continent_code
-        return data
 
 
 class EventUpdate(EventBase):

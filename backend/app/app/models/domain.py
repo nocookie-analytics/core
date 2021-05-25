@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, List
 
+from crypt import mksalt
 from sqlalchemy import Column, ForeignKey, Integer, String, Boolean
 from sqlalchemy.orm import relationship, Query
 from sqlalchemy.sql.functions import func
@@ -16,6 +17,12 @@ class Domain(Base):
     id = Column(Integer, primary_key=True, index=True)
 
     domain_name = Column(String, index=True, unique=True)
+
+    salt = Column(String, default=mksalt)
+    salt_last_changed = Column(
+        DateTime(timezone=True), server_default=func.now(), index=True
+    )
+
     events: Query = relationship("Event", lazy="dynamic")
 
     owner_id = Column(Integer, ForeignKey("user.id"))

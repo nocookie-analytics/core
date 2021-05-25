@@ -40,16 +40,14 @@ class TestCreatePageViewEvent:
             user_timezone="Europe/Amsterdam",
             ua_string="Mozilla/5.0 (X11; Linux x86_64; rv:9000.0) Gecko/20100101 Firefox/9000.0",
             page_view_id=str(page_view_id),
-            ip_country_iso_code="US",
-            ip_continent_code="NA",
+            ip=mock_ip_address,
         )
-        event = crud.event.create_with_domain(
-            db=db, obj_in=event_in, domain_id=domain.id
-        )
+        event = crud.event.create_with_domain(db=db, obj_in=event_in, domain=domain)
         assert event.domain_id == domain.id
         assert event.browser_family == "Firefox"
         assert event.ip_country
         assert event.ip_continent_code
+        assert event.visitor_fingerprint
 
     @pytest.mark.parametrize(
         "referrer, expected_referrer_medium, expected_referrer_name",
@@ -81,7 +79,7 @@ class TestCreatePageViewEvent:
             referrer = f"https://{mock_read_only_domain.domain_name}"
         event = create_random_page_view_event(
             db,
-            domain_id=domain.id,
+            domain=domain,
             ip_address=mock_ip_address,
             create_overrides={
                 "referrer": referrer,
@@ -100,7 +98,7 @@ class TestCreatePageViewEvent:
         domain = mock_read_only_domain
         event = create_random_page_view_event(
             db,
-            domain_id=domain.id,
+            domain=domain,
             ip_address=mock_ip_address,
             create_overrides={
                 "url": "https://www.example.com/page?utm_content=buffercf3b2&utm_medium=social&utm_source=facebook.com&utm_campaign=buffer"
