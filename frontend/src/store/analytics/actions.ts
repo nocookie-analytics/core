@@ -39,7 +39,6 @@ export const actions = {
         domainName,
         include: [
           AnalyticsType.Pages,
-          AnalyticsType.Pageviews,
           AnalyticsType.Countries,
 
           AnalyticsType.ReferrerNames,
@@ -49,9 +48,6 @@ export const actions = {
           AnalyticsType.DeviceFamilies,
 
           AnalyticsType.PageviewsPerDay,
-          AnalyticsType.LcpPerDay,
-          AnalyticsType.FpPerDay,
-          AnalyticsType.ClsPerDay,
 
           AnalyticsType.UtmSources,
           AnalyticsType.UtmTerms,
