@@ -41,6 +41,8 @@ def create_random_metric_event(
     create_overrides: Dict = None,
 ) -> models.Event:
     geolocation = get_ip_gelocation(ip_address)
+    if not create_overrides:
+        create_overrides = {}
     event_in_data = {
         "event_type": EventType.metric,
         "url": "https://google.com",

@@ -18,31 +18,45 @@ from app.tests.utils.event import (
 )
 
 
-class PageViewsPerDayStatTest:
+class TestPageViewsPerDayStat:
     def test_get_pageviews(self, db: Session, mock_ip_address):
         # With one page view event
         domain = create_random_domain(db)
         create_random_page_view_event(db, domain=domain, ip_address=mock_ip_address)
         base_query = domain.events.filter(Event.event_type == EventType.page_view)
         data = PageViewStat.from_base_query(base_query)
-        per_day_data = PageViewsPerDayStat.from_base_query(base_query)
+        end = datetime.now()
+        start = end - timedelta(days=1)
+
+        per_day_data = PageViewsPerDayStat.from_base_query(
+            base_query, start=start, end=end
+        )
         assert data.total_visits == 1
-        assert per_day_data[0].total_visits == 1
+        assert len(per_day_data) == 2
+        assert per_day_data[-1].total_visits == 1
+        assert per_day_data[-1].visitors == 1
 
         # With two page view events
         create_random_page_view_event(db, domain=domain, ip_address=mock_ip_address)
         data = PageViewStat.from_base_query(base_query)
-        per_day_data = PageViewsPerDayStat.from_base_query(base_query)
+        per_day_data = PageViewsPerDayStat.from_base_query(
+            base_query, start=start, end=end
+        )
         assert data.total_visits == 2
-        assert per_day_data[0].total_visits == 2
+        assert len(per_day_data) == 2
+        assert per_day_data[-1].total_visits == 2
+        assert per_day_data[-1].visitors == 1
 
         # With two page view events and one metric event
         create_random_metric_event(db, domain=domain, ip_address=mock_ip_address)
         data = PageViewStat.from_base_query(base_query)
-        per_day_data = PageViewsPerDayStat.from_base_query(base_query)
+        per_day_data = PageViewsPerDayStat.from_base_query(
+            base_query, start=start, end=end
+        )
         assert data.total_visits == 2
-        assert len(per_day_data) == 1
-        assert per_day_data[0].total_visits == 2
+        assert len(per_day_data) == 2
+        assert per_day_data[-1].total_visits == 2
+        assert per_day_data[-1].visitors == 1
 
 
 class TestAggregateStat:
