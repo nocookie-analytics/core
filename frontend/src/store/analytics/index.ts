@@ -23,9 +23,8 @@ const readDateFromURLParam = (
   return defaultValue;
 };
 
-const now = new Date();
-
 export const getFiltersFromUrl = (): AnalyticsFilterState => {
+  const now = new Date();
   return {
     page: getURLParamValue('page'),
     country: getURLParamValue('country'),
