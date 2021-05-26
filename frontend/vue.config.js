@@ -1,8 +1,10 @@
 const webpack = require('webpack');
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 
 module.exports = {
   configureWebpack: {
     plugins: [
+      new VuetifyLoaderPlugin(),
       new webpack.IgnorePlugin({
         resourceRegExp: /^\.\/locale$/,
         contextRegExp: /moment$/,
