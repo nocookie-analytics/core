@@ -31,7 +31,6 @@ import {
 
 export default new Vuetify({
   icons: {
-    iconfont: 'mdiSvg',
     values: {
       account: mdiAccount,
       accountCircle: mdiAccountCircle,
