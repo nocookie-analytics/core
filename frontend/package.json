@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@mdi/font": "^5.9.55",
+    "@mdi/js": "^5.9.55",
     "@types/chai": "^4.2.11",
     "@types/mocha": "^5.2.4",
     "@types/sinon": "^9.0.11",
