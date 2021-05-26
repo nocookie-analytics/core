@@ -47,7 +47,7 @@ export default class AnalyticsBlock extends Vue {
   BlockType = BlockType;
   // TODO: There's gotta be a better way to handle this, we don't need an explicit blockType when we already have blockData with a type
   @Prop() public blockData!:
-    | AggregateStat
+    | Array<AggregateStat>
     | PageViewStat
     | Array<AvgMetricPerDayStat>
     | Array<PageViewsPerDayStat>;
