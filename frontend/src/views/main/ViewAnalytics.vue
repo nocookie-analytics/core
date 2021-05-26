@@ -26,10 +26,10 @@
             okText="Set start date"
           >
             <template slot="dateIcon">
-              <v-icon>mdi-calendar</v-icon>
+              <v-icon> {{ $vuetify.icons.values.calendar }}</v-icon>
             </template>
             <template slot="timeIcon">
-              <v-icon>mdi-clock-outline</v-icon>
+              <v-icon> {{ $vuetify.icons.values.clockOutline }}</v-icon>
             </template>
           </v-datetime-picker>
         </v-col>
@@ -40,10 +40,10 @@
             okText="Set end date"
           >
             <template slot="dateIcon">
-              <v-icon>mdi-calendar</v-icon>
+              <v-icon> {{ $vuetify.icons.values.calendar }}</v-icon>
             </template>
             <template slot="timeIcon">
-              <v-icon>mdi-clock-outline</v-icon>
+              <v-icon> {{ $vuetify.icons.values.clockOutline }}</v-icon>
             </template>
           </v-datetime-picker>
         </v-col>

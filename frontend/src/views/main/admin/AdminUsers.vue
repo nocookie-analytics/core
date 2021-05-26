@@ -7,10 +7,14 @@
     </v-toolbar>
     <v-data-table :headers="headers" :items="users">
       <template #[`item.isActive`]="{ item }">
-        <v-icon v-if="item.is_active">mdi-check</v-icon>
+        <v-icon v-if="item.is_active">
+          {{ $vuetify.icons.values.check }}</v-icon
+        >
       </template>
       <template #[`item.isSuperuser`]="{ item }">
-        <v-icon v-if="item.is_superuser">mdi-check</v-icon>
+        <v-icon v-if="item.is_superuser">
+          {{ $vuetify.icons.values.check }}</v-icon
+        >
       </template>
       <template #[`item.id`]="{ item }">
         <v-tooltip top>
@@ -24,7 +28,7 @@
                 params: { id: item.id },
               }"
             >
-              <v-icon>mdi-account-edit</v-icon>
+              <v-icon>{{ $vuetify.icons.values.edit }}</v-icon>
             </v-btn>
           </template>
         </v-tooltip>
@@ -35,8 +39,6 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Store } from 'vuex';
-import { IUserProfile } from '@/interfaces';
 import { readAdminUsers } from '@/store/admin/getters';
 import { dispatchGetUsers } from '@/store/admin/actions';
 

@@ -16,7 +16,7 @@
                 :to="{ query: filterURL(block.urlParamName) }"
                 v-if="block.urlParamName && isFilterActive(block.urlParamName)"
               >
-                <v-icon> mdi-delete </v-icon>
+                <v-icon> {{ $vuetify.icons.values.delete }} </v-icon>
               </router-link>
             </template>
             <template v-slot:itemName="{ item }">

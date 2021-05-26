@@ -24,7 +24,7 @@
                   @keyup.enter="submit"
                   label="Username"
                   type="text"
-                  prepend-icon="mdi-account"
+                  :prepend-icon="$vuetify.icons.values.account"
                   v-model="username"
                   v-validate="'required'"
                   data-vv-name="username"

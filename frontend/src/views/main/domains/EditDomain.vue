@@ -11,7 +11,7 @@
           :value="error"
           transition="fade-transition"
           type="error"
-          icon="mdi-alert-circle"
+          :icon="$vuetify.icons.values.alertCircle"
         >
           We are really sorry but something went wrong, please try again later
         </v-alert>
@@ -28,7 +28,7 @@
             v-model="domainName"
             required
             :rules="domainNameRules"
-            append-icon="mdi-web"
+            :append-icon="$vuetify.icons.values.web"
           ></v-text-field>
 
           <v-checkbox
