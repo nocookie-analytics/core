@@ -28,7 +28,7 @@
                 params: { id: item.id },
               }"
             >
-              <v-icon>{{ $vuetify.icons.values.edit }}</v-icon>
+              <v-icon>{{ $vuetify.icons.values.pencil }}</v-icon>
             </v-btn>
           </template>
         </v-tooltip>

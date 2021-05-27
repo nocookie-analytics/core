@@ -10,23 +10,24 @@ const appColors = {
 };
 
 import {
+  mdiAccount,
   mdiAccountCircle,
   mdiAccountEdit,
   mdiAccountPlus,
   mdiAlertCircle,
-  mdiChevronLeft,
-  mdiChevronRight,
-  mdiDelete,
-  mdiDns,
-  mdiGroup,
-  mdiDotsVertical,
-  mdiWeb,
   mdiCalendar,
   mdiCheck,
+  mdiChevronLeft,
+  mdiChevronRight,
   mdiClockOutline,
   mdiClose,
+  mdiDelete,
+  mdiDns,
+  mdiDotsVertical,
+  mdiGroup,
   mdiLock,
-  mdiAccount,
+  mdiPencil,
+  mdiWeb,
 } from '@mdi/js';
 
 export default new Vuetify({
@@ -48,6 +49,7 @@ export default new Vuetify({
       dotsVertical: mdiDotsVertical,
       group: mdiGroup,
       lock: mdiLock,
+      pencil: mdiPencil,
       web: mdiWeb,
     },
   },

@@ -23,7 +23,7 @@
         <template #[`item.actions`]="{ item }">
           <v-btn title="Edit" icon :to="'/domains/' + item.domain_name">
             <span class="group pa-2">
-              <v-icon medium> {{ $vuetify.icons.values.edit }}</v-icon>
+              <v-icon medium> {{ $vuetify.icons.values.pencil }}</v-icon>
             </span>
           </v-btn>
         </template>
