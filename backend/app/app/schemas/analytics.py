@@ -56,10 +56,10 @@ class AggregateStat(BaseModel):
             base_query.group_by(group_by_column)
             .with_entities(
                 group_by_column,
-                func.count(),
-                func.count(func.distinct(Event.visitor_fingerprint)),
+                func.count().label("total_visits"),
+                func.count(func.distinct(Event.visitor_fingerprint)).label("visitors"),
             )
-            .order_by(func.count().desc())
+            .order_by("visitors")
         )
         if filter_none is True:
             query = query.filter(group_by_column.isnot(None))
