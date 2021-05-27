@@ -7,6 +7,7 @@ import arrow
 from pydantic import BaseModel
 from sqlalchemy import func, column
 from sqlalchemy.orm import Query
+from sqlalchemy.sql import desc
 
 from app.models.event import Event, MetricType
 
@@ -59,7 +60,7 @@ class AggregateStat(BaseModel):
                 func.count().label("total_visits"),
                 func.count(func.distinct(Event.visitor_fingerprint)).label("visitors"),
             )
-            .order_by("visitors")
+            .order_by(desc("visitors"))
         )
         if filter_none is True:
             query = query.filter(group_by_column.isnot(None))
