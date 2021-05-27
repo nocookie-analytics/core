@@ -13,7 +13,7 @@
                 <v-text-field
                   @keyup.enter="submit"
                   v-model="email"
-                  prepend-icon="mdi-account"
+                  :prepend-icon="$vuetify.icons.values.account"
                   name="login"
                   label="Login"
                   type="text"
@@ -21,7 +21,7 @@
                 <v-text-field
                   @keyup.enter="submit"
                   v-model="password"
-                  prepend-icon="mdi-lock"
+                  :prepend-icon="$vuetify.icons.values.lock"
                   name="password"
                   label="Password"
                   id="password"

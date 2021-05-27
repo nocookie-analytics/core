@@ -1,6 +1,5 @@
 import Vue from 'vue';
-import Vuetify from 'vuetify';
-import '@mdi/font/css/materialdesignicons.css';
+import Vuetify from 'vuetify/lib';
 
 Vue.use(Vuetify);
 
@@ -10,9 +9,49 @@ const appColors = {
   flamePea: '#e75f3b',
 };
 
+import {
+  mdiAccount,
+  mdiAccountCircle,
+  mdiAccountEdit,
+  mdiAccountPlus,
+  mdiAlertCircle,
+  mdiCalendar,
+  mdiCheck,
+  mdiChevronLeft,
+  mdiChevronRight,
+  mdiClockOutline,
+  mdiClose,
+  mdiDelete,
+  mdiDns,
+  mdiDotsVertical,
+  mdiGroup,
+  mdiLock,
+  mdiPencil,
+  mdiWeb,
+} from '@mdi/js';
+
 export default new Vuetify({
   icons: {
-    iconfont: 'mdi',
+    values: {
+      account: mdiAccount,
+      accountCircle: mdiAccountCircle,
+      accountEdit: mdiAccountEdit,
+      accountPlus: mdiAccountPlus,
+      alertCircle: mdiAlertCircle,
+      calendar: mdiCalendar,
+      check: mdiCheck,
+      chevronLeft: mdiChevronLeft,
+      chevronRight: mdiChevronRight,
+      clockOutline: mdiClockOutline,
+      close: mdiClose,
+      delete: mdiDelete,
+      dns: mdiDns,
+      dotsVertical: mdiDotsVertical,
+      group: mdiGroup,
+      lock: mdiLock,
+      pencil: mdiPencil,
+      web: mdiWeb,
+    },
   },
   theme: {
     themes: {
