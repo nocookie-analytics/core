@@ -31,6 +31,7 @@ import {
 } from '@mdi/js';
 
 export default new Vuetify({
+  iconfont: 'mdiSvg',
   icons: {
     values: {
       account: mdiAccount,
