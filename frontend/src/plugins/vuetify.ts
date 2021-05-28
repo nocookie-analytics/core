@@ -17,6 +17,8 @@ import {
   mdiAlertCircle,
   mdiCalendar,
   mdiCheck,
+  mdiCheckboxBlankOutline,
+  mdiCheckboxMarked,
   mdiChevronLeft,
   mdiChevronRight,
   mdiClockOutline,
@@ -31,9 +33,10 @@ import {
 } from '@mdi/js';
 
 export default new Vuetify({
-  iconfont: 'mdiSvg',
   icons: {
     values: {
+      checkboxOff: mdiCheckboxBlankOutline,
+      checkboxOn: mdiCheckboxMarked,
       account: mdiAccount,
       accountCircle: mdiAccountCircle,
       accountEdit: mdiAccountEdit,
