@@ -1,14 +1,14 @@
 <template>
   <div>
     <v-container v-if="analyticsData">
-      <v-row>
+      <v-row dense>
         <AnalyticsBlock
           :blockData="analyticsData.pageviews_per_day"
           :blockType="BlockType.ArrayPageViewsPerDayStat"
         />
       </v-row>
       <v-row>
-        <v-col v-for="block in blocks" :key="block.title" :cols="block.cols">
+        <v-col v-for="block in blocks" :key="block.title">
           <AnalyticsBlock :blockData="block.data" :blockType="block.type">
             <template v-slot:blockTitle>
               {{ block.title }}

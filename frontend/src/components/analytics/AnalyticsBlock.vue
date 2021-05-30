@@ -1,6 +1,6 @@
 <template>
   <v-col v-if="hasData">
-    <v-container v-if="blockType == BlockType.AggregateStat">
+    <span v-if="blockType == BlockType.AggregateStat">
       <v-card-title>
         <slot name="blockTitle"></slot>
       </v-card-title>
@@ -11,16 +11,16 @@
           </template>
         </Tabular>
       </v-card>
-    </v-container>
+    </span>
 
-    <v-container v-if="blockType == BlockType.ArrayPageViewsPerDayStat">
+    <span v-if="blockType == BlockType.ArrayPageViewsPerDayStat">
       <v-card-title>Page views</v-card-title>
-      <v-card class="pa-2" outlined tile>
+      <v-card class="pa-2" flat>
         <v-card-text>
           <LineChart :blockData="blockData" :styles="styles" />
         </v-card-text>
       </v-card>
-    </v-container>
+    </span>
   </v-col>
 </template>
 

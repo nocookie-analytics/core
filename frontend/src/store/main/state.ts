@@ -14,6 +14,5 @@ export interface MainState {
   registrationError: string | null;
   userProfile: IUserProfile | null;
   dashboardMiniDrawer: boolean;
-  dashboardShowDrawer: boolean;
   notifications: AppNotification[];
 }

@@ -1,10 +1,8 @@
 <template>
   <div v-if="isLoggedIn">
     <v-navigation-drawer
-      persistent
       :mini-variant="miniDrawer"
-      v-model="showDrawer"
-      fixed
+      :mini-variant-width="60"
       app
     >
       <v-layout column fill-height>
@@ -157,15 +155,11 @@ import { Vue, Component } from 'vue-property-decorator';
 import { appName } from '@/env';
 import {
   readDashboardMiniDrawer,
-  readDashboardShowDrawer,
   readHasAdminAccess,
   readIsLoggedIn,
   readUserProfile,
 } from '@/store/main/getters';
-import {
-  commitSetDashboardShowDrawer,
-  commitSetDashboardMiniDrawer,
-} from '@/store/main/mutations';
+import { commitSetDashboardMiniDrawer } from '@/store/main/mutations';
 import {
   dispatchCheckLoggedIn,
   dispatchUserLogOut,
@@ -207,21 +201,6 @@ export default class Main extends Vue {
 
   get miniDrawer() {
     return readDashboardMiniDrawer(this.$store);
-  }
-
-  get showDrawer() {
-    return readDashboardShowDrawer(this.$store);
-  }
-
-  set showDrawer(value) {
-    commitSetDashboardShowDrawer(this.$store, value);
-  }
-
-  public switchShowDrawer() {
-    commitSetDashboardShowDrawer(
-      this.$store,
-      !readDashboardShowDrawer(this.$store),
-    );
   }
 
   public switchMiniDrawer() {

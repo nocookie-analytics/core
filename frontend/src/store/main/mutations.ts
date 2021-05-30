@@ -22,9 +22,6 @@ export const mutations = {
   setDashboardMiniDrawer(state: MainState, payload: boolean) {
     state.dashboardMiniDrawer = payload;
   },
-  setDashboardShowDrawer(state: MainState, payload: boolean) {
-    state.dashboardShowDrawer = payload;
-  },
   addNotification(state: MainState, payload: AppNotification) {
     state.notifications.push(payload);
   },
@@ -39,9 +36,6 @@ const { commit } = getStoreAccessors<MainState | any, RootState>('');
 
 export const commitSetDashboardMiniDrawer = commit(
   mutations.setDashboardMiniDrawer,
-);
-export const commitSetDashboardShowDrawer = commit(
-  mutations.setDashboardShowDrawer,
 );
 export const commitSetLoggedIn = commit(mutations.setLoggedIn);
 export const commitSetLogInError = commit(mutations.setLogInError);

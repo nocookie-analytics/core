@@ -14,8 +14,8 @@
       </span>
     </v-container>
     <v-container>
-      <v-row align="baseline">
-        <v-col cols="2">
+      <v-row align="baseline" class="mb-6" dense>
+        <v-col>
           {{ domainName }}
         </v-col>
         <v-col cols="2">
@@ -49,9 +49,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-container>
-      <AnalyticsContainer :analyticsData="analyticsData" />
-    </v-container>
+    <AnalyticsContainer :analyticsData="analyticsData" />
   </div>
 </template>
 
