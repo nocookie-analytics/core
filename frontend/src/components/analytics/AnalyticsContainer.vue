@@ -8,7 +8,7 @@
         />
       </v-row>
       <v-row>
-        <v-col v-for="block in blocks" :key="block.title" :cols="block.cols">
+        <v-col v-for="block in blocks" :key="block.title">
           <AnalyticsBlock :blockData="block.data" :blockType="block.type">
             <template v-slot:blockTitle>
               {{ block.title }}
