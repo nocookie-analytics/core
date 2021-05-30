@@ -9,7 +9,6 @@ const defaultState: MainState = {
   logInError: false,
   userProfile: null,
   dashboardMiniDrawer: false,
-  dashboardShowDrawer: true,
   notifications: [],
   registrationError: '',
 };

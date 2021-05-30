@@ -12,7 +12,6 @@ export const getters = {
   },
   loginError: (state: MainState) => state.logInError,
   registrationError: (state: MainState) => state.registrationError,
-  dashboardShowDrawer: (state: MainState) => state.dashboardShowDrawer,
   dashboardMiniDrawer: (state: MainState) => state.dashboardMiniDrawer,
   userProfile: (state: MainState) => state.userProfile,
   token: (state: MainState) => state.token,
@@ -24,7 +23,6 @@ export const getters = {
 const { read } = getStoreAccessors<MainState, RootState>('');
 
 export const readDashboardMiniDrawer = read(getters.dashboardMiniDrawer);
-export const readDashboardShowDrawer = read(getters.dashboardShowDrawer);
 export const readHasAdminAccess = read(getters.hasAdminAccess);
 export const readIsLoggedIn = read(getters.isLoggedIn);
 export const readLoginError = read(getters.loginError);
