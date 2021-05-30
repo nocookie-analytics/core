@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container v-if="analyticsData">
-      <v-row>
+      <v-row dense>
         <AnalyticsBlock
           :blockData="analyticsData.pageviews_per_day"
           :blockType="BlockType.ArrayPageViewsPerDayStat"

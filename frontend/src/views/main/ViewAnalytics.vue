@@ -14,7 +14,7 @@
       </span>
     </v-container>
     <v-container>
-      <v-row align="baseline" class="mb-6">
+      <v-row align="baseline" class="mb-6" dense>
         <v-col>
           {{ domainName }}
         </v-col>
