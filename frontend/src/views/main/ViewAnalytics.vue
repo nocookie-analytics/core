@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container fluid>
     <router-view :key="$route.fullPath"></router-view>
     <v-container fluid>
       <span v-if="analyticsError">
@@ -13,8 +13,8 @@
         </v-card>
       </span>
     </v-container>
-    <v-container>
-      <v-row align="baseline" class="mb-6" dense>
+    <v-container fluid>
+      <v-row align="baseline" class="mb-6" no-gutters>
         <v-col>
           {{ domainName }}
         </v-col>
@@ -50,7 +50,7 @@
       </v-row>
     </v-container>
     <AnalyticsContainer :analyticsData="analyticsData" />
-  </div>
+  </v-container>
 </template>
 
 <script lang="ts">

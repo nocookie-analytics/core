@@ -1,76 +1,74 @@
 <template>
-  <div>
-    <v-container v-if="analyticsData">
-      <v-row dense>
-        <AnalyticsBlock
-          :blockData="analyticsData.pageviews_per_day"
-          :blockType="BlockType.ArrayPageViewsPerDayStat"
-        />
-      </v-row>
-      <v-row dense>
-        <v-col
-          v-for="block in blocks"
-          :key="block.title"
-          :lg="block.cols * 2"
-          :md="block.cols * 4"
-          :sm="block.cols * 4"
-          :xl="block.cols"
-        >
-          <AnalyticsBlock :blockData="block.data" :blockType="block.type">
-            <template v-slot:blockTitle>
-              {{ block.title }}
-              <router-link
-                :to="{ query: filterURL(block.urlParamName) }"
-                v-if="block.urlParamName && isFilterActive(block.urlParamName)"
-              >
-                <v-icon> {{ $vuetify.icons.values.delete }} </v-icon>
-              </router-link>
-            </template>
-            <template v-slot:itemName="{ item }">
-              <Icon
-                :value="item.value"
-                v-if="block.urlParamName !== 'country'"
-              />&nbsp;
-              <router-link
-                v-if="
-                  block.urlParamName &&
-                  block.data &&
-                  block.data.length > 1 &&
-                  block.urlExclude &&
-                  !block.urlExclude.includes(item.value)
-                "
-                :to="{ query: filterURL(block.urlParamName, item.value) }"
-              >
-                <span v-if="block.urlParamName === 'country'">
-                  <country-flag
-                    :country="item.value.toLowerCase()"
-                    rounded
-                    size="normal"
-                  />{{ countryCodeToCountryName(item.value) }}
-                </span>
-                <span v-else>
-                  {{ item.value }}
-                </span>
-              </router-link>
-              <span v-else>
-                <span v-if="block.urlParamName === 'country'">
-                  <country-flag
-                    :country="item.value.toLowerCase()"
-                    rounded
-                    size="normal"
-                  />{{ countryCodeToCountryName(item.value) }}
-                </span>
-                <span v-else>
-                  {{ item.value }}
-                </span>
+  <v-container v-if="analyticsData" fluid>
+    <v-row no-gutters>
+      <AnalyticsBlock
+        :blockData="analyticsData.pageviews_per_day"
+        :blockType="BlockType.ArrayPageViewsPerDayStat"
+      />
+    </v-row>
+    <v-row dense>
+      <v-col
+        v-for="block in blocks"
+        :key="block.title"
+        :lg="block.cols * 2"
+        :md="block.cols * 4"
+        :sm="block.cols * 4"
+        :xl="block.cols"
+      >
+        <AnalyticsBlock :blockData="block.data" :blockType="block.type">
+          <template v-slot:blockTitle>
+            {{ block.title }}
+            <router-link
+              :to="{ query: filterURL(block.urlParamName) }"
+              v-if="block.urlParamName && isFilterActive(block.urlParamName)"
+            >
+              <v-icon> {{ $vuetify.icons.values.delete }} </v-icon>
+            </router-link>
+          </template>
+          <template v-slot:itemName="{ item }">
+            <Icon
+              :value="item.value"
+              v-if="block.urlParamName !== 'country'"
+            />&nbsp;
+            <router-link
+              v-if="
+                block.urlParamName &&
+                block.data &&
+                block.data.length > 1 &&
+                block.urlExclude &&
+                !block.urlExclude.includes(item.value)
+              "
+              :to="{ query: filterURL(block.urlParamName, item.value) }"
+            >
+              <span v-if="block.urlParamName === 'country'">
+                <country-flag
+                  :country="item.value.toLowerCase()"
+                  rounded
+                  size="normal"
+                />{{ countryCodeToCountryName(item.value) }}
               </span>
-            </template>
-          </AnalyticsBlock>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-container v-else> Loading, please wait </v-container>
-  </div>
+              <span v-else>
+                {{ item.value }}
+              </span>
+            </router-link>
+            <span v-else>
+              <span v-if="block.urlParamName === 'country'">
+                <country-flag
+                  :country="item.value.toLowerCase()"
+                  rounded
+                  size="normal"
+                />{{ countryCodeToCountryName(item.value) }}
+              </span>
+              <span v-else>
+                {{ item.value }}
+              </span>
+            </span>
+          </template>
+        </AnalyticsBlock>
+      </v-col>
+    </v-row>
+  </v-container>
+  <v-container v-else> Loading, please wait </v-container>
 </template>
 
 <script lang="ts">
