@@ -7,8 +7,15 @@
           :blockType="BlockType.ArrayPageViewsPerDayStat"
         />
       </v-row>
-      <v-row>
-        <v-col v-for="block in blocks" :key="block.title">
+      <v-row dense>
+        <v-col
+          v-for="block in blocks"
+          :key="block.title"
+          :lg="block.cols * 2"
+          :md="block.cols * 4"
+          :sm="block.cols * 4"
+          :xl="block.cols"
+        >
           <AnalyticsBlock :blockData="block.data" :blockType="block.type">
             <template v-slot:blockTitle>
               {{ block.title }}
@@ -165,7 +172,7 @@ export default class AnalyticsContainer extends Vue {
       {
         data: this.analyticsData.referrer_names,
         type: BlockType.AggregateStat,
-        title: 'Referrer name',
+        title: 'Referrer',
         urlParamName: 'referrerName',
         urlExclude: [],
         cols: 3,
