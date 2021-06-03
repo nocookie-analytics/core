@@ -51,4 +51,6 @@ def update_salts() -> None:
     except Exception as e:
         logger.error(e)
         raise e
+    finally:
+        db.close()
     logger.info("Finished at %s", datetime.now())
