@@ -1,10 +1,13 @@
-from geoip2.database import Reader
-from pydantic.networks import IPvAnyAddress
-from starlette.requests import Request
-from app.core.config import settings
 from typing import Optional, Union
+
+from geoip2.database import Reader
 from geoip2.errors import AddressNotFoundError
 from geoip2.models import Country
+from pydantic.networks import IPvAnyAddress
+from starlette.requests import Request
+
+from app.core.config import settings
+from app.logger import logger
 
 
 def get_ip_gelocation(
@@ -35,4 +38,11 @@ def get_ip_from_request(request: Request) -> str:
         return request.client.host
 
 
-MMDB_INSTANCE = Reader(settings.MMDB_PATH)
+try:
+    MMDB_INSTANCE = Reader(settings.MMDB_PATH)
+except FileNotFoundError:
+    logger.error(
+        "MMDB file not found in %s, you should run %s first",
+        settings.MMDB_PATH,
+        "scripts/fetch-db-ip.sh",
+    )

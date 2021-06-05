@@ -120,3 +120,4 @@ yarn-error.log
 docker-stack.yml
 .vim
 pyrightconfig.json
+*.mmdb
