@@ -24,6 +24,8 @@ jobs:
       run: |
         apk add --no-cache python3
 
+    - uses: actions/checkout@v2
+
     - name: Setup env file
       run: |
         mv .env-ci .env
