@@ -15,7 +15,7 @@ def get_ip_gelocation(
     if isinstance(ip_address, IPvAnyAddress):
         ip_address = str(ip_address)
     try:
-        country = GEOLITE_INSTANCE.country(str(ip_address))
+        country = MMDB_INSTANCE.country(str(ip_address))
         return country
     except AddressNotFoundError:
         return None
@@ -35,4 +35,4 @@ def get_ip_from_request(request: Request) -> str:
         return request.client.host
 
 
-GEOLITE_INSTANCE = Reader(settings.GEOLITE_PATH)
+MMDB_INSTANCE = Reader(settings.MMDB_PATH)

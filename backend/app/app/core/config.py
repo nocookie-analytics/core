@@ -83,7 +83,7 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str
     USERS_OPEN_REGISTRATION: bool = True
 
-    GEOLITE_PATH = "data/GeoLite2-Country.mmdb"
+    MMDB_PATH = "data/db-ip-country.mmdb"
 
     class Config:
         case_sensitive = True
