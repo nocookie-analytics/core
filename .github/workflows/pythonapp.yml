@@ -22,28 +22,7 @@ jobs:
     steps:
     - name: Install git
       run: |
-        apk add --no-cache openssh-client git-lfs python3
-        git lfs install
-
-    - name: Create SSH key
-      run: |
-        mkdir -p ~/.ssh
-        ssh-keyscan gitlab.com >> /etc/ssh/ssh_known_hosts
-        ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-        echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-      env:
-        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-
-    - uses: actions/checkout@v2
-      env:
-        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-
-    - name: LFS pull
-      run: |
-        git lfs pull
-      env:
-        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        apk add --no-cache python3
 
     - name: Setup env file
       run: |
