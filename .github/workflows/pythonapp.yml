@@ -22,7 +22,7 @@ jobs:
     steps:
     - name: Install git
       run: |
-        apk add --no-cache python3
+        apk add --no-cache python3 curl
 
     - uses: actions/checkout@v2
 
