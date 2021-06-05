@@ -31,7 +31,7 @@ jobs:
         mv .env-ci .env
         echo "TAG=$GITHUB_SHA" | sed 's|/|-|g' >> .env
         echo "BRANCH_TAG=$(echo $GITHUB_REF | sed 's|/|-|g')" >> .env
-        bash backend/app/scripts/fetch-db-ip.sh
+        sh backend/app/scripts/fetch-db-ip.sh
 
     - uses: google-github-actions/setup-gcloud@master
       with:
