@@ -11,17 +11,6 @@ jobs:
     timeout-minutes: 5
 
     steps:
-
-      - name: Create SSH key
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-
       - name: Install github cli
         run: |
           sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
@@ -30,8 +19,6 @@ jobs:
           sudo apt-get -qq -y install gh
 
       - uses: actions/checkout@v2
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
       - name: Run update script
         run: bash backend/app/data/update-referers.sh
@@ -51,4 +38,3 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
