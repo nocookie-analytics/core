@@ -10,10 +10,6 @@ ARG INSTALL_JUPYTER=false
 
 WORKDIR /app/
 
-COPY ./app/scripts/fetch-db-ip.sh /tmp
-
-RUN bash /tmp/fetch-db-ip.sh
-
 # Install Poetry
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
     cd /usr/local/bin && \
