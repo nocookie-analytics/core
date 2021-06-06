@@ -26,14 +26,6 @@ Backend, JSON based web API based on OpenAPI: http://localhost/api/
 
 Automatic interactive documentation with Swagger UI (from the OpenAPI backend): http://localhost/docs
 
-Alternative automatic documentation with ReDoc (from the OpenAPI backend): http://localhost/redoc
-
-PGAdmin, PostgreSQL web administration: http://localhost:5050
-
-Flower, administration of Celery tasks: http://localhost:5555
-
-Traefik UI, to see how the routes are being handled by the proxy: http://localhost:8090
-
 **Note**: The first time you start your stack, it might take a minute for it to be ready. While the backend waits for the database to be ready and configures everything. You can check the logs to monitor it.
 
 To check the logs, run:
@@ -422,14 +414,6 @@ Frontend: http://localhost
 Backend: http://localhost/api/
 
 Automatic Interactive Docs (Swagger UI): https://localhost/docs
-
-Automatic Alternative Docs (ReDoc): https://localhost/redoc
-
-PGAdmin: http://localhost:5050
-
-Flower: http://localhost:5555
-
-Traefik UI: http://localhost:8090
 
 
 ## Resolve poetry.lock conflicts
