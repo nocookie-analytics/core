@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 
 module.exports = {
+  assetsDir: 'static',
   configureWebpack: {
     plugins: [
       new VuetifyLoaderPlugin(),
