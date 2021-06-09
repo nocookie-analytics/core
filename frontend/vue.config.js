@@ -1,10 +1,18 @@
 const webpack = require('webpack');
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   assetsDir: 'static',
   configureWebpack: {
     plugins: [
+      new CopyPlugin([
+        {
+          from: '**',
+          context: './node_modules/flag-icon-css/flags/4x3/',
+          to: './static/flags/',
+        },
+      ]),
       new VuetifyLoaderPlugin(),
       new webpack.IgnorePlugin({
         resourceRegExp: /moment$/,
