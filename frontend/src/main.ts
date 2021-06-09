@@ -5,7 +5,6 @@ import './component-hooks';
 import Vue from 'vue';
 import vuetify from './plugins/vuetify';
 import './plugins/vee-validate';
-import './plugins/vue-date-picker';
 import App from './App.vue';
 import router from './router';
 import store from '@/store';

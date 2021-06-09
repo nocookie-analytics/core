@@ -18,34 +18,24 @@
         <v-col>
           {{ domainName }}
         </v-col>
-        <v-col cols="2">
-          <v-datetime-picker
-            class="mb-3"
-            label="Start"
-            v-model="startDate"
-            okText="Set start date"
+        <v-spacer></v-spacer>
+        <v-col align="right">
+          <date-range-picker
+            ref="picker"
+            :locale-data="{ firstDay: 1, format: 'yyyy-mm-dd HH:mm:ss' }"
+            :timePicker="true"
+            opens="left"
+            :timePicker24Hour="true"
+            :showWeekNumbers="true"
+            :showDropdowns="true"
+            :autoApply="true"
+            v-model="dateRange"
           >
-            <template slot="dateIcon">
-              <v-icon> {{ $vuetify.icons.values.calendar }}</v-icon>
+            <template v-slot:input="picker" style="min-width: 800px">
+              {{ picker.startDate.toLocaleString() }} -
+              {{ picker.endDate.toLocaleString() }}
             </template>
-            <template slot="timeIcon">
-              <v-icon> {{ $vuetify.icons.values.clockOutline }}</v-icon>
-            </template>
-          </v-datetime-picker>
-        </v-col>
-        <v-col cols="2">
-          <v-datetime-picker
-            label="End"
-            v-model="endDate"
-            okText="Set end date"
-          >
-            <template slot="dateIcon">
-              <v-icon> {{ $vuetify.icons.values.calendar }}</v-icon>
-            </template>
-            <template slot="timeIcon">
-              <v-icon> {{ $vuetify.icons.values.clockOutline }}</v-icon>
-            </template>
-          </v-datetime-picker>
+          </date-range-picker>
         </v-col>
       </v-row>
     </v-container>
@@ -57,6 +47,8 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import AnalyticsContainer from '@/components/analytics/AnalyticsContainer.vue';
 import { dispatchOverwriteAnalyticsFilters } from '@/store/analytics/actions';
+import DateRangePicker from 'vue2-daterange-picker';
+import 'vue2-daterange-picker/dist/vue2-daterange-picker.css';
 import {
   readAnalyticsData,
   readAnalyticsError,
@@ -69,11 +61,29 @@ import { getFiltersFromUrl } from '@/store/analytics';
 @Component({
   components: {
     AnalyticsContainer,
+    DateRangePicker,
   },
 })
 export default class ViewAnalytics extends Vue {
   get domainName(): string {
     return this.$router.currentRoute.params.domainName;
+  }
+
+  get dateRange() {
+    return {
+      startDate: readStartDate(this.$store),
+      endDate: readEndDate(this.$store),
+    };
+  }
+
+  set dateRange(dateRange) {
+    this.$router.replace({
+      query: {
+        ...this.$route.query,
+        start: dateRange.startDate.toISOString(),
+        end: dateRange.endDate.toISOString(),
+      },
+    });
   }
 
   get startDate(): Date {
@@ -113,3 +123,15 @@ export default class ViewAnalytics extends Vue {
   }
 }
 </script>
+
+<style>
+.calendars {
+  flex-wrap: nowrap !important;
+}
+
+@media only screen and (max-width: 800px) {
+  .calendars > .ranges > ul > li {
+    text-align: right;
+  }
+}
+</style>

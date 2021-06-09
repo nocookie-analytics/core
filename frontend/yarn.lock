@@ -3494,7 +3494,7 @@ data-urls@^1.1.0:
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
 
-date-fns@^2.1.0, date-fns@^2.19.0:
+date-fns@^2.19.0:
   version "2.19.0"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.19.0.tgz#65193348635a28d5d916c43ec7ce6fbd145059e1"
   integrity sha512-X3bf2iTPgCAQp9wvjOQytnf5vO5rESYRXlPIVcgSbtT5OTScPcsf9eZU+B/YIkKAtYr5WeCii58BgATrNitlWg==
@@ -10142,6 +10142,13 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
+vue2-daterange-picker@^0.6.5:
+  version "0.6.5"
+  resolved "https://registry.yarnpkg.com/vue2-daterange-picker/-/vue2-daterange-picker-0.6.5.tgz#bd02141f88a9b86c12a638ac566e13d229f3b522"
+  integrity sha512-8gXvbqMF8LpfArlCaeG/pveoM/Q+DQzfG4gt++NZqLabs859ch7zbuvjvvcMvchGp9yOIsBqw+jwpL/v5kr31A==
+  dependencies:
+    vue "^2.6.10"
+
 vue2-leaflet@2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/vue2-leaflet/-/vue2-leaflet-2.1.1.tgz#33ec8920bd1e273b312209a84ce355021226ee79"
@@ -10152,15 +10159,6 @@ vue@^2.6.10, vue@^2.6.12:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
   integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
 
-vuetify-datetime-picker@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/vuetify-datetime-picker/-/vuetify-datetime-picker-2.1.1.tgz#582341b65fa6e8036cb10d7e56a90d9989335ad9"
-  integrity sha512-xY3YCVNxoe/5Chbm7G2BXrkg12CWLWwnDJZdhNPVKe1p8S72H8NomYOB6SSBzMMEHisRGIRzAQTDwDfDU06x/Q==
-  dependencies:
-    date-fns "^2.1.0"
-    vue "^2.6.10"
-    vuetify "^2.1.3"
-
 vuetify-loader@^1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/vuetify-loader/-/vuetify-loader-1.7.2.tgz#5cdc45309496cf3a5fe431fd7611706ffa4aa8c8"
@@ -10169,11 +10167,6 @@ vuetify-loader@^1.7.2:
     decache "^4.6.0"
     file-loader "^6.2.0"
     loader-utils "^2.0.0"
-
-vuetify@^2.1.3:
-  version "2.4.9"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.4.9.tgz#c4ccf4cf3dc81d426da78913c32d47ab33ede38f"
-  integrity sha512-IS+ZKCk4+RhN8PW9mw6dLSGy0hnFZ0YwOg0Ga+sr9bngbSOI6nw0p+Y/U00vRw8DPScqUmK5cSrI8RhiaTpXow==
 
 vuetify@^2.4.8:
   version "2.4.8"
