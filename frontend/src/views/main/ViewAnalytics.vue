@@ -47,7 +47,7 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import AnalyticsContainer from '@/components/analytics/AnalyticsContainer.vue';
 import { dispatchOverwriteAnalyticsFilters } from '@/store/analytics/actions';
-import DateRangePicker from 'vue2-daterange-picker';
+import DateRangePicker from 'vue2-daterange-picker/src/index';
 import 'vue2-daterange-picker/dist/vue2-daterange-picker.css';
 import {
   readAnalyticsData,
