@@ -41,11 +41,8 @@
               :to="{ query: filterURL(block.urlParamName, item.value) }"
             >
               <span v-if="block.urlParamName === 'country'">
-                <country-flag
-                  :country="item.value.toLowerCase()"
-                  rounded
-                  size="normal"
-                />{{ countryCodeToCountryName(item.value) }}
+                <country-flag :countryName="item.value" />
+                {{ countryCodeToCountryName(item.value) }}
               </span>
               <span v-else>
                 {{ item.value }}
@@ -53,11 +50,9 @@
             </router-link>
             <span v-else>
               <span v-if="block.urlParamName === 'country'">
-                <country-flag
-                  :country="item.value.toLowerCase()"
-                  rounded
-                  size="normal"
-                />{{ countryCodeToCountryName(item.value) }}
+                <country-flag :countryName="item.value" />
+
+                {{ countryCodeToCountryName(item.value) }}
               </span>
               <span v-else>
                 {{ item.value }}
@@ -80,7 +75,7 @@ import AnalyticsBlock, {
 import Icon from '@/components/analytics/Icon.vue';
 import { parseISO } from 'date-fns';
 import countryCodes from '@/components/data/countryCodes';
-import CountryFlag from 'vue-country-flag';
+import CountryFlag from '@/components/analytics/CountryFlag.vue';
 import {
   readBrowser,
   readCountry,

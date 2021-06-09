@@ -54,7 +54,7 @@ const iconMap = {
 };
 
 @Component
-export default class AnalyticsContainer extends Vue {
+export default class Icon extends Vue {
   @Prop() public value!: string;
 
   get iconName(): string | undefined {
