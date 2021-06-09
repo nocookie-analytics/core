@@ -19,7 +19,7 @@
           {{ domainName }}
         </v-col>
         <v-spacer></v-spacer>
-        <v-col align="right">
+        <v-col align="right" lg="12" md="12" sm="12" xl="5">
           <date-range-picker
             ref="picker"
             :locale-data="{ firstDay: 1, format: 'yyyy-mm-dd HH:mm:ss' }"
@@ -31,9 +31,9 @@
             :autoApply="true"
             v-model="dateRange"
           >
-            <template v-slot:input="picker" style="min-width: 800px">
-              {{ picker.startDate.toLocaleString() }} -
-              {{ picker.endDate.toLocaleString() }}
+            <template v-slot:input="picker">
+              <b>{{ picker.startDate.toLocaleString() }}</b> -
+              <b>{{ picker.endDate.toLocaleString() }}</b>
             </template>
           </date-range-picker>
         </v-col>
@@ -125,13 +125,10 @@ export default class ViewAnalytics extends Vue {
 </script>
 
 <style>
-.calendars {
-  flex-wrap: nowrap !important;
+.vue-daterange-picker {
+  display: block !important;
 }
-
-@media only screen and (max-width: 800px) {
-  .calendars > .ranges > ul > li {
-    text-align: right;
-  }
+.reportrange-text {
+  border: none !important;
 }
 </style>
