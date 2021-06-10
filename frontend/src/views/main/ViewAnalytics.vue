@@ -30,6 +30,7 @@
             :showDropdowns="true"
             :autoApply="true"
             v-model="dateRange"
+            :max-date="new Date()"
           >
             <template v-slot:input="picker">
               <v-card flat class="text-no-wrap text-truncate">
