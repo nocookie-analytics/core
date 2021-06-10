@@ -1,5 +1,5 @@
 <template>
-  <img width="24" :src="countryFlagUrl" />
+  <img width="24" height="16" :src="countryFlagUrl" />
 </template>
 
 <script lang="ts">
