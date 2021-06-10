@@ -10062,11 +10062,6 @@ vue-class-component@^7.2.6:
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.2.6.tgz#8471e037b8e4762f5a464686e19e5afc708502e4"
   integrity sha512-+eaQXVrAm/LldalI272PpDe3+i4mPis0ORiMYxF6Ae4hyuCh15W8Idet7wPUEs4N4YptgFHGys4UrgNQOMyO6w==
 
-vue-country-flag@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/vue-country-flag/-/vue-country-flag-2.0.4.tgz#44d46a5a1c324a49ffbd951a04e863457c9ef8d8"
-  integrity sha512-hJkuZ8OS+iNBo5Ce/UJeZRC0AIa/35BaYH6TzHZ03ImoZuGhmMzshelPloThODsowQr5FpYXJ3RP937byeKJYw==
-
 vue-eslint-parser@^7.0.0:
   version "7.4.1"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-7.4.1.tgz#e4adcf7876a7379758d9056a72235af18a587f92"
