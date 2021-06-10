@@ -14,7 +14,6 @@
     </span>
 
     <span v-if="blockType == BlockType.ArrayPageViewsPerDayStat">
-      <v-card-title>Page views</v-card-title>
       <v-card class="pa-2" flat>
         <v-card-text>
           <LineChart :blockData="blockData" :styles="styles" />

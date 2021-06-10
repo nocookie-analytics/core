@@ -1,15 +1,98 @@
+<template>
+  <v-chart class="chart" :option="options" />
+</template>
+
 <script lang="ts">
-import { Component, Mixins, Prop } from 'vue-property-decorator';
-import { Line } from 'vue-chartjs';
-import { ChartData, ChartOptions } from 'chart.js';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import { PageViewsPerDayStat } from '@/generated';
 
+import VChart, { THEME_KEY } from 'vue-echarts';
+import { CanvasRenderer } from 'echarts/renderers';
+import { use } from 'echarts/core';
+import { LineChart as EChartsLineChart } from 'echarts/lib/chart/line';
+import {
+  TooltipComponent,
+  GridComponent,
+  TitleComponent,
+} from 'echarts/components';
+import { EChartsOption } from 'echarts/types/dist/shared';
+
+use([
+  CanvasRenderer,
+  EChartsLineChart,
+  TooltipComponent,
+  TitleComponent,
+  GridComponent,
+]);
+
+import 'echarts/theme/sakura';
+
 @Component({
-  extends: Line,
+  components: {
+    VChart,
+  },
+  provide: { [THEME_KEY]: 'sakura' },
 })
-export default class LineChart extends Mixins(Line) {
+export default class LineChart extends Vue {
   @Prop() blockData!: Array<PageViewsPerDayStat>;
 
+  get options(): EChartsOption {
+    const dates: Array<string> = [];
+    const totalVisits: Array<number> = [];
+    const visitors: Array<number> = [];
+
+    this.blockData.forEach((row) => {
+      dates.push(row.date);
+      totalVisits.push(row.total_visits);
+      visitors.push(row.visitors);
+    });
+
+    return {
+      title: {
+        text: 'Visitors',
+      },
+      grid: {
+        left: 50,
+        right: 0,
+      },
+      series: [
+        { name: 'Page views', type: 'line', areaStyle: {}, data: totalVisits },
+        { name: 'Visitors', type: 'line', areaStyle: {}, data: visitors },
+      ],
+      xAxis: [
+        {
+          data: dates,
+          axisPointer: {
+            snap: true,
+          },
+        },
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          axisPointer: {
+            snap: true,
+          },
+          splitLine: {
+            show: false,
+          },
+        },
+      ],
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#6a7985',
+            precision: 0,
+          },
+          snap: true,
+        },
+      },
+    };
+  }
+
+  /*
   get chartData(): ChartData {
     const labels: Array<string> = [];
     const totalVisits: Array<number> = [];
@@ -56,6 +139,7 @@ export default class LineChart extends Mixins(Line) {
             gridLines: {
               display: false,
             },
+            minInterval: 1,
           },
         ],
         xAxes: [
@@ -63,6 +147,7 @@ export default class LineChart extends Mixins(Line) {
             gridLines: {
               display: false,
             },
+            type: 'time'
           },
         ],
       },
@@ -73,5 +158,12 @@ export default class LineChart extends Mixins(Line) {
   mounted(): void {
     this.renderChart(this.chartData, this.options);
   }
+  */
 }
 </script>
+
+<style scoped>
+.chart {
+  height: 400px;
+}
+</style>
