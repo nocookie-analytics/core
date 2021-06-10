@@ -9,7 +9,7 @@ import { PageViewsPerDayStat } from '@/generated';
 import VChart, { THEME_KEY } from 'vue-echarts';
 import { CanvasRenderer } from 'echarts/renderers';
 import { use } from 'echarts/core';
-import { LineChart as EChartsLineChart } from 'echarts/lib/chart/line';
+import { LineChart as EChartsLineChart } from 'echarts/charts';
 import {
   TooltipComponent,
   GridComponent,
