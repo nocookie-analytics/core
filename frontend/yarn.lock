@@ -9893,6 +9893,21 @@ upath@^1.1.1:
   resolved "https://registry.yarnpkg.com/upath/-/upath-1.2.0.tgz#8f66dbcd55a883acdae4408af8b035a5044c1894"
   integrity sha512-aZwGpamFO61g3OlfT7OQCHqhGnW43ieH9WZeP7QxN/G/jS4jfqUkZxoryvJgVPEcrl5NL/ggHsSmLMHuH64Lhg==
 
+uplot-react@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/uplot-react/-/uplot-react-1.1.0.tgz#708e8a07df08f5ea8f0266231e4aa40bf04db276"
+  integrity sha512-tU6noQZ7UbXWLEAMPPJyhHfoR1aDFYh8yo2hBHiFRcy7FtmupVXOKBfvyGhO8laMyM3G1v529KL9o3bDBJOtYg==
+
+uplot-vue@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/uplot-vue/-/uplot-vue-1.1.0.tgz#09d878971a5e849e9c6558f37c69345a302a1825"
+  integrity sha512-gPILGBXwLm4/qHuHoburqg5pqP/SfDOv028IWxgycUADZgwxVoJjOeREJZvd1Rmy5Srdj8ytGJTo0hUYx11gwQ==
+
+uplot@^1.6.12:
+  version "1.6.12"
+  resolved "https://registry.yarnpkg.com/uplot/-/uplot-1.6.12.tgz#a2741f224c3d3b4f4f25a53797c1687ddfef2989"
+  integrity sha512-afBjwy/9SM0E7w29Gen+wQ+UAe6ipiA2zE/s1dMCidMXQYvYkCpEgxLRkVA179/8eRJz+og2r7ZFS1HIzT75fQ==
+
 upper-case@^1.1.1:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/upper-case/-/upper-case-1.1.3.tgz#f6b4501c2ec4cdd26ba78be7222961de77621598"
