@@ -14,12 +14,12 @@
       </span>
     </v-container>
     <v-container fluid>
-      <v-row align="baseline" class="mb-6" no-gutters>
-        <v-col>
+      <v-row align="baseline" no-gutters>
+        <v-col xs="12">
           {{ domainName }}
         </v-col>
         <v-spacer></v-spacer>
-        <v-col align="right" lg="12" md="12" sm="12" xl="5">
+        <v-col xs="12" align="right">
           <date-range-picker
             ref="picker"
             :locale-data="{ firstDay: 1, format: 'yyyy-mm-dd HH:mm:ss' }"
@@ -32,8 +32,10 @@
             v-model="dateRange"
           >
             <template v-slot:input="picker">
-              <b>{{ picker.startDate.toLocaleString() }}</b> -
-              <b>{{ picker.endDate.toLocaleString() }}</b>
+              <v-card flat class="text-no-wrap text-truncate">
+                {{ picker.startDate.toLocaleString() }} -
+                {{ picker.endDate.toLocaleString() }}
+              </v-card>
             </template>
           </date-range-picker>
         </v-col>
