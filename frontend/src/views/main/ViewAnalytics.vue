@@ -19,7 +19,7 @@
           {{ domainName }}
         </v-col>
         <v-spacer></v-spacer>
-        <v-col xs="12" align="right">
+        <v-col xs="12" xl="5" align="right">
           <date-range-picker
             ref="picker"
             :locale-data="{ firstDay: 1, format: 'yyyy-mm-dd HH:mm:ss' }"
