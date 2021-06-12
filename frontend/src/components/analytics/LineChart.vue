@@ -102,7 +102,7 @@ export default class LineChart extends Vue {
   }
 
   mounted() {
-    this.width = this.$refs.wrapper.clientWidth;
+    this.width = (this.$refs.wrapper as Element).clientWidth;
   }
 
   destroyed() {
@@ -110,7 +110,7 @@ export default class LineChart extends Vue {
   }
 
   resizeChart(): void {
-    this.width = this.$refs.wrapper.clientWidth;
+    this.width = (this.$refs.wrapper as Element).clientWidth;
   }
 
   /*
