@@ -1,5 +1,7 @@
 <template>
-  <UplotVue :data="chartData" :options="options" />
+  <div ref="wrapper">
+    <UplotVue :data="chartData" :options="options" />
+  </div>
 </template>
 
 
@@ -18,17 +20,23 @@ import 'uplot/dist/uPlot.min.css';
 export default class LineChart extends Vue {
   @Prop() blockData!: Array<PageViewsPerDayStat>;
 
-  width: number = window.innerWidth - 200;
+  width: number = window.innerWidth;
 
   get options(): uPlot.Options {
     return {
-      title: 'Visitors',
       id: 'chart1',
       class: 'page-views-chart',
       width: this.width,
-      height: 600,
+      height: 400,
+      axes: [{}, { space: 50 }],
+      legend: {
+        show: true,
+      },
       series: [
-        {},
+        {
+          value: (self, rawValue) => new Date(rawValue * 1000).toDateString(),
+          label: 'Date',
+        },
         {
           // initial toggled state (optional)
           show: true,
@@ -37,13 +45,12 @@ export default class LineChart extends Vue {
 
           // in-legend display
           label: 'Page views',
-          value: (self, rawValue) => rawValue.toFixed(2),
+          value: (self, rawValue) => rawValue,
 
           // series style
           stroke: '#e52c3c',
-          width: 1,
+          width: 2,
           fill: '#fa506c',
-          dash: [10, 5],
         },
         {
           // initial toggled state (optional)
@@ -53,15 +60,26 @@ export default class LineChart extends Vue {
 
           // in-legend display
           label: 'Visitors',
-          value: (self, rawValue) => rawValue.toFixed(2),
+          value: (self, rawValue) => rawValue,
 
           // series style
           stroke: '#f7b1ab',
-          width: 1,
+          width: 2,
           fill: '#f8c4d8',
-          dash: [10, 5],
         },
       ],
+      focus: {
+        alpha: 0.6,
+      },
+      cursor: {
+        focus: {
+          prox: 5,
+        },
+        drag: {
+          x: true,
+          y: true,
+        },
+      },
     };
   }
 
@@ -83,12 +101,16 @@ export default class LineChart extends Vue {
     window.addEventListener('resize', this.resizeChart);
   }
 
+  mounted() {
+    this.width = this.$refs.wrapper.clientWidth;
+  }
+
   destroyed() {
     window.removeEventListener('resize', this.resizeChart);
   }
 
   resizeChart(): void {
-    this.width = window.innerWidth - 200;
+    this.width = this.$refs.wrapper.clientWidth;
   }
 
   /*
