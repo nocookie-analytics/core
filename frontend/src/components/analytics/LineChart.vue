@@ -4,9 +4,8 @@
   </div>
 </template>
 
-
 <script lang="ts">
-import { Component, Mixins, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import { PageViewsPerDayStat } from '@/generated';
 import uPlot from 'uplot';
 import UplotVue from 'uplot-vue';
