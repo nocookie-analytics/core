@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="pa-0 ma-0">
     <router-view :key="$route.fullPath"></router-view>
     <v-container fluid>
       <span v-if="analyticsError">
