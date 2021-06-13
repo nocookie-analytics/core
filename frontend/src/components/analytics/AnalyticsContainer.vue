@@ -1,12 +1,12 @@
 <template>
-  <v-container v-if="analyticsData" fluid>
+  <v-container v-if="analyticsData" fluid class="pa-0">
     <v-row no-gutters>
       <AnalyticsBlock
         :blockData="analyticsData.pageviews_per_day"
         :blockType="BlockType.ArrayPageViewsPerDayStat"
       />
     </v-row>
-    <v-row dense>
+    <v-row dense no-gutters>
       <v-col
         v-for="block in blocks"
         :key="block.title"

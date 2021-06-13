@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="pa-0 ma-0">
     <router-view :key="$route.fullPath"></router-view>
     <v-container fluid>
       <span v-if="analyticsError">
@@ -19,7 +19,7 @@
           {{ domainName }}
         </v-col>
         <v-spacer></v-spacer>
-        <v-col xs="12" align="right">
+        <v-col xs="12" xl="5" align="right">
           <date-range-picker
             ref="picker"
             :locale-data="{ firstDay: 1, format: 'yyyy-mm-dd HH:mm:ss' }"
