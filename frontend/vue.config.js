@@ -21,6 +21,8 @@ module.exports = {
   },
 
   chainWebpack: (config) => {
+    config.plugins.delete('prefetch');
+
     if (process.env.NODE_ENV === 'test') {
       // https://github.com/vuejs/vue-cli/issues/4053#issuecomment-544641072
       for (const ruleName of ['sass', 'scss']) {

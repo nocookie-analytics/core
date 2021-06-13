@@ -152,7 +152,8 @@ export default new Router({
           path: ':domainName',
           component: () =>
             import(
-              /* webpackChunkName: "view-analytics" */ './views/main/ViewAnalytics.vue'
+              /* webpackChunkName: "view-analytics" 
+                webpackPrefetch: true*/ './views/main/ViewAnalytics.vue'
             ),
         },
       ],
