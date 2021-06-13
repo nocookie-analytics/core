@@ -48,6 +48,7 @@ def get_analytics(
     os: str = None,
     device: str = None,
     referrer_name: str = None,
+    limit: int = 100,
     current_user: models.User = Depends(deps.get_current_active_user_silent),
     db: Session = Depends(deps.get_db),
 ):
@@ -70,5 +71,6 @@ def get_analytics(
         browser=browser,
         os=os,
         device=device,
+        group_limit=limit,
         referrer_name=referrer_name,
     )

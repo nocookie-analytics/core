@@ -1,14 +1,12 @@
-from app.utils.geolocation import get_ip_from_request, get_ip_gelocation
+from app.utils.geolocation import get_ip_gelocation
 from typing import Dict, List, Optional, Union
 
 from hashlib import sha3_256
 from arrow.arrow import Arrow
 from fastapi.exceptions import HTTPException
 from furl.furl import furl
-from pydantic import IPvAnyAddress
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
-from sqlalchemy import func
 
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
@@ -154,6 +152,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         os: str = None,
         device: str = None,
         referrer_name: str = None,
+        group_limit: int = None,
     ) -> AnalyticsData:
         data = AnalyticsData(start=start, end=end)
         for field in fields:
@@ -167,6 +166,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                     )
                 )
             )
+            group_limit = group_limit or 100
             if country is not None:
                 base_query = base_query.filter(Event.ip_country_iso_code == country)
             if page is not None:
@@ -187,63 +187,78 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 data.pageviews = PageViewStat.from_base_query(base_query)
             elif field == AnalyticsType.BROWSERS:
                 data.browser_families = AggregateStat.from_base_query(
-                    page_view_base_query, Event.browser_family
+                    page_view_base_query, Event.browser_family, group_limit=group_limit
                 )
             elif field == AnalyticsType.COUNTRIES:
                 data.countries = AggregateStat.from_base_query(
-                    page_view_base_query, Event.ip_country_iso_code, filter_none=True
+                    page_view_base_query,
+                    Event.ip_country_iso_code,
+                    filter_none=True,
+                    group_limit=group_limit,
                 )
             elif field == AnalyticsType.OS:
                 data.os_families = AggregateStat.from_base_query(
-                    page_view_base_query, Event.os_family
+                    page_view_base_query, Event.os_family, group_limit=group_limit
                 )
             elif field == AnalyticsType.DEVICES:
                 data.device_families = AggregateStat.from_base_query(
-                    page_view_base_query, Event.device_brand, filter_none=True
+                    page_view_base_query,
+                    Event.device_brand,
+                    filter_none=True,
+                    group_limit=group_limit,
                 )
             elif field == AnalyticsType.PAGES:
                 data.pages = AggregateStat.from_base_query(
-                    page_view_base_query, Event.path
+                    page_view_base_query, Event.path, group_limit=group_limit
                 )
             elif field == AnalyticsType.REFERRER_MEDIUMS:
                 data.referrer_mediums = AggregateStat.from_base_query(
-                    page_view_base_query, Event.referrer_medium, filter_none=True
+                    page_view_base_query,
+                    Event.referrer_medium,
+                    filter_none=True,
+                    group_limit=group_limit,
                 )
             elif field == AnalyticsType.REFERRER_NAMES:
                 data.referrer_names = AggregateStat.from_base_query(
                     page_view_base_query,
                     Event.referrer_name,
                     filter_none=True,
+                    group_limit=group_limit,
                 )
             elif field == AnalyticsType.UTM_CAMPAIGNS:
                 data.utm_campaigns = AggregateStat.from_base_query(
                     page_view_base_query,
                     Event.utm_campaign,
                     filter_none=True,
+                    group_limit=group_limit,
                 )
             elif field == AnalyticsType.UTM_SOURCES:
                 data.utm_sources = AggregateStat.from_base_query(
                     page_view_base_query,
                     Event.utm_source,
                     filter_none=True,
+                    group_limit=group_limit,
                 )
             elif field == AnalyticsType.UTM_TERMS:
                 data.utm_terms = AggregateStat.from_base_query(
                     page_view_base_query,
                     Event.utm_term,
                     filter_none=True,
+                    group_limit=group_limit,
                 )
             elif field == AnalyticsType.UTM_CONTENTS:
                 data.utm_contents = AggregateStat.from_base_query(
                     page_view_base_query,
                     Event.utm_content,
                     filter_none=True,
+                    group_limit=group_limit,
                 )
             elif field == AnalyticsType.UTM_MEDIUMS:
                 data.utm_mediums = AggregateStat.from_base_query(
                     page_view_base_query,
                     Event.utm_medium,
                     filter_none=True,
+                    group_limit=group_limit,
                 )
             elif field == AnalyticsType.PAGEVIEWS_PER_DAY:
                 data.pageviews_per_day = PageViewsPerDayStat.from_base_query(

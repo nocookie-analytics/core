@@ -118,3 +118,41 @@ def test_public_analytics(
     db.commit()
     response = client.get(f"{settings.API_V1_STR}/a/", params=data)
     assert response.status_code == 200, response.json()
+
+
+@pytest.mark.usefixtures("override_testclient")
+def test_get_analytics_success_with_many_pages(db: Session, client: TestClient) -> None:
+    # The other test is hypothesis based with no real event data, this one includes an event
+    password = random_lower_string()
+    user = create_random_user(db, password=password)
+    domain = create_random_domain(db, owner_id=user.id)
+    headers = user_authentication_headers(
+        client=client, email=user.email, password=password
+    )
+
+    for i in range(120):
+        create_random_page_view_event(
+            db,
+            domain=domain,
+            create_overrides={"url": f"https://{domain.domain_name}/{i}"},
+        )
+
+    data = {
+        "domain_name": domain.domain_name,
+        "start": datetime.now() - timedelta(minutes=1),
+        "end": datetime.now() + timedelta(minutes=1),
+        "include": [AnalyticsType.PAGES.value],
+    }
+    response = client.get(f"{settings.API_V1_STR}/a/", params=data, headers=headers)
+    assert response.status_code == 200, response.json()
+    json = response.json()
+    assert json["pages"] and len(json["pages"]) == 100  # default limit is 100
+
+    response = client.get(
+        f"{settings.API_V1_STR}/a/",
+        params={**data, "limit": 110},
+        headers=headers,
+    )
+    assert response.status_code == 200, response.json()
+    json = response.json()
+    assert json["pages"] and len(json["pages"]) == 110
