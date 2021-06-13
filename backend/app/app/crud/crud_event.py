@@ -153,12 +153,14 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         device: str = None,
         referrer_name: str = None,
         group_limit: int = None,
+        include_bots: bool = False,
     ) -> AnalyticsData:
         data = AnalyticsData(start=start, end=end)
         for field in fields:
             base_query = (
                 db.query(Event)
                 .filter(Event.domain_id == domain.id)
+                .filter(Event.is_bot.is_(False))
                 .filter(
                     and_(
                         Event.timestamp >= start.datetime,
