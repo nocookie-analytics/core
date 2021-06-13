@@ -160,7 +160,6 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             base_query = (
                 db.query(Event)
                 .filter(Event.domain_id == domain.id)
-                .filter(Event.is_bot.is_(False))
                 .filter(
                     and_(
                         Event.timestamp >= start.datetime,
@@ -168,6 +167,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                     )
                 )
             )
+            if include_bots is False:
+                base_query = base_query.filter(Event.is_bot.is_(False))
             group_limit = group_limit or 100
             if country is not None:
                 base_query = base_query.filter(Event.ip_country_iso_code == country)
