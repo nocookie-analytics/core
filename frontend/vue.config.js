@@ -23,6 +23,15 @@ module.exports = {
   chainWebpack: (config) => {
     config.plugins.delete('prefetch');
 
+    config.module
+      .rule('css')
+      .oneOf('normal')
+      .use('postcss-loader')
+      .tap((options) => {
+        options.plugins.unshift(...[require('cssnano')]);
+        return options;
+      });
+
     if (process.env.NODE_ENV === 'test') {
       // https://github.com/vuejs/vue-cli/issues/4053#issuecomment-544641072
       for (const ruleName of ['sass', 'scss']) {
