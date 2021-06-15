@@ -23,7 +23,14 @@ module.exports = {
   },
 
   chainWebpack: (config) => {
-    config.plugins.delete('prefetch');
+    config.plugin('prefetch').tap((options) => {
+      options[0].fileBlacklist = options[0].fileBlacklist || [];
+      options[0].fileBlacklist.push(/\/main-.*/);
+      options[0].fileBlacklist.push(/\/domains-.*/);
+      options[0].fileBlacklist.push(/\/users-.*/);
+      options[0].fileBlacklist.push(/.*map$/);
+      return options;
+    });
 
     config.module
       .rule('css')
