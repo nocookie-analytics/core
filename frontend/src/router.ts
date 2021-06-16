@@ -15,7 +15,7 @@ export default new Router({
     {
       path: '/',
       component: () =>
-        import(/* webpackChunkName: start */ './views/main/Main.vue'),
+        import(/* webpackChunkName: "start" */ './views/main/Main.vue'),
       children: [
         {
           path: 'login',
@@ -154,7 +154,7 @@ export default new Router({
           path: ':domainName',
           component: () =>
             import(
-              /* webpackChunkName: view-analytics */ './views/main/ViewAnalytics.vue'
+              /* webpackChunkName: "view-analytics" */ './views/main/ViewAnalytics.vue'
             ),
         },
       ],
