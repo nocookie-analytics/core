@@ -48,7 +48,9 @@ def get_analytics(
     os: str = None,
     device: str = None,
     referrer_name: str = None,
+    limit: int = 100,
     current_user: models.User = Depends(deps.get_current_active_user_silent),
+    include_bots: bool = False,
     db: Session = Depends(deps.get_db),
 ):
     # TODO: This section (getting domain/verifying ownership)
@@ -70,5 +72,7 @@ def get_analytics(
         browser=browser,
         os=os,
         device=device,
+        group_limit=limit,
+        include_bots=include_bots,
         referrer_name=referrer_name,
     )

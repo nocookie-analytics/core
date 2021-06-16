@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from sqlalchemy import func, column
 from sqlalchemy.orm import Query
 from sqlalchemy.sql import desc
+from sqlalchemy.sql.schema import Column
 
 from app.models.event import Event, MetricType
 
@@ -51,7 +52,11 @@ class AggregateStat(BaseModel):
 
     @staticmethod
     def from_base_query(
-        base_query: Query, group_by_column, *, filter_none: bool = False
+        base_query: Query,
+        group_by_column: Column,
+        group_limit: int,
+        *,
+        filter_none: bool = False
     ) -> List[AggregateStat]:
         query = (
             base_query.group_by(group_by_column)
@@ -64,7 +69,7 @@ class AggregateStat(BaseModel):
         )
         if filter_none is True:
             query = query.filter(group_by_column.isnot(None))
-        query = query.limit(10)
+        query = query.limit(group_limit)
         return [
             AggregateStat(
                 value=row[0] or "Unknown", total_visits=row[1], visitors=row[2]
