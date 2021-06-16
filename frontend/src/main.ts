@@ -1,4 +1,3 @@
-import 'regenerator-runtime/runtime';
 // Import Component hooks before component definitions
 import './component-hooks';
 import Vue from 'vue';

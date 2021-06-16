@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const purgecss = require('@fullhuman/postcss-purgecss');
 
 module.exports = {
@@ -23,15 +22,17 @@ module.exports = {
   },
 
   chainWebpack: (config) => {
-    config.plugin('prefetch').tap((options) => {
-      options[0].fileBlacklist = options[0].fileBlacklist || [];
-      options[0].fileBlacklist.push(/\/main-.*/);
-      options[0].fileBlacklist.push(/\/domains.*/);
-      options[0].fileBlacklist.push(/\/users-.*/);
-      options[0].fileBlacklist.push(/\/.*analytics.*/);
-      options[0].fileBlacklist.push(/.*map$/);
-      return options;
-    });
+    if (config.plugins.has('prefetch')) {
+      config.plugin('prefetch').tap((options) => {
+        options[0].fileBlacklist = options[0].fileBlacklist || [];
+        options[0].fileBlacklist.push(/\/main-.*/);
+        options[0].fileBlacklist.push(/\/domains.*/);
+        options[0].fileBlacklist.push(/\/users-.*/);
+        options[0].fileBlacklist.push(/\/.*analytics.*/);
+        options[0].fileBlacklist.push(/.*map$/);
+        return options;
+      });
+    }
 
     config.module
       .rule('css')

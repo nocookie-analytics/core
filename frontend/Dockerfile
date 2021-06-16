@@ -15,7 +15,7 @@ ENV VUE_APP_ENV=${FRONTEND_ENV}
 # Comment out the next line to disable tests
 RUN NODE_ENV=test yarn test:unit
 
-RUN NODE_ENV=production yarn build
+RUN NODE_ENV=production yarn build --modern
 
 
 # Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
