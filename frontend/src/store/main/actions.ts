@@ -162,7 +162,7 @@ export const actions = {
       router.currentRoute.path === '/register' ||
       router.currentRoute.path === '/'
     ) {
-      router.push('/main');
+      router.push('/domains');
     }
   },
   async removeNotification(
