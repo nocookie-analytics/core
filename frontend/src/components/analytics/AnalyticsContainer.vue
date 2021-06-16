@@ -143,7 +143,7 @@ export default class AnalyticsContainer extends Vue {
         type: BlockType.AggregateStat,
         title: 'Browser',
         urlParamName: 'browser',
-        urlExclude: [],
+        urlExclude: ['Unknown'],
         cols: 3,
       },
       {
