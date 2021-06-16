@@ -23,31 +23,33 @@ export default new Router({
           // this generates a separate chunk (about.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
           component: () =>
-            import(/* webpackChunkName: "login" */ './views/Login.vue'),
+            import(/* webpackChunkName: "users-login" */ './views/Login.vue'),
         },
         {
           path: 'register',
           component: () =>
-            import(/* webpackChunkName: "register" */ './views/Register.vue'),
+            import(
+              /* webpackChunkName: "users-register" */ './views/Register.vue'
+            ),
         },
         {
           path: 'recover-password',
           component: () =>
             import(
-              /* webpackChunkName: "recover-password" */ './views/PasswordRecovery.vue'
+              /* webpackChunkName: "users-recover-password" */ './views/PasswordRecovery.vue'
             ),
         },
         {
           path: 'reset-password',
           component: () =>
             import(
-              /* webpackChunkName: "reset-password" */ './views/ResetPassword.vue'
+              /* webpackChunkName: "users-reset-password" */ './views/ResetPassword.vue'
             ),
         },
         {
           path: 'main',
           component: () =>
-            import(/* webpackChunkName: "dummy" */ './views/Dummy.vue'),
+            import(/* webpackChunkName: "main-dummy" */ './views/Dummy.vue'),
           children: [
             {
               path: 'profile',
@@ -126,7 +128,7 @@ export default new Router({
               name: 'list-domains',
               component: () =>
                 import(
-                  /* webpackChunkName: "list-domains" */ './views/main/domains/ListDomains.vue'
+                  /* webpackChunkName: "domains-list-domains" */ './views/main/domains/ListDomains.vue'
                 ),
             },
             {
@@ -134,7 +136,7 @@ export default new Router({
               name: 'create-domain',
               component: () =>
                 import(
-                  /* webpackChunkName: "create-domain" */ './views/main/domains/EditDomain.vue'
+                  /* webpackChunkName: "domains-create-domain" */ './views/main/domains/EditDomain.vue'
                 ),
             },
             {
@@ -142,7 +144,7 @@ export default new Router({
               name: 'edit-domain',
               component: () =>
                 import(
-                  /* webpackChunkName: "edit-domain" */ './views/main/domains/EditDomain.vue'
+                  /* webpackChunkName: "domains-edit-domain" */ './views/main/domains/EditDomain.vue'
                 ),
             },
           ],
