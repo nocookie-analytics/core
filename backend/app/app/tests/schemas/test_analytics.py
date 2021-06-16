@@ -64,7 +64,9 @@ class TestAggregateStat:
         domain = create_random_domain(db)
         create_random_page_view_event(db, domain=domain, ip_address=mock_ip_address)
         base_query = domain.events.filter(Event.event_type == EventType.page_view)
-        data = AggregateStat.from_base_query(base_query, Event.os_family)
+        data = AggregateStat.from_base_query(
+            base_query, Event.os_family, group_limit=100
+        )
         assert len(data) == 1
         assert data[0].value
         assert data[0].total_visits == 1
@@ -73,7 +75,9 @@ class TestAggregateStat:
         domain = create_random_domain(db)
         create_random_page_view_event(db, domain=domain, ip_address="10.0.0.1")
         base_query = domain.events.filter(Event.event_type == EventType.page_view)
-        data = AggregateStat.from_base_query(base_query, Event.ip_country_iso_code)
+        data = AggregateStat.from_base_query(
+            base_query, Event.ip_country_iso_code, group_limit=100
+        )
         assert len(data) == 1
         assert data[0].value == "Unknown"
         assert data[0].total_visits == 1
@@ -94,7 +98,7 @@ class TestAggregateStat:
         )
         base_query = domain.events.filter(Event.event_type == EventType.page_view)
         data = AggregateStat.from_base_query(
-            base_query, Event.referrer_name, filter_none=True
+            base_query, Event.referrer_name, filter_none=True, group_limit=100
         )
         assert len(data) == 1
         assert data[0].value
