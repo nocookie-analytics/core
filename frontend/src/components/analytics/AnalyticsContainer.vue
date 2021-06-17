@@ -26,10 +26,7 @@
             </router-link>
           </template>
           <template v-slot:itemName="{ item }">
-            <Icon
-              :value="item.value"
-              v-if="block.urlParamName !== 'country'"
-            />&nbsp;
+            <!-- router-link only if there's more than one value and it's not excluded, otherwise we render it as plain text -->
             <router-link
               v-if="
                 block.urlParamName &&
@@ -40,23 +37,16 @@
               "
               :to="{ query: filterURL(block.urlParamName, item.value) }"
             >
-              <span v-if="block.urlParamName === 'country'">
-                <country-flag :countryName="item.value" />
-                {{ countryCodeToCountryName(item.value) }}
-              </span>
-              <span v-else>
-                {{ item.value }}
-              </span>
+              <AnalyticsValue
+                :valueType="block.urlParamName"
+                :value="item.value"
+              />
             </router-link>
             <span v-else>
-              <span v-if="block.urlParamName === 'country'">
-                <country-flag :countryName="item.value" />
-
-                {{ countryCodeToCountryName(item.value) }}
-              </span>
-              <span v-else>
-                {{ item.value }}
-              </span>
+              <AnalyticsValue
+                :valueType="block.urlParamName"
+                :value="item.value"
+              />
             </span>
           </template>
         </AnalyticsBlock>
@@ -72,10 +62,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import AnalyticsBlock, {
   BlockType,
 } from '@/components/analytics/AnalyticsBlock.vue';
-import Icon from '@/components/analytics/Icon.vue';
+import AnalyticsValue from './AnalyticsValue.vue';
 import { parseISO } from 'date-fns';
-import countryCodes from '@/components/data/countryCodes';
-import CountryFlag from '@/components/analytics/CountryFlag.vue';
 import {
   readBrowser,
   readCountry,
@@ -88,8 +76,7 @@ import {
 @Component({
   components: {
     AnalyticsBlock,
-    CountryFlag,
-    Icon,
+    AnalyticsValue,
   },
 })
 export default class AnalyticsContainer extends Vue {
@@ -227,10 +214,6 @@ export default class AnalyticsContainer extends Vue {
       ...this.$route.query,
       [key]: value,
     };
-  }
-
-  countryCodeToCountryName(countryCode: string): string {
-    return countryCodes[countryCode] || countryCode;
   }
 }
 </script>
