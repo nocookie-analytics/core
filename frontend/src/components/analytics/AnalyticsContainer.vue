@@ -14,6 +14,7 @@
         :md="block.cols * 4"
         :sm="block.cols * 4"
         :xl="block.cols"
+        cols="12"
       >
         <AnalyticsBlock :blockData="block.data" :blockType="block.type">
           <template v-slot:blockTitle>

@@ -1,12 +1,9 @@
 <template>
-  <span v-if="valueType === 'country'">
+  <span v-if="valueType === 'country'" class="nowrap">
     <country-flag :countryName="value" />
     {{ countryCodeToCountryName(value) }}
   </span>
-  <span v-else>
-    <Icon :value="value" />&nbsp;
-    {{ value }}
-  </span>
+  <span v-else class="nowrap"> <Icon :value="value" />&nbsp; {{ value }} </span>
 </template>
 <script lang="ts">
 import countryCodes from '@/components/data/countryCodes';
@@ -29,3 +26,14 @@ export default class AnalyticsValue extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.nowrap {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  max-width: 400px;
+  min-width: 200px;
+}
+</style>
