@@ -2,15 +2,19 @@
   <span class="fixed-min-width">
     <span v-if="block.urlParamName === 'country'" class="nowrap">
       <country-flag :countryName="item.value" style="margin-right: 5px" />
-      <router-link :to="filterOnThisItemUrl" v-if="filterOnThisItemUrl">{{
-        countryCodeToCountryName(item.value)
-      }}</router-link>
+      <optional-router-link
+        :to="filterOnThisItemUrl"
+        :disabled="!filterOnThisItemUrl"
+        >{{ countryCodeToCountryName(item.value) }}</optional-router-link
+      >
     </span>
     <span v-else-if="block.urlParamName === 'page'">
       <span class="nowrap">
-        <router-link :to="filterOnThisItemUrl" v-if="filterOnThisItemUrl">{{
-          item.value
-        }}</router-link>
+        <optional-router-link
+          :to="filterOnThisItemUrl"
+          :disabled="!filterOnThisItemUrl"
+          >{{ item.value }}</optional-router-link
+        >
       </span>
       <a
         :href="externalLink"
@@ -22,10 +26,10 @@
       </a>
     </span>
     <span v-else>
-      <Icon :value="item.value" /><router-link
+      <Icon :value="item.value" /><optional-router-link
         :to="filterOnThisItemUrl"
-        v-if="filterOnThisItemUrl"
-        >{{ item.value }}</router-link
+        :disabled="!filterOnThisItemUrl"
+        >{{ item.value }}</optional-router-link
       ></span
     >
   </span>
@@ -38,11 +42,13 @@ import CountryFlag from '@/components/analytics/CountryFlag.vue';
 import { DeclarativeAnalyticsBlock } from './interfaces';
 import { AggregateStat } from '@/generated';
 import { readCurrentDomain } from '@/store/analytics/getters';
+import OptionalRouterLink from './OptionalRouterLink.vue';
 
 @Component({
   components: {
     CountryFlag,
     Icon,
+    OptionalRouterLink,
   },
 })
 export default class AnalyticsSingleValue extends Vue {
@@ -69,7 +75,7 @@ export default class AnalyticsSingleValue extends Vue {
         };
       }
     }
-    return undefined;
+    return null;
   }
 }
 </script>
