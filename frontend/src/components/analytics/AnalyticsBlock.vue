@@ -1,6 +1,6 @@
 <template>
   <v-col v-if="hasData">
-    <span v-if="blockType == BlockType.AggregateStat">
+    <span v-if="blockType == DeclarativeBlockType.AggregateStat">
       <v-card-title>
         <slot name="blockTitle"></slot>
       </v-card-title>
@@ -13,7 +13,7 @@
       </v-card>
     </span>
 
-    <span v-if="blockType == BlockType.ArrayPageViewsPerDayStat">
+    <span v-if="blockType == DeclarativeBlockType.ArrayPageViewsPerDayStat">
       <LineChart :blockData="blockData" :styles="styles" />
     </span>
   </v-col>
@@ -27,19 +27,13 @@ import {
   PageViewStat,
 } from '@/generated';
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { DeclarativeBlockType } from './interfaces';
 import LineChart from './LineChart.vue';
 import Tabular from './Tabular.vue';
 
-export enum BlockType {
-  AggregateStat,
-  ArrayAvgMetricPerDayStat,
-  PageViewStat,
-  ArrayPageViewsPerDayStat,
-}
-
 @Component({ components: { LineChart, Tabular } })
 export default class AnalyticsBlock extends Vue {
-  BlockType = BlockType;
+  DeclarativeBlockType = DeclarativeBlockType;
   // TODO: There's gotta be a better way to handle this, we don't need an explicit blockType when we already have blockData with a type
   @Prop() public blockData!:
     | Array<AggregateStat>
@@ -47,7 +41,7 @@ export default class AnalyticsBlock extends Vue {
     | Array<AvgMetricPerDayStat>
     | Array<PageViewsPerDayStat>;
 
-  @Prop() public blockType!: BlockType;
+  @Prop() public blockType!: DeclarativeBlockType;
 
   get hasData(): boolean {
     if (this.blockData && Array.isArray(this.blockData)) {

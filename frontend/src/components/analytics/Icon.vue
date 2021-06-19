@@ -26,6 +26,7 @@ import {
   mdiSpider,
   mdiTwitter,
   mdiUbuntu,
+  mdiOpenInNew,
 } from '@mdi/js';
 
 const iconMap = {
@@ -56,6 +57,7 @@ const iconMap = {
   Ubuntu: mdiUbuntu,
   Windows: mdiMicrosoftWindows,
   iOS: mdiAppleIos,
+  openInNew: mdiOpenInNew,
 };
 
 @Component
