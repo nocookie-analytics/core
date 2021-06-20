@@ -4,7 +4,7 @@
       <country-flag :countryName="item.value" style="margin-right: 5px" />
       <optional-router-link
         :to="filterOnThisItemUrl"
-        :disabled="!filterOnThisItemUrl"
+        :disabled="!filterOnThisItemUrl.query"
         >{{ countryCodeToCountryName(item.value) }}</optional-router-link
       >
     </span>
@@ -12,7 +12,7 @@
       <span class="nowrap">
         <optional-router-link
           :to="filterOnThisItemUrl"
-          :disabled="!filterOnThisItemUrl"
+          :disabled="!filterOnThisItemUrl.query"
           >{{ item.value }}</optional-router-link
         >
       </span>
@@ -26,10 +26,10 @@
       </a>
     </span>
     <span v-else>
-      <Icon :value="item.value" /><optional-router-link
+      <Icon :value="item.value" /><router-link
         :to="filterOnThisItemUrl"
-        :disabled="!filterOnThisItemUrl"
-        >{{ item.value }}</optional-router-link
+        :disabled="!filterOnThisItemUrl.query"
+        >{{ item.value }}</router-link
       ></span
     >
   </span>
@@ -70,12 +70,14 @@ export default class AnalyticsSingleValue extends Vue {
       const excludes = this.block.urlExclude;
       if (excludes && !excludes.includes(value)) {
         return {
-          ...this.$route.query,
-          [this.block.urlParamName]: value,
+          query: {
+            ...this.$route.query,
+            [this.block.urlParamName]: value,
+          },
         };
       }
     }
-    return null;
+    return { query: null };
   }
 }
 </script>
