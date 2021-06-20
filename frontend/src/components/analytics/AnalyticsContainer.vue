@@ -31,20 +31,11 @@
 </template>
 
 <script lang="ts">
-import { AggregateStat, AnalyticsData } from '@/generated';
+import { AnalyticsData } from '@/generated';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import AnalyticsBlock from '@/components/analytics/AnalyticsBlock.vue';
 import AnalyticsSingleValue from './AnalyticsSingleValue.vue';
 import AnalyticsBlockTitle from './AnalyticsBlockTitle.vue';
-import { parseISO } from 'date-fns';
-import {
-  readBrowser,
-  readCountry,
-  readDevice,
-  readOs,
-  readPage,
-  readReferrerName,
-} from '@/store/analytics/getters';
 import { DeclarativeBlockType, DeclarativeAnalyticsBlock } from './interfaces';
 
 @Component({
@@ -57,38 +48,6 @@ import { DeclarativeBlockType, DeclarativeAnalyticsBlock } from './interfaces';
 export default class AnalyticsContainer extends Vue {
   DeclarativeBlockType = DeclarativeBlockType;
   @Prop() public analyticsData!: AnalyticsData;
-
-  get startDate(): Date {
-    return parseISO(this.analyticsData.start);
-  }
-
-  get endDate(): Date {
-    return parseISO(this.analyticsData.end);
-  }
-
-  get page(): string | undefined {
-    return readPage(this.$store);
-  }
-
-  get country(): string | undefined {
-    return readCountry(this.$store);
-  }
-
-  get browser(): string | undefined {
-    return readBrowser(this.$store);
-  }
-
-  get os(): string | undefined {
-    return readOs(this.$store);
-  }
-
-  get device(): string | undefined {
-    return readDevice(this.$store);
-  }
-
-  get referrerName(): string | undefined {
-    return readReferrerName(this.$store);
-  }
 
   get blocks(): Array<DeclarativeAnalyticsBlock> {
     const blocks = [
@@ -172,26 +131,6 @@ export default class AnalyticsContainer extends Vue {
       },
     ];
     return blocks.filter((block) => block.data.length > 0);
-  }
-
-  itemUrl(block: DeclarativeAnalyticsBlock, item): string {
-    if (
-      block.urlParamName &&
-      block.data &&
-      block.data.length > 1 &&
-      block.urlExclude &&
-      !block.urlExclude.includes(item.value)
-    ) {
-      return 'hello';
-    }
-    return 'hello';
-  }
-
-  filterURL(key: string, value: string | undefined = undefined) {
-    return {
-      ...this.$route.query,
-      [key]: value,
-    };
   }
 }
 </script>
