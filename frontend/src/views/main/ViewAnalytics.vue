@@ -31,11 +31,12 @@
             :autoApply="true"
             v-model="dateRange"
             :max-date="new Date()"
+            :ranges="dateRanges"
           >
             <template v-slot:input="picker">
               <v-card flat class="text-no-wrap text-truncate">
-                {{ picker.startDate.toLocaleString() }} -
-                {{ picker.endDate.toLocaleString() }}
+                {{ formatISO9075(picker.startDate) }} -
+                {{ formatISO9075(picker.endDate) }}
               </v-card>
             </template>
           </date-range-picker>
@@ -60,6 +61,13 @@ import {
 } from '@/store/analytics/getters';
 import { AnalyticsData } from '@/generated';
 import { getFiltersFromUrl } from '@/store/analytics';
+import {
+  addMonths,
+  addYears,
+  startOfMonth,
+  startOfYear,
+  formatISO9075,
+} from 'date-fns';
 
 @Component({
   components: {
@@ -68,8 +76,19 @@ import { getFiltersFromUrl } from '@/store/analytics';
   },
 })
 export default class ViewAnalytics extends Vue {
+  formatISO9075 = formatISO9075;
   get domainName(): string {
     return this.$router.currentRoute.params.domainName;
+  }
+
+  get dateRanges() {
+    const today = new Date();
+    return {
+      'This month': [startOfMonth(today), today],
+      'Last 1 month': [addMonths(today, -1), today],
+      'This year': [startOfYear(today), today],
+      'Last 1 year': [addYears(today, -12), today],
+    };
   }
 
   get dateRange() {

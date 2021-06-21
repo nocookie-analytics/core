@@ -48,7 +48,8 @@ module.exports = {
                 `./dist/**/*.html`,
                 `./src/**/*.vue`,
                 `./node_modules/vuetify/src/**/*.ts`,
-                `./node_modules/uplot/dist/**`,
+                `./node_modules/uplot/dist/uPlot.min.css`,
+                './node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css',
               ],
               variables: true,
               whitelist: [
