@@ -89,7 +89,6 @@ services:
       - .env
     environment:
       - SERVER_NAME=${DOMAIN}
-      - SERVER_HOST=https://${DOMAIN}
       # Allow explicit env var override for tests
       - SMTP_HOST=${SMTP_HOST}
     build:

@@ -11,7 +11,14 @@ class Settings(BaseSettings):
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
     SERVER_NAME: str
-    SERVER_HOST: AnyHttpUrl
+    SERVER_HOST: Optional[AnyHttpUrl] = None
+
+    @validator("SERVER_HOST", pre=True)
+    def assemble_server_host(cls, v: Optional[AnyHttpUrl], values: Dict[str, Any]):
+        if not v:
+            return f'https://${values["SERVER_NAME"]}'
+        return v
+
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
     # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
@@ -30,20 +37,31 @@ class Settings(BaseSettings):
 
     @validator("SENTRY_DSN", pre=True)
     def sentry_dsn_can_be_blank(cls, v: str) -> Optional[str]:
-        if len(v) == 0:
+        if v is None:
+            return v
+        if isinstance(v, str) and len(v) == 0:
             return None
         return v
 
-    POSTGRES_SERVER: str
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str
-    POSTGRES_DB: str
+    POSTGRES_SERVER: Optional[str]
+    POSTGRES_USER: Optional[str]
+    POSTGRES_PASSWORD: Optional[str]
+    POSTGRES_DB: Optional[str]
+    DATABASE_URL: Optional[PostgresDsn] = None
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
 
     @validator("SQLALCHEMY_DATABASE_URI", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
-        if isinstance(v, str):
-            return v
+        database_url = values.get("DATABASE_URL")
+        if database_url:
+            return database_url
+        if not (
+            values.get("POSTGRES_USER")
+            or values.get("POSTGRES_PASSWORD")
+            or values.get("POSTGRES_SERVER")
+            or values.get("POSTGRES_DB")
+        ):
+            raise ValueError()
         return PostgresDsn.build(
             scheme="postgresql",
             user=values.get("POSTGRES_USER"),
