@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     @validator("SERVER_HOST", pre=True)
     def assemble_server_host(cls, v: Optional[AnyHttpUrl], values: Dict[str, Any]):
         if not v:
-            return f'https://${values["SERVER_NAME"]}'
+            return f'https://{values["SERVER_NAME"]}'
         return v
 
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
