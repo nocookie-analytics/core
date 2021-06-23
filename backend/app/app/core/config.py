@@ -47,14 +47,12 @@ class Settings(BaseSettings):
     POSTGRES_USER: Optional[str]
     POSTGRES_PASSWORD: Optional[str]
     POSTGRES_DB: Optional[str]
-    DATABASE_URL: Optional[PostgresDsn] = None
-    SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
+    DATABASE_URL: Optional[PostgresDsn]
 
-    @validator("SQLALCHEMY_DATABASE_URI", pre=True)
-    def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
-        database_url = values.get("DATABASE_URL")
-        if database_url:
-            return database_url
+    @validator("DATABASE_URL", pre=True)
+    def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> str:
+        if v:
+            return v
         if not (
             values.get("POSTGRES_USER")
             or values.get("POSTGRES_PASSWORD")
