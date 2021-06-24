@@ -3,8 +3,6 @@
 # Exit in case of error
 set -e
 
-DOMAIN=${DOMAIN} \
-TRAEFIK_TAG=${TRAEFIK_TAG} \
 STACK_NAME=${STACK_NAME} \
 TAG=${TAG} \
 docker-compose \
