@@ -1,5 +1,6 @@
 from datetime import datetime
 import logging
+import sentry_sdk
 from app.db.session import SessionLocal
 import socket
 
@@ -38,6 +39,15 @@ if settings.BACKEND_CORS_ORIGINS:
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 simplify_operation_ids(app)
+
+if settings.SENTRY_DSN:
+    sentry_sdk.init(
+        settings.SENTRY_DSN,
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        # We recommend adjusting this value in production.
+        traces_sample_rate=1.0,
+    )
 
 
 @app.on_event("startup")
