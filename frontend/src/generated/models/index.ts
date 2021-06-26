@@ -11,6 +11,7 @@ export * from './domain-update';
 export * from './event-created';
 export * from './event-type';
 export * from './httpvalidation-error';
+export * from './interval-type';
 export * from './metric-type';
 export * from './msg';
 export * from './page-view-stat';

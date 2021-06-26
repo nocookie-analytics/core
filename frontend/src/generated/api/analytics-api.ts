@@ -26,6 +26,8 @@ import { AnalyticsData } from '../models';
 import { AnalyticsType } from '../models';
 // @ts-ignore
 import { HTTPValidationError } from '../models';
+// @ts-ignore
+import { IntervalType } from '../models';
 /**
  * AnalyticsApi - axios parameter creator
  * @export
@@ -43,12 +45,15 @@ export const AnalyticsApiAxiosParamCreator = function (configuration?: Configura
          * @param {string} [os] 
          * @param {string} [device] 
          * @param {string} [referrerName] 
+         * @param {number} [limit] 
+         * @param {boolean} [includeBots] 
+         * @param {IntervalType} [interval] 
          * @param {string} [start] 
          * @param {string} [end] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAnalytics: async (domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: string, referrerName?: string, start?: string, end?: string, options: any = {}): Promise<RequestArgs> => {
+        getAnalytics: async (domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: string, referrerName?: string, limit?: number, includeBots?: boolean, interval?: IntervalType, start?: string, end?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'domainName' is not null or undefined
             assertParamExists('getAnalytics', 'domainName', domainName)
             // verify required parameter 'include' is not null or undefined
@@ -101,6 +106,18 @@ export const AnalyticsApiAxiosParamCreator = function (configuration?: Configura
                 localVarQueryParameter['referrer_name'] = referrerName;
             }
 
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (includeBots !== undefined) {
+                localVarQueryParameter['include_bots'] = includeBots;
+            }
+
+            if (interval !== undefined) {
+                localVarQueryParameter['interval'] = interval;
+            }
+
             if (start !== undefined) {
                 localVarQueryParameter['start'] = (start as any instanceof Date) ?
                     (start as any).toISOString() :
@@ -145,13 +162,16 @@ export const AnalyticsApiFp = function(configuration?: Configuration) {
          * @param {string} [os] 
          * @param {string} [device] 
          * @param {string} [referrerName] 
+         * @param {number} [limit] 
+         * @param {boolean} [includeBots] 
+         * @param {IntervalType} [interval] 
          * @param {string} [start] 
          * @param {string} [end] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: string, referrerName?: string, start?: string, end?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AnalyticsData>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAnalytics(domainName, include, page, country, browser, os, device, referrerName, start, end, options);
+        async getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: string, referrerName?: string, limit?: number, includeBots?: boolean, interval?: IntervalType, start?: string, end?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AnalyticsData>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAnalytics(domainName, include, page, country, browser, os, device, referrerName, limit, includeBots, interval, start, end, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -175,13 +195,16 @@ export const AnalyticsApiFactory = function (configuration?: Configuration, base
          * @param {string} [os] 
          * @param {string} [device] 
          * @param {string} [referrerName] 
+         * @param {number} [limit] 
+         * @param {boolean} [includeBots] 
+         * @param {IntervalType} [interval] 
          * @param {string} [start] 
          * @param {string} [end] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: string, referrerName?: string, start?: string, end?: string, options?: any): AxiosPromise<AnalyticsData> {
-            return localVarFp.getAnalytics(domainName, include, page, country, browser, os, device, referrerName, start, end, options).then((request) => request(axios, basePath));
+        getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: string, referrerName?: string, limit?: number, includeBots?: boolean, interval?: IntervalType, start?: string, end?: string, options?: any): AxiosPromise<AnalyticsData> {
+            return localVarFp.getAnalytics(domainName, include, page, country, browser, os, device, referrerName, limit, includeBots, interval, start, end, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -250,6 +273,27 @@ export interface AnalyticsApiGetAnalyticsRequest {
 
     /**
      * 
+     * @type {number}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly limit?: number
+
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly includeBots?: boolean
+
+    /**
+     * 
+     * @type {IntervalType}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly interval?: IntervalType
+
+    /**
+     * 
      * @type {string}
      * @memberof AnalyticsApiGetAnalytics
      */
@@ -279,6 +323,6 @@ export class AnalyticsApi extends BaseAPI {
      * @memberof AnalyticsApi
      */
     public getAnalytics(requestParameters: AnalyticsApiGetAnalyticsRequest, options?: any) {
-        return AnalyticsApiFp(this.configuration).getAnalytics(requestParameters.domainName, requestParameters.include, requestParameters.page, requestParameters.country, requestParameters.browser, requestParameters.os, requestParameters.device, requestParameters.referrerName, requestParameters.start, requestParameters.end, options).then((request) => request(this.axios, this.basePath));
+        return AnalyticsApiFp(this.configuration).getAnalytics(requestParameters.domainName, requestParameters.include, requestParameters.page, requestParameters.country, requestParameters.browser, requestParameters.os, requestParameters.device, requestParameters.referrerName, requestParameters.limit, requestParameters.includeBots, requestParameters.interval, requestParameters.start, requestParameters.end, options).then((request) => request(this.axios, this.basePath));
     }
 }

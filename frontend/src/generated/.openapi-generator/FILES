@@ -25,6 +25,7 @@ models/event-created.ts
 models/event-type.ts
 models/httpvalidation-error.ts
 models/index.ts
+models/interval-type.ts
 models/metric-type.ts
 models/msg.ts
 models/page-view-stat.ts
