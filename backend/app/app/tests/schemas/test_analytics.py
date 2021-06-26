@@ -59,6 +59,20 @@ class TestPageViewsPerDayStat:
         assert per_day_data[-1].total_visits == 2
         assert per_day_data[-1].visitors == 1
 
+    def test_get_pageviews_per_hour(self, db: Session, mock_ip_address):
+        domain = create_random_domain(db)
+        create_random_page_view_event(db, domain=domain, ip_address=mock_ip_address)
+        base_query = domain.events.filter(Event.event_type == EventType.page_view)
+        end = datetime.now()
+        start = end - timedelta(days=1)
+
+        per_hour_data = PageViewsPerDayStat.from_base_query(
+            base_query, start=start, end=end, interval=IntervalType.HOUR
+        )
+        assert len(per_hour_data) == 25
+        assert per_hour_data[-1].total_visits == 1
+        assert per_hour_data[-1].visitors == 1
+
 
 class TestAggregateStat:
     def test_aggregate_stat(self, db: Session, mock_ip_address):
