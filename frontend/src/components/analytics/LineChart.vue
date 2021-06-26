@@ -31,20 +31,37 @@ export default class LineChart extends Vue {
       legend: {
         show: true,
       },
+      hooks: {
+        setSelect: [
+          (u: uPlot) => {
+            let min = u.posToVal(u.select.left, 'x');
+            let max = u.posToVal(u.select.left + u.select.width, 'x');
+            const start = new Date(min * 1000);
+            const end = new Date(max * 1000);
+            this.$router.replace({
+              query: {
+                ...this.$route.query,
+                start: start.toISOString(),
+                end: end.toISOString(),
+              },
+            });
+          },
+        ],
+      },
       series: [
         {
           value: (self, rawValue) => new Date(rawValue * 1000).toDateString(),
           label: 'Date',
         },
         {
-          // initial toggled state (optional)
-          show: true,
+          points: {
+            size: 10,
+          },
 
           spanGaps: false,
 
           // in-legend display
           label: 'Page views',
-          value: (self, rawValue) => rawValue,
 
           // series style
           stroke: '#e52c3c',
@@ -52,14 +69,15 @@ export default class LineChart extends Vue {
           fill: '#fa506c',
         },
         {
-          // initial toggled state (optional)
+          points: {
+            size: 10,
+          },
           show: true,
 
           spanGaps: false,
 
           // in-legend display
           label: 'Visitors',
-          value: (self, rawValue) => rawValue,
 
           // series style
           stroke: '#f7b1ab',

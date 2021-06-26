@@ -1,4 +1,4 @@
-import { AnalyticsApi, AnalyticsType } from '@/generated';
+import { AnalyticsApi, AnalyticsType, IntervalType } from '@/generated';
 import { getStoreAccessors } from 'typesafe-vuex';
 import { ActionContext } from 'vuex';
 import { RootState } from '../state';
@@ -35,6 +35,13 @@ export const actions = {
       return Promise.resolve();
     }
     try {
+      const start = context.state.filters.start;
+      const end = context.state.filters.end;
+      let interval = IntervalType.Day;
+      if ((end.valueOf() - start.valueOf()) / 1000 <= 86400 * 7) {
+        // If the filter interval is shorter than 7 days, then show a hourly view
+        interval = IntervalType.Hour;
+      }
       const response = await analyticsApi.getAnalytics({
         domainName,
         include: [
@@ -58,8 +65,9 @@ export const actions = {
         ...context.state.filters,
         // start and end are already part of destructured filters, but as Date type
         // The API needs them as string
-        start: context.state.filters.start.toISOString(),
-        end: context.state.filters.end.toISOString(),
+        start: start.toISOString(),
+        end: end.toISOString(),
+        interval,
       });
       const analyticsData = response.data;
       commitSetAnalyticsData(context, analyticsData);

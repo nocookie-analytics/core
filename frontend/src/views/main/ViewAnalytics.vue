@@ -7,7 +7,7 @@
           <v-card-text>
             <div class="headline font-weight-light ma-5">
               {{ analyticsError }} (You might need to
-              <a href="/login">log-in)</a>
+              <a href="/login">log-in</a>)
             </div>
           </v-card-text>
         </v-card>
