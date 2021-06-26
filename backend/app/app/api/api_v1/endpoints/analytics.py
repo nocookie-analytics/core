@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from app import models
 from app import crud
 from app.api import deps
-from app.schemas.analytics import AnalyticsData, AnalyticsType
+from app.schemas.analytics import AnalyticsData, AnalyticsType, IntervalType
 
 router = APIRouter()
 
@@ -51,6 +51,7 @@ def get_analytics(
     limit: int = 100,
     current_user: models.User = Depends(deps.get_current_active_user_silent),
     include_bots: bool = False,
+    interval: IntervalType = IntervalType.DAY,
     db: Session = Depends(deps.get_db),
 ):
     # TODO: This section (getting domain/verifying ownership)
@@ -75,4 +76,5 @@ def get_analytics(
         group_limit=limit,
         include_bots=include_bots,
         referrer_name=referrer_name,
+        interval=interval,
     )

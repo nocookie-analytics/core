@@ -34,6 +34,11 @@ class AnalyticsType(Enum):
     CLS_PER_DAY = "cls_per_day"
 
 
+class IntervalType(Enum):
+    DAY = "day"
+    HOUR = "hour"
+
+
 class PydanticArrow(datetime.datetime):
     # https://github.com/tiangolo/fastapi/issues/1285
     @classmethod
@@ -81,22 +86,28 @@ class AggregateStat(BaseModel):
 class PageViewsPerDayStat(BaseModel):
     total_visits: int
     visitors: int
-    date: datetime.date
+    date: datetime.datetime
 
     @staticmethod
     def from_base_query(
-        base_query: Query, start: datetime.datetime, end: datetime.datetime
+        base_query: Query,
+        start: datetime.datetime,
+        end: datetime.datetime,
+        interval: IntervalType,
     ) -> List[PageViewsPerDayStat]:
+        interval_text = "1 day"
+        if interval == IntervalType.HOUR:
+            interval_text = "1 hour"
         rows = (
-            base_query.group_by(column("one_day"))
+            base_query.group_by(column("interval"))
             .with_entities(
                 func.time_bucket_gapfill(
-                    "1 day", Event.timestamp, start.date(), end.date()
-                ).label("one_day"),
+                    interval_text, Event.timestamp, start.date(), end.date()
+                ).label("interval"),
                 func.coalesce(func.count(), 0),
                 func.coalesce(func.count(func.distinct(Event.visitor_fingerprint)), 0),
             )
-            .order_by("one_day")
+            .order_by("interval")
         )
         return [
             PageViewsPerDayStat(date=row[0], total_visits=row[1], visitors=row[2])

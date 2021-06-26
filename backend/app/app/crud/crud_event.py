@@ -14,6 +14,7 @@ from app.models.event import Event, EventType, MetricType, ReferrerMediumType
 from app.models.parsed_ua import ParsedUA
 from app.schemas.analytics import (
     AvgMetricPerDayStat,
+    IntervalType,
     PageViewsPerDayStat,
     AggregateStat,
     AnalyticsData,
@@ -154,6 +155,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         referrer_name: str = None,
         group_limit: int = None,
         include_bots: bool = False,
+        interval: IntervalType = IntervalType.DAY,
     ) -> AnalyticsData:
         data = AnalyticsData(start=start, end=end)
         for field in fields:
@@ -265,7 +267,10 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 )
             elif field == AnalyticsType.PAGEVIEWS_PER_DAY:
                 data.pageviews_per_day = PageViewsPerDayStat.from_base_query(
-                    base_query, start=start.datetime, end=end.datetime
+                    base_query,
+                    start=start.datetime,
+                    end=end.datetime,
+                    interval=interval,
                 )
             elif field == AnalyticsType.LCP_PER_DAY:
                 data.lcp_per_day = AvgMetricPerDayStat.from_base_query(
