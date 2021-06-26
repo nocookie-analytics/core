@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="analyticsData" fluid class="pa-0">
+  <v-container v-if="analyticsData" class="pa-0">
     <v-row no-gutters>
       <AnalyticsBlock
         :blockData="analyticsData.pageviews_per_day"
