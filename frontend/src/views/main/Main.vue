@@ -170,7 +170,7 @@ const startRouteGuard = async (to, from, next) => {
   await dispatchCheckLoggedIn(store);
   if (readIsLoggedIn(store)) {
     if (to.path === '/login' || to.path === '/') {
-      next('/main/');
+      next('/domains/');
     } else {
       next();
     }
