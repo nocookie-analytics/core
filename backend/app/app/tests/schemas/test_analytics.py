@@ -6,6 +6,7 @@ from sqlalchemy.orm.session import Session
 from app.models.event import Event, EventType, MetricType
 from app.schemas.analytics import (
     AvgMetricPerDayStat,
+    IntervalType,
     PageViewsPerDayStat,
     AggregateStat,
     AnalyticsType,
@@ -29,7 +30,7 @@ class TestPageViewsPerDayStat:
         start = end - timedelta(days=1)
 
         per_day_data = PageViewsPerDayStat.from_base_query(
-            base_query, start=start, end=end
+            base_query, start=start, end=end, interval=IntervalType.DAY
         )
         assert data.total_visits == 1
         assert len(per_day_data) == 2
@@ -40,7 +41,7 @@ class TestPageViewsPerDayStat:
         create_random_page_view_event(db, domain=domain, ip_address=mock_ip_address)
         data = PageViewStat.from_base_query(base_query)
         per_day_data = PageViewsPerDayStat.from_base_query(
-            base_query, start=start, end=end
+            base_query, start=start, end=end, interval=IntervalType.DAY
         )
         assert data.total_visits == 2
         assert len(per_day_data) == 2
@@ -51,7 +52,7 @@ class TestPageViewsPerDayStat:
         create_random_metric_event(db, domain=domain, ip_address=mock_ip_address)
         data = PageViewStat.from_base_query(base_query)
         per_day_data = PageViewsPerDayStat.from_base_query(
-            base_query, start=start, end=end
+            base_query, start=start, end=end, interval=IntervalType.DAY
         )
         assert data.total_visits == 2
         assert len(per_day_data) == 2
