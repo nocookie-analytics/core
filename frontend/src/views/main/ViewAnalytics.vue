@@ -81,7 +81,7 @@ export default class ViewAnalytics extends Vue {
     return this.$router.currentRoute.params.domainName;
   }
 
-  get dateRanges() {
+  get dateRanges(): Record<string, Array<Date>> {
     const today = new Date();
     return {
       'This month': [startOfMonth(today), today],
@@ -91,14 +91,14 @@ export default class ViewAnalytics extends Vue {
     };
   }
 
-  get dateRange() {
+  get dateRange(): Record<string, Date> {
     return {
       startDate: readStartDate(this.$store),
       endDate: readEndDate(this.$store),
     };
   }
 
-  set dateRange(dateRange) {
+  set dateRange(dateRange: Record<string, Date>) {
     this.$router.replace({
       query: {
         ...this.$route.query,
@@ -106,22 +106,6 @@ export default class ViewAnalytics extends Vue {
         end: dateRange.endDate.toISOString(),
       },
     });
-  }
-
-  get startDate(): Date {
-    return readStartDate(this.$store);
-  }
-
-  set startDate(value: Date) {
-    this.setQueryParam('start', value.toISOString());
-  }
-
-  get endDate(): Date {
-    return readEndDate(this.$store);
-  }
-
-  set endDate(value: Date) {
-    this.setQueryParam('end', value.toISOString());
   }
 
   get analyticsError(): string | null {
