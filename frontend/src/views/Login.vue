@@ -37,10 +37,10 @@
                   Incorrect email or password
                 </v-alert>
               </div>
-              <v-flex class="caption text-xs-right"
+              <v-flex
                 ><router-link to="/register">Register</router-link></v-flex
               >
-              <v-flex class="caption text-xs-right"
+              <v-flex
                 ><router-link to="/recover-password"
                   >Forgot your password?</router-link
                 ></v-flex
