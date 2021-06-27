@@ -45,6 +45,19 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <v-expansion-panels class="pa-3">
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          Add the script tag to your website
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <code v-pre>
+            &lt;script async defer
+            src="https://nocookieanalytics.com/latest.js"&gt;&lt;script&gt;
+          </code>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
   </v-container>
 </template>
 
