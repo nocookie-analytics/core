@@ -37,16 +37,14 @@
                   {{ registrationError }}
                 </v-alert>
               </div>
-              <v-flex><router-link to="/login">Login</router-link></v-flex>
-              <v-flex
-                ><router-link to="/recover-password"
-                  >Forgot your password?</router-link
-                ></v-flex
+              <v-flex>
+                <router-link to="/login">Go back to login</router-link></v-flex
               >
             </v-card-text>
             <v-card-actions>
+              <v-btn to="/recover-password"> Forgot your password? </v-btn>
               <v-spacer></v-spacer>
-              <v-btn @click.prevent="register">Register</v-btn>
+              <v-btn @click.prevent="register" color="primary">Register</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>

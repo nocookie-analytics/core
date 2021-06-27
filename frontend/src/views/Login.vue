@@ -37,18 +37,19 @@
                   Incorrect email or password
                 </v-alert>
               </div>
-              <v-flex
-                ><router-link to="/register">Register</router-link></v-flex
-              >
-              <v-flex
-                ><router-link to="/recover-password"
-                  >Forgot your password?</router-link
+              <v-flex>
+                <router-link to="/register"
+                  >Don't have an account yet?</router-link
                 ></v-flex
               >
             </v-card-text>
             <v-card-actions>
+              <v-btn to="/recover-password"> Forgot your password? </v-btn>
               <v-spacer></v-spacer>
-              <v-btn @click.prevent="submit">Login</v-btn>
+              <v-btn color="primary" @click.prevent="submit"
+                ><v-icon>{{ $vuetify.icons.values.login }}</v-icon
+                >Login</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-flex>

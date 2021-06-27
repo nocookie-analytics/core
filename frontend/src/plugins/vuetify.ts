@@ -28,6 +28,7 @@ import {
   mdiDotsVertical,
   mdiGroup,
   mdiLock,
+  mdiLogin,
   mdiPencil,
   mdiWeb,
 } from '@mdi/js';
@@ -55,6 +56,7 @@ export default new Vuetify({
       lock: mdiLock,
       pencil: mdiPencil,
       web: mdiWeb,
+      login: mdiLogin,
     },
   },
   theme: {
