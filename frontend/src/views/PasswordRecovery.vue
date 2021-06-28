@@ -22,7 +22,7 @@
               >
                 <v-text-field
                   @keyup.enter="submit"
-                  label="Username"
+                  label="Email"
                   type="text"
                   :prepend-icon="$vuetify.icons.values.account"
                   v-model="username"
