@@ -1,10 +1,12 @@
 <template>
   <v-container v-if="analyticsData" class="pa-0">
     <v-row no-gutters>
-      <AnalyticsBlock
-        :blockData="analyticsData.pageviews_per_day"
-        :blockType="DeclarativeBlockType.ArrayPageViewsPerDayStat"
-      />
+      <v-col>
+        <LineChart
+          :blockData="analyticsData.pageviews_per_day"
+          :styles="styles"
+        />
+      </v-col>
     </v-row>
     <v-row dense no-gutters>
       <v-col
@@ -24,6 +26,7 @@
 </template>
 
 <script lang="ts">
+import LineChart from './LineChart.vue';
 import { AnalyticsData } from '@/generated';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import AnalyticsBlock from '@/components/analytics/AnalyticsBlock.vue';
@@ -32,6 +35,7 @@ import { DeclarativeBlockType, DeclarativeAnalyticsBlock } from './interfaces';
 @Component({
   components: {
     AnalyticsBlock,
+    LineChart,
   },
 })
 export default class AnalyticsContainer extends Vue {
@@ -120,6 +124,12 @@ export default class AnalyticsContainer extends Vue {
       },
     ];
     return blocks.filter((block) => block.data.length > 0);
+  }
+  get styles(): Record<string, string> {
+    return {
+      height: '500px',
+      position: 'relative',
+    };
   }
 }
 </script>

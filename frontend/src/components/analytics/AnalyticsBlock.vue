@@ -18,23 +18,18 @@
         </Tabular>
       </v-card>
     </span>
-
-    <span v-if="blockType == DeclarativeBlockType.ArrayPageViewsPerDayStat">
-      <LineChart :blockData="block.data" :styles="styles" />
-    </span>
   </v-col>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { DeclarativeAnalyticsBlock, DeclarativeBlockType } from './interfaces';
-import LineChart from './LineChart.vue';
 import Tabular from './Tabular.vue';
 import AnalyticsSingleValue from './AnalyticsSingleValue.vue';
 import AnalyticsBlockTitle from './AnalyticsBlockTitle.vue';
 
 @Component({
-  components: { LineChart, Tabular, AnalyticsSingleValue, AnalyticsBlockTitle },
+  components: { Tabular, AnalyticsSingleValue, AnalyticsBlockTitle },
 })
 export default class AnalyticsBlock extends Vue {
   DeclarativeBlockType = DeclarativeBlockType;
@@ -68,13 +63,6 @@ export default class AnalyticsBlock extends Vue {
       return this.block.data.length !== 0;
     }
     return Boolean(this.block && this.block.data);
-  }
-
-  get styles(): Record<string, string> {
-    return {
-      height: '500px',
-      position: 'relative',
-    };
   }
 }
 </script>

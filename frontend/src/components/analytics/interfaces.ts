@@ -2,9 +2,6 @@ import { AggregateStat } from '@/generated';
 
 export enum DeclarativeBlockType {
   AggregateStat,
-  ArrayAvgMetricPerDayStat,
-  PageViewStat,
-  ArrayPageViewsPerDayStat,
 }
 
 export interface DeclarativeAnalyticsBlock {
