@@ -1,72 +1,65 @@
 <template>
-  <v-icon v-if="iconName">{{ iconName }}</v-icon>
+  <img
+    width="24"
+    height="24"
+    style="vertical-align: middle"
+    :src="iconUrl"
+    v-if="iconUrl"
+  />
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-import {
-  mdiAndroid,
-  mdiApple,
-  mdiAppleIos,
-  mdiAppleSafari,
-  mdiFacebook,
-  mdiFedora,
-  mdiFirefox,
-  mdiGithub,
-  mdiGoogle,
-  mdiGoogleChrome,
-  mdiInstagram,
-  mdiLaptopChromebook,
-  mdiLinux,
-  mdiMicrosoftBing,
-  mdiMicrosoftEdge,
-  mdiMicrosoftWindows,
-  mdiOpera,
-  mdiSpider,
-  mdiTwitter,
-  mdiUbuntu,
-  mdiOpenInNew,
-} from '@mdi/js';
+const directMatchIconMap = [
+  'android',
+  'android',
+  'apple',
+  'baidu',
+  'duckduckgo',
+  'facebook',
+  'firefox',
+  'fedora',
+  'github',
+  'google',
+  'huawei',
+  'instagram',
+  'ios',
+  'linux',
+  'nokia',
+  'opera',
+  'safari',
+  'samsung',
+  'twitter',
+  'ubuntu',
+  'windows',
+  'xiaomi',
+];
 
-const iconMap = {
-  Android: mdiAndroid,
-  Apple: mdiApple,
-  Bing: mdiMicrosoftBing,
-  Chrome: mdiGoogleChrome,
-  Chromium: mdiGoogleChrome,
-  'Chrome OS': mdiLaptopChromebook,
-  'Chrome Mobile': mdiGoogleChrome,
-  Edge: mdiMicrosoftEdge,
-  Facebook: mdiFacebook,
-  Fedora: mdiFedora,
-  Firefox: mdiFirefox,
-  'Firefox Mobile': mdiFirefox,
-  GitHub: mdiGithub,
-  Google: mdiGoogle,
-  Googlebot: mdiGoogle,
-  Instagram: mdiInstagram,
-  Linux: mdiLinux,
-  Mac: mdiApple,
-  'Mac OS X': mdiApple,
-  'Mobile Safari': mdiAppleSafari,
-  Opera: mdiOpera,
-  Safari: mdiAppleSafari,
-  Spider: mdiSpider,
-  Twitter: mdiTwitter,
-  Ubuntu: mdiUbuntu,
-  Windows: mdiMicrosoftWindows,
-  iOS: mdiAppleIos,
-  openInNew: mdiOpenInNew,
+const indirectIconMap = {
+  Bing: 'microsoftbing',
+  Chrome: 'googlechrome',
+  Chromium: 'googlechrome',
+  'Chrome Mobile': 'googlechrome',
+  Edge: 'microsoftedge',
+  'Firefox Mobile': 'firefox',
+  Googlebot: 'google',
+  'Mac OS X': 'macos',
+  'Mobile Safari': 'safari',
 };
 
 @Component
 export default class Icon extends Vue {
   @Prop() public value!: string;
 
-  get iconName(): string | undefined {
-    if (iconMap[this.value]) {
-      return iconMap[this.value];
+  get iconUrl(): string | undefined {
+    if (directMatchIconMap.includes(this.value.toLowerCase())) {
+      return `/static/brand-icons/${this.value.toLowerCase()}.svg`;
+    }
+    if (indirectIconMap[this.value]) {
+      return `/static/brand-icons/${indirectIconMap[
+        this.value
+      ].toLowerCase()}.svg`;
     }
     return undefined;
   }

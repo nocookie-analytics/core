@@ -29,6 +29,7 @@ import {
   mdiGroup,
   mdiLock,
   mdiLogin,
+  mdiOpenInNew,
   mdiPencil,
   mdiWeb,
 } from '@mdi/js';
@@ -57,6 +58,7 @@ export default new Vuetify({
       pencil: mdiPencil,
       web: mdiWeb,
       login: mdiLogin,
+      openInNew: mdiOpenInNew,
     },
   },
   theme: {

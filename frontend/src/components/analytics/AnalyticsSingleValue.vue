@@ -22,14 +22,14 @@
         target="_blank"
         class="external-link"
       >
-        <Icon value="openInNew" />
+        <v-icon>{{ $vuetify.icons.values.openInNew }}</v-icon>
       </a>
     </span>
     <span v-else>
-      <Icon :value="item.value" /><router-link
+      <Icon :value="item.value" />&nbsp;<optional-router-link
         :to="filterOnThisItemUrl"
         :disabled="!filterOnThisItemUrl.query"
-        >{{ item.value }}</router-link
+        >{{ item.value }}</optional-router-link
       ></span
     >
   </span>
