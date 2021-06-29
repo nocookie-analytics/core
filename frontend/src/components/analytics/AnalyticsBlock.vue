@@ -2,16 +2,13 @@
   <v-col v-if="hasData">
     <span v-if="blockType == DeclarativeBlockType.AggregateStat">
       <v-card-title>
-        <AnalyticsBlockTitle :block="block" />
-        <span v-if="totalPages > 1">
-          <v-icon large :disabled="!hasPrevPage" @click="goToPrevPage">{{
-            $vuetify.icons.values.chevronLeft
-          }}</v-icon>
-          {{ currentPage + 1 }}/{{ totalPages }}
-          <v-icon large :disabled="!hasNextPage" @click="goToNextPage">{{
-            $vuetify.icons.values.chevronRight
-          }}</v-icon>
-        </span>
+        <AnalyticsBlockTitle
+          :block="block"
+          :currentPage="currentPage"
+          :totalPages="totalPages"
+          v-on:next-page="currentPage += 1"
+          v-on:prev-page="currentPage -= 1"
+        />
       </v-card-title>
       <v-card class="pa-2" outlined tile>
         <Tabular :data="currentPageItems">
@@ -50,19 +47,8 @@ export default class AnalyticsBlock extends Vue {
 
   itemsPerPage = 10;
 
-  goToPrevPage() {
-    this.currentPage -= 1;
-  }
-  goToNextPage() {
-    this.currentPage += 1;
-  }
-
   private get totalPages() {
     return Math.ceil(this.block.data.length / this.itemsPerPage);
-  }
-
-  private get previousPageStart() {
-    return (this.currentPage - 1) * this.itemsPerPage;
   }
 
   private get currentPageStart() {
@@ -75,14 +61,6 @@ export default class AnalyticsBlock extends Vue {
 
   get currentPageItems() {
     return this.block.data.slice(this.currentPageStart, this.nextPageStart);
-  }
-
-  get hasNextPage() {
-    return this.currentPage < this.totalPages - 1;
-  }
-
-  get hasPrevPage() {
-    return this.currentPage > 0;
   }
 
   get hasData(): boolean {
