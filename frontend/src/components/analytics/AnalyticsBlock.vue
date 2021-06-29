@@ -2,52 +2,94 @@
   <v-col v-if="hasData">
     <span v-if="blockType == DeclarativeBlockType.AggregateStat">
       <v-card-title>
-        <slot name="blockTitle"></slot>
+        <AnalyticsBlockTitle :block="block" />
+        <span v-if="totalPages > 1">
+          <v-icon large :disabled="!hasPrevPage" @click="goToPrevPage">{{
+            $vuetify.icons.values.chevronLeft
+          }}</v-icon>
+          {{ currentPage + 1 }}/{{ totalPages }}
+          <v-icon large :disabled="!hasNextPage" @click="goToNextPage">{{
+            $vuetify.icons.values.chevronRight
+          }}</v-icon>
+        </span>
       </v-card-title>
       <v-card class="pa-2" outlined tile>
-        <Tabular :data="blockData">
+        <Tabular :data="currentPageItems">
           <template v-slot:itemName="{ item }">
-            <slot name="itemName" v-bind:item="item" />
+            <AnalyticsSingleValue :block="block" :item="item" />
           </template>
         </Tabular>
       </v-card>
     </span>
 
     <span v-if="blockType == DeclarativeBlockType.ArrayPageViewsPerDayStat">
-      <LineChart :blockData="blockData" :styles="styles" />
+      <LineChart :blockData="block.data" :styles="styles" />
     </span>
   </v-col>
 </template>
 
 <script lang="ts">
-import {
-  AggregateStat,
-  AvgMetricPerDayStat,
-  PageViewsPerDayStat,
-  PageViewStat,
-} from '@/generated';
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { DeclarativeBlockType } from './interfaces';
+import { DeclarativeAnalyticsBlock, DeclarativeBlockType } from './interfaces';
 import LineChart from './LineChart.vue';
 import Tabular from './Tabular.vue';
+import AnalyticsSingleValue from './AnalyticsSingleValue.vue';
+import AnalyticsBlockTitle from './AnalyticsBlockTitle.vue';
 
-@Component({ components: { LineChart, Tabular } })
+@Component({
+  components: { LineChart, Tabular, AnalyticsSingleValue, AnalyticsBlockTitle },
+})
 export default class AnalyticsBlock extends Vue {
   DeclarativeBlockType = DeclarativeBlockType;
   // TODO: There's gotta be a better way to handle this, we don't need an explicit blockType when we already have blockData with a type
-  @Prop() public blockData!:
-    | Array<AggregateStat>
-    | PageViewStat
-    | Array<AvgMetricPerDayStat>
-    | Array<PageViewsPerDayStat>;
+  @Prop() public block!: DeclarativeAnalyticsBlock;
 
   @Prop() public blockType!: DeclarativeBlockType;
 
+  currentPage = 0;
+
+  itemsPerPage = 10;
+
+  goToPrevPage() {
+    this.currentPage -= 1;
+  }
+  goToNextPage() {
+    this.currentPage += 1;
+  }
+
+  private get totalPages() {
+    return Math.ceil(this.block.data.length / this.itemsPerPage);
+  }
+
+  private get previousPageStart() {
+    return (this.currentPage - 1) * this.itemsPerPage;
+  }
+
+  private get currentPageStart() {
+    return this.currentPage * this.itemsPerPage;
+  }
+
+  private get nextPageStart() {
+    return (this.currentPage + 1) * this.itemsPerPage;
+  }
+
+  get currentPageItems() {
+    return this.block.data.slice(this.currentPageStart, this.nextPageStart);
+  }
+
+  get hasNextPage() {
+    return this.currentPage < this.totalPages - 1;
+  }
+
+  get hasPrevPage() {
+    return this.currentPage > 0;
+  }
+
   get hasData(): boolean {
-    if (this.blockData && Array.isArray(this.blockData)) {
-      return this.blockData.length !== 0;
+    if (this.block && this.block.data && Array.isArray(this.block.data)) {
+      return this.block.data.length !== 0;
     }
-    return Boolean(this.blockData);
+    return Boolean(this.block && this.block.data);
   }
 
   get styles(): Record<string, string> {

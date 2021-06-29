@@ -16,14 +16,7 @@
         :xl="block.cols"
         cols="12"
       >
-        <AnalyticsBlock :blockData="block.data" :blockType="block.type">
-          <template v-slot:blockTitle>
-            <AnalyticsBlockTitle :block="block" />
-          </template>
-          <template v-slot:itemName="{ item }">
-            <AnalyticsSingleValue :block="block" :item="item" />
-          </template>
-        </AnalyticsBlock>
+        <AnalyticsBlock :block="block" :blockType="block.type" />
       </v-col>
     </v-row>
   </v-container>
@@ -34,15 +27,11 @@
 import { AnalyticsData } from '@/generated';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import AnalyticsBlock from '@/components/analytics/AnalyticsBlock.vue';
-import AnalyticsSingleValue from './AnalyticsSingleValue.vue';
-import AnalyticsBlockTitle from './AnalyticsBlockTitle.vue';
 import { DeclarativeBlockType, DeclarativeAnalyticsBlock } from './interfaces';
 
 @Component({
   components: {
     AnalyticsBlock,
-    AnalyticsBlockTitle,
-    AnalyticsSingleValue,
   },
 })
 export default class AnalyticsContainer extends Vue {
