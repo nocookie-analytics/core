@@ -18,7 +18,7 @@
         :xl="block.cols"
         cols="12"
       >
-        <AnalyticsBlock :block="block" :blockType="block.type" />
+        <AnalyticsBlock :block="block" />
       </v-col>
     </v-row>
   </v-container>
@@ -30,7 +30,7 @@ import LineChart from './LineChart.vue';
 import { AnalyticsData } from '@/generated';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import AnalyticsBlock from '@/components/analytics/AnalyticsBlock.vue';
-import { DeclarativeBlockType, DeclarativeAnalyticsBlock } from './interfaces';
+import { DeclarativeAnalyticsBlock } from './interfaces';
 
 @Component({
   components: {
@@ -39,14 +39,12 @@ import { DeclarativeBlockType, DeclarativeAnalyticsBlock } from './interfaces';
   },
 })
 export default class AnalyticsContainer extends Vue {
-  DeclarativeBlockType = DeclarativeBlockType;
   @Prop() public analyticsData!: AnalyticsData;
 
   get blocks(): Array<DeclarativeAnalyticsBlock> {
     const blocks = [
       {
         data: this.analyticsData.pages || [],
-        type: DeclarativeBlockType.AggregateStat,
         title: 'Page',
         urlParamName: 'page',
         urlExclude: [],
@@ -54,7 +52,6 @@ export default class AnalyticsContainer extends Vue {
       },
       {
         data: this.analyticsData.browser_families || [],
-        type: DeclarativeBlockType.AggregateStat,
         title: 'Browser',
         urlParamName: 'browser',
         urlExclude: ['Unknown'],
@@ -62,7 +59,6 @@ export default class AnalyticsContainer extends Vue {
       },
       {
         data: this.analyticsData.os_families || [],
-        type: DeclarativeBlockType.AggregateStat,
         title: 'OS',
         urlParamName: 'os',
         urlExclude: ['Other'],
@@ -70,7 +66,6 @@ export default class AnalyticsContainer extends Vue {
       },
       {
         data: this.analyticsData.device_families || [],
-        type: DeclarativeBlockType.AggregateStat,
         title: 'Device',
         urlParamName: 'device',
         urlExclude: ['Other', 'Unknown'],
@@ -78,7 +73,6 @@ export default class AnalyticsContainer extends Vue {
       },
       {
         data: this.analyticsData.referrer_names || [],
-        type: DeclarativeBlockType.AggregateStat,
         title: 'Referrer',
         urlParamName: 'referrerName',
         urlExclude: [],
@@ -86,7 +80,6 @@ export default class AnalyticsContainer extends Vue {
       },
       {
         data: this.analyticsData.countries || [],
-        type: DeclarativeBlockType.AggregateStat,
         title: 'Country',
         urlParamName: 'country',
         urlExclude: ['Unknown'],
@@ -94,31 +87,26 @@ export default class AnalyticsContainer extends Vue {
       },
       {
         data: this.analyticsData.utm_terms || [],
-        type: DeclarativeBlockType.AggregateStat,
         title: 'UTM Term',
         cols: 2,
       },
       {
         data: this.analyticsData.utm_sources || [],
-        type: DeclarativeBlockType.AggregateStat,
         title: 'UTM Source',
         cols: 2,
       },
       {
         data: this.analyticsData.utm_mediums || [],
-        type: DeclarativeBlockType.AggregateStat,
         title: 'UTM Medium',
         cols: 2,
       },
       {
         data: this.analyticsData.utm_contents || [],
-        type: DeclarativeBlockType.AggregateStat,
         title: 'UTM Content',
         cols: 2,
       },
       {
         data: this.analyticsData.utm_campaigns || [],
-        type: DeclarativeBlockType.AggregateStat,
         title: 'UTM Campaign',
         cols: 2,
       },

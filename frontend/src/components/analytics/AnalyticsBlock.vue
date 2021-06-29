@@ -1,29 +1,27 @@
 <template>
   <v-col v-if="hasData">
-    <span v-if="blockType == DeclarativeBlockType.AggregateStat">
-      <v-card-title>
-        <AnalyticsBlockTitle
-          :block="block"
-          :currentPage="currentPage"
-          :totalPages="totalPages"
-          v-on:next-page="currentPage += 1"
-          v-on:prev-page="currentPage -= 1"
-        />
-      </v-card-title>
-      <v-card class="pa-2" outlined tile>
-        <Tabular :data="currentPageItems">
-          <template v-slot:itemName="{ item }">
-            <AnalyticsSingleValue :block="block" :item="item" />
-          </template>
-        </Tabular>
-      </v-card>
-    </span>
+    <v-card-title>
+      <AnalyticsBlockTitle
+        :block="block"
+        :currentPage="currentPage"
+        :totalPages="totalPages"
+        v-on:next-page="currentPage += 1"
+        v-on:prev-page="currentPage -= 1"
+      />
+    </v-card-title>
+    <v-card class="pa-2" outlined tile>
+      <Tabular :data="currentPageItems">
+        <template v-slot:itemName="{ item }">
+          <AnalyticsSingleValue :block="block" :item="item" />
+        </template>
+      </Tabular>
+    </v-card>
   </v-col>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { DeclarativeAnalyticsBlock, DeclarativeBlockType } from './interfaces';
+import { DeclarativeAnalyticsBlock } from './interfaces';
 import Tabular from './Tabular.vue';
 import AnalyticsSingleValue from './AnalyticsSingleValue.vue';
 import AnalyticsBlockTitle from './AnalyticsBlockTitle.vue';
@@ -32,11 +30,7 @@ import AnalyticsBlockTitle from './AnalyticsBlockTitle.vue';
   components: { Tabular, AnalyticsSingleValue, AnalyticsBlockTitle },
 })
 export default class AnalyticsBlock extends Vue {
-  DeclarativeBlockType = DeclarativeBlockType;
-  // TODO: There's gotta be a better way to handle this, we don't need an explicit blockType when we already have blockData with a type
   @Prop() public block!: DeclarativeAnalyticsBlock;
-
-  @Prop() public blockType!: DeclarativeBlockType;
 
   currentPage = 0;
 
