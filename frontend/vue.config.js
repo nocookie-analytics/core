@@ -14,6 +14,11 @@ module.exports = {
           context: './node_modules/flag-icon-css/flags/4x3/',
           to: './static/flags/',
         },
+        {
+          from: '**',
+          context: './node_modules/simple-icons/icons/',
+          to: './static/brand-icons/',
+        },
       ]),
       new VuetifyLoaderPlugin(),
       new webpack.IgnorePlugin({
