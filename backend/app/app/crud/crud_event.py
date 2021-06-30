@@ -19,7 +19,7 @@ from app.schemas.analytics import (
     AggregateStat,
     AnalyticsData,
     AnalyticsType,
-    PageViewStat,
+    SummaryStat,
 )
 from app.schemas.event import EventCreate, EventUpdate
 from app.utils.referer_parser import Referer
@@ -188,8 +188,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 Event.event_type == EventType.page_view
             )
             metric_base_query = base_query.filter(Event.event_type == EventType.metric)
-            if field == AnalyticsType.PAGEVIEWS:
-                data.pageviews = PageViewStat.from_base_query(base_query)
+            if field == AnalyticsType.SUMMARY:
+                data.summary = SummaryStat.from_base_query(base_query)
             elif field == AnalyticsType.BROWSERS:
                 data.browser_families = AggregateStat.from_base_query(
                     page_view_base_query, Event.browser_family, group_limit=group_limit

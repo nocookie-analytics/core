@@ -15,8 +15,8 @@
 
 import { AggregateStat } from './aggregate-stat';
 import { AvgMetricPerDayStat } from './avg-metric-per-day-stat';
-import { PageViewStat } from './page-view-stat';
 import { PageViewsPerDayStat } from './page-views-per-day-stat';
+import { SummaryStat } from './summary-stat';
 
 /**
  * 
@@ -44,10 +44,10 @@ export interface AnalyticsData {
     pages?: Array<AggregateStat>;
     /**
      * 
-     * @type {PageViewStat}
+     * @type {SummaryStat}
      * @memberof AnalyticsData
      */
-    pageviews?: PageViewStat;
+    summary?: SummaryStat;
     /**
      * 
      * @type {Array<AvgMetricPerDayStat>}

@@ -28,8 +28,8 @@ models/index.ts
 models/interval-type.ts
 models/metric-type.ts
 models/msg.ts
-models/page-view-stat.ts
 models/page-views-per-day-stat.ts
+models/summary-stat.ts
 models/token.ts
 models/user-create.ts
 models/user-update.ts

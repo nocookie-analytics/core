@@ -21,7 +21,7 @@
  */
 export enum AnalyticsType {
     Pages = 'pages',
-    Pageviews = 'pageviews',
+    Summary = 'summary',
     PageviewsPerDay = 'pageviews_per_day',
     Countries = 'countries',
     BrowserFamilies = 'browser_families',

@@ -15,7 +15,7 @@ from app.models.event import Event, MetricType
 
 class AnalyticsType(Enum):
     PAGES = "pages"
-    PAGEVIEWS = "pageviews"
+    SUMMARY = "summary"
     PAGEVIEWS_PER_DAY = "pageviews_per_day"
     COUNTRIES = "countries"
     BROWSERS = "browser_families"
@@ -140,7 +140,7 @@ class AvgMetricPerDayStat(BaseModel):
         return [AvgMetricPerDayStat(date=row[0], value=row[1]) for row in rows]
 
 
-class PageViewStat(BaseModel):
+class SummaryStat(BaseModel):
     total_visits: int
     visitors: int
 
@@ -150,14 +150,14 @@ class PageViewStat(BaseModel):
             func.coalesce(func.count(), 0),
             func.coalesce(func.count(func.distinct(Event.visitor_fingerprint)), 0),
         ).one()
-        return PageViewStat(total_visits=row[0], visitors=row[1])
+        return SummaryStat(total_visits=row[0], visitors=row[1])
 
 
 class AnalyticsData(BaseModel):
     start: PydanticArrow
     end: PydanticArrow
     pages: Optional[List[AggregateStat]]
-    pageviews: Optional[PageViewStat]
+    summary: Optional[SummaryStat]
 
     lcp_per_day: Optional[List[AvgMetricPerDayStat]]
     cls_per_day: Optional[List[AvgMetricPerDayStat]]

@@ -34,7 +34,7 @@ def test_get_analytics_success(
         "domain_name": mock_read_only_domain.domain_name,
         "start": start,
         "end": start + duration,
-        "include": [AnalyticsType.PAGEVIEWS.value, AnalyticsType.COUNTRIES.value],
+        "include": [AnalyticsType.SUMMARY.value, AnalyticsType.COUNTRIES.value],
     }
     response = client.get(
         f"{settings.API_V1_STR}/a/", params=data, headers=superuser_token_headers
@@ -64,7 +64,7 @@ def test_get_analytics_invalid_domain(
         "domain_name": "doesnotexist.com",
         "start": start,
         "end": start + duration,
-        "include": "pageviews",
+        "include": "summary",
     }
     response = client.get(
         f"{settings.API_V1_STR}/a/", params=data, headers=superuser_token_headers
@@ -90,12 +90,12 @@ def test_get_analytics_success_with_data(db: Session, client: TestClient) -> Non
         "domain_name": domain.domain_name,
         "start": datetime.now() - timedelta(minutes=1),
         "end": datetime.now() + timedelta(minutes=1),
-        "include": [AnalyticsType.PAGEVIEWS.value, AnalyticsType.COUNTRIES.value],
+        "include": [AnalyticsType.SUMMARY.value, AnalyticsType.COUNTRIES.value],
     }
     response = client.get(f"{settings.API_V1_STR}/a/", params=data, headers=headers)
     assert response.status_code == 200, response.json()
     json = response.json()
-    assert json["pageviews"]["total_visits"] == 1
+    assert json["summary"]["total_visits"] == 1
 
 
 @pytest.mark.usefixtures("override_testclient")
@@ -108,7 +108,7 @@ def test_public_analytics(
         "domain_name": read_write_domain.domain_name,
         "start": datetime.now() - timedelta(days=1),
         "end": datetime.now(),
-        "include": "pageviews",
+        "include": "summary",
     }
     response = client.get(f"{settings.API_V1_STR}/a/", params=data)
     assert response.status_code == 404, response.json()

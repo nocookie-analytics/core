@@ -10,7 +10,7 @@ from app.schemas.analytics import (
     PageViewsPerDayStat,
     AggregateStat,
     AnalyticsType,
-    PageViewStat,
+    SummaryStat,
 )
 from app.tests.utils.domain import create_random_domain
 from app.tests.utils.event import (
@@ -24,7 +24,7 @@ class TestPageViewStat:
         domain = create_random_domain(db)
         base_query = domain.events.filter(Event.event_type == EventType.page_view)
 
-        data = PageViewStat.from_base_query(base_query)
+        data = SummaryStat.from_base_query(base_query)
         assert data.total_visits == 0
         assert data.visitors == 0
 
@@ -32,7 +32,7 @@ class TestPageViewStat:
         create_random_page_view_event(db, domain=domain, ip_address=mock_ip_address)
         create_random_metric_event(db, domain=domain, ip_address=mock_ip_address)
 
-        data = PageViewStat.from_base_query(base_query)
+        data = SummaryStat.from_base_query(base_query)
         assert data.total_visits == 2
         assert data.visitors == 1
 

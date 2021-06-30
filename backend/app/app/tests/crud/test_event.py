@@ -124,7 +124,7 @@ class TestGetAnalytics:
     ) -> None:
         start = arrow.get(start)
         end = start + duration
-        fields = [AnalyticsType.PAGEVIEWS, AnalyticsType.BROWSERS]
+        fields = [AnalyticsType.SUMMARY, AnalyticsType.BROWSERS]
         analytics_data = crud.event.get_analytics_from_fields(
             db=db,
             domain=read_write_domain,
@@ -137,7 +137,7 @@ class TestGetAnalytics:
         assert len(
             set(analytics_data.dict(exclude_unset=True).keys()) - set(["start", "end"])
         ) == len(fields)
-        assert analytics_data.pageviews
+        assert analytics_data.summary
         assert isinstance(analytics_data.browser_families, Sequence)
 
 
