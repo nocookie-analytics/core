@@ -26,6 +26,12 @@ export interface PageViewStat {
      * @memberof PageViewStat
      */
     total_visits: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PageViewStat
+     */
+    visitors: number;
 }
 
 
