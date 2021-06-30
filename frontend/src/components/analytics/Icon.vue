@@ -26,6 +26,7 @@ const directMatchIconMap = [
   'instagram',
   'ios',
   'linux',
+  'macos',
   'nokia',
   'opera',
   'safari',
@@ -40,12 +41,8 @@ const indirectIconMap = {
   Bing: 'microsoftbing',
   Chrome: 'googlechrome',
   Chromium: 'googlechrome',
-  'Chrome Mobile': 'googlechrome',
   Edge: 'microsoftedge',
-  'Firefox Mobile': 'firefox',
   Googlebot: 'google',
-  'Mac OS X': 'macos',
-  'Mobile Safari': 'safari',
 };
 
 @Component

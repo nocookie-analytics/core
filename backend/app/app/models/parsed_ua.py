@@ -9,6 +9,7 @@ browser_family_map = {
     "Firefox iOS": "Firefox",
     "Mobile Safari": "Safari",
     "Firefox Mobile": "Firefox",
+    "Chromium": "Chrome",
 }
 
 
