@@ -142,10 +142,15 @@ class AvgMetricPerDayStat(BaseModel):
 
 class PageViewStat(BaseModel):
     total_visits: int
+    visitors: int
 
     @staticmethod
     def from_base_query(base_query: Query):
-        return PageViewStat(total_visits=base_query.count())
+        row = base_query.with_entities(
+            func.coalesce(func.count(), 0),
+            func.coalesce(func.count(func.distinct(Event.visitor_fingerprint)), 0),
+        ).one()
+        return PageViewStat(total_visits=row[0], visitors=row[1])
 
 
 class AnalyticsData(BaseModel):
