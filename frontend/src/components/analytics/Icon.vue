@@ -6,9 +6,11 @@
     :src="iconUrl"
     v-if="iconUrl"
   />
+  <v-icon size="24" v-else>{{ mdiHelpCircleOutline }}</v-icon>
 </template>
 
 <script lang="ts">
+import { mdiHelpCircleOutline } from '@mdi/js';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 const directMatchIconMap = [
@@ -48,6 +50,7 @@ const indirectIconMap = {
 @Component
 export default class Icon extends Vue {
   @Prop() public value!: string;
+  mdiHelpCircleOutline = mdiHelpCircleOutline;
 
   get iconUrl(): string | undefined {
     if (directMatchIconMap.includes(this.value.toLowerCase())) {
