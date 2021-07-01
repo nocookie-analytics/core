@@ -15,7 +15,7 @@ module.exports = {
           to: './static/flags/',
         },
         {
-          from: '**',
+          from: '**/*.svg',
           context: './node_modules/simple-icons/icons/',
           to: './static/brand-icons/',
         },
@@ -57,43 +57,31 @@ module.exports = {
                 './node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css',
               ],
               variables: true,
-              whitelist: [
-                /**
-                 * Vuetify
-                 */
-                'v-application',
-                'v-application--wrap',
-                'layout',
-                'row',
-                'col',
-              ],
-              whitelistPatterns: [
-                /-(leave|enter|appear)(|-(to|from|active))$/,
-                /^(?!(|.*?:)cursor-move).+-move$/,
-                /^router-link(|-exact)-active$/,
-                /data-v-.*/,
+              safelist: {
+                standard: [
+                  'v-app',
+                  'v-col',
+                  'v-container',
+                  'v-layout',
+                  'v-row',
+                ],
+                deep: [
+                  /-(leave|enter|appear)(|-(to|from|active))$/,
+                  /^(?!(|.*?:)cursor-move).+-move$/,
+                  /^router-link(|-exact)-active$/,
+                  /data-v-.*/,
 
-                /**
-                 * Vuetify
-                 */
-                /^v-((?!application).)*$/,
-                /^theme--*/,
-                /.*-transition/,
-                /^justify-*/,
-                /^p*-[0-9]/,
-                /^m*-[0-9]/,
-                /^text--*/,
-                /--text$/,
-                /^row-*/,
-                /^col-*/,
-              ],
-              whitelistPatternsChildren: [
-                /**
-                 * Vuetify
-                 */
-                /^v-((?!application).)*$/,
-                /^theme--*/,
-              ],
+                  /^theme--*/,
+                  /.*-transition/,
+                  /^justify-*/,
+                  /^p*-[0-9]/,
+                  /^m*-[0-9]/,
+                  /^text--*/,
+                  /--text$/,
+                  /^row-*/,
+                  /^col-*/,
+                ],
+              },
             }),
           ],
         );
