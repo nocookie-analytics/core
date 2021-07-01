@@ -13,7 +13,20 @@
           <v-card-title>{{ block.title }}</v-card-title>
           <v-card-text>
             <v-icon>{{ block.icon }}</v-icon>
-            {{ block.text }}
+            {{ block.value }}
+            <span
+              v-if="block.change"
+              :class="block.change > 0 ? 'light-green--text' : 'red--text'"
+            >
+              <v-icon v-if="block.change < 0">{{
+                icons.mdiTrendingDown
+              }}</v-icon>
+              <v-icon v-if="block.change == 0" class="red--text">{{
+                icons.mdiTrendingNeutral
+              }}</v-icon>
+              <v-icon v-if="block.change > 0">{{ icons.mdiTrendingUp }}</v-icon>
+              {{ block.change }}%
+            </span>
           </v-card-text>
         </v-card>
       </v-col>
@@ -23,30 +36,54 @@
 
 <script lang="ts">
 import { SummaryStat } from '@/generated';
-import { mdiAccountMultiple, mdiCropLandscape } from '@mdi/js';
+import {
+  mdiAccountMultiple,
+  mdiCropLandscape,
+  mdiTrendingUp,
+  mdiTrendingDown,
+  mdiTrendingNeutral,
+} from '@mdi/js';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class SummaryBlock extends Vue {
   @Prop() public summaryData!: SummaryStat;
+  @Prop() public summaryDataPreviousInterval!: SummaryStat;
 
-  justifyData() {
+  percentagechange(newValue: number, oldValue: number): number | undefined {
+    if (oldValue) {
+      return Math.round((100 * (newValue - oldValue)) / oldValue);
+    }
+    return undefined;
+  }
+
+  get icons() {
     return {
-      justify: ['start', 'center', 'end', 'space-around', 'space-between'],
+      mdiTrendingUp,
+      mdiTrendingDown,
+      mdiTrendingNeutral,
     };
   }
 
   get summaryBlocks() {
     return [
       {
-        title: 'Unique visitors',
-        text: this.summaryData.visitors,
-        icon: mdiAccountMultiple,
+        title: 'Page views',
+        value: this.summaryData.total_visits,
+        change: this.percentagechange(
+          this.summaryData.total_visits,
+          this.summaryDataPreviousInterval.total_visits,
+        ),
+        icon: mdiCropLandscape,
       },
       {
-        title: 'Page views',
-        text: this.summaryData.total_visits,
-        icon: mdiCropLandscape,
+        title: 'Unique visitors',
+        value: this.summaryData.visitors,
+        icon: mdiAccountMultiple,
+        change: this.percentagechange(
+          this.summaryData.visitors,
+          this.summaryDataPreviousInterval.visitors,
+        ),
       },
     ];
   }

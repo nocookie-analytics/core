@@ -2,7 +2,10 @@
   <v-container v-if="analyticsData" class="pa-0">
     <v-row no-gutters>
       <v-col>
-        <SummaryBlock :summaryData="analyticsData.summary" />
+        <SummaryBlock
+          :summaryData="analyticsData.summary"
+          :summaryDataPreviousInterval="analyticsData.summary_previous_interval"
+        />
       </v-col>
     </v-row>
     <v-row no-gutters>
