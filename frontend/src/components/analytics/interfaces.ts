@@ -5,5 +5,4 @@ export interface DeclarativeAnalyticsBlock {
   title: string;
   urlParamName?: string;
   urlExclude?: Array<string>;
-  cols: number;
 }

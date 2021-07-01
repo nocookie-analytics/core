@@ -45,6 +45,8 @@ export const actions = {
       const response = await analyticsApi.getAnalytics({
         domainName,
         include: [
+          AnalyticsType.Summary,
+
           AnalyticsType.Pages,
           AnalyticsType.Countries,
 
