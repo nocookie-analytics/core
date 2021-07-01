@@ -50,6 +50,12 @@ export interface AnalyticsData {
     summary?: SummaryStat;
     /**
      * 
+     * @type {SummaryStat}
+     * @memberof AnalyticsData
+     */
+    summary_previous_interval?: SummaryStat;
+    /**
+     * 
      * @type {Array<AvgMetricPerDayStat>}
      * @memberof AnalyticsData
      */

@@ -22,6 +22,7 @@
 export enum AnalyticsType {
     Pages = 'pages',
     Summary = 'summary',
+    SummaryPreviousInterval = 'summary_previous_interval',
     PageviewsPerDay = 'pageviews_per_day',
     Countries = 'countries',
     BrowserFamilies = 'browser_families',
