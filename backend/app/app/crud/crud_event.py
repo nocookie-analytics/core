@@ -194,6 +194,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             metric_base_query = base_query.filter(Event.event_type == EventType.metric)
             if field == AnalyticsType.SUMMARY:
                 data.summary = SummaryStat.from_base_query(base_query)
+            elif field == AnalyticsType.SUMMARY_PREVIOUS_INTERVAL:
                 data.summary_previous_interval = SummaryStat.from_base_query(
                     base_query_previous_interval
                 )

@@ -16,6 +16,7 @@ from app.models.event import Event, MetricType
 class AnalyticsType(Enum):
     PAGES = "pages"
     SUMMARY = "summary"
+    SUMMARY_PREVIOUS_INTERVAL = "summary_previous_interval"
     PAGEVIEWS_PER_DAY = "pageviews_per_day"
     COUNTRIES = "countries"
     BROWSERS = "browser_families"
