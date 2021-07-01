@@ -53,7 +53,7 @@
         <v-expansion-panel-content>
           <code v-pre>
             &lt;script async defer
-            src="https://nocookieanalytics.com/latest.js"&gt;&lt;script&gt;
+            src="https://nocookieanalytics.com/latest.js"&gt;&lt;/script&gt;
           </code>
         </v-expansion-panel-content>
       </v-expansion-panel>

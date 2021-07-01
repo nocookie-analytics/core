@@ -46,6 +46,7 @@ export const actions = {
         domainName,
         include: [
           AnalyticsType.Summary,
+          AnalyticsType.SummaryPreviousInterval,
 
           AnalyticsType.Pages,
           AnalyticsType.Countries,
