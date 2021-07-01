@@ -158,6 +158,7 @@ class AnalyticsData(BaseModel):
     end: PydanticArrow
     pages: Optional[List[AggregateStat]]
     summary: Optional[SummaryStat]
+    summary_previous_interval: Optional[SummaryStat]
 
     lcp_per_day: Optional[List[AvgMetricPerDayStat]]
     cls_per_day: Optional[List[AvgMetricPerDayStat]]

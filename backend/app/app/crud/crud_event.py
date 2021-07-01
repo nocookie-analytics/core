@@ -159,14 +159,18 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
     ) -> AnalyticsData:
         data = AnalyticsData(start=start, end=end)
         for field in fields:
-            base_query = (
-                db.query(Event)
-                .filter(Event.domain_id == domain.id)
-                .filter(
-                    and_(
-                        Event.timestamp >= start.datetime,
-                        Event.timestamp <= end.datetime,
-                    )
+            base_query = db.query(Event).filter(Event.domain_id == domain.id)
+            base_query_previous_interval = base_query.filter(
+                and_(
+                    Event.timestamp >= start.datetime - (end.datetime - start.datetime),
+                    Event.timestamp <= start.datetime,
+                )
+            )
+
+            base_query = base_query.filter(
+                and_(
+                    Event.timestamp >= start.datetime,
+                    Event.timestamp <= end.datetime,
                 )
             )
             if include_bots is False:
@@ -190,6 +194,9 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             metric_base_query = base_query.filter(Event.event_type == EventType.metric)
             if field == AnalyticsType.SUMMARY:
                 data.summary = SummaryStat.from_base_query(base_query)
+                data.summary_previous_interval = SummaryStat.from_base_query(
+                    base_query_previous_interval
+                )
             elif field == AnalyticsType.BROWSERS:
                 data.browser_families = AggregateStat.from_base_query(
                     page_view_base_query, Event.browser_family, group_limit=group_limit
