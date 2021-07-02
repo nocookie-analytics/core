@@ -21,7 +21,7 @@
               <v-icon v-if="block.change < 0">{{
                 icons.mdiTrendingDown
               }}</v-icon>
-              <v-icon v-if="block.change == 0" class="red--text">{{
+              <v-icon v-if="block.change == 0">{{
                 icons.mdiTrendingNeutral
               }}</v-icon>
               <v-icon v-if="block.change > 0">{{ icons.mdiTrendingUp }}</v-icon>
