@@ -35,8 +35,8 @@
           >
             <template v-slot:input="picker">
               <v-card flat class="text-no-wrap text-truncate">
-                {{ formatISO9075(picker.startDate) }} -
-                {{ formatISO9075(picker.endDate) }}
+                {{ formatISO9075(picker.startDate).slice(0, -3) }} -
+                {{ formatISO9075(picker.endDate).slice(0, -3) }}
               </v-card>
             </template>
           </date-range-picker>
