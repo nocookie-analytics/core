@@ -9,7 +9,12 @@
     >
       <v-layout column fill-height>
         <v-list nav>
-          <v-list-item>Welcome {{ greetedUser }} </v-list-item>
+          <v-list-item
+            >Welcome {{ greetedUser }}
+            <v-icon @click="drawer = false">{{
+              $vuetify.icons.values.close
+            }}</v-icon></v-list-item
+          >
           <v-list-item to="/domains">
             <v-list-item-action>
               <v-icon>{{ $vuetify.icons.values.dns }}</v-icon>
