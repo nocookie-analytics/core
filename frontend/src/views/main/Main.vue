@@ -4,28 +4,36 @@
       :mini-variant="miniDrawer"
       :mini-variant-width="60"
       app
+      :permanent="$vuetify.breakpoint.mdAndUp"
+      v-model="drawer"
     >
       <v-layout column fill-height>
-        <v-list dense>
+        <v-list nav>
           <v-list-item>Welcome {{ greetedUser }} </v-list-item>
           <v-list-item to="/domains">
             <v-list-item-action>
               <v-icon>{{ $vuetify.icons.values.dns }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>Domains</v-list-item-title>
+              <v-list-item-title class="text-subtitle-1"
+                >Domains</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <v-list-group :prepend-icon="$vuetify.icons.values.accountCircle">
             <template v-slot:activator>
-              <v-list-item-title>Account</v-list-item-title>
+              <v-list-item-title class="text-subtitle-1"
+                >Account</v-list-item-title
+              >
             </template>
             <v-list-item to="/main/profile/view">
               <v-list-item-action>
                 <v-icon> {{ $vuetify.icons.values.account }}</v-icon>
               </v-list-item-action>
               <v-list-item-content>
-                <v-list-item-title>Profile</v-list-item-title>
+                <v-list-item-title class="text-subtitle-1"
+                  >Profile</v-list-item-title
+                >
               </v-list-item-content>
             </v-list-item>
             <v-list-item to="/main/profile/edit">
@@ -33,7 +41,9 @@
                 <v-icon> {{ $vuetify.icons.values.accountEdit }}</v-icon>
               </v-list-item-action>
               <v-list-item-content>
-                <v-list-item-title>Edit Profile</v-list-item-title>
+                <v-list-item-title class="text-subtitle-1"
+                  >Edit Profile</v-list-item-title
+                >
               </v-list-item-content>
             </v-list-item>
             <v-list-item to="/main/profile/password">
@@ -41,7 +51,9 @@
                 <v-icon> {{ $vuetify.icons.values.lock }}</v-icon>
               </v-list-item-action>
               <v-list-item-content>
-                <v-list-item-title>Change Password</v-list-item-title>
+                <v-list-item-title class="text-subtitle-1"
+                  >Change Password</v-list-item-title
+                >
               </v-list-item-content>
             </v-list-item>
           </v-list-group>
@@ -54,7 +66,9 @@
               <v-icon> {{ $vuetify.icons.values.group }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>Manage Users</v-list-item-title>
+              <v-list-item-title class="text-subtitle-1"
+                >Manage Users</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <v-list-item to="/main/admin/users/create">
@@ -62,7 +76,9 @@
               <v-icon> {{ $vuetify.icons.values.accountPlus }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>Create User</v-list-item-title>
+              <v-list-item-title class="text-subtitle-1"
+                >Create User</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -73,7 +89,9 @@
               <v-icon> {{ $vuetify.icons.values.close }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>Logout</v-list-item-title>
+              <v-list-item-title class="text-subtitle-1"
+                >Logout</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
           <v-divider></v-divider>
@@ -85,13 +103,18 @@
               <v-icon v-else> {{ $vuetify.icons.values.chevronLeft }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>Collapse</v-list-item-title>
+              <v-list-item-title class="text-subtitle-1"
+                >Collapse</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
         </v-list>
       </v-layout>
     </v-navigation-drawer>
-    <v-app-bar dark color="secondary" app>
+    <v-app-bar color="secondary" app>
+      <span class="hidden-md-and-up">
+        <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      </span>
       <v-img
         alt="No Cookie Analytics"
         class="shrink mr-2"
@@ -119,7 +142,9 @@
         <v-list>
           <v-list-item to="/main/profile">
             <v-list-item-content>
-              <v-list-item-title>Profile</v-list-item-title>
+              <v-list-item-title class="text-subtitle-1"
+                >Profile</v-list-item-title
+              >
             </v-list-item-content>
             <v-list-item-action>
               <v-icon> {{ $vuetify.icons.values.person }}</v-icon>
@@ -127,7 +152,9 @@
           </v-list-item>
           <v-list-item @click="logout">
             <v-list-item-content>
-              <v-list-item-title>Logout</v-list-item-title>
+              <v-list-item-title class="text-subtitle-1"
+                >Logout</v-list-item-title
+              >
             </v-list-item-content>
             <v-list-item-action>
               <v-icon> {{ $vuetify.icons.values.close }}</v-icon>
@@ -190,6 +217,7 @@ const startRouteGuard = async (to, from, next) => {
 @Component
 export default class Main extends Vue {
   public appName = appName;
+  public drawer = false;
 
   public beforeRouteEnter(to, from, next) {
     startRouteGuard(to, from, next);
