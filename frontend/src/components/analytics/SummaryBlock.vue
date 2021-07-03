@@ -9,7 +9,7 @@
         xl="2"
         sm="6"
       >
-        <v-card outlined min-width="190" max-width="190" width="190">
+        <v-card outlined min-width="160" max-width="160" width="160">
           <v-card-title>{{ block.title }}</v-card-title>
           <v-card-text>
             <v-icon>{{ block.icon }}</v-icon>
@@ -79,7 +79,7 @@ export default class SummaryBlock extends Vue {
         icon: mdiCropLandscape,
       },
       {
-        title: 'Unique visitors',
+        title: 'Visitors',
         value: this.summaryData.visitors,
         icon: mdiAccountMultiple,
         change: this.percentagechange(
