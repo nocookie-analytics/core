@@ -9,14 +9,16 @@
         xl="2"
         sm="6"
       >
-        <v-card outlined min-width="200" max-width="200" width="200">
+        <v-card outlined min-width="190" max-width="190" width="190">
           <v-card-title>{{ block.title }}</v-card-title>
           <v-card-text>
             <v-icon>{{ block.icon }}</v-icon>
             {{ block.value }}
             <span
               v-if="block.change"
-              :class="block.change > 0 ? 'light-green--text' : 'red--text'"
+              :class="
+                block.change > 0 ? 'green--text text--darken-2' : 'red--text'
+              "
             >
               <v-icon v-if="block.change < 0">{{
                 icons.mdiTrendingDown

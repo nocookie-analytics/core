@@ -15,16 +15,16 @@
     </v-container>
     <v-container fluid>
       <v-row align="baseline" no-gutters>
-        <v-col xs="12">
-          {{ domainName }}
+        <v-col cols="12" class="text-h5">
+          <v-icon>{{ mdiWeb }}</v-icon> {{ domainName }}
         </v-col>
         <v-spacer></v-spacer>
-        <v-col xs="12" xl="5" align="right">
+        <v-col cols="12">
           <date-range-picker
             ref="picker"
             :locale-data="{ firstDay: 1, format: 'yyyy-mm-dd HH:mm:ss' }"
             :timePicker="true"
-            opens="left"
+            opens="right"
             :timePicker24Hour="true"
             :showWeekNumbers="true"
             :showDropdowns="true"
@@ -68,6 +68,7 @@ import {
   startOfYear,
   formatISO9075,
 } from 'date-fns';
+import { mdiWeb } from '@mdi/js';
 
 @Component({
   components: {
@@ -77,6 +78,7 @@ import {
 })
 export default class ViewAnalytics extends Vue {
   formatISO9075 = formatISO9075;
+  mdiWeb = mdiWeb;
   get domainName(): string {
     return this.$router.currentRoute.params.domainName;
   }
