@@ -75,10 +75,7 @@ export const actions = {
       const analyticsData = response.data;
       commitSetAnalyticsData(context, analyticsData);
     } catch (e) {
-      commitSetAnalyticsError(
-        context,
-        'Domain not found. You might need to login',
-      );
+      commitSetAnalyticsError(context, 'Error fetching data.');
     }
   },
 };

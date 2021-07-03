@@ -30,7 +30,6 @@
       </v-col>
     </v-row>
   </v-container>
-  <v-container v-else> Loading, please wait </v-container>
 </template>
 
 <script lang="ts">

@@ -1,19 +1,21 @@
 <template>
   <v-container>
     <router-view :key="$route.fullPath"></router-view>
-    <v-container fluid>
-      <span v-if="analyticsError">
-        <v-card class="ma-3 pa-3">
-          <v-card-text>
-            <div class="headline font-weight-light ma-5">
-              {{ analyticsError }} (You might need to
-              <a href="/login">log-in</a>)
-            </div>
-          </v-card-text>
-        </v-card>
-      </span>
+    <v-container fluid v-if="analyticsError">
+      <v-card class="ma-3 pa-3">
+        <v-card-text>
+          <div class="headline font-weight-light ma-5">
+            {{ analyticsError }}
+            <span v-if="isLoggedIn">Please try again in a little while.</span>
+            <span v-else>
+              (Are you <router-link to="/login">logged-in</router-link>?)
+            </span>
+          </div>
+        </v-card-text>
+      </v-card>
     </v-container>
-    <v-container fluid>
+    <v-container v-else-if="!analyticsData"> Loading, please wait </v-container>
+    <v-container fluid v-else>
       <v-row align="baseline" no-gutters>
         <v-col cols="12" class="text-h5">
           <v-icon>{{ mdiWeb }}</v-icon> {{ domainName }}
@@ -69,6 +71,7 @@ import {
   formatISO9075,
 } from 'date-fns';
 import { mdiWeb } from '@mdi/js';
+import { readIsLoggedIn } from '@/store/main/getters';
 
 @Component({
   components: {
@@ -79,6 +82,10 @@ import { mdiWeb } from '@mdi/js';
 export default class ViewAnalytics extends Vue {
   formatISO9075 = formatISO9075;
   mdiWeb = mdiWeb;
+
+  get isLoggedIn(): boolean {
+    return readIsLoggedIn(this.$store) || false;
+  }
   get domainName(): string {
     return this.$router.currentRoute.params.domainName;
   }
