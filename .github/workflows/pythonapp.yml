@@ -15,9 +15,9 @@ jobs:
       COMPOSE_DOCKER_CLI_BUILD: 1
       #DOCKER_BUILDKIT: 1
       #BUILDKIT_INLINE_CACHE: 1
-      DOCKER_IMAGE_BACKEND: eu.gcr.io/no-cookie-analytics/nca-backend
-      DOCKER_IMAGE_FRONTEND: eu.gcr.io/no-cookie-analytics/nca-frontend
-      DOCKER_IMAGE_FRONTEND_BUILD_STAGE: eu.gcr.io/no-cookie-analytics/nca-frontend-build-stage
+      DOCKER_IMAGE_BACKEND: ghcr.io/nocookie-analytics/nca-backend
+      DOCKER_IMAGE_FRONTEND: ghcr.io/nocookie-analytics/nca-frontend
+      DOCKER_IMAGE_FRONTEND_BUILD_STAGE: ghcr.io/nocookie-analytics/nca-frontend-build-stage
 
     steps:
     - name: Install git
@@ -33,21 +33,11 @@ jobs:
         echo "BRANCH_TAG=$(echo $GITHUB_REF | sed 's|/|-|g')" >> .env
         sh backend/app/scripts/fetch-db-ip.sh
 
-    - uses: google-github-actions/setup-gcloud@master
-      with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
-        export_default_credentials: true
-
     - name: Create docker stack
       run: |
         docker-compose \
         -f docker-compose.yml \
         config > docker-stack.yml
-
-    - name: Docker login
-      run: |
-        gcloud auth configure-docker
 
     - name: Pull docker cache
       run: |
