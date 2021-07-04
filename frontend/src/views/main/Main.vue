@@ -11,9 +11,11 @@
         <v-list nav>
           <v-list-item
             >Welcome {{ greetedUser }}
-            <v-icon @click="drawer = false">{{
-              $vuetify.icons.values.close
-            }}</v-icon></v-list-item
+            <span class="hidden-md-and-up">
+              <v-icon @click="drawer = false">{{
+                $vuetify.icons.values.close
+              }}</v-icon></span
+            ></v-list-item
           >
           <v-list-item to="/domains">
             <v-list-item-action>
