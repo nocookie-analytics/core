@@ -24,17 +24,25 @@ class TestPageViewStat:
         domain = create_random_domain(db)
         base_query = domain.events.filter(Event.event_type == EventType.page_view)
 
-        data = SummaryStat.from_base_query(base_query)
+        data = SummaryStat.from_base_query(db, base_query)
         assert data.total_visits == 0
         assert data.visitors == 0
+        assert data.bounce_rate is None
 
         create_random_page_view_event(db, domain=domain, ip_address=mock_ip_address)
         create_random_page_view_event(db, domain=domain, ip_address=mock_ip_address)
         create_random_metric_event(db, domain=domain, ip_address=mock_ip_address)
 
-        data = SummaryStat.from_base_query(base_query)
+        data = SummaryStat.from_base_query(db, base_query)
         assert data.total_visits == 2
         assert data.visitors == 1
+        assert data.bounce_rate == 0
+
+        create_random_page_view_event(db, domain=domain, ip_address="127.0.0.1")
+        data = SummaryStat.from_base_query(db, base_query)
+        assert (
+            data.bounce_rate == 50
+        )  # At this point in the test: 2 visitors, 1 bounced 1 didn't
 
 
 class TestPageViewsPerDayStat:
