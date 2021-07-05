@@ -17,7 +17,9 @@
             <span
               v-if="block.change"
               :class="
-                block.change > 0 ? 'green--text text--darken-2' : 'red--text'
+                block.changeSign * block.change > 0
+                  ? 'green--text text--darken-2'
+                  : 'red--text'
               "
             >
               <v-icon v-if="block.change < 0">{{
@@ -36,7 +38,9 @@
   </v-container>
 </template>
 
+
 <script lang="ts">
+import { ISummaryBlock } from '@/interfaces';
 import { SummaryStat } from '@/generated';
 import {
   mdiAccountMultiple,
@@ -68,7 +72,7 @@ export default class SummaryBlock extends Vue {
     };
   }
 
-  get summaryBlocks() {
+  get summaryBlocks(): Array<ISummaryBlock> {
     const blocks = [
       {
         title: 'Page views',
@@ -77,6 +81,7 @@ export default class SummaryBlock extends Vue {
           this.summaryData.total_visits,
           this.summaryDataPreviousInterval.total_visits,
         ),
+        changeSign: 1,
         class: '',
         icon: mdiCropLandscape,
       },
@@ -85,6 +90,7 @@ export default class SummaryBlock extends Vue {
         value: this.summaryData.visitors.toString(),
         class: '',
         icon: mdiAccountMultiple,
+        changeSign: 1,
         change: this.percentagechange(
           this.summaryData.visitors,
           this.summaryDataPreviousInterval.visitors,
@@ -97,6 +103,7 @@ export default class SummaryBlock extends Vue {
         value: `${this.summaryData.bounce_rate}%`,
         icon: mdiSubdirectoryArrowRight,
         class: 'rotate-45',
+        changeSign: -1,
         change: this.percentagechange(
           this.summaryData.bounce_rate,
           this.summaryDataPreviousInterval.bounce_rate,

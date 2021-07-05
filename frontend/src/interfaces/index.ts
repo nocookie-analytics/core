@@ -21,3 +21,12 @@ export interface IUserProfileCreate {
   is_active?: boolean;
   is_superuser?: boolean;
 }
+
+export interface ISummaryBlock {
+  title: string;
+  value: string;
+  change: number | undefined;
+  changeSign: number; // Things like bounce rate need a "reversed" logic for deciding if it's a good thing or not
+  class: string;
+  icon: string;
+}
