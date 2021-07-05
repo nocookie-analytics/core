@@ -31,6 +31,12 @@ export interface SummaryStat {
      * @type {number}
      * @memberof SummaryStat
      */
+    bounce_rate?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof SummaryStat
+     */
     visitors: number;
 }
 
