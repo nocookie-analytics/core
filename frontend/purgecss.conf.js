@@ -1,5 +1,4 @@
 module.exports = {
-  css: ['./chunk-vendors.90650e09.css'],
   content: [
     `./dist/**/*.html`,
     `./src/**/*.vue`,
@@ -39,6 +38,7 @@ module.exports = {
       ///^v-row-*/,
       ///^v-col-*/,
     ],
+    greedy: [/v-list-item/],
     //greedy: [/v-list-item/, /v-data-table/],
     // greedy: [/d-flex/],
   },
