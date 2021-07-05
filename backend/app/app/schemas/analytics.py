@@ -149,44 +149,30 @@ class SummaryStat(BaseModel):
     visitors: int
 
     @staticmethod
-    def get_bounce_rate(db: Session, base_query: Query):
-        visitors_by_visits = (
-            base_query.group_by(Event.visitor_fingerprint)
-            .with_entities(func.count(Event.visitor_fingerprint).label("count"))
-            .subquery()
-        )
-
-        case_stmt = case(
-            (column("count") == 1, "single"), (column("count") > 1, "multiple")
-        )
-        result = (
-            db.query(case_stmt, func.count())
-            .select_from(visitors_by_visits)
-            .group_by(case_stmt)
-            .order_by(case_stmt)
-            .all()
-        )
-        multiple, single = (0, 0)
-        for visit_type, count in result:
-            if visit_type == "multiple":
-                multiple = count
-            if visit_type == "single":
-                single = count
-        bounce_rate = None
-        if single + multiple > 0:
-            bounce_rate = (single / (single + multiple)) * 100
-        return bounce_rate
-
-    @staticmethod
     def from_base_query(db: Session, base_query: Query):
         row = base_query.with_entities(
             func.coalesce(func.count(), 0),
             func.coalesce(func.count(func.distinct(Event.visitor_fingerprint)), 0),
         ).one()
+        total_visits, total_visitors = row
+
+        bounce_rate = None
+        if total_visitors > 0:
+            single_visit_visitors = (
+                base_query.with_entities(Event.visitor_fingerprint)
+                .group_by(Event.visitor_fingerprint)
+                .having(func.count() == 1)
+                .count()
+            )
+            multiple_visit_visitors = total_visitors - single_visit_visitors
+            bounce_rate = (
+                single_visit_visitors
+                / (single_visit_visitors + multiple_visit_visitors)
+            ) * 100
         return SummaryStat(
-            total_visits=row[0],
-            visitors=row[1],
-            bounce_rate=SummaryStat.get_bounce_rate(db, base_query),
+            total_visits=total_visits,
+            visitors=total_visitors,
+            bounce_rate=bounce_rate,
         )
 
 
