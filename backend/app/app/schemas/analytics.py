@@ -7,7 +7,9 @@ import arrow
 from pydantic import BaseModel
 from sqlalchemy import func, column
 from sqlalchemy.orm import Query
+from sqlalchemy.orm.session import Session
 from sqlalchemy.sql import desc
+from sqlalchemy.sql.expression import case
 from sqlalchemy.sql.schema import Column
 
 from app.models.event import Event, MetricType
@@ -143,15 +145,49 @@ class AvgMetricPerDayStat(BaseModel):
 
 class SummaryStat(BaseModel):
     total_visits: int
+    bounce_rate: Optional[int]
     visitors: int
 
     @staticmethod
-    def from_base_query(base_query: Query):
+    def get_bounce_rate(db: Session, base_query: Query):
+        visitors_by_visits = (
+            base_query.group_by(Event.visitor_fingerprint)
+            .with_entities(func.count(Event.visitor_fingerprint).label("count"))
+            .subquery()
+        )
+
+        case_stmt = case(
+            (column("count") == 1, "single"), (column("count") > 1, "multiple")
+        )
+        result = (
+            db.query(case_stmt, func.count())
+            .select_from(visitors_by_visits)
+            .group_by(case_stmt)
+            .order_by(case_stmt)
+            .all()
+        )
+        multiple, single = (0, 0)
+        for visit_type, count in result:
+            if visit_type == "multiple":
+                multiple = count
+            if visit_type == "single":
+                single = count
+        bounce_rate = None
+        if single + multiple > 0:
+            bounce_rate = (single / (single + multiple)) * 100
+        return bounce_rate
+
+    @staticmethod
+    def from_base_query(db: Session, base_query: Query):
         row = base_query.with_entities(
             func.coalesce(func.count(), 0),
             func.coalesce(func.count(func.distinct(Event.visitor_fingerprint)), 0),
         ).one()
-        return SummaryStat(total_visits=row[0], visitors=row[1])
+        return SummaryStat(
+            total_visits=row[0],
+            visitors=row[1],
+            bounce_rate=SummaryStat.get_bounce_rate(db, base_query),
+        )
 
 
 class AnalyticsData(BaseModel):
