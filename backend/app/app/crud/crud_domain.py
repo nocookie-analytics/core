@@ -36,6 +36,7 @@ class CRUDDomain(CRUDBase[Domain, DomainCreate, DomainUpdate]):
         return (
             db.query(self.model)
             .filter(Domain.owner_id == owner_id)
+            .order_by(Domain.domain_name)
             .offset(skip)
             .limit(limit)
             .all()
