@@ -49,7 +49,7 @@ import {
   mdiTrendingDown,
   mdiTrendingNeutral,
   mdiSubdirectoryArrowRight,
-  mdiCheckboxBlankCircle,
+  mdiSawtoothWave,
 } from '@mdi/js';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
@@ -113,12 +113,13 @@ export default class SummaryBlock extends Vue {
       });
     }
     blocks.push({
+      // TODO: This should update automatically
       title: 'Live visitors',
       value: `${this.liveVisitorCount}`,
-      icon: mdiCheckboxBlankCircle,
+      icon: mdiSawtoothWave,
       changeSign: 1,
       change: undefined,
-      class: '',
+      class: 'blink',
     });
     return blocks;
   }
@@ -128,5 +129,14 @@ export default class SummaryBlock extends Vue {
 <style scoped>
 .rotate-45 {
   transform: rotate(-45deg);
+}
+.blink {
+  animation: blinker 5s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
 }
 </style>
