@@ -7,6 +7,7 @@ from app.models.event import Event, EventType, MetricType
 from app.schemas.analytics import (
     AvgMetricPerDayStat,
     IntervalType,
+    LiveVisitorStat,
     PageViewsPerDayStat,
     AggregateStat,
     AnalyticsType,
@@ -195,3 +196,19 @@ class TestAvgMetricPerDayStat:
             assert fid.value == 0
         assert lcp_per_day[-1].value == 7.5
         assert fid_per_day[-1].value == 0
+
+
+class TestLiveVisitorStat:
+    def test_live_visitor_stat(self, db: Session, mock_ip_address):
+        domain = create_random_domain(db)
+        stat = LiveVisitorStat.from_base_query(
+            db.query(Event).filter(Event.domain_id == domain.id)
+        )
+        assert stat == 0
+
+        create_random_page_view_event(db, domain=domain, ip_address=mock_ip_address)
+
+        stat = LiveVisitorStat.from_base_query(
+            db.query(Event).filter(Event.domain_id == domain.id)
+        )
+        assert stat == 1

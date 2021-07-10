@@ -1,4 +1,5 @@
 from __future__ import annotations
+from app.models.domain import Domain
 import datetime
 from enum import Enum
 from typing import List, Optional, Union
@@ -17,6 +18,7 @@ from app.models.event import Event, MetricType
 
 class AnalyticsType(Enum):
     PAGES = "pages"
+    LIVE_VISITORS = "live_visitors"
     SUMMARY = "summary"
     SUMMARY_PREVIOUS_INTERVAL = "summary_previous_interval"
     PAGEVIEWS_PER_DAY = "pageviews_per_day"
@@ -143,6 +145,24 @@ class AvgMetricPerDayStat(BaseModel):
         return [AvgMetricPerDayStat(date=row[0], value=row[1]) for row in rows]
 
 
+class LiveVisitorStat:
+    @staticmethod
+    def from_base_query(base_query: Query) -> int:
+        now = arrow.now()
+
+        row = (
+            base_query.filter(
+                Event.timestamp.between(now.shift(minutes=-5).datetime, now.datetime)
+            )
+            .with_entities(
+                func.coalesce(func.count(func.distinct(Event.visitor_fingerprint)), 0),
+            )
+            .one()
+        )
+        recent_visitor_count = row[0]
+        return recent_visitor_count
+
+
 class SummaryStat(BaseModel):
     total_visits: int
     bounce_rate: Optional[int]
@@ -180,6 +200,7 @@ class AnalyticsData(BaseModel):
     start: PydanticArrow
     end: PydanticArrow
     pages: Optional[List[AggregateStat]]
+    live_visitors: Optional[int]
     summary: Optional[SummaryStat]
     summary_previous_interval: Optional[SummaryStat]
 

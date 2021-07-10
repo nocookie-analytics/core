@@ -15,6 +15,7 @@ from app.models.parsed_ua import ParsedUA
 from app.schemas.analytics import (
     AvgMetricPerDayStat,
     IntervalType,
+    LiveVisitorStat,
     PageViewsPerDayStat,
     AggregateStat,
     AnalyticsData,
@@ -167,33 +168,53 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 )
             )
 
-            base_query = base_query.filter(
+            base_query_current_interval = base_query.filter(
                 and_(
                     Event.timestamp >= start.datetime,
                     Event.timestamp <= end.datetime,
                 )
             )
             if include_bots is False:
-                base_query = base_query.filter(Event.is_bot.is_(False))
+                base_query_current_interval = base_query_current_interval.filter(
+                    Event.is_bot.is_(False)
+                )
             group_limit = group_limit or 100
             if country is not None:
-                base_query = base_query.filter(Event.ip_country_iso_code == country)
+                base_query_current_interval = base_query_current_interval.filter(
+                    Event.ip_country_iso_code == country
+                )
             if page is not None:
-                base_query = base_query.filter(Event.path == page)
+                base_query_current_interval = base_query_current_interval.filter(
+                    Event.path == page
+                )
             if browser is not None:
-                base_query = base_query.filter(Event.browser_family == browser)
+                base_query_current_interval = base_query_current_interval.filter(
+                    Event.browser_family == browser
+                )
             if os is not None:
-                base_query = base_query.filter(Event.os_family == os)
+                base_query_current_interval = base_query_current_interval.filter(
+                    Event.os_family == os
+                )
             if device is not None:
-                base_query = base_query.filter(Event.device_brand == device)
+                base_query_current_interval = base_query_current_interval.filter(
+                    Event.device_brand == device
+                )
             if referrer_name is not None:
-                base_query = base_query.filter(Event.referrer_name == referrer_name)
-            page_view_base_query = base_query.filter(
+                base_query_current_interval = base_query_current_interval.filter(
+                    Event.referrer_name == referrer_name
+                )
+            page_view_base_query = base_query_current_interval.filter(
                 Event.event_type == EventType.page_view
             )
-            metric_base_query = base_query.filter(Event.event_type == EventType.metric)
+            metric_base_query = base_query_current_interval.filter(
+                Event.event_type == EventType.metric
+            )
             if field == AnalyticsType.SUMMARY:
-                data.summary = SummaryStat.from_base_query(db, base_query)
+                data.summary = SummaryStat.from_base_query(
+                    db, base_query_current_interval
+                )
+            elif field == AnalyticsType.LIVE_VISITORS:
+                data.live_visitors = LiveVisitorStat.from_base_query(base_query)
             elif field == AnalyticsType.SUMMARY_PREVIOUS_INTERVAL:
                 data.summary_previous_interval = SummaryStat.from_base_query(
                     db, base_query_previous_interval
@@ -275,7 +296,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 )
             elif field == AnalyticsType.PAGEVIEWS_PER_DAY:
                 data.pageviews_per_day = PageViewsPerDayStat.from_base_query(
-                    base_query,
+                    base_query_current_interval,
                     start=start.datetime,
                     end=end.datetime,
                     interval=interval,
