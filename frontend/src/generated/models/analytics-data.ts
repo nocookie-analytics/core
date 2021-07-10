@@ -44,6 +44,12 @@ export interface AnalyticsData {
     pages?: Array<AggregateStat>;
     /**
      * 
+     * @type {number}
+     * @memberof AnalyticsData
+     */
+    live_visitors?: number;
+    /**
+     * 
      * @type {SummaryStat}
      * @memberof AnalyticsData
      */

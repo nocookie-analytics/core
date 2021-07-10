@@ -21,6 +21,7 @@
  */
 export enum AnalyticsType {
     Pages = 'pages',
+    LiveVisitors = 'live_visitors',
     Summary = 'summary',
     SummaryPreviousInterval = 'summary_previous_interval',
     PageviewsPerDay = 'pageviews_per_day',
