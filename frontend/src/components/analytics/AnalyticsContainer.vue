@@ -4,6 +4,7 @@
       <v-col>
         <SummaryBlock
           :summaryData="analyticsData.summary"
+          :liveVisitorCount="analyticsData.live_visitors"
           :summaryDataPreviousInterval="analyticsData.summary_previous_interval"
         />
       </v-col>

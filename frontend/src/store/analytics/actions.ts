@@ -47,6 +47,7 @@ export const actions = {
         include: [
           AnalyticsType.Summary,
           AnalyticsType.SummaryPreviousInterval,
+          AnalyticsType.LiveVisitors,
 
           AnalyticsType.Pages,
           AnalyticsType.Countries,

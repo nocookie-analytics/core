@@ -49,6 +49,7 @@ import {
   mdiTrendingDown,
   mdiTrendingNeutral,
   mdiSubdirectoryArrowRight,
+  mdiCheckboxBlankCircle,
 } from '@mdi/js';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
@@ -56,6 +57,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 export default class SummaryBlock extends Vue {
   @Prop() public summaryData!: SummaryStat;
   @Prop() public summaryDataPreviousInterval!: SummaryStat;
+  @Prop() public liveVisitorCount!: number;
 
   percentagechange(newValue: number, oldValue?: number): number | undefined {
     if (oldValue) {
@@ -110,6 +112,14 @@ export default class SummaryBlock extends Vue {
         ),
       });
     }
+    blocks.push({
+      title: 'Live visitors',
+      value: `${this.liveVisitorCount}`,
+      icon: mdiCheckboxBlankCircle,
+      changeSign: 1,
+      change: undefined,
+      class: '',
+    });
     return blocks;
   }
 }
