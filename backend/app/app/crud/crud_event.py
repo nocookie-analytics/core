@@ -58,7 +58,16 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         return sha3_256(data.encode("utf-8")).hexdigest()
 
     @staticmethod
-    def _get_referrer_info(ref_url: Optional[str], curr_url: Optional[str] = None):
+    def _get_referrer_info(
+        ref_url: Optional[str],
+        curr_url: Optional[str] = None,
+        override_ref: Optional[str] = None,
+    ):
+        if override_ref is not None:
+            return {
+                "referrer_name": override_ref,
+                "referrer_medium": ReferrerMediumType.UNKNOWN,
+            }
         referrer_medium, referrer_name = ReferrerMediumType.UNKNOWN, None
         try:
             furled_ref = furl(ref_url)
@@ -107,12 +116,18 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             "page_view_id": event_in.page_view_id.hex,
         }
         if event_in.event_type == EventType.page_view:
+            url_components = self._get_url_components(event_in.url)
+            print(url_components)
             obj_in_data = {
                 **obj_in_data,
-                **self._get_referrer_info(event_in.referrer, event_in.url),
+                **self._get_referrer_info(
+                    event_in.referrer,
+                    event_in.url,
+                    url_components["url_params"].get("ref"),
+                ),
                 **(self._get_parsed_ua(event_in.ua_string)),
-                **self._get_url_components(event_in.url),
                 **self._get_geolocation_info(event_in.ip),
+                **url_components,
                 "visitor_fingerprint": self._get_visitor_fingerprint(
                     event_in.ua_string, domain, event_in.ip
                 ),

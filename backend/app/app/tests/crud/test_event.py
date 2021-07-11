@@ -89,6 +89,25 @@ class TestCreatePageViewEvent:
         assert event.referrer_medium == expected_referrer_medium
         assert event.referrer_name == expected_referrer_name
 
+    def test_override_referrer(
+        self,
+        db: Session,
+        mock_read_only_domain: Domain,
+        mock_ip_address: str,
+    ) -> None:
+        referrer = "https://www.facebook.com/"
+        event = create_random_page_view_event(
+            db,
+            domain=mock_read_only_domain,
+            ip_address=mock_ip_address,
+            create_overrides={
+                "referrer": referrer,
+                "url": f"https://{mock_read_only_domain.domain_name}/path?ref=override",
+            },
+        )
+        assert event.referrer_name == "override"
+        assert event.referrer_medium == ReferrerMediumType.UNKNOWN
+
     def test_create_url_components(
         self,
         db: Session,
