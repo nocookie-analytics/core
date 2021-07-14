@@ -96,13 +96,6 @@ class Event(Base):
 
     is_bot = Column(Boolean)
 
-    # deprecated, replaced with device_type
-    is_mobile = Column(Boolean)
-    is_tablet = Column(Boolean)
-    is_touch_capable = Column(Boolean)
-    is_pc = Column(Boolean)
-    # end deprecated columns
-
     path = Column(String)
     url_params = Column(JSONB)
     referrer_medium = Column(ReferrerMediumTypeEnum)
