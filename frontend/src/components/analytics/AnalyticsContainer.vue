@@ -72,9 +72,16 @@ export default class AnalyticsContainer extends Vue {
         urlExclude: ['Other'],
       },
       {
-        data: this.analyticsData.device_brands || [],
+        data: this.analyticsData.device_types || [],
         title: 'Device',
         urlParamName: 'device',
+        urlExclude: [],
+        transformValue: (str) => str.replace(/^\w/, (c) => c.toUpperCase()),
+      },
+      {
+        data: this.analyticsData.device_brands || [],
+        title: 'Device brand',
+        urlParamName: 'device_brand',
         urlExclude: ['Other', 'Unknown'],
       },
       {

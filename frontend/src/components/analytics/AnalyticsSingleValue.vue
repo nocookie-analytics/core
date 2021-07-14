@@ -1,11 +1,11 @@
 <template>
   <span class="fixed-min-width">
     <span v-if="block.urlParamName === 'country'" class="nowrap">
-      <country-flag :countryName="item.value" style="margin-right: 5px" />
+      <country-flag :countryName="itemValue" style="margin-right: 5px" />
       <optional-router-link
         :to="filterOnThisItemUrl"
         :disabled="!filterOnThisItemUrl.query"
-        >{{ countryCodeToCountryName(item.value) }}</optional-router-link
+        >{{ countryCodeToCountryName(itemValue) }}</optional-router-link
       >
     </span>
     <span v-else-if="block.urlParamName === 'page'">
@@ -13,7 +13,7 @@
         <optional-router-link
           :to="filterOnThisItemUrl"
           :disabled="!filterOnThisItemUrl.query"
-          >{{ item.value }}</optional-router-link
+          >{{ itemValue }}</optional-router-link
         >
       </span>
       <a
@@ -26,10 +26,10 @@
       </a>
     </span>
     <span v-else>
-      <Icon :value="item.value" />&nbsp;<optional-router-link
+      <Icon :value="itemValue" />&nbsp;<optional-router-link
         :to="filterOnThisItemUrl"
         :disabled="!filterOnThisItemUrl.query"
-        >{{ item.value }}</optional-router-link
+        >{{ itemValue }}</optional-router-link
       ></span
     >
   </span>
@@ -57,6 +57,14 @@ export default class AnalyticsSingleValue extends Vue {
 
   countryCodeToCountryName(countryCode: string): string {
     return countryCodes[countryCode] || countryCode;
+  }
+
+  get itemValue(): string {
+    console.log(this.block, this.block.transformValue);
+    if (this.block.transformValue) {
+      return this.block.transformValue(this.item.value);
+    }
+    return this.item.value;
   }
 
   get externalLink(): string {

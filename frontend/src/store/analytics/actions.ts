@@ -57,6 +57,7 @@ export const actions = {
           AnalyticsType.OsFamilies,
           AnalyticsType.BrowserFamilies,
           AnalyticsType.DeviceBrands,
+          AnalyticsType.DeviceTypes,
 
           AnalyticsType.PageviewsPerDay,
 
