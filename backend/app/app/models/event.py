@@ -48,6 +48,12 @@ class MetricType(Enum):
     LCP_FINAL = "lcpFinal"
 
 
+class DeviceType(Enum):
+    MOBILE = "mobile"
+    DESKTOP = "desktop"
+    TABLET = "tablet"
+
+
 EventTypeEnum = ENUM(
     EventType, name="event_type", values_callable=lambda x: [e.value for e in x]
 )
@@ -57,6 +63,7 @@ ReferrerMediumTypeEnum = ENUM(
     values_callable=lambda x: [e.value for e in x],
 )
 MetricTypeEnum = SQLAlchemyEnum(MetricType, native_enum=False)
+DeviceTypeEnum = SQLAlchemyEnum(DeviceType, native_enum=False)
 
 
 class Event(Base):
@@ -83,12 +90,16 @@ class Event(Base):
     browser_version_major = Column(String)
     os_family = Column(String)
     device_brand = Column(String)
+    device_type = Column(DeviceTypeEnum, nullable=True)
 
+    is_bot = Column(Boolean)
+
+    # deprecated, replaced with device_type
     is_mobile = Column(Boolean)
     is_tablet = Column(Boolean)
     is_touch_capable = Column(Boolean)
     is_pc = Column(Boolean)
-    is_bot = Column(Boolean)
+    # end deprecated columns
 
     path = Column(String)
     url_params = Column(JSONB)
@@ -119,6 +130,9 @@ class Event(Base):
         "ix_referrer", domain_id, referrer_medium, referrer_name, timestamp
     )
     ix_path = Index("id_path", domain_id, path, timestamp)
+
+    ix_bot = Index("ix_bot", domain_id, is_bot, timestamp)
+    ix_device_type = Index("ix_device_type", domain_id, device_type, timestamp)
 
     __table_args__: Tuple = (
         Index(

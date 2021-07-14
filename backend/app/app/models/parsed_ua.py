@@ -1,4 +1,5 @@
 from __future__ import annotations
+from app.models.event import DeviceType
 from typing import Optional, Tuple
 from pydantic.main import BaseModel
 from user_agents import parse
@@ -6,10 +7,10 @@ from user_agents import parse
 
 browser_family_map = {
     "Chrome Mobile": "Chrome",
-    "Firefox iOS": "Firefox",
-    "Mobile Safari": "Safari",
-    "Firefox Mobile": "Firefox",
     "Chromium": "Chrome",
+    "Firefox iOS": "Firefox",
+    "Firefox Mobile": "Firefox",
+    "Mobile Safari": "Safari",
 }
 
 
@@ -21,10 +22,7 @@ class ParsedUA(BaseModel):
 
     device_brand: Optional[str]
 
-    is_mobile: bool
-    is_tablet: bool
-    is_touch_capable: bool
-    is_pc: bool
+    device_type: Optional[DeviceType]
     is_bot: bool
 
     @classmethod
@@ -50,6 +48,14 @@ class ParsedUA(BaseModel):
 
         browser_family = browser_family_map.get(browser.family, browser.family)
 
+        device_type: Optional[DeviceType] = None
+        if parsed_ua.is_mobile:
+            device_type = DeviceType.MOBILE
+        elif parsed_ua.is_pc:
+            device_type = DeviceType.DESKTOP
+        elif parsed_ua.is_tablet:
+            device_type = DeviceType.TABLET
+
         return ParsedUA(
             # Browser
             browser_family=browser_family,
@@ -58,10 +64,6 @@ class ParsedUA(BaseModel):
             os_family=os_family,
             # Device
             device_brand=device_brand,
-            # Booleans
-            is_mobile=parsed_ua.is_mobile,
-            is_tablet=parsed_ua.is_tablet,
-            is_touch_capable=parsed_ua.is_touch_capable,
-            is_pc=parsed_ua.is_pc,
+            device_type=device_type,
             is_bot=parsed_ua.is_bot,
         )
