@@ -249,10 +249,17 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 data.os_families = AggregateStat.from_base_query(
                     page_view_base_query, Event.os_family, group_limit=group_limit
                 )
-            elif field == AnalyticsType.DEVICES:
-                data.device_families = AggregateStat.from_base_query(
+            elif field == AnalyticsType.DEVICE_BRANDS:
+                data.device_brands = AggregateStat.from_base_query(
                     page_view_base_query,
                     Event.device_brand,
+                    filter_none=True,
+                    group_limit=group_limit,
+                )
+            elif field == AnalyticsType.DEVICE_TYPES:
+                data.device_types = AggregateStat.from_base_query(
+                    page_view_base_query,
+                    Event.device_type,
                     filter_none=True,
                     group_limit=group_limit,
                 )

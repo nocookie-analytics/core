@@ -5,4 +5,5 @@ export interface DeclarativeAnalyticsBlock {
   title: string;
   urlParamName?: string;
   urlExclude?: Array<string>;
+  transformValue?: CallableFunction; // Function to map values (eg: capitalise)
 }

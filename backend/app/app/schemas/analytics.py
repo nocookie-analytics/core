@@ -25,7 +25,8 @@ class AnalyticsType(Enum):
     COUNTRIES = "countries"
     BROWSERS = "browser_families"
     OS = "os_families"
-    DEVICES = "device_families"
+    DEVICE_BRANDS = "device_brands"
+    DEVICE_TYPES = "device_types"
     REFERRER_MEDIUMS = "referrer_mediums"
     REFERRER_NAMES = "referrer_names"
     UTM_SOURCES = "utm_sources"
@@ -214,7 +215,8 @@ class AnalyticsData(BaseModel):
     browser_families: Optional[List[AggregateStat]]
     countries: Optional[List[AggregateStat]]
     os_families: Optional[List[AggregateStat]]
-    device_families: Optional[List[AggregateStat]]
+    device_brands: Optional[List[AggregateStat]]
+    device_types: Optional[List[AggregateStat]]
     referrer_mediums: Optional[List[AggregateStat]]
     referrer_names: Optional[List[AggregateStat]]
     utm_sources: Optional[List[AggregateStat]]
