@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-app>
-      <v-app-bar app color="secondary">
+      <v-app-bar app flat color="secondary">
         <div class="d-flex align-center">
           <v-img
             alt="No Cookie Analytics"

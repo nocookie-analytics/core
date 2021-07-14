@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar light>
+    <v-toolbar light flat>
       <v-toolbar-title> Domains </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn color="primary" to="/domains/create">Add new domain</v-btn>

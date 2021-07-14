@@ -4,7 +4,7 @@
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md4>
           <v-card class="elevation-12">
-            <v-toolbar dark color="primary" class="white--text">
+            <v-toolbar dark color="primary" class="white--text" flat>
               <v-toolbar-title
                 >{{ appName }} - Password Recovery</v-toolbar-title
               >

@@ -118,7 +118,7 @@
         </v-list>
       </v-layout>
     </v-navigation-drawer>
-    <v-app-bar color="secondary" app>
+    <v-app-bar flat color="secondary" app>
       <span class="hidden-md-and-up">
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       </span>

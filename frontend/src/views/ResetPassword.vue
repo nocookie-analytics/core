@@ -4,7 +4,7 @@
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md4>
           <v-card class="elevation-12">
-            <v-toolbar dark color="primary">
+            <v-toolbar dark flat color="primary">
               <v-toolbar-title>{{ appName }} - Reset Password</v-toolbar-title>
             </v-toolbar>
             <v-card-text>

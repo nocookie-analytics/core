@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar light>
+    <v-toolbar light flat>
       <v-toolbar-title> Manage Users </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn color="primary" to="/main/admin/users/create">Create User</v-btn>
