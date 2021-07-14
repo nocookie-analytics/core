@@ -14,6 +14,7 @@
         :items-per-page="50"
         class="elevation-1"
         :server-items-length="domainsList.length"
+        hide-default-footer
       >
         <template #[`item.domain_name`]="{ item }">
           <router-link :to="'/' + item.domain_name">
@@ -23,10 +24,11 @@
           </router-link>
         </template>
         <template #[`item.actions`]="{ item }">
+          <v-btn title="View analytics" icon :to="'/' + item.domain_name">
+            <v-icon medium> {{ mdiChartAreaspline }}</v-icon>
+          </v-btn>
           <v-btn title="Edit" icon :to="'/domains/' + item.domain_name">
-            <span class="group pa-2">
-              <v-icon medium> {{ $vuetify.icons.values.pencil }}</v-icon>
-            </span>
+            <v-icon medium> {{ $vuetify.icons.values.pencil }}</v-icon>
           </v-btn>
         </template>
       </v-data-table>
@@ -36,6 +38,7 @@
 
 <script lang="ts">
 import { Domain, DomainsApi } from '@/generated';
+import { mdiChartAreaspline } from '@mdi/js';
 import { Component, Vue } from 'vue-property-decorator';
 import { DataTableHeader } from 'vuetify';
 
@@ -44,6 +47,7 @@ export default class ListDomains extends Vue {
   fetchDomainsError: string | null = null;
   domainsList: Array<Domain> = [];
   isLoading = true;
+  mdiChartAreaspline = mdiChartAreaspline;
 
   async mounted(): Promise<void> {
     await this.fetchDomains();

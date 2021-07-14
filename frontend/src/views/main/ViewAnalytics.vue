@@ -18,7 +18,7 @@
     <v-container fluid v-else>
       <v-row align="baseline" no-gutters>
         <v-col cols="12" class="text-h5">
-          <v-icon>{{ mdiWeb }}</v-icon> {{ domainName }}
+          <v-icon>{{ $vuetify.icons.values.web }}</v-icon> {{ domainName }}
         </v-col>
         <v-spacer></v-spacer>
         <v-col cols="12">
@@ -70,7 +70,6 @@ import {
   startOfYear,
   formatISO9075,
 } from 'date-fns';
-import { mdiWeb } from '@mdi/js';
 import { readIsLoggedIn } from '@/store/main/getters';
 
 @Component({
@@ -81,7 +80,6 @@ import { readIsLoggedIn } from '@/store/main/getters';
 })
 export default class ViewAnalytics extends Vue {
   formatISO9075 = formatISO9075;
-  mdiWeb = mdiWeb;
 
   get isLoggedIn(): boolean {
     return readIsLoggedIn(this.$store) || false;

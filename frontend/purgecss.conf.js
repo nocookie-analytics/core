@@ -38,7 +38,7 @@ module.exports = {
       ///^v-row-*/,
       ///^v-col-*/,
     ],
-    greedy: [/v-list-item/, /v-input/],
+    greedy: [/v-list-item/, /v-input/, /v-data-table/],
     //greedy: [/v-list-item/, /v-data-table/],
     // greedy: [/d-flex/],
   },
