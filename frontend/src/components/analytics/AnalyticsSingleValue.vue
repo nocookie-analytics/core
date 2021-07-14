@@ -60,7 +60,6 @@ export default class AnalyticsSingleValue extends Vue {
   }
 
   get itemValue(): string {
-    console.log(this.block, this.block.transformValue);
     if (this.block.transformValue) {
       return this.block.transformValue(this.item.value);
     }
