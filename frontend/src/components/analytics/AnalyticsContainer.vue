@@ -72,7 +72,7 @@ export default class AnalyticsContainer extends Vue {
         urlExclude: ['Other'],
       },
       {
-        data: this.analyticsData.device_families || [],
+        data: this.analyticsData.device_brands || [],
         title: 'Device',
         urlParamName: 'device',
         urlExclude: ['Other', 'Unknown'],

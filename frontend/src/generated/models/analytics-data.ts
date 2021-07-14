@@ -113,7 +113,13 @@ export interface AnalyticsData {
      * @type {Array<AggregateStat>}
      * @memberof AnalyticsData
      */
-    device_families?: Array<AggregateStat>;
+    device_brands?: Array<AggregateStat>;
+    /**
+     * 
+     * @type {Array<AggregateStat>}
+     * @memberof AnalyticsData
+     */
+    device_types?: Array<AggregateStat>;
     /**
      * 
      * @type {Array<AggregateStat>}
