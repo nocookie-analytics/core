@@ -1,5 +1,5 @@
 <template>
-  <router-link v-if="!disabled" v-bind="$attrs">
+  <router-link v-if="!disabled" v-bind="$attrs" class="dark-link">
     <slot />
   </router-link>
 
@@ -16,3 +16,9 @@ export default class OptionalRouterLink extends Vue {
   @Prop() disabled!: boolean;
 }
 </script>
+
+<style scoped>
+.dark-link {
+  color: #d5411a;
+}
+</style>

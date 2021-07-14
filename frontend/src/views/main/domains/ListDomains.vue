@@ -17,7 +17,9 @@
       >
         <template #[`item.domain_name`]="{ item }">
           <router-link :to="'/' + item.domain_name">
-            {{ item.domain_name }}
+            <span class="text-subtitle-1 dark-link">{{
+              item.domain_name
+            }}</span>
           </router-link>
         </template>
         <template #[`item.actions`]="{ item }">
@@ -85,3 +87,9 @@ export default class ListDomains extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.dark-link {
+  color: #ad3515;
+}
+</style>
