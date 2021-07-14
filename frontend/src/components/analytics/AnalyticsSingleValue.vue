@@ -92,7 +92,7 @@ export default class AnalyticsSingleValue extends Vue {
   text-overflow: ellipsis;
   white-space: nowrap;
   display: inline-block;
-  max-width: 250px;
+  max-width: 240px;
 }
 .external-link {
   margin-left: 5px;
