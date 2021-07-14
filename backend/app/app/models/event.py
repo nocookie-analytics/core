@@ -63,7 +63,9 @@ ReferrerMediumTypeEnum = ENUM(
     values_callable=lambda x: [e.value for e in x],
 )
 MetricTypeEnum = SQLAlchemyEnum(MetricType, native_enum=False)
-DeviceTypeEnum = SQLAlchemyEnum(DeviceType, native_enum=False)
+DeviceTypeEnum = SQLAlchemyEnum(
+    DeviceType, native_enum=False, values_callable=lambda x: [e.value for e in x]
+)
 
 
 class Event(Base):
@@ -132,7 +134,13 @@ class Event(Base):
     ix_path = Index("id_path", domain_id, path, timestamp)
 
     ix_bot = Index("ix_bot", domain_id, is_bot, timestamp)
-    ix_device_type = Index("ix_device_type", domain_id, device_type, timestamp)
+    ix_device_type = Index(
+        "ix_device_type",
+        domain_id,
+        device_type,
+        timestamp,
+        postgresql_where=device_type.isnot(None),
+    )
 
     __table_args__: Tuple = (
         Index(
