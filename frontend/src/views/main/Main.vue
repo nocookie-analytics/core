@@ -122,14 +122,16 @@
       <span class="hidden-md-and-up">
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       </span>
-      <v-img
-        alt="No Cookie Analytics"
-        class="shrink mr-2"
-        contain
-        src="/img/logo.png"
-        transition="scale-transition"
-        width="40"
-      />
+      <router-link to="/">
+        <v-img
+          alt="No Cookie Analytics"
+          class="shrink mr-2"
+          contain
+          src="/img/logo.png"
+          transition="scale-transition"
+          width="40"
+        />
+      </router-link>
 
       <v-img
         alt="No Cookie Analytics"

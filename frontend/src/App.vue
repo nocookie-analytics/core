@@ -2,25 +2,28 @@
   <div id="app">
     <v-app>
       <v-app-bar app flat color="secondary">
-        <div class="d-flex align-center">
-          <v-img
-            alt="No Cookie Analytics"
-            class="shrink mr-2"
-            contain
-            src="/img/logo.png"
-            transition="scale-transition"
-            width="40"
-          />
+        <!-- We use a href instead of router link to link to the real homepage, which might not be a part of this Vue app -->
+        <a href="/">
+          <div class="d-flex align-center">
+            <v-img
+              alt="No Cookie Analytics"
+              class="shrink mr-2"
+              contain
+              src="/img/logo.png"
+              transition="scale-transition"
+              width="40"
+            />
 
-          <v-img
-            alt="No Cookie Analytics"
-            src="/img/wordmark.png"
-            class="shrink mt-1 hidden-sm-and-down"
-            contain
-            min-width="200"
-            width="200"
-          />
-        </div>
+            <v-img
+              alt="No Cookie Analytics"
+              src="/img/wordmark.png"
+              class="shrink mt-1 hidden-sm-and-down"
+              contain
+              min-width="200"
+              width="200"
+            />
+          </div>
+        </a>
 
         <v-spacer></v-spacer>
       </v-app-bar>
