@@ -4623,12 +4623,12 @@
         }, 
         "Last.fm": {
             "domains": [
-                "lastfm.ru"
+                "last.fm"
             ]
         }, 
         "LiveJournal": {
             "domains": [
-                "livejournal.ru"
+                "livejournal.com"
             ]
         }, 
         "Tumblr": {
@@ -4665,6 +4665,11 @@
         "MoiKrug.ru": {
             "domains": [
                 "moikrug.ru"
+            ]
+        },
+        "Medium": {
+            "domains": [
+                "medium.com"
             ]
         }
     }
