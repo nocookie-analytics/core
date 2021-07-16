@@ -22,25 +22,6 @@ export const getters = {
   endDate: (state: AnalyticsState): Date => {
     return state.filters.end;
   },
-
-  page: (state: AnalyticsState): string | undefined => {
-    return state.filters.page;
-  },
-  country: (state: AnalyticsState): string | undefined => {
-    return state.filters.country;
-  },
-  browser: (state: AnalyticsState): string | undefined => {
-    return state.filters.browser;
-  },
-  os: (state: AnalyticsState): string | undefined => {
-    return state.filters.os;
-  },
-  device: (state: AnalyticsState): string | undefined => {
-    return state.filters.device;
-  },
-  referrerName: (state: AnalyticsState): string | undefined => {
-    return state.filters.referrerName;
-  },
 };
 
 const { read } = getStoreAccessors<AnalyticsState, RootState>('');
@@ -50,9 +31,3 @@ export const readCurrentDomain = read(getters.currentDomain);
 export const readStartDate = read(getters.startDate);
 export const readEndDate = read(getters.endDate);
 export const readAnalyticsError = read(getters.analyticsError);
-export const readPage = read(getters.page);
-export const readCountry = read(getters.country);
-export const readBrowser = read(getters.browser);
-export const readOs = read(getters.os);
-export const readDevice = read(getters.device);
-export const readReferrerName = read(getters.referrerName);
