@@ -10,7 +10,13 @@ from sqlalchemy.orm import Session
 
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
-from app.models.event import Event, EventType, MetricType, ReferrerMediumType
+from app.models.event import (
+    DeviceType,
+    Event,
+    EventType,
+    MetricType,
+    ReferrerMediumType,
+)
 from app.models.parsed_ua import ParsedUA
 from app.schemas.analytics import (
     AvgMetricPerDayStat,
@@ -167,7 +173,8 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         page: str = None,
         browser: str = None,
         os: str = None,
-        device: str = None,
+        device_type: DeviceType = None,
+        device_brand: str = None,
         referrer_name: str = None,
         group_limit: int = None,
         include_bots: bool = False,
@@ -210,9 +217,13 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 base_query_current_interval = base_query_current_interval.filter(
                     Event.os_family == os
                 )
-            if device is not None:
+            if device_brand is not None:
                 base_query_current_interval = base_query_current_interval.filter(
-                    Event.device_brand == device
+                    Event.device_brand == device_brand
+                )
+            if device_type is not None:
+                base_query_current_interval = base_query_current_interval.filter(
+                    Event.device_type == device_type
                 )
             if referrer_name is not None:
                 base_query_current_interval = base_query_current_interval.filter(

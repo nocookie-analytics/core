@@ -1,4 +1,5 @@
 from __future__ import annotations
+from app.models.event import DeviceType
 from datetime import datetime
 from typing import List, Optional
 
@@ -46,7 +47,8 @@ def get_analytics(
     country: str = None,
     browser: str = None,
     os: str = None,
-    device: str = None,
+    device: DeviceType = None,
+    device_brand: str = None,
     referrer_name: str = None,
     limit: int = 100,
     current_user: models.User = Depends(deps.get_current_active_user_silent),
@@ -72,7 +74,8 @@ def get_analytics(
         page=page,
         browser=browser,
         os=os,
-        device=device,
+        device_brand=device_brand,
+        device_type=device,
         group_limit=limit,
         include_bots=include_bots,
         referrer_name=referrer_name,
