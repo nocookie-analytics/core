@@ -5,6 +5,7 @@ export * from './avg-metric-per-day-stat';
 export * from './body-create-user-open-api-v1-users-open-post';
 export * from './body-reset-password-api-v1-reset-password-post';
 export * from './body-update-user-me-api-v1-users-me-put';
+export * from './device-type';
 export * from './domain';
 export * from './domain-create';
 export * from './domain-update';
