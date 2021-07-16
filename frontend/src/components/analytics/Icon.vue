@@ -41,6 +41,7 @@ const directMatchIconMap = [
   'ios',
   'linux',
   'macos',
+  'medium',
   'nokia',
   'opera',
   'safari',
@@ -57,6 +58,7 @@ const indirectIconMap = {
   Chromium: 'googlechrome',
   Edge: 'microsoftedge',
   Googlebot: 'google',
+  'Hacker News': 'ycombinator',
 };
 
 @Component
