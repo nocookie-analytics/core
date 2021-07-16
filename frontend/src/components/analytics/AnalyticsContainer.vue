@@ -81,7 +81,7 @@ export default class AnalyticsContainer extends Vue {
       {
         data: this.analyticsData.device_brands || [],
         title: 'Device brand',
-        urlParamName: 'device_brand',
+        urlParamName: 'deviceBrand',
         urlExclude: ['Other', 'Unknown'],
       },
       {

@@ -30,6 +30,7 @@ export const getFiltersFromUrl = (): AnalyticsFilterState => {
     country: getURLParamValue('country'),
     browser: getURLParamValue('browser'),
     device: getURLParamValue('device'),
+    deviceBrand: getURLParamValue('deviceBrand'),
     os: getURLParamValue('os'),
     referrerName: getURLParamValue('referrerName'),
     start: readDateFromURLParam('start', addDays(now, -30)),

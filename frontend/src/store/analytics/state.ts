@@ -6,6 +6,7 @@ export interface BaseAnalyticsFilterState {
   browser: string | undefined;
   os: string | undefined;
   device: string | undefined;
+  deviceBrand: string | undefined;
   referrerName: string | undefined;
 }
 
