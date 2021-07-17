@@ -1,6 +1,6 @@
 <template>
-  <v-container fluid>
-    <v-card class="ma-3 pa-3">
+  <v-container>
+    <v-card class="ma-3 pa-3" outlined>
       <v-card-title primary-title>
         <div class="headline primary--text">Set Password</div>
       </v-card-title>
@@ -12,7 +12,7 @@
               class="title primary--text text--darken-2"
               v-if="userProfile.full_name"
             >
-              {{ userProfile.full_name }}
+              {{ userProfile.full_name }} ({{ userProfile.email }})
             </div>
             <div class="title primary--text text--darken-2" v-else>
               {{ userProfile.email }}
@@ -48,9 +48,11 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click="cancel">Cancel</v-btn>
-        <v-btn @click="reset">Reset</v-btn>
-        <v-btn @click="submit" :disabled="!valid">Save</v-btn>
+        <v-btn class="ma-3" @click="cancel">Cancel</v-btn>
+        <v-btn class="ma-3" @click="reset">Reset</v-btn>
+        <v-btn class="ma-3" @click="submit" :disabled="!valid" color="primary"
+          >Save</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-container>

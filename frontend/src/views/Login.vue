@@ -3,7 +3,7 @@
     <v-container fluid fill-height>
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md4>
-          <v-card class="elevation-12">
+          <v-card>
             <v-toolbar color="primary" class="white--text" flat>
               <v-toolbar-title>{{ appName }} - Login</v-toolbar-title>
               <v-spacer></v-spacer>
@@ -37,7 +37,7 @@
                   Incorrect email or password
                 </v-alert>
               </div>
-              <v-flex>
+              <v-flex class="text-subtitle-1">
                 <router-link to="/register"
                   >Don't have an account yet?</router-link
                 ></v-flex

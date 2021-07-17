@@ -1,7 +1,7 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <router-view :key="$route.fullPath"></router-view>
-    <v-card class="ma-3 pa-3">
+    <v-card class="ma-3 pa-3" outlined>
       <v-card-title primary-title>
         <div class="headline primary--text" v-if="isCreate">Add new domain</div>
         <div class="headline primary--text" v-else>Edit domain</div>

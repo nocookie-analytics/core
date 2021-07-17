@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-card class="ma-3 pa-3">
       <v-card-title primary-title>
         <div class="headline primary--text">Edit User</div>

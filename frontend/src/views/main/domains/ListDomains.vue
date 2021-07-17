@@ -1,11 +1,11 @@
 <template>
   <div>
-    <v-toolbar light flat>
-      <v-toolbar-title> Domains </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn color="primary" to="/domains/create">Add new domain</v-btn>
-    </v-toolbar>
-    <v-container fluid>
+    <v-container>
+      <v-toolbar light flat outlined>
+        <v-toolbar-title> Domains </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" to="/domains/create">Add new domain</v-btn>
+      </v-toolbar>
       <v-data-table
         loading="isLoading"
         :loading-text="loadingText"

@@ -1,6 +1,6 @@
 <template>
-  <v-container fluid>
-    <v-card class="ma-3 pa-3">
+  <v-container>
+    <v-card class="ma-3 pa-3" outlined>
       <v-card-title primary-title>
         <div class="headline primary--text">User Profile</div>
       </v-card-title>
@@ -29,8 +29,12 @@
         </div>
       </v-card-text>
       <v-card-actions>
-        <v-btn to="/main/profile/edit">Edit</v-btn>
-        <v-btn to="/main/profile/password">Change password</v-btn>
+        <v-btn color="primary" class="ma-3" to="/main/profile/edit"
+          >Edit profile information</v-btn
+        >
+        <v-btn color="primary" to="/main/profile/password"
+          >Change password</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-container>

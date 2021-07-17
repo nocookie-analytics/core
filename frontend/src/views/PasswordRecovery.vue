@@ -3,7 +3,7 @@
     <v-container fluid fill-height>
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md4>
-          <v-card class="elevation-12">
+          <v-card>
             <v-toolbar dark color="primary" class="white--text" flat>
               <v-toolbar-title
                 >{{ appName }} - Password Recovery</v-toolbar-title
@@ -35,8 +35,13 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn @click="cancel">Cancel</v-btn>
-              <v-btn @click.prevent="submit" :disabled="!valid">
+              <v-btn class="ma-3" @click="cancel">Cancel</v-btn>
+              <v-btn
+                class="ma-3"
+                color="primary"
+                @click.prevent="submit"
+                :disabled="!valid"
+              >
                 Recover Password
               </v-btn>
             </v-card-actions>
