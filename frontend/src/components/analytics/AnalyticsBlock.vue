@@ -34,7 +34,7 @@ export default class AnalyticsBlock extends Vue {
 
   currentPage = 0;
 
-  itemsPerPage = 10;
+  itemsPerPage = 5;
 
   private get totalPages() {
     return Math.ceil(this.block.data.length / this.itemsPerPage);
