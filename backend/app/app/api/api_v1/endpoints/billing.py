@@ -14,9 +14,6 @@ import stripe
 
 router = APIRouter()
 
-if settings.STRIPE_API_KEY:
-    stripe.api_key = settings.STRIPE_API_KEY
-
 
 @router.get("/subscribe", response_model=schemas.SignupLink)
 def subscribe(

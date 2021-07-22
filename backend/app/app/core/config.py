@@ -9,8 +9,9 @@ from pydantic import (
     HttpUrl,
     PostgresDsn,
     validator,
-    Field,
 )
+
+import stripe
 
 
 class Settings(BaseSettings):
@@ -123,3 +124,6 @@ if "POSTGRES_DB" in os.environ:
     override_settings = {"POSTGRES_DB": os.environ["POSTGRES_DB"]}
 
 settings = Settings(**override_settings)
+
+if settings.STRIPE_API_KEY:
+    stripe.api_key = settings.STRIPE_API_KEY
