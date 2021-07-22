@@ -24,3 +24,5 @@ class User(Base):
     updated = Column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
+
+    stripe_customer_id = Column(String)
