@@ -2,7 +2,15 @@ import os
 import secrets
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, PostgresDsn, validator
+from pydantic import (
+    AnyHttpUrl,
+    BaseSettings,
+    EmailStr,
+    HttpUrl,
+    PostgresDsn,
+    validator,
+    Field,
+)
 
 
 class Settings(BaseSettings):
@@ -100,6 +108,9 @@ class Settings(BaseSettings):
     USERS_OPEN_REGISTRATION: bool = True
 
     MMDB_PATH = "data/db-ip-country.mmdb"
+
+    STRIPE_API_KEY: Optional[str] = None
+    STRIPE_WEBHOOK_SECRET: Optional[str] = None
 
     class Config:
         case_sensitive = True

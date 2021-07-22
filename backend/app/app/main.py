@@ -51,7 +51,7 @@ if settings.SENTRY_DSN:
 
 
 @app.on_event("startup")
-@repeat_every(seconds=60 * 15, wait_first=True)
+@repeat_every(seconds=60 * 15, wait_first=True, logger=logger)
 def update_salts() -> None:
     # this task isn't well-suited for scaling horizontally, but that's a problem for another time
     db = SessionLocal()
