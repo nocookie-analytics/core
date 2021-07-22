@@ -1,12 +1,13 @@
 from typing import Any
 
 from fastapi import APIRouter, Depends
+from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 from starlette.datastructures import URLPath
 from starlette.requests import Request
 from starlette.responses import Response
 
-from app import models, schemas
+from app import crud, models, schemas
 from app.api import deps
 from app.core.config import settings
 from app.core.products import Plan
@@ -34,9 +35,19 @@ def subscribe(
         for price_object in price_list["data"]
     }
 
+    if not current_user.stripe_customer_id:
+        crud.user.create_stripe_customer(db, current_user)
+
+    if not current_user.stripe_customer_id:
+        raise HTTPException(
+            status_code=500,
+            detail="Error creating Stripe customer, please try again alter",
+        )
+
     session = stripe.checkout.Session.create(
         success_url=success_url,
         cancel_url=cancel_url,
+        customer=current_user.stripe_customer_id,
         payment_method_types=["card"],
         mode="subscription",
         line_items=[
@@ -46,8 +57,6 @@ def subscribe(
             }
         ],
         subscription_data={"trial_period_days": 14},
-        client_reference_id=current_user.id,
-        customer_email=current_user.email,
     )
     return {"url": session.url}
 
