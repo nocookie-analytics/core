@@ -1,9 +1,13 @@
 from enum import Enum
-from app.core.config import settings
-from app.logger import logger
+from typing import List
 
 
 class Plan(Enum):
+    NO_PLAN = "no_plan"
+    FREE = "free"
     LITE = "lite"
     MEDIUM = "medium"
     ENTERPRISE = "enterprise"
+
+
+SUBSCRIBABLE_PLANS = [Plan.LITE, Plan.MEDIUM, Plan.ENTERPRISE]
