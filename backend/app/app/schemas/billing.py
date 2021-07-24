@@ -2,5 +2,5 @@ from pydantic.main import BaseModel
 from pydantic.networks import HttpUrl
 
 
-class SignupLink(BaseModel):
+class StripeLink(BaseModel):
     url: HttpUrl

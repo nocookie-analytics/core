@@ -1,3 +1,5 @@
+from datetime import datetime
+from app.core.products import Plan
 from typing import Optional
 
 from pydantic import BaseModel, EmailStr
@@ -22,6 +24,13 @@ class UserUpdate(UserBase):
     password: Optional[str] = None
 
 
+class UserStripeInfoUpdate(BaseModel):
+    stripe_customer_id: str
+    active_plan: Optional[Plan]
+    stripe_subscription_ref: Optional[str]
+    last_paid: Optional[datetime]
+
+
 class UserInDBBase(UserBase):
     id: Optional[int] = None
 
@@ -31,7 +40,7 @@ class UserInDBBase(UserBase):
 
 # Additional properties to return via API
 class User(UserInDBBase):
-    pass
+    active_plan: Plan
 
 
 # Additional properties stored in DB

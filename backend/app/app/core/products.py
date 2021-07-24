@@ -8,6 +8,7 @@ class Plan(Enum):
     LITE = "lite"
     MEDIUM = "medium"
     ENTERPRISE = "enterprise"
+    CANCELLED = "cancelled"
 
 
 SUBSCRIBABLE_PLANS = [Plan.LITE, Plan.MEDIUM, Plan.ENTERPRISE]

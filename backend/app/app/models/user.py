@@ -31,5 +31,7 @@ class User(Base):
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
 
-    stripe_customer_id = Column(String)
+    stripe_customer_id = Column(String, unique=True)
     active_plan = Column(ActivePlanEnum, default=Plan.NO_PLAN)
+    stripe_subscription_ref = Column(String, nullable=True)
+    last_paid = Column(DateTime(timezone=True), nullable=True)
