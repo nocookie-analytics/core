@@ -29,7 +29,7 @@ def portal(
     request: Request,
     current_user: models.User = Depends(deps.get_current_active_user),
 ):
-    session = get_portal_session(request, current_user)
+    session = get_portal_session(request.base_url, current_user)
     return {"url": session.url}
 
 
@@ -64,7 +64,15 @@ def subscribe(
             detail="An active subscription already exists for this user",
         )
 
-    session = create_checkout_session(request, plan, current_user)
+    session = create_checkout_session(request.base_url, plan, current_user)
+    return {"url": session.url}
+
+
+@router.get("/portal")
+def portal_session(
+    request: Request, current_user: models.User = Depends(deps.get_current_active_user)
+):
+    session = get_portal_session(request.base_url, current_user)
     return {"url": session.url}
 
 

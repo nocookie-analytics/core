@@ -1,6 +1,6 @@
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple, Union
 from sqlalchemy.orm.session import Session
-from starlette.datastructures import URLPath
+from starlette.datastructures import URL, URLPath
 from starlette.requests import Request
 from app.core.config import settings
 
@@ -12,6 +12,8 @@ import stripe
 
 
 def create_stripe_customer_for_user(db: Session, user_obj: User) -> None:
+    if user_obj.stripe_customer_id:
+        raise Exception("This user already has a customer id")
     customer = stripe.Customer.create(
         email=user_obj.email,
         metadata={"user_id": user_obj.id},
@@ -46,13 +48,9 @@ def get_stripe_prices() -> Dict[Plan, str]:
     return price_map
 
 
-def create_checkout_session(request: Request, plan: Plan, user: User) -> Any:
-    cancel_url = URLPath("/main/transaction/cancelled").make_absolute_url(
-        request.base_url
-    )
-    success_url = URLPath("/main/transaction/success").make_absolute_url(
-        request.base_url
-    )
+def create_checkout_session(base_url: Union[str, URL], plan: Plan, user: User) -> Any:
+    cancel_url = URLPath("/main/transaction/cancelled").make_absolute_url(base_url)
+    success_url = URLPath("/main/transaction/success").make_absolute_url(base_url)
     prices = get_stripe_prices()
 
     session = stripe.checkout.Session.create(
@@ -73,8 +71,8 @@ def create_checkout_session(request: Request, plan: Plan, user: User) -> Any:
     return session
 
 
-def get_portal_session(request: Request, user: User) -> Any:
-    return_url = URLPath("/main/").make_absolute_url(request.base_url)
+def get_portal_session(base_url: Union[str, URL], user: User) -> Any:
+    return_url = URLPath("/main/").make_absolute_url(base_url)
     session = stripe.billing_portal.Session.create(
         customer=user.stripe_customer_id,
         return_url=return_url,
