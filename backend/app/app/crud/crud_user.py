@@ -5,8 +5,7 @@ from sqlalchemy.orm import Session
 from app.core.security import get_password_hash, verify_password
 from app.crud.base import CRUDBase
 from app.models.user import User
-from app.schemas.user import UserCreate, UserUpdate
-import stripe
+from app.schemas.user import UserCreate, UserStripeInfoUpdate, UserUpdate
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
@@ -24,15 +23,6 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         db.commit()
         db.refresh(db_obj)
         return db_obj
-
-    def create_stripe_customer(self, db: Session, user_obj: User):
-        customer = stripe.Customer.create(
-            email=user_obj.email,
-            metadata={"user_id": user_obj.id},
-            name=user_obj.full_name,
-        )
-        user_obj.stripe_customer_id = customer["id"]
-        db.commit()
 
     def update(
         self, db: Session, *, db_obj: User, obj_in: Union[UserUpdate, Dict[str, Any]]
@@ -60,6 +50,12 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
     def is_superuser(self, user: User) -> bool:
         return user.is_superuser
+
+    def update_stripe_info(
+        self, db: Session, *, user_obj: User, obj_in: UserStripeInfoUpdate
+    ):
+        update_data = obj_in.dict(exclude_unset=True)
+        return super().update(db, db_obj=user_obj, obj_in=update_data)
 
 
 user = CRUDUser(User)
