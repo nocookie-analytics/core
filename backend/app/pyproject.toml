@@ -44,6 +44,7 @@ pylint = "^2.7.4"
 ipython = "^7.22.0"
 coverage = {extras = ["toml"], version = "^5.5"}
 hypothesis = "^6.8.1"
+pytest-vcr = "^1.0.2"
 
 [tool.isort]
 multi_line_output = 3
