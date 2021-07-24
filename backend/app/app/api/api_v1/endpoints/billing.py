@@ -1,42 +1,55 @@
+from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
-from starlette.datastructures import URLPath
 from starlette.requests import Request
-from starlette.responses import Response
+import stripe
 
 from app import crud, models, schemas
 from app.api import deps
-from app.core.config import settings
-from app.core.products import Plan
-import stripe
+from app.core.products import Plan, SUBSCRIBABLE_PLANS
+from app.schemas.user import UserStripeInfoUpdate
+from app.utils.stripe_helpers import (
+    create_checkout_session,
+    create_stripe_customer_for_user,
+    get_portal_session,
+    get_stripe_subscriptions_for_user,
+    get_user_from_stripe_customer_id,
+    verify_webhook,
+)
 
 router = APIRouter()
 
 
-@router.get("/subscribe", response_model=schemas.SignupLink)
+@router.get("/portal", response_model=schemas.StripeLink)
+def portal(
+    *,
+    request: Request,
+    current_user: models.User = Depends(deps.get_current_active_user),
+):
+    session = get_portal_session(request, current_user)
+    return {"url": session.url}
+
+
+@router.get("/subscribe", response_model=schemas.StripeLink)
 def subscribe(
     *,
     db: Session = Depends(deps.get_db),
-    plan_name: Plan,
+    plan: Plan,
     request: Request,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Subscribe to a plan
     """
-    cancel_url = URLPath("/main/billing/cancelled").make_absolute_url(request.base_url)
-    success_url = URLPath("/main/billing/success").make_absolute_url(request.base_url)
-    price_list = stripe.Price.list(lookup_keys=[e.value for e in Plan])
-    price_map = {
-        Plan(price_object.lookup_key): price_object
-        for price_object in price_list["data"]
-    }
-
+    if plan not in SUBSCRIBABLE_PLANS:
+        raise HTTPException(
+            status_code=400, detail="The plan you're looking for is not here"
+        )
     if not current_user.stripe_customer_id:
-        crud.user.create_stripe_customer(db, current_user)
+        create_stripe_customer_for_user(db, current_user)
 
     if not current_user.stripe_customer_id:
         raise HTTPException(
@@ -44,55 +57,54 @@ def subscribe(
             detail="Error creating Stripe customer, please try again alter",
         )
 
-    session = stripe.checkout.Session.create(
-        success_url=success_url,
-        cancel_url=cancel_url,
-        customer=current_user.stripe_customer_id,
-        payment_method_types=["card"],
-        mode="subscription",
-        line_items=[
-            {
-                "price": price_map[plan_name].id,
-                "quantity": 1,
-            }
-        ],
-        subscription_data={"trial_period_days": 14},
-    )
+    subscriptions = get_stripe_subscriptions_for_user(current_user)
+    if len(subscriptions.data):
+        raise HTTPException(
+            status_code=400,
+            detail="An active subscription already exists for this user",
+        )
+
+    session = create_checkout_session(request, plan, current_user)
     return {"url": session.url}
 
 
 @router.post("/webhook")
-async def webhook_received(request: Request):
-    webhook_secret = settings.STRIPE_WEBHOOK_SECRET
-
+async def webhook_received(request: Request, db: Session = Depends(deps.get_db)):
     body = await request.body()
-    request_data = await request.json()
 
-    if webhook_secret:
-        # Retrieve the event by verifying the signature using the raw body and secret if webhook signing is configured.
-        signature = request.headers.get("stripe-signature")
-        try:
-            event = stripe.Webhook.construct_event(
-                payload=body, sig_header=signature, secret=webhook_secret
+    # Retrieve the event by verifying the signature using the raw body and secret if webhook signing is configured.
+    signature = request.headers.get("stripe-signature")
+    try:
+        event_type, data = verify_webhook(body, signature)
+    except Exception as e:
+        return e
+
+    if event_type in [
+        "checkout.session.completed",
+        "customer.subscription.deleted",
+        "invoice.paid",
+    ]:
+        customer = data.object.customer
+        subscription = data.object.subscription
+        user = get_user_from_stripe_customer_id(db, customer)
+        update_stripe_info = None
+        if event_type == "checkout.session.completed":
+            stripe_subscription = stripe.Subscription.retrieve(subscription)
+            plan = Plan(stripe_subscription.metadata["plan"])
+            update_stripe_info = UserStripeInfoUpdate(
+                active_plan=plan, stripe_subscription_ref=subscription
             )
-            data = event["data"]
-        except Exception as e:
-            return e
-        # Get the type of webhook event sent - used to check the status of PaymentIntents.
-        event_type = event["type"]
-    else:
-        data = request_data["data"]
-        event_type = request_data["type"]
-
-    if event_type == "checkout.session.completed":
-        # Payment is successful and the subscription is created.
-        # You should provision the subscription and save the customer ID to your database.
-        print(data)
-    elif event_type == "invoice.paid":
-        # Continue to provision the subscription as payments continue to be made.
-        # Store the status in your database and check when a user accesses your service.
-        # This approach helps you avoid hitting rate limits.
-        print(data)
+        elif event_type == "customer.subscription.deleted":
+            update_stripe_info = UserStripeInfoUpdate(
+                active_plan=Plan.NO_PLAN, stripe_subscription_ref=None
+            )
+        elif event_type == "invoice.paid":
+            # Continue to provision the subscription as payments continue to be made.
+            # Store the status in your database and check when a user accesses your service.
+            # This approach helps you avoid hitting rate limits.
+            update_stripe_info = UserStripeInfoUpdate(last_paid=datetime.now())
+        if update_stripe_info:
+            crud.user.update_stripe_info(db, user_obj=user, obj_in=update_stripe_info)
     elif event_type == "invoice.payment_failed":
         # The payment failed or the customer does not have a valid payment method.
         # The subscription becomes past_due. Notify your customer and send them to the
@@ -101,4 +113,4 @@ async def webhook_received(request: Request):
     else:
         print("Unhandled event type {}".format(event_type))
 
-    return Response({"status": "success"})
+    return {"status": "success"}
