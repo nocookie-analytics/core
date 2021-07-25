@@ -31,7 +31,9 @@ def get_stripe_subscriptions_for_user(user_obj: User) -> List:
 def cancel_stripe_subscription(db: Session, user_obj: User) -> None:
     subscription = stripe.Subscription.list(customer=user_obj.stripe_customer_id)
     stripe.Subscription.delete(subscription.data[0].id)
-    stripe_info_update = UserStripeInfoUpdate(active_plan=Plan.CANCELLED)
+    stripe_info_update = UserStripeInfoUpdate(
+        active_plan=Plan.CANCELLED, stripe_subscription_ref=None
+    )
     crud.user.update_stripe_info(db, user_obj=user_obj, obj_in=stripe_info_update)
 
 

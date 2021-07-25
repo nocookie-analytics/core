@@ -25,7 +25,7 @@ class UserUpdate(UserBase):
 
 
 class UserStripeInfoUpdate(BaseModel):
-    stripe_customer_id: str
+    stripe_customer_id: Optional[str]
     active_plan: Optional[Plan]
     stripe_subscription_ref: Optional[str]
     last_paid: Optional[datetime]
