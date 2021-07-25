@@ -89,7 +89,7 @@ jobs:
 
     - name: Run tests
       run: |
-        docker-compose -f docker-stack.yml exec -T backend bash /app/tests-start.sh --cov=app "$@"
+        docker-compose -f docker-stack.yml exec -T backend bash /app/tests-start.sh --cov=app --vcr-record=none "$@"
 
     - name: Log docker status
       if: ${{ always() }}
