@@ -86,12 +86,12 @@ jobs:
     - name: Start docker
       run: |
         docker-compose -f docker-stack.yml up -d
+      env:
+        STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
 
     - name: Run tests
       run: |
         docker-compose -f docker-stack.yml exec -T backend bash /app/tests-start.sh --cov=app --vcr-record=none "$@"
-      env:
-        STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
 
     - name: Log docker status
       if: ${{ always() }}
