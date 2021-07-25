@@ -50,7 +50,7 @@ def get_stripe_prices() -> Dict[Plan, str]:
     return price_map
 
 
-def create_checkout_session(base_url: Union[str, URL], plan: Plan, user: User) -> Any:
+def create_checkout_session(base_url: Union[str, URL], plan: Plan, user: User) -> str:
     cancel_url = URLPath("/main/transaction/cancelled").make_absolute_url(base_url)
     success_url = URLPath("/main/transaction/success").make_absolute_url(base_url)
     prices = get_stripe_prices()
@@ -70,16 +70,16 @@ def create_checkout_session(base_url: Union[str, URL], plan: Plan, user: User) -
         ],
         subscription_data={"trial_period_days": 14},
     )
-    return session
+    return session.url
 
 
-def get_portal_session(base_url: Union[str, URL], user: User) -> Any:
+def get_portal_session_url(base_url: Union[str, URL], user: User) -> str:
     return_url = URLPath("/main/").make_absolute_url(base_url)
     session = stripe.billing_portal.Session.create(
         customer=user.stripe_customer_id,
         return_url=return_url,
     )
-    return session
+    return session.url
 
 
 def verify_webhook(body, signature) -> Tuple[str, Any]:

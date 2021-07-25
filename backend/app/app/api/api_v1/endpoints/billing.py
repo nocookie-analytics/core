@@ -14,7 +14,7 @@ from app.schemas.user import UserStripeInfoUpdate
 from app.utils.stripe_helpers import (
     create_checkout_session,
     create_stripe_customer_for_user,
-    get_portal_session,
+    get_portal_session_url,
     get_stripe_subscriptions_for_user,
     get_user_from_stripe_customer_id,
     verify_webhook,
@@ -29,8 +29,8 @@ def portal(
     request: Request,
     current_user: models.User = Depends(deps.get_current_active_user),
 ):
-    session = get_portal_session(request.base_url, current_user)
-    return {"url": session.url}
+    url = get_portal_session_url(request.base_url, current_user)
+    return {"url": url}
 
 
 @router.get("/subscribe", response_model=schemas.StripeLink)
@@ -54,26 +54,18 @@ def subscribe(
     if not current_user.stripe_customer_id:
         raise HTTPException(
             status_code=500,
-            detail="Error creating Stripe customer, please try again alter",
+            detail="Error creating Stripe customer, please try again later",
         )
 
     subscriptions = get_stripe_subscriptions_for_user(current_user)
-    if len(subscriptions.data):
+    if len(subscriptions):
         raise HTTPException(
             status_code=400,
             detail="An active subscription already exists for this user",
         )
 
-    session = create_checkout_session(request.base_url, plan, current_user)
-    return {"url": session.url}
-
-
-@router.get("/portal")
-def portal_session(
-    request: Request, current_user: models.User = Depends(deps.get_current_active_user)
-):
-    session = get_portal_session(request.base_url, current_user)
-    return {"url": session.url}
+    url = create_checkout_session(request.base_url, plan, current_user)
+    return {"url": url}
 
 
 @router.post("/webhook")

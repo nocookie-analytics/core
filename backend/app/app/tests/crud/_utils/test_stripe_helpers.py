@@ -11,7 +11,7 @@ from app.utils.stripe_helpers import (
     cancel_stripe_subscription,
     create_checkout_session,
     create_stripe_customer_for_user,
-    get_portal_session,
+    get_portal_session_url,
     get_stripe_prices,
     get_stripe_subscriptions_for_user,
     get_user_from_stripe_customer_id,
@@ -86,5 +86,5 @@ class TestStripe:
         assert session.url
 
     def test_create_portal(self, user: User):
-        portal = get_portal_session("http://localhost", user)
+        portal = get_portal_session_url("http://localhost", user)
         assert portal.url
