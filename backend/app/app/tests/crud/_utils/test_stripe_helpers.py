@@ -82,9 +82,9 @@ class TestStripe:
         assert get_user_from_stripe_customer_id(db, user.stripe_customer_id) == user
 
     def test_create_checkout_session(self, user: User):
-        session = create_checkout_session("http://localhost", Plan.LITE, user)
-        assert session.url
+        session_url = create_checkout_session("http://localhost", Plan.LITE, user)
+        assert session_url
 
     def test_create_portal(self, user: User):
-        portal = get_portal_session_url("http://localhost", user)
-        assert portal.url
+        portal_url = get_portal_session_url("http://localhost", user)
+        assert portal_url

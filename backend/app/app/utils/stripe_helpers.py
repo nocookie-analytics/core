@@ -51,6 +51,7 @@ def get_stripe_prices() -> Dict[Plan, str]:
 
 
 def create_checkout_session(base_url: Union[str, URL], plan: Plan, user: User) -> str:
+    """Get a URL for a checkout session"""
     cancel_url = URLPath("/main/transaction/cancelled").make_absolute_url(base_url)
     success_url = URLPath("/main/transaction/success").make_absolute_url(base_url)
     prices = get_stripe_prices()
