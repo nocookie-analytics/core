@@ -108,7 +108,9 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str
     USERS_OPEN_REGISTRATION: bool = True
 
-    MMDB_PATH = "data/db-ip-country.mmdb"
+    MMDB_PATH: str = "data/db-ip-country.mmdb"
+
+    TRIAL_PERIOD_DAYS: int = 14
 
     STRIPE_API_KEY: Optional[str] = None
     STRIPE_WEBHOOK_SECRET: Optional[str] = None
