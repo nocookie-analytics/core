@@ -1,8 +1,8 @@
 """add stripe related fields
 
-Revision ID: ed84c18b6b8b
+Revision ID: 70a1eff57522
 Revises: e3844e1ac67a
-Create Date: 2021-07-26 20:21:19.674493
+Create Date: 2021-07-26 20:23:41.304045
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ed84c18b6b8b'
+revision = '70a1eff57522'
 down_revision = 'e3844e1ac67a'
 branch_labels = None
 depends_on = None
@@ -22,7 +22,7 @@ def upgrade():
     op.add_column('user', sa.Column('last_paid', sa.DateTime(timezone=True), nullable=True))
     op.add_column('user', sa.Column('stripe_customer_id', sa.String(), nullable=True))
     op.add_column('user', sa.Column('stripe_subscription_ref', sa.String(), nullable=True))
-    op.add_column('user', sa.Column('trial_end_date', sa.Date(), nullable=True))
+    op.add_column('user', sa.Column('trial_end_date', sa.Date(), nullable=False))
     op.create_index(op.f('ix_user_stripe_customer_id'), 'user', ['stripe_customer_id'], unique=True)
     # ### end Alembic commands ###
 

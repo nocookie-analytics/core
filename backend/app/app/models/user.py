@@ -30,5 +30,5 @@ class User(Base):
     stripe_customer_id = Column(String, unique=True, index=True)
     active_plan = Column(ActivePlanEnum, default=Plan.NO_PLAN)
     stripe_subscription_ref = Column(String, nullable=True)
-    trial_end_date = Column(Date())
+    trial_end_date = Column(Date(), nullable=False)
     last_paid = Column(DateTime(timezone=True), nullable=True)
