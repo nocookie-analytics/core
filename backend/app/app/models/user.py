@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+
+from sqlalchemy.sql.expression import text
 from app.core.config import settings
 
 from sqlalchemy import Boolean, Column, Integer, String
@@ -34,6 +36,7 @@ class User(Base):
     trial_end_date = Column(
         Date(),
         nullable=False,
+        server_default=text(f"NOW() + ('{settings.TRIAL_PERIOD_DAYS} days')::interval"),
         default=lambda: datetime.now() + timedelta(days=settings.TRIAL_PERIOD_DAYS),
     )
     last_paid = Column(DateTime(timezone=True), nullable=True)
