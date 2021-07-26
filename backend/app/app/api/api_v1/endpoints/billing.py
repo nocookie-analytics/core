@@ -4,6 +4,7 @@ from typing import Any
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
+from starlette.background import BackgroundTasks
 from starlette.requests import Request
 import stripe
 
@@ -11,6 +12,7 @@ from app import crud, models, schemas
 from app.api import deps
 from app.core.products import Plan, SUBSCRIBABLE_PLANS
 from app.schemas.user import UserStripeInfoUpdate
+from app.utils.email import send_trial_ending_email
 from app.utils.stripe_helpers import (
     create_checkout_session,
     create_stripe_customer_for_user,
@@ -69,7 +71,11 @@ def subscribe(
 
 
 @router.post("/webhook")
-async def webhook_received(request: Request, db: Session = Depends(deps.get_db)):
+async def webhook_received(
+    request: Request,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(deps.get_db),
+):
     body = await request.body()
 
     # Retrieve the event by verifying the signature using the raw body and secret if webhook signing is configured.
@@ -83,6 +89,7 @@ async def webhook_received(request: Request, db: Session = Depends(deps.get_db))
         "checkout.session.completed",
         "customer.subscription.deleted",
         "invoice.paid",
+        "customer.subscription.trial_will_end",
     ]:
         customer = data.object.customer
         subscription = data.object.subscription
@@ -103,6 +110,10 @@ async def webhook_received(request: Request, db: Session = Depends(deps.get_db))
             # Store the status in your database and check when a user accesses your service.
             # This approach helps you avoid hitting rate limits.
             update_stripe_info = UserStripeInfoUpdate(last_paid=datetime.now())
+        elif event_type == "customer.subscription.trial_will_end":
+            background_tasks.add_task(
+                send_trial_ending_email, user.email, user.trial_end_date
+            )
         if update_stripe_info:
             crud.user.update_stripe_info(db, user_obj=user, obj_in=update_stripe_info)
     elif event_type == "invoice.payment_failed":

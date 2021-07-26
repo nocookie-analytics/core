@@ -1,3 +1,4 @@
+from datetime import date
 import logging
 from typing import Any, Dict
 import emails
@@ -56,6 +57,23 @@ def send_test_email(email_to: str) -> None:
         subject_template=subject,
         html_template=template_str,
         environment={"project_name": settings.PROJECT_NAME, "email": email_to},
+    )
+
+
+def send_trial_ending_email(email_to: str, trial_end_date: date) -> None:
+    project_name = settings.PROJECT_NAME
+    subject = f"{project_name} - Trial ending soon"
+    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "trial-ending.html") as f:
+        template_str = f.read()
+    send_email(
+        email_to=email_to,
+        subject_template=subject,
+        html_template=template_str,
+        environment={
+            "project_name": settings.PROJECT_NAME,
+            "trial_end_date": trial_end_date,
+            "link": settings.SERVER_HOST,
+        },
     )
 
 
