@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Tuple
+from datetime import datetime, timedelta
+from app.core.config import settings
 
 from sqlalchemy import Boolean, Column, Integer, String
 from sqlalchemy.orm import relationship
@@ -30,5 +31,9 @@ class User(Base):
     stripe_customer_id = Column(String, unique=True, index=True)
     active_plan = Column(ActivePlanEnum, default=Plan.NO_PLAN)
     stripe_subscription_ref = Column(String, nullable=True)
-    trial_end_date = Column(Date(), nullable=False)
+    trial_end_date = Column(
+        Date(),
+        nullable=False,
+        default=lambda: datetime.now() + timedelta(days=settings.TRIAL_PERIOD_DAYS),
+    )
     last_paid = Column(DateTime(timezone=True), nullable=True)
