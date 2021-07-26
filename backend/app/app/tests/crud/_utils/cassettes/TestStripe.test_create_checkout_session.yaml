@@ -11,8 +11,8 @@ interactions:
       User-Agent:
       - Stripe/v1 PythonBindings/2.60.0
       X-Stripe-Client-Telemetry:
-      - '{"last_request_metrics": {"request_id": "req_tg6XEQ215Jpbnq", "request_duration_ms":
-        1}}'
+      - '{"last_request_metrics": {"request_id": "req_m4BoxtToH9Flfb", "request_duration_ms":
+        814}}'
       X-Stripe-Client-User-Agent:
       - '{"bindings_version": "2.60.0", "lang": "python", "publisher": "stripe", "httplib":
         "requests", "lang_version": "3.8.2", "platform": "Linux-5.10.49-1-MANJARO-x86_64-with-glibc2.2.5",
@@ -62,7 +62,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sun, 25 Jul 2021 11:52:48 GMT
+      - Mon, 26 Jul 2021 21:02:00 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -80,7 +80,7 @@ interactions:
       cache-control:
       - no-cache, no-store
       request-id:
-      - req_ZnmNQPHWI7Y6oV
+      - req_8StA3v24MvcqV2
       stripe-version:
       - '2020-08-27'
       x-stripe-c-cost:
@@ -89,7 +89,7 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: success_url=http%3A%2F%2Flocalhost%2Fmain%2Ftransaction%2Fsuccess&cancel_url=http%3A%2F%2Flocalhost%2Fmain%2Ftransaction%2Fcancelled&customer=cus_JuvfQtesBmJXnQ&payment_method_types[0]=card&mode=subscription&metadata[plan]=lite&line_items[0][price]=price_1JFnKPISAshlKrRgQ3RTCFiO&line_items[0][quantity]=1&subscription_data[trial_period_days]=14
+    body: success_url=http%3A%2F%2Flocalhost%2Fmain%2Ftransaction%2Fsuccess&cancel_url=http%3A%2F%2Flocalhost%2Fmain%2Ftransaction%2Fcancelled&customer=cus_JvRpCCzaOdKoVk&payment_method_types[0]=card&mode=subscription&metadata[plan]=lite&line_items[0][price]=price_1JFnKPISAshlKrRgQ3RTCFiO&line_items[0][quantity]=1&subscription_data[trial_period_days]=14
     headers:
       Accept:
       - '*/*'
@@ -102,12 +102,12 @@ interactions:
       Content-Type:
       - application/x-www-form-urlencoded
       Idempotency-Key:
-      - 23a91669-3b9a-4752-83af-d9e3c45f36de
+      - 65eb1542-b940-4aa7-840e-9525c52b9fe3
       User-Agent:
       - Stripe/v1 PythonBindings/2.60.0
       X-Stripe-Client-Telemetry:
-      - '{"last_request_metrics": {"request_id": "req_ZnmNQPHWI7Y6oV", "request_duration_ms":
-        623}}'
+      - '{"last_request_metrics": {"request_id": "req_8StA3v24MvcqV2", "request_duration_ms":
+        351}}'
       X-Stripe-Client-User-Agent:
       - '{"bindings_version": "2.60.0", "lang": "python", "publisher": "stripe", "httplib":
         "requests", "lang_version": "3.8.2", "platform": "Linux-5.10.49-1-MANJARO-x86_64-with-glibc2.2.5",
@@ -119,13 +119,13 @@ interactions:
     uri: https://api.stripe.com/v1/checkout/sessions
   response:
     body:
-      string: "{\n  \"id\": \"cs_test_a1ZSrlAkflROcu5MN2h0t5dgDQUILlQVxoFjpAhjd9gyRlKGFgsyADq8Ou\",\n
+      string: "{\n  \"id\": \"cs_test_a1TOC4FpxvndtiHjjQKwM3T3EOfNyDSIfwxXZfmQLMWjgBdPkgXnZk1ofP\",\n
         \ \"object\": \"checkout.session\",\n  \"allow_promotion_codes\": null,\n
         \ \"amount_subtotal\": 0,\n  \"amount_total\": 0,\n  \"automatic_tax\": {\n
         \   \"enabled\": false,\n    \"status\": null\n  },\n  \"billing_address_collection\":
         null,\n  \"cancel_url\": \"http://localhost/main/transaction/cancelled\",\n
         \ \"client_reference_id\": null,\n  \"currency\": \"eur\",\n  \"customer\":
-        \"cus_JuvfQtesBmJXnQ\",\n  \"customer_details\": null,\n  \"customer_email\":
+        \"cus_JvRpCCzaOdKoVk\",\n  \"customer_details\": null,\n  \"customer_email\":
         null,\n  \"livemode\": false,\n  \"locale\": null,\n  \"metadata\": {\n    \"plan\":
         \"lite\"\n  },\n  \"mode\": \"subscription\",\n  \"payment_intent\": null,\n
         \ \"payment_method_options\": null,\n  \"payment_method_types\": [\n    \"card\"\n
@@ -133,7 +133,7 @@ interactions:
         null,\n  \"shipping_address_collection\": null,\n  \"submit_type\": null,\n
         \ \"subscription\": null,\n  \"success_url\": \"http://localhost/main/transaction/success\",\n
         \ \"total_details\": {\n    \"amount_discount\": 0,\n    \"amount_shipping\":
-        0,\n    \"amount_tax\": 0\n  },\n  \"url\": \"https://checkout.stripe.com/pay/cs_test_a1ZSrlAkflROcu5MN2h0t5dgDQUILlQVxoFjpAhjd9gyRlKGFgsyADq8Ou#fidkdWxOYHwnPyd1blpxYHZxWjA0TGZ8b2ZMVkR2bWlOd1diXTJLYTcycUFQfTY9S1JRVmd2dERscFBCbG9XTnY9NUs9Sj1vY01ESExiaVZHdTNMc25nUXI1b19Ob3E0Nl0yMjF9dkNQNWQyNTVtUU1DUkNUNScpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl\"\n}\n"
+        0,\n    \"amount_tax\": 0\n  },\n  \"url\": \"https://checkout.stripe.com/pay/cs_test_a1TOC4FpxvndtiHjjQKwM3T3EOfNyDSIfwxXZfmQLMWjgBdPkgXnZk1ofP#fidkdWxOYHwnPyd1blpxYHZxWjA0TGZ8b2ZMVkR2bWlOd1diXTJLYTcycUFQfTY9S1JRVmd2dERscFBCbG9XTnY9NUs9Sj1vY01ESExiaVZHdTNMc25nUXI1b19Ob3E0Nl0yMjF9dkNQNWQyNTVtUU1DUkNUNScpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl\"\n}\n"
     headers:
       Connection:
       - keep-alive
@@ -142,7 +142,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sun, 25 Jul 2021 11:52:48 GMT
+      - Mon, 26 Jul 2021 21:02:00 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -160,11 +160,11 @@ interactions:
       cache-control:
       - no-cache, no-store
       idempotency-key:
-      - 23a91669-3b9a-4752-83af-d9e3c45f36de
+      - 65eb1542-b940-4aa7-840e-9525c52b9fe3
       original-request:
-      - req_B7nqxv8MD6UvYP
+      - req_c7phTe1Z6oovlG
       request-id:
-      - req_B7nqxv8MD6UvYP
+      - req_c7phTe1Z6oovlG
       stripe-should-retry:
       - 'false'
       stripe-version:

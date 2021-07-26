@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: email=qtzxnlwzuxfatdsgsghlamlywlzdimmt%40emfhibeetdgjatykicxtqkecmsocwkqm.com&metadata[user_id]=2
+    body: email=wgwurehvaxerdbcllyswbvduoktcrcpn%40qiftvmmvivikyvphpuqrhcqeetnithgd.com&metadata[user_id]=2
     headers:
       Accept:
       - '*/*'
@@ -13,7 +13,7 @@ interactions:
       Content-Type:
       - application/x-www-form-urlencoded
       Idempotency-Key:
-      - d278c76c-5ff6-4a14-a424-9cc13342c3b0
+      - 5f0c097f-a401-4dec-a112-a2a1435aae07
       User-Agent:
       - Stripe/v1 PythonBindings/2.60.0
       X-Stripe-Client-User-Agent:
@@ -27,11 +27,11 @@ interactions:
     uri: https://api.stripe.com/v1/customers
   response:
     body:
-      string: "{\n  \"id\": \"cus_JuvfQtesBmJXnQ\",\n  \"object\": \"customer\",\n
-        \ \"address\": null,\n  \"balance\": 0,\n  \"created\": 1627213656,\n  \"currency\":
+      string: "{\n  \"id\": \"cus_JvRpCCzaOdKoVk\",\n  \"object\": \"customer\",\n
+        \ \"address\": null,\n  \"balance\": 0,\n  \"created\": 1627333316,\n  \"currency\":
         null,\n  \"default_source\": null,\n  \"delinquent\": false,\n  \"description\":
-        null,\n  \"discount\": null,\n  \"email\": \"qtzxnlwzuxfatdsgsghlamlywlzdimmt@emfhibeetdgjatykicxtqkecmsocwkqm.com\",\n
-        \ \"invoice_prefix\": \"5E1CCE53\",\n  \"invoice_settings\": {\n    \"custom_fields\":
+        null,\n  \"discount\": null,\n  \"email\": \"wgwurehvaxerdbcllyswbvduoktcrcpn@qiftvmmvivikyvphpuqrhcqeetnithgd.com\",\n
+        \ \"invoice_prefix\": \"9326FE15\",\n  \"invoice_settings\": {\n    \"custom_fields\":
         null,\n    \"default_payment_method\": null,\n    \"footer\": null\n  },\n
         \ \"livemode\": false,\n  \"metadata\": {\n    \"user_id\": \"2\"\n  },\n
         \ \"name\": null,\n  \"phone\": null,\n  \"preferred_locales\": [\n\n  ],\n
@@ -44,7 +44,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sun, 25 Jul 2021 11:47:36 GMT
+      - Mon, 26 Jul 2021 21:01:56 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -62,11 +62,11 @@ interactions:
       cache-control:
       - no-cache, no-store
       idempotency-key:
-      - d278c76c-5ff6-4a14-a424-9cc13342c3b0
+      - 5f0c097f-a401-4dec-a112-a2a1435aae07
       original-request:
-      - req_3HWsVYriI5ZjHV
+      - req_iG46g6bTvw4NxQ
       request-id:
-      - req_3HWsVYriI5ZjHV
+      - req_iG46g6bTvw4NxQ
       stripe-should-retry:
       - 'false'
       stripe-version:

@@ -24,25 +24,12 @@ def user(db: Session) -> User:
 
 
 def create_subscription_for_test_user(user: User, price: str, db: Session):
-    method = stripe.PaymentMethod.create(
-        type="card",
-        card={
-            "number": "4242424242424242",
-            "exp_month": 7,
-            "exp_year": 2022,
-            "cvc": "314",
-        },
-    )
-    stripe.PaymentMethod.attach(
-        method.id,
-        customer=user.stripe_customer_id,
-    )
     subscription = stripe.Subscription.create(
         customer=user.stripe_customer_id,
         items=[
             {"price": price},
         ],
-        default_payment_method=method.id,
+        trial_period_days=14,
     )
     user.stripe_subscription_ref = subscription.id
     db.commit()

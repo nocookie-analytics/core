@@ -11,8 +11,8 @@ interactions:
       User-Agent:
       - Stripe/v1 PythonBindings/2.60.0
       X-Stripe-Client-Telemetry:
-      - '{"last_request_metrics": {"request_id": "req_3HWsVYriI5ZjHV", "request_duration_ms":
-        738}}'
+      - '{"last_request_metrics": {"request_id": "req_iG46g6bTvw4NxQ", "request_duration_ms":
+        529}}'
       X-Stripe-Client-User-Agent:
       - '{"bindings_version": "2.60.0", "lang": "python", "publisher": "stripe", "httplib":
         "requests", "lang_version": "3.8.2", "platform": "Linux-5.10.49-1-MANJARO-x86_64-with-glibc2.2.5",
@@ -62,7 +62,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sun, 25 Jul 2021 11:47:37 GMT
+      - Mon, 26 Jul 2021 21:01:56 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -80,7 +80,7 @@ interactions:
       cache-control:
       - no-cache, no-store
       request-id:
-      - req_0BMOROnTrEVCsm
+      - req_zqmfqAIsE1d89P
       stripe-version:
       - '2020-08-27'
       x-stripe-c-cost:

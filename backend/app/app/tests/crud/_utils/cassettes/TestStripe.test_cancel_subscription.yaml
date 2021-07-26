@@ -11,8 +11,8 @@ interactions:
       User-Agent:
       - Stripe/v1 PythonBindings/2.60.0
       X-Stripe-Client-Telemetry:
-      - '{"last_request_metrics": {"request_id": "req_rSnlOo4MUQCI3Z", "request_duration_ms":
-        261}}'
+      - '{"last_request_metrics": {"request_id": "req_VwtrGEheO642Lc", "request_duration_ms":
+        248}}'
       X-Stripe-Client-User-Agent:
       - '{"bindings_version": "2.60.0", "lang": "python", "publisher": "stripe", "httplib":
         "requests", "lang_version": "3.8.2", "platform": "Linux-5.10.49-1-MANJARO-x86_64-with-glibc2.2.5",
@@ -21,22 +21,22 @@ interactions:
       authorization:
       - DUMMY
     method: GET
-    uri: https://api.stripe.com/v1/subscriptions?customer=cus_JuvfQtesBmJXnQ
+    uri: https://api.stripe.com/v1/subscriptions?customer=cus_JvRpCCzaOdKoVk
   response:
     body:
-      string: "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"sub_JuvfLfhfEyEpDh\",\n
+      string: "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"sub_JvRpb0t6jUNTDE\",\n
         \     \"object\": \"subscription\",\n      \"application_fee_percent\": null,\n
         \     \"automatic_tax\": {\n        \"enabled\": false\n      },\n      \"billing_cycle_anchor\":
-        1627213659,\n      \"billing_thresholds\": null,\n      \"cancel_at\": null,\n
+        1628542917,\n      \"billing_thresholds\": null,\n      \"cancel_at\": null,\n
         \     \"cancel_at_period_end\": false,\n      \"canceled_at\": null,\n      \"collection_method\":
-        \"charge_automatically\",\n      \"created\": 1627213659,\n      \"current_period_end\":
-        1629892059,\n      \"current_period_start\": 1627213659,\n      \"customer\":
-        \"cus_JuvfQtesBmJXnQ\",\n      \"days_until_due\": null,\n      \"default_payment_method\":
-        \"pm_1JH5nyISAshlKrRgH4gsl7OH\",\n      \"default_source\": null,\n      \"default_tax_rates\":
-        [\n\n      ],\n      \"discount\": null,\n      \"ended_at\": null,\n      \"items\":
+        \"charge_automatically\",\n      \"created\": 1627333317,\n      \"current_period_end\":
+        1628542917,\n      \"current_period_start\": 1627333317,\n      \"customer\":
+        \"cus_JvRpCCzaOdKoVk\",\n      \"days_until_due\": null,\n      \"default_payment_method\":
+        null,\n      \"default_source\": null,\n      \"default_tax_rates\": [\n\n
+        \     ],\n      \"discount\": null,\n      \"ended_at\": null,\n      \"items\":
         {\n        \"object\": \"list\",\n        \"data\": [\n          {\n            \"id\":
-        \"si_JuvfOb3heIbhv9\",\n            \"object\": \"subscription_item\",\n            \"billing_thresholds\":
-        null,\n            \"created\": 1627213660,\n            \"metadata\": {\n
+        \"si_JvRpmF17yAELlb\",\n            \"object\": \"subscription_item\",\n            \"billing_thresholds\":
+        null,\n            \"created\": 1627333318,\n            \"metadata\": {\n
         \           },\n            \"plan\": {\n              \"id\": \"price_1JFnKrISAshlKrRgdPcdclQ9\",\n
         \             \"object\": \"plan\",\n              \"active\": true,\n              \"aggregate_usage\":
         null,\n              \"amount\": 4900,\n              \"amount_decimal\":
@@ -59,35 +59,36 @@ interactions:
         null,\n              \"transform_quantity\": null,\n              \"type\":
         \"recurring\",\n              \"unit_amount\": 4900,\n              \"unit_amount_decimal\":
         \"4900\"\n            },\n            \"quantity\": 1,\n            \"subscription\":
-        \"sub_JuvfLfhfEyEpDh\",\n            \"tax_rates\": [\n\n            ]\n          }\n
+        \"sub_JvRpb0t6jUNTDE\",\n            \"tax_rates\": [\n\n            ]\n          }\n
         \       ],\n        \"has_more\": false,\n        \"total_count\": 1,\n        \"url\":
-        \"/v1/subscription_items?subscription=sub_JuvfLfhfEyEpDh\"\n      },\n      \"latest_invoice\":
-        \"in_1JH5nzISAshlKrRgI2rHQCwD\",\n      \"livemode\": false,\n      \"metadata\":
+        \"/v1/subscription_items?subscription=sub_JvRpb0t6jUNTDE\"\n      },\n      \"latest_invoice\":
+        \"in_1JHavxISAshlKrRgNJYC0qWp\",\n      \"livemode\": false,\n      \"metadata\":
         {\n      },\n      \"next_pending_invoice_item_invoice\": null,\n      \"pause_collection\":
         null,\n      \"payment_settings\": {\n        \"payment_method_options\":
         null,\n        \"payment_method_types\": null\n      },\n      \"pending_invoice_item_interval\":
-        null,\n      \"pending_setup_intent\": null,\n      \"pending_update\": null,\n
-        \     \"plan\": {\n        \"id\": \"price_1JFnKrISAshlKrRgdPcdclQ9\",\n        \"object\":
-        \"plan\",\n        \"active\": true,\n        \"aggregate_usage\": null,\n
-        \       \"amount\": 4900,\n        \"amount_decimal\": \"4900\",\n        \"billing_scheme\":
-        \"per_unit\",\n        \"created\": 1626904333,\n        \"currency\": \"eur\",\n
-        \       \"interval\": \"month\",\n        \"interval_count\": 1,\n        \"livemode\":
-        false,\n        \"metadata\": {\n        },\n        \"nickname\": null,\n
-        \       \"product\": \"prod_JtaVPrC8nroNHr\",\n        \"tiers_mode\": null,\n
-        \       \"transform_usage\": null,\n        \"trial_period_days\": null,\n
-        \       \"usage_type\": \"licensed\"\n      },\n      \"quantity\": 1,\n      \"schedule\":
-        null,\n      \"start_date\": 1627213659,\n      \"status\": \"active\",\n
-        \     \"transfer_data\": null,\n      \"trial_end\": null,\n      \"trial_start\":
-        null\n    }\n  ],\n  \"has_more\": false,\n  \"url\": \"/v1/subscriptions\"\n}\n"
+        null,\n      \"pending_setup_intent\": \"seti_1JHavxISAshlKrRghXv4o7eY\",\n
+        \     \"pending_update\": null,\n      \"plan\": {\n        \"id\": \"price_1JFnKrISAshlKrRgdPcdclQ9\",\n
+        \       \"object\": \"plan\",\n        \"active\": true,\n        \"aggregate_usage\":
+        null,\n        \"amount\": 4900,\n        \"amount_decimal\": \"4900\",\n
+        \       \"billing_scheme\": \"per_unit\",\n        \"created\": 1626904333,\n
+        \       \"currency\": \"eur\",\n        \"interval\": \"month\",\n        \"interval_count\":
+        1,\n        \"livemode\": false,\n        \"metadata\": {\n        },\n        \"nickname\":
+        null,\n        \"product\": \"prod_JtaVPrC8nroNHr\",\n        \"tiers_mode\":
+        null,\n        \"transform_usage\": null,\n        \"trial_period_days\":
+        null,\n        \"usage_type\": \"licensed\"\n      },\n      \"quantity\":
+        1,\n      \"schedule\": null,\n      \"start_date\": 1627333317,\n      \"status\":
+        \"trialing\",\n      \"transfer_data\": null,\n      \"trial_end\": 1628542917,\n
+        \     \"trial_start\": 1627333317\n    }\n  ],\n  \"has_more\": false,\n  \"url\":
+        \"/v1/subscriptions\"\n}\n"
     headers:
       Connection:
       - keep-alive
       Content-Length:
-      - '4275'
+      - '4291'
       Content-Type:
       - application/json
       Date:
-      - Sun, 25 Jul 2021 11:47:42 GMT
+      - Mon, 26 Jul 2021 21:01:58 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -105,7 +106,7 @@ interactions:
       cache-control:
       - no-cache, no-store
       request-id:
-      - req_KXfux6hwUbs0BD
+      - req_Z5r0IQ2CvLDt94
       stripe-version:
       - '2020-08-27'
       x-stripe-c-cost:
@@ -127,8 +128,8 @@ interactions:
       User-Agent:
       - Stripe/v1 PythonBindings/2.60.0
       X-Stripe-Client-Telemetry:
-      - '{"last_request_metrics": {"request_id": "req_KXfux6hwUbs0BD", "request_duration_ms":
-        615}}'
+      - '{"last_request_metrics": {"request_id": "req_Z5r0IQ2CvLDt94", "request_duration_ms":
+        359}}'
       X-Stripe-Client-User-Agent:
       - '{"bindings_version": "2.60.0", "lang": "python", "publisher": "stripe", "httplib":
         "requests", "lang_version": "3.8.2", "platform": "Linux-5.10.49-1-MANJARO-x86_64-with-glibc2.2.5",
@@ -137,21 +138,21 @@ interactions:
       authorization:
       - DUMMY
     method: DELETE
-    uri: https://api.stripe.com/v1/subscriptions/sub_JuvfLfhfEyEpDh
+    uri: https://api.stripe.com/v1/subscriptions/sub_JvRpb0t6jUNTDE
   response:
     body:
-      string: "{\n  \"id\": \"sub_JuvfLfhfEyEpDh\",\n  \"object\": \"subscription\",\n
+      string: "{\n  \"id\": \"sub_JvRpb0t6jUNTDE\",\n  \"object\": \"subscription\",\n
         \ \"application_fee_percent\": null,\n  \"automatic_tax\": {\n    \"enabled\":
-        false\n  },\n  \"billing_cycle_anchor\": 1627213659,\n  \"billing_thresholds\":
+        false\n  },\n  \"billing_cycle_anchor\": 1628542917,\n  \"billing_thresholds\":
         null,\n  \"cancel_at\": null,\n  \"cancel_at_period_end\": false,\n  \"canceled_at\":
-        1627213662,\n  \"collection_method\": \"charge_automatically\",\n  \"created\":
-        1627213659,\n  \"current_period_end\": 1629892059,\n  \"current_period_start\":
-        1627213659,\n  \"customer\": \"cus_JuvfQtesBmJXnQ\",\n  \"days_until_due\":
-        null,\n  \"default_payment_method\": \"pm_1JH5nyISAshlKrRgH4gsl7OH\",\n  \"default_source\":
-        null,\n  \"default_tax_rates\": [\n\n  ],\n  \"discount\": null,\n  \"ended_at\":
-        1627213662,\n  \"items\": {\n    \"object\": \"list\",\n    \"data\": [\n
-        \     {\n        \"id\": \"si_JuvfOb3heIbhv9\",\n        \"object\": \"subscription_item\",\n
-        \       \"billing_thresholds\": null,\n        \"created\": 1627213660,\n
+        1627333319,\n  \"collection_method\": \"charge_automatically\",\n  \"created\":
+        1627333317,\n  \"current_period_end\": 1628542917,\n  \"current_period_start\":
+        1627333317,\n  \"customer\": \"cus_JvRpCCzaOdKoVk\",\n  \"days_until_due\":
+        null,\n  \"default_payment_method\": null,\n  \"default_source\": null,\n
+        \ \"default_tax_rates\": [\n\n  ],\n  \"discount\": null,\n  \"ended_at\":
+        1627333319,\n  \"items\": {\n    \"object\": \"list\",\n    \"data\": [\n
+        \     {\n        \"id\": \"si_JvRpmF17yAELlb\",\n        \"object\": \"subscription_item\",\n
+        \       \"billing_thresholds\": null,\n        \"created\": 1627333318,\n
         \       \"metadata\": {\n        },\n        \"plan\": {\n          \"id\":
         \"price_1JFnKrISAshlKrRgdPcdclQ9\",\n          \"object\": \"plan\",\n          \"active\":
         true,\n          \"aggregate_usage\": null,\n          \"amount\": 4900,\n
@@ -172,33 +173,33 @@ interactions:
         \"licensed\"\n          },\n          \"tiers_mode\": null,\n          \"transform_quantity\":
         null,\n          \"type\": \"recurring\",\n          \"unit_amount\": 4900,\n
         \         \"unit_amount_decimal\": \"4900\"\n        },\n        \"quantity\":
-        1,\n        \"subscription\": \"sub_JuvfLfhfEyEpDh\",\n        \"tax_rates\":
+        1,\n        \"subscription\": \"sub_JvRpb0t6jUNTDE\",\n        \"tax_rates\":
         [\n\n        ]\n      }\n    ],\n    \"has_more\": false,\n    \"total_count\":
-        1,\n    \"url\": \"/v1/subscription_items?subscription=sub_JuvfLfhfEyEpDh\"\n
-        \ },\n  \"latest_invoice\": \"in_1JH5nzISAshlKrRgI2rHQCwD\",\n  \"livemode\":
+        1,\n    \"url\": \"/v1/subscription_items?subscription=sub_JvRpb0t6jUNTDE\"\n
+        \ },\n  \"latest_invoice\": \"in_1JHavxISAshlKrRgNJYC0qWp\",\n  \"livemode\":
         false,\n  \"metadata\": {\n  },\n  \"next_pending_invoice_item_invoice\":
         null,\n  \"pause_collection\": null,\n  \"payment_settings\": {\n    \"payment_method_options\":
         null,\n    \"payment_method_types\": null\n  },\n  \"pending_invoice_item_interval\":
-        null,\n  \"pending_setup_intent\": null,\n  \"pending_update\": null,\n  \"plan\":
-        {\n    \"id\": \"price_1JFnKrISAshlKrRgdPcdclQ9\",\n    \"object\": \"plan\",\n
-        \   \"active\": true,\n    \"aggregate_usage\": null,\n    \"amount\": 4900,\n
-        \   \"amount_decimal\": \"4900\",\n    \"billing_scheme\": \"per_unit\",\n
+        null,\n  \"pending_setup_intent\": \"seti_1JHavxISAshlKrRghXv4o7eY\",\n  \"pending_update\":
+        null,\n  \"plan\": {\n    \"id\": \"price_1JFnKrISAshlKrRgdPcdclQ9\",\n    \"object\":
+        \"plan\",\n    \"active\": true,\n    \"aggregate_usage\": null,\n    \"amount\":
+        4900,\n    \"amount_decimal\": \"4900\",\n    \"billing_scheme\": \"per_unit\",\n
         \   \"created\": 1626904333,\n    \"currency\": \"eur\",\n    \"interval\":
         \"month\",\n    \"interval_count\": 1,\n    \"livemode\": false,\n    \"metadata\":
         {\n    },\n    \"nickname\": null,\n    \"product\": \"prod_JtaVPrC8nroNHr\",\n
         \   \"tiers_mode\": null,\n    \"transform_usage\": null,\n    \"trial_period_days\":
         null,\n    \"usage_type\": \"licensed\"\n  },\n  \"quantity\": 1,\n  \"schedule\":
-        null,\n  \"start_date\": 1627213659,\n  \"status\": \"canceled\",\n  \"transfer_data\":
-        null,\n  \"trial_end\": null,\n  \"trial_start\": null\n}\n"
+        null,\n  \"start_date\": 1627333317,\n  \"status\": \"canceled\",\n  \"transfer_data\":
+        null,\n  \"trial_end\": 1628542917,\n  \"trial_start\": 1627333317\n}\n"
     headers:
       Connection:
       - keep-alive
       Content-Length:
-      - '3658'
+      - '3672'
       Content-Type:
       - application/json
       Date:
-      - Sun, 25 Jul 2021 11:47:42 GMT
+      - Mon, 26 Jul 2021 21:01:59 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -216,7 +217,7 @@ interactions:
       cache-control:
       - no-cache, no-store
       request-id:
-      - req_tg6XEQ215Jpbnq
+      - req_m4BoxtToH9Flfb
       stripe-version:
       - '2020-08-27'
       x-stripe-c-cost:
