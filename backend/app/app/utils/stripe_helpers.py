@@ -99,7 +99,8 @@ def verify_webhook(body, signature) -> Tuple[str, Any]:
         event = stripe.Webhook.construct_event(
             payload=body, sig_header=signature, secret=webhook_secret
         )
-        event_type, data = event["data"]
+        event_type = event.type
+        data = event.data
     except Exception as e:
         raise e
     return event_type, data
