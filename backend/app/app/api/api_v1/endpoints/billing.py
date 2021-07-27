@@ -98,7 +98,11 @@ async def webhook_received(
         "customer.subscription.trial_will_end",
     ]:
         customer = data.object.customer
-        subscription = data.object.subscription
+        subscription = (
+            data.object.subscription
+            if event_type == "checkout.session.completed"
+            else data.object.id
+        )
         logger.info("Processing webhook %s", (event_type, customer, subscription))
         user = get_user_from_stripe_customer_id(db, customer)
         update_stripe_info = None
