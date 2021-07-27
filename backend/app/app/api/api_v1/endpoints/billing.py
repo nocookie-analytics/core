@@ -11,6 +11,7 @@ import stripe
 from app import crud, models, schemas
 from app.api import deps
 from app.core.products import Plan, SUBSCRIBABLE_PLANS
+from app.logger import logger
 from app.schemas.user import UserStripeInfoUpdate
 from app.utils.email import send_trial_ending_email
 from app.utils.stripe_helpers import (
@@ -86,6 +87,8 @@ async def webhook_received(
     except Exception as e:
         return e
 
+    logger.info("Received webhook %s", (event_type,))
+
     if event_type in [
         "checkout.session.completed",
         "customer.subscription.deleted",
@@ -95,6 +98,7 @@ async def webhook_received(
     ]:
         customer = data.object.customer
         subscription = data.object.subscription
+        logger.info("Processing webhook %s", (event_type, customer, subscription))
         user = get_user_from_stripe_customer_id(db, customer)
         update_stripe_info = None
         if (
@@ -133,8 +137,8 @@ async def webhook_received(
         # The payment failed or the customer does not have a valid payment method.
         # The subscription becomes past_due. Notify your customer and send them to the
         # customer portal to update their payment information.
-        print(data)
+        logger.warning(data)
     else:
-        print("Unhandled event type {}".format(event_type))
+        logger.warning("Unhandled event type {}".format(event_type))
 
     return {"status": "success"}
