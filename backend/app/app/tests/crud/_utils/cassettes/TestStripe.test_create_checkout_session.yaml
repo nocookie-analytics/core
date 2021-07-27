@@ -11,8 +11,8 @@ interactions:
       User-Agent:
       - Stripe/v1 PythonBindings/2.60.0
       X-Stripe-Client-Telemetry:
-      - '{"last_request_metrics": {"request_id": "req_m4BoxtToH9Flfb", "request_duration_ms":
-        814}}'
+      - '{"last_request_metrics": {"request_id": "req_WFXuvE1GKT6xPm", "request_duration_ms":
+        449}}'
       X-Stripe-Client-User-Agent:
       - '{"bindings_version": "2.60.0", "lang": "python", "publisher": "stripe", "httplib":
         "requests", "lang_version": "3.8.2", "platform": "Linux-5.10.49-1-MANJARO-x86_64-with-glibc2.2.5",
@@ -21,7 +21,7 @@ interactions:
       authorization:
       - DUMMY
     method: GET
-    uri: https://api.stripe.com/v1/prices?lookup_keys%5B0%5D=no_plan&lookup_keys%5B1%5D=free&lookup_keys%5B2%5D=lite&lookup_keys%5B3%5D=medium&lookup_keys%5B4%5D=enterprise&lookup_keys%5B5%5D=cancelled
+    uri: https://api.stripe.com/v1/prices?lookup_keys%5B0%5D=no_plan&lookup_keys%5B1%5D=trial&lookup_keys%5B2%5D=trial_expired&lookup_keys%5B3%5D=free&lookup_keys%5B4%5D=lite&lookup_keys%5B5%5D=medium&lookup_keys%5B6%5D=enterprise&lookup_keys%5B7%5D=cancelled
   response:
     body:
       string: "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"price_1JFnKrISAshlKrRgdPcdclQ9\",\n
@@ -52,17 +52,26 @@ interactions:
         \"month\",\n        \"interval_count\": 1,\n        \"trial_period_days\":
         null,\n        \"usage_type\": \"licensed\"\n      },\n      \"tiers_mode\":
         null,\n      \"transform_quantity\": null,\n      \"type\": \"recurring\",\n
-        \     \"unit_amount\": 1900,\n      \"unit_amount_decimal\": \"1900\"\n    }\n
-        \ ],\n  \"has_more\": false,\n  \"url\": \"/v1/prices\"\n}\n"
+        \     \"unit_amount\": 1900,\n      \"unit_amount_decimal\": \"1900\"\n    },\n
+        \   {\n      \"id\": \"price_1JHcZiISAshlKrRgK9G5oNXY\",\n      \"object\":
+        \"price\",\n      \"active\": true,\n      \"billing_scheme\": \"per_unit\",\n
+        \     \"created\": 1627339626,\n      \"currency\": \"eur\",\n      \"livemode\":
+        false,\n      \"lookup_key\": \"trial\",\n      \"metadata\": {\n      },\n
+        \     \"nickname\": null,\n      \"product\": \"prod_JvTW5tdIV7RZrO\",\n      \"recurring\":
+        {\n        \"aggregate_usage\": null,\n        \"interval\": \"month\",\n
+        \       \"interval_count\": 1,\n        \"trial_period_days\": null,\n        \"usage_type\":
+        \"licensed\"\n      },\n      \"tiers_mode\": null,\n      \"transform_quantity\":
+        null,\n      \"type\": \"recurring\",\n      \"unit_amount\": 0,\n      \"unit_amount_decimal\":
+        \"0\"\n    }\n  ],\n  \"has_more\": false,\n  \"url\": \"/v1/prices\"\n}\n"
     headers:
       Connection:
       - keep-alive
       Content-Length:
-      - '2132'
+      - '2808'
       Content-Type:
       - application/json
       Date:
-      - Mon, 26 Jul 2021 21:02:00 GMT
+      - Tue, 27 Jul 2021 20:07:05 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -80,7 +89,7 @@ interactions:
       cache-control:
       - no-cache, no-store
       request-id:
-      - req_8StA3v24MvcqV2
+      - req_3KVSe5Vh9grcaG
       stripe-version:
       - '2020-08-27'
       x-stripe-c-cost:
@@ -89,7 +98,7 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: success_url=http%3A%2F%2Flocalhost%2Fmain%2Ftransaction%2Fsuccess&cancel_url=http%3A%2F%2Flocalhost%2Fmain%2Ftransaction%2Fcancelled&customer=cus_JvRpCCzaOdKoVk&payment_method_types[0]=card&mode=subscription&metadata[plan]=lite&line_items[0][price]=price_1JFnKPISAshlKrRgQ3RTCFiO&line_items[0][quantity]=1&subscription_data[trial_period_days]=14
+    body: success_url=http%3A%2F%2Flocalhost%2Fmain%2Ftransaction%2Fsuccess&cancel_url=http%3A%2F%2Flocalhost%2Fmain%2Ftransaction%2Fcancelled&customer=cus_JvoAx7X7LaA7IQ&payment_method_types[0]=card&mode=subscription&metadata[plan]=lite&line_items[0][price]=price_1JFnKPISAshlKrRgQ3RTCFiO&line_items[0][quantity]=1
     headers:
       Accept:
       - '*/*'
@@ -98,16 +107,16 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '345'
+      - '305'
       Content-Type:
       - application/x-www-form-urlencoded
       Idempotency-Key:
-      - 65eb1542-b940-4aa7-840e-9525c52b9fe3
+      - 8dcfa58a-e312-43cc-8a59-dc08e2a5a7b8
       User-Agent:
       - Stripe/v1 PythonBindings/2.60.0
       X-Stripe-Client-Telemetry:
-      - '{"last_request_metrics": {"request_id": "req_8StA3v24MvcqV2", "request_duration_ms":
-        351}}'
+      - '{"last_request_metrics": {"request_id": "req_3KVSe5Vh9grcaG", "request_duration_ms":
+        404}}'
       X-Stripe-Client-User-Agent:
       - '{"bindings_version": "2.60.0", "lang": "python", "publisher": "stripe", "httplib":
         "requests", "lang_version": "3.8.2", "platform": "Linux-5.10.49-1-MANJARO-x86_64-with-glibc2.2.5",
@@ -119,13 +128,13 @@ interactions:
     uri: https://api.stripe.com/v1/checkout/sessions
   response:
     body:
-      string: "{\n  \"id\": \"cs_test_a1TOC4FpxvndtiHjjQKwM3T3EOfNyDSIfwxXZfmQLMWjgBdPkgXnZk1ofP\",\n
+      string: "{\n  \"id\": \"cs_test_a1y5pqXl2iEz7Wx3BWpoIZpBYRRJVcMMqOX6eKwUlpuLM4gxm4kI2TrHmh\",\n
         \ \"object\": \"checkout.session\",\n  \"allow_promotion_codes\": null,\n
-        \ \"amount_subtotal\": 0,\n  \"amount_total\": 0,\n  \"automatic_tax\": {\n
-        \   \"enabled\": false,\n    \"status\": null\n  },\n  \"billing_address_collection\":
+        \ \"amount_subtotal\": 500,\n  \"amount_total\": 500,\n  \"automatic_tax\":
+        {\n    \"enabled\": false,\n    \"status\": null\n  },\n  \"billing_address_collection\":
         null,\n  \"cancel_url\": \"http://localhost/main/transaction/cancelled\",\n
         \ \"client_reference_id\": null,\n  \"currency\": \"eur\",\n  \"customer\":
-        \"cus_JvRpCCzaOdKoVk\",\n  \"customer_details\": null,\n  \"customer_email\":
+        \"cus_JvoAx7X7LaA7IQ\",\n  \"customer_details\": null,\n  \"customer_email\":
         null,\n  \"livemode\": false,\n  \"locale\": null,\n  \"metadata\": {\n    \"plan\":
         \"lite\"\n  },\n  \"mode\": \"subscription\",\n  \"payment_intent\": null,\n
         \ \"payment_method_options\": null,\n  \"payment_method_types\": [\n    \"card\"\n
@@ -133,16 +142,16 @@ interactions:
         null,\n  \"shipping_address_collection\": null,\n  \"submit_type\": null,\n
         \ \"subscription\": null,\n  \"success_url\": \"http://localhost/main/transaction/success\",\n
         \ \"total_details\": {\n    \"amount_discount\": 0,\n    \"amount_shipping\":
-        0,\n    \"amount_tax\": 0\n  },\n  \"url\": \"https://checkout.stripe.com/pay/cs_test_a1TOC4FpxvndtiHjjQKwM3T3EOfNyDSIfwxXZfmQLMWjgBdPkgXnZk1ofP#fidkdWxOYHwnPyd1blpxYHZxWjA0TGZ8b2ZMVkR2bWlOd1diXTJLYTcycUFQfTY9S1JRVmd2dERscFBCbG9XTnY9NUs9Sj1vY01ESExiaVZHdTNMc25nUXI1b19Ob3E0Nl0yMjF9dkNQNWQyNTVtUU1DUkNUNScpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl\"\n}\n"
+        0,\n    \"amount_tax\": 0\n  },\n  \"url\": \"https://checkout.stripe.com/pay/cs_test_a1y5pqXl2iEz7Wx3BWpoIZpBYRRJVcMMqOX6eKwUlpuLM4gxm4kI2TrHmh#fidkdWxOYHwnPyd1blpxYHZxWjA0TGZ8b2ZMVkR2bWlOd1diXTJLYTcycUFQfTY9S1JRVmd2dERscFBCbG9XTnY9NUs9Sj1vY01ESExiaVZHdTNMc25nUXI1b19Ob3E0Nl0yMjF9dkNQNWQyNTVtUU1DUkNUNScpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl\"\n}\n"
     headers:
       Connection:
       - keep-alive
       Content-Length:
-      - '1400'
+      - '1404'
       Content-Type:
       - application/json
       Date:
-      - Mon, 26 Jul 2021 21:02:00 GMT
+      - Tue, 27 Jul 2021 20:07:05 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -160,11 +169,11 @@ interactions:
       cache-control:
       - no-cache, no-store
       idempotency-key:
-      - 65eb1542-b940-4aa7-840e-9525c52b9fe3
+      - 8dcfa58a-e312-43cc-8a59-dc08e2a5a7b8
       original-request:
-      - req_c7phTe1Z6oovlG
+      - req_VUFnL161313Bvc
       request-id:
-      - req_c7phTe1Z6oovlG
+      - req_VUFnL161313Bvc
       stripe-should-retry:
       - 'false'
       stripe-version:

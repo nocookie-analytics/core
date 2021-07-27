@@ -23,18 +23,6 @@ def user(db: Session) -> User:
     return create_random_user(db)
 
 
-def create_subscription_for_test_user(user: User, price: str, db: Session):
-    subscription = stripe.Subscription.create(
-        customer=user.stripe_customer_id,
-        items=[
-            {"price": price},
-        ],
-        trial_period_days=14,
-    )
-    user.stripe_subscription_ref = subscription.id
-    db.commit()
-
-
 @pytest.mark.vcr()
 class TestStripe:
     def test_stripe_api_key_is_test_mode(self):
@@ -50,12 +38,9 @@ class TestStripe:
 
     def test_get_stripe_prices(self):
         prices = get_stripe_prices()
-        assert len(list(prices.keys())) == 3
+        assert len(list(prices.keys())) == 4
 
     def test_get_stripe_subscriptions_for_user(self, user: User, db: Session):
-        assert len(get_stripe_subscriptions_for_user(user)) == 0
-        price = list(get_stripe_prices().values())[0]
-        create_subscription_for_test_user(user, price, db)
         assert len(get_stripe_subscriptions_for_user(user)) == 1
 
     def test_cancel_subscription(self, db: Session, user: User):

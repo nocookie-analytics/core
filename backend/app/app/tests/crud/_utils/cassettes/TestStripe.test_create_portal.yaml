@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: customer=cus_JvRpCCzaOdKoVk&return_url=http%3A%2F%2Flocalhost%2Fmain%2F
+    body: customer=cus_JvoAx7X7LaA7IQ&return_url=http%3A%2F%2Flocalhost%2Fmain%2F
     headers:
       Accept:
       - '*/*'
@@ -13,12 +13,12 @@ interactions:
       Content-Type:
       - application/x-www-form-urlencoded
       Idempotency-Key:
-      - 20914401-50d6-4fe8-b927-feab7e86cf68
+      - 38c80317-6098-407c-8384-0a42ba4bf385
       User-Agent:
       - Stripe/v1 PythonBindings/2.60.0
       X-Stripe-Client-Telemetry:
-      - '{"last_request_metrics": {"request_id": "req_c7phTe1Z6oovlG", "request_duration_ms":
-        438}}'
+      - '{"last_request_metrics": {"request_id": "req_VUFnL161313Bvc", "request_duration_ms":
+        443}}'
       X-Stripe-Client-User-Agent:
       - '{"bindings_version": "2.60.0", "lang": "python", "publisher": "stripe", "httplib":
         "requests", "lang_version": "3.8.2", "platform": "Linux-5.10.49-1-MANJARO-x86_64-with-glibc2.2.5",
@@ -30,10 +30,10 @@ interactions:
     uri: https://api.stripe.com/v1/billing_portal/sessions
   response:
     body:
-      string: "{\n  \"id\": \"bps_1JHaw0ISAshlKrRgBQcsjwpb\",\n  \"object\": \"billing_portal.session\",\n
-        \ \"configuration\": \"bpc_1JG9X9ISAshlKrRg6qYtsSuu\",\n  \"created\": 1627333320,\n
-        \ \"customer\": \"cus_JvRpCCzaOdKoVk\",\n  \"livemode\": false,\n  \"on_behalf_of\":
-        null,\n  \"return_url\": \"http://localhost/main/\",\n  \"url\": \"https://billing.stripe.com/session/_JvRptbl54sFGrrb8Nwqh7z5CAyUBeJl\"\n}\n"
+      string: "{\n  \"id\": \"bps_1JHwYPISAshlKrRgCHZ2HXuM\",\n  \"object\": \"billing_portal.session\",\n
+        \ \"configuration\": \"bpc_1JG9X9ISAshlKrRg6qYtsSuu\",\n  \"created\": 1627416425,\n
+        \ \"customer\": \"cus_JvoAx7X7LaA7IQ\",\n  \"livemode\": false,\n  \"on_behalf_of\":
+        null,\n  \"return_url\": \"http://localhost/main/\",\n  \"url\": \"https://billing.stripe.com/session/_JvoA4gx0KNNdYfxsnjHW3b2H247n7Sl\"\n}\n"
     headers:
       Connection:
       - keep-alive
@@ -42,7 +42,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Mon, 26 Jul 2021 21:02:01 GMT
+      - Tue, 27 Jul 2021 20:07:05 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -60,11 +60,11 @@ interactions:
       cache-control:
       - no-cache, no-store
       idempotency-key:
-      - 20914401-50d6-4fe8-b927-feab7e86cf68
+      - 38c80317-6098-407c-8384-0a42ba4bf385
       original-request:
-      - req_l5ysVNiZN5L2pu
+      - req_2wC40qgkxtoE70
       request-id:
-      - req_l5ysVNiZN5L2pu
+      - req_2wC40qgkxtoE70
       stripe-should-retry:
       - 'false'
       stripe-version:
