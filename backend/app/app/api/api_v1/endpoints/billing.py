@@ -88,7 +88,7 @@ async def webhook_received(
     except Exception as e:
         return e
 
-    logger.info("Received webhook %s %s", event_type)
+    logger.info("Received webhook %s", event_type)
 
     if event_type in [
         "checkout.session.completed",
