@@ -19,7 +19,18 @@ def create_stripe_customer_for_user(db: Session, user_obj: User) -> None:
         metadata={"user_id": user_obj.id},
         name=user_obj.full_name,
     )
-    stripe_info_update = UserStripeInfoUpdate(stripe_customer_id=customer.id)
+    subscription = stripe.Subscription.create(
+        customer=customer.id,
+        items=[
+            {"price": get_stripe_prices()[Plan.TRIAL]},
+        ],
+        trial_period_days=settings.TRIAL_PERIOD_DAYS,
+    )
+    stripe_info_update = UserStripeInfoUpdate(
+        stripe_customer_id=customer.id,
+        stripe_subscription_ref=subscription.id,
+        active_plan=Plan.TRIAL,
+    )
     crud.user.update_stripe_info(db, user_obj=user_obj, obj_in=stripe_info_update)
 
 
@@ -69,7 +80,6 @@ def create_checkout_session(base_url: Union[str, URL], plan: Plan, user: User) -
                 "quantity": 1,
             }
         ],
-        subscription_data={"trial_period_days": 14},
     )
     return session.url
 
