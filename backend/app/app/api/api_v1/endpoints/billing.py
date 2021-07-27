@@ -111,7 +111,7 @@ async def webhook_received(
             or event_type == "customer.subscription.updated"
         ):
             stripe_subscription = stripe.Subscription.retrieve(subscription)
-            stripe_subscription_price_id = stripe_subscription[0].plan.id
+            stripe_subscription_price_id = stripe_subscription.plan.id
             plan: Optional[Plan] = None
             for plan, price in get_stripe_prices().items():
                 if price == stripe_subscription_price_id:
