@@ -88,7 +88,7 @@ async def webhook_received(
     except Exception as e:
         return e
 
-    logger.info("Received webhook %s %s", (event_type, json.dumps(data)))
+    logger.info("Received webhook %s %s", event_type)
 
     if event_type in [
         "checkout.session.completed",
@@ -103,7 +103,7 @@ async def webhook_received(
             if event_type == "checkout.session.completed"
             else data.object.id
         )
-        logger.info("Processing webhook %s", (event_type, customer, subscription))
+        logger.info("Processing webhook %s %s %s", event_type, customer, subscription)
         user = get_user_from_stripe_customer_id(db, customer)
         update_stripe_info = None
         if (
