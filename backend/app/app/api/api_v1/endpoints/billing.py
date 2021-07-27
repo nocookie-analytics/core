@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any
+from typing import Any, Optional
 
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
@@ -17,6 +17,7 @@ from app.utils.stripe_helpers import (
     create_checkout_session,
     create_stripe_customer_for_user,
     get_portal_session_url,
+    get_stripe_prices,
     get_stripe_subscriptions_for_user,
     get_user_from_stripe_customer_id,
     verify_webhook,
@@ -88,6 +89,7 @@ async def webhook_received(
     if event_type in [
         "checkout.session.completed",
         "customer.subscription.deleted",
+        "customer.subscription.updated",
         "invoice.paid",
         "customer.subscription.trial_will_end",
     ]:
@@ -95,15 +97,26 @@ async def webhook_received(
         subscription = data.object.subscription
         user = get_user_from_stripe_customer_id(db, customer)
         update_stripe_info = None
-        if event_type == "checkout.session.completed":
+        if (
+            event_type == "checkout.session.completed"
+            or event_type == "customer.subscription.updated"
+        ):
             stripe_subscription = stripe.Subscription.retrieve(subscription)
-            plan = Plan(stripe_subscription.metadata["plan"])
+            stripe_subscription_price_id = stripe_subscription[0].plan.id
+            plan: Optional[Plan] = None
+            for plan, price in get_stripe_prices().items():
+                if price == stripe_subscription_price_id:
+                    break
+
+            if not plan:
+                raise Exception("Unknown price used. Failing ungracefully.")
+
             update_stripe_info = UserStripeInfoUpdate(
                 active_plan=plan, stripe_subscription_ref=subscription
             )
         elif event_type == "customer.subscription.deleted":
             update_stripe_info = UserStripeInfoUpdate(
-                active_plan=Plan.NO_PLAN, stripe_subscription_ref=None
+                active_plan=Plan.CANCELLED, stripe_subscription_ref=None
             )
         elif event_type == "invoice.paid":
             # Continue to provision the subscription as payments continue to be made.
