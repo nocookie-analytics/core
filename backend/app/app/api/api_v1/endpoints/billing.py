@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 from typing import Any, Optional
 
 from fastapi import APIRouter, Depends
@@ -87,7 +88,7 @@ async def webhook_received(
     except Exception as e:
         return e
 
-    logger.info("Received webhook %s", (event_type,))
+    logger.info("Received webhook %s %s", (event_type, json.dumps(data)))
 
     if event_type in [
         "checkout.session.completed",
