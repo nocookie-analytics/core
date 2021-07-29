@@ -1,9 +1,7 @@
 from datetime import datetime
-import json
-from typing import Any, Optional
+from typing import Optional
 
 from fastapi import APIRouter, Depends
-from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 from starlette.background import BackgroundTasks
 from starlette.requests import Request
@@ -11,16 +9,13 @@ import stripe
 
 from app import crud, models, schemas
 from app.api import deps
-from app.core.products import Plan, SUBSCRIBABLE_PLANS
+from app.core.products import Plan
 from app.logger import logger
 from app.schemas.user import UserStripeInfoUpdate
 from app.utils.email import send_trial_ending_email
 from app.utils.stripe_helpers import (
-    create_checkout_session,
-    create_stripe_customer_for_user,
     get_portal_session_url,
     get_stripe_prices,
-    get_stripe_subscriptions_for_user,
     get_user_from_stripe_customer_id,
     verify_webhook,
 )
