@@ -38,41 +38,6 @@ def portal(
     return {"url": url}
 
 
-@router.get("/subscribe", response_model=schemas.StripeLink)
-def subscribe(
-    *,
-    db: Session = Depends(deps.get_db),
-    plan: Plan,
-    request: Request,
-    current_user: models.User = Depends(deps.get_current_active_user),
-) -> Any:
-    """
-    Subscribe to a plan
-    """
-    if plan not in SUBSCRIBABLE_PLANS:
-        raise HTTPException(
-            status_code=400, detail="The plan you're looking for is not here"
-        )
-    if not current_user.stripe_customer_id:
-        create_stripe_customer_for_user(db, current_user)
-
-    if not current_user.stripe_customer_id:
-        raise HTTPException(
-            status_code=500,
-            detail="Error creating Stripe customer, please try again later",
-        )
-
-    subscriptions = get_stripe_subscriptions_for_user(current_user)
-    if len(subscriptions):
-        raise HTTPException(
-            status_code=400,
-            detail="An active subscription already exists for this user",
-        )
-
-    url = create_checkout_session(request.base_url, plan, current_user)
-    return {"url": url}
-
-
 @router.post("/webhook")
 async def webhook_received(
     request: Request,
