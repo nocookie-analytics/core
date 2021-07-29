@@ -1,0 +1,17 @@
+<mjml>
+  <mj-body background-color="#fff">
+    <mj-section>
+      <mj-column>
+        <mj-divider border-color="#555"></mj-divider>
+        <mj-text font-size="20px" color="#555" font-family="helvetica">{{ project_name }} - Trial ending soon</mj-text>
+        <mj-text font-size="16px" color="#555">Hello,</mj-text>
+        <mj-text font-size="16px" color="#555">Your No Cookie Analytics trial is ending on {{ trial_end_date }}. If you'd like to continue using No Cookie Analytics, you can click the button below to choose a plan and add a payment method to your profile.</mj-text>
+        <mj-button padding="50px 0px" href="{{ link }}">Go to Dashboard</mj-button>
+        <mj-text font-size="16px" color="#555">If you choose to not continue, we'd still love to hear your feedback.</mj-text>
+        <mj-text font-size="16px" color="#555">Had a busy schedule and couldn't evaluate? Just hit reply and we're happy to add extra time in your trial.</mj-text>
+        <mj-text font-size="16px" color="#555">Thanks for being a part of the privacy movement!</mj-text>
+        <mj-divider border-color="#555" border-width="2px" />
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

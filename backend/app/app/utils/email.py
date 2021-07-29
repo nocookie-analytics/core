@@ -1,3 +1,4 @@
+from datetime import date
 import logging
 from typing import Any, Dict
 import emails
@@ -6,7 +7,7 @@ from app.core.config import settings
 from pathlib import Path
 
 
-def send_new_account_email(email_to: str, username: str, password: str) -> None:
+def send_new_account_email(email_to: str, username: str) -> None:
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - New account for user {username}"
     with open(Path(settings.EMAIL_TEMPLATES_DIR) / "new_account.html") as f:
@@ -19,7 +20,6 @@ def send_new_account_email(email_to: str, username: str, password: str) -> None:
         environment={
             "project_name": settings.PROJECT_NAME,
             "username": username,
-            "password": password,
             "email": email_to,
             "link": link,
         },
@@ -57,6 +57,23 @@ def send_test_email(email_to: str) -> None:
         subject_template=subject,
         html_template=template_str,
         environment={"project_name": settings.PROJECT_NAME, "email": email_to},
+    )
+
+
+def send_trial_ending_email(email_to: str, trial_end_date: date) -> None:
+    project_name = settings.PROJECT_NAME
+    subject = f"{project_name} - Trial ending soon"
+    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "trial-ending.html") as f:
+        template_str = f.read()
+    send_email(
+        email_to=email_to,
+        subject_template=subject,
+        html_template=template_str,
+        environment={
+            "project_name": settings.PROJECT_NAME,
+            "trial_end_date": trial_end_date,
+            "link": settings.SERVER_HOST,
+        },
     )
 
 

@@ -1,6 +1,6 @@
 from typing import Any, List
 
-from fastapi import APIRouter, Body, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Body, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 from pydantic.networks import EmailStr
 from sqlalchemy.orm import Session
@@ -9,6 +9,7 @@ from app import crud, models, schemas
 from app.api import deps
 from app.core.config import settings
 from app.utils.email import send_new_account_email
+from app.utils.stripe_helpers import create_stripe_customer_for_user
 
 router = APIRouter()
 
@@ -33,6 +34,7 @@ def create_user(
     db: Session = Depends(deps.get_db),
     user_in: schemas.UserCreate,
     current_user: models.User = Depends(deps.get_current_active_superuser),
+    background_tasks: BackgroundTasks,
 ) -> Any:
     """
     Create new user.
@@ -45,9 +47,8 @@ def create_user(
         )
     user = crud.user.create(db, obj_in=user_in)
     if settings.EMAILS_ENABLED and user_in.email:
-        send_new_account_email(
-            email_to=user_in.email, username=user_in.email, password=user_in.password
-        )
+        send_new_account_email(email_to=user_in.email, username=user_in.email)
+    background_tasks.add_task(create_stripe_customer_for_user, db, user)
     return user
 
 
@@ -93,6 +94,7 @@ def create_user_open(
     password: str = Body(...),
     email: EmailStr = Body(...),
     full_name: str = Body(None),
+    background_tasks: BackgroundTasks,
 ) -> Any:
     """
     Create new user without the need to be logged in.
@@ -111,9 +113,8 @@ def create_user_open(
     user_in = schemas.UserCreate(password=password, email=email, full_name=full_name)
     user = crud.user.create(db, obj_in=user_in)
     if settings.EMAILS_ENABLED and user_in.email:
-        send_new_account_email(
-            email_to=user_in.email, username=user_in.email, password=user_in.password
-        )
+        send_new_account_email(email_to=user_in.email, username=user_in.email)
+    background_tasks.add_task(create_stripe_customer_for_user, db, user)
     return user
 
 

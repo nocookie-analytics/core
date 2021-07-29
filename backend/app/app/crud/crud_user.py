@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.core.security import get_password_hash, verify_password
 from app.crud.base import CRUDBase
 from app.models.user import User
-from app.schemas.user import UserCreate, UserUpdate
+from app.schemas.user import UserCreate, UserStripeInfoUpdate, UserUpdate
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
@@ -50,6 +50,12 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
     def is_superuser(self, user: User) -> bool:
         return user.is_superuser
+
+    def update_stripe_info(
+        self, db: Session, *, user_obj: User, obj_in: UserStripeInfoUpdate
+    ):
+        update_data = obj_in.dict(exclude_unset=True)
+        return super().update(db, db_obj=user_obj, obj_in=update_data)
 
 
 user = CRUDUser(User)

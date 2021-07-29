@@ -123,7 +123,6 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         }
         if event_in.event_type == EventType.page_view:
             url_components = self._get_url_components(event_in.url)
-            print(url_components)
             obj_in_data = {
                 **obj_in_data,
                 **self._get_referrer_info(

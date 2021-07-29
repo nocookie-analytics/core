@@ -104,3 +104,10 @@ def read_write_domain(db, request):
 
     request.addfinalizer(teardown)
     return domain
+
+
+@pytest.fixture(scope="module")
+def vcr_config():
+    return {
+        "filter_headers": [("authorization", "DUMMY")],
+    }

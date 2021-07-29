@@ -2,7 +2,16 @@ import os
 import secrets
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, PostgresDsn, validator
+from pydantic import (
+    AnyHttpUrl,
+    BaseSettings,
+    EmailStr,
+    HttpUrl,
+    PostgresDsn,
+    validator,
+)
+
+import stripe
 
 
 class Settings(BaseSettings):
@@ -99,7 +108,12 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str
     USERS_OPEN_REGISTRATION: bool = True
 
-    MMDB_PATH = "data/db-ip-country.mmdb"
+    MMDB_PATH: str = "data/db-ip-country.mmdb"
+
+    TRIAL_PERIOD_DAYS: int = 14
+
+    STRIPE_API_KEY: Optional[str] = None
+    STRIPE_WEBHOOK_SECRET: Optional[str] = None
 
     class Config:
         case_sensitive = True
@@ -112,3 +126,6 @@ if "POSTGRES_DB" in os.environ:
     override_settings = {"POSTGRES_DB": os.environ["POSTGRES_DB"]}
 
 settings = Settings(**override_settings)
+
+if settings.STRIPE_API_KEY:
+    stripe.api_key = settings.STRIPE_API_KEY

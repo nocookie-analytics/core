@@ -1,4 +1,5 @@
 from typing import Dict
+import unittest
 
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
@@ -37,11 +38,14 @@ def test_create_user_new_email(
     username = random_email()
     password = random_lower_string()
     data = {"email": username, "password": password}
-    r = client.post(
-        f"{settings.API_V1_STR}/users/",
-        headers=superuser_token_headers,
-        json=data,
-    )
+    with unittest.mock.patch(
+        "app.api.api_v1.endpoints.users.create_stripe_customer_for_user"
+    ):
+        r = client.post(
+            f"{settings.API_V1_STR}/users/",
+            headers=superuser_token_headers,
+            json=data,
+        )
     assert 200 <= r.status_code < 300
     created_user = r.json()
     user = crud.user.get_by_email(db, email=username)
