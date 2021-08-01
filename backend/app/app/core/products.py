@@ -3,7 +3,6 @@ from enum import Enum
 
 class Plan(Enum):
     NO_PLAN = "no_plan"
-    TRIAL = "trial"
     TRIAL_EXPIRED = "trial_expired"
     FREE = "free"
     LITE = "lite"

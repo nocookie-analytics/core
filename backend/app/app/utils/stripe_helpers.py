@@ -22,14 +22,14 @@ def create_stripe_customer_for_user(db: Session, user_obj: User) -> None:
     subscription = stripe.Subscription.create(
         customer=customer.id,
         items=[
-            {"price": get_stripe_prices()[Plan.TRIAL]},
+            {"price": get_stripe_prices()[Plan.LITE]},
         ],
         trial_period_days=settings.TRIAL_PERIOD_DAYS,
     )
     stripe_info_update = UserStripeInfoUpdate(
         stripe_customer_id=customer.id,
         stripe_subscription_ref=subscription.id,
-        active_plan=Plan.TRIAL,
+        active_plan=Plan.LITE,
     )
     crud.user.update_stripe_info(db, user_obj=user_obj, obj_in=stripe_info_update)
 
