@@ -62,9 +62,12 @@ ReferrerMediumTypeEnum = ENUM(
     name="referrer_medium_type",
     values_callable=lambda x: [e.value for e in x],
 )
-MetricTypeEnum = SQLAlchemyEnum(MetricType, native_enum=False)
+MetricTypeEnum = SQLAlchemyEnum(MetricType, native_enum=False, length=50)
 DeviceTypeEnum = SQLAlchemyEnum(
-    DeviceType, native_enum=False, values_callable=lambda x: [e.value for e in x]
+    DeviceType,
+    native_enum=False,
+    values_callable=lambda x: [e.value for e in x],
+    length=50,
 )
 
 

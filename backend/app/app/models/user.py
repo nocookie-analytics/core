@@ -12,7 +12,7 @@ from app.core.products import Plan
 from app.db.base_class import Base
 
 ActivePlanEnum = SQLAlchemyEnum(
-    Plan, native_enum=False, values_callable=lambda x: [e.value for e in x]
+    Plan, native_enum=False, values_callable=lambda x: [e.value for e in x], length=50
 )
 
 

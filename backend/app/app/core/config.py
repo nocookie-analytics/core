@@ -110,7 +110,7 @@ class Settings(BaseSettings):
 
     MMDB_PATH: str = "data/db-ip-country.mmdb"
 
-    TRIAL_PERIOD_DAYS: int = 14
+    TRIAL_PERIOD_DAYS: int = 30
 
     STRIPE_API_KEY: Optional[str] = None
     STRIPE_WEBHOOK_SECRET: Optional[str] = None
