@@ -33,6 +33,8 @@ class EventCreate(EventBase):
     event_type: EventType
     page_view_id: UUID4
     ua_string: str
+    width: Optional[int]
+    height: Optional[int]
     url: Optional[str]
     referrer: Optional[str]
     user_timezone: Optional[str]
@@ -47,6 +49,8 @@ class EventCreate(EventBase):
         cls: EventCreate,
         request: Request,
         et: EventType = Query(None, description="Event type"),
+        w: Optional[int] = None,
+        h: Optional[int] = None,
         pvid: Optional[UUID4] = Query(None, description="Page view ID"),
         tz: Optional[str] = Query(None, description="Timezone"),
         url: Optional[str] = Query(None, description="Current page URL"),
@@ -73,6 +77,8 @@ class EventCreate(EventBase):
                 user_timezone=tz or None,
                 ua_string=request.headers.get("user-agent"),
                 url=url,
+                width=w,
+                height=h,
                 page_view_id=pvid,
                 metric_name=mn,
                 metric_value=mv,

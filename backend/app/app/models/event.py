@@ -16,8 +16,10 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.dialects.postgresql import JSONB, UUID, ENUM
+from sqlalchemy.dialects.postgresql.base import INTERVAL
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql.sqltypes import Enum as SQLAlchemyEnum
+from sqlalchemy.sql.expression import and_
+from sqlalchemy.sql.sqltypes import Enum as SQLAlchemyEnum, Float
 
 from app.db.base_class import Base
 
@@ -87,6 +89,8 @@ class Event(Base):
     )
     ip_country: Country = relationship("Country")  # type: ignore
     ip_continent_code = Column(String(length=2))
+    width = Column(Integer)
+    height = Column(Integer)
 
     metric_name = Column(MetricTypeEnum)
     metric_value = Column(NUMERIC)
@@ -180,6 +184,14 @@ class Event(Base):
             utm_content,
             timestamp,
             postgresql_where=utm_content.isnot(None),
+        ),
+        Index(
+            "ix_width_height",
+            domain_id,
+            width,
+            height,
+            timestamp,
+            postgresql_where=and_(width.isnot(None), height.isnot(None)),
         ),
         ix_timestamp,
         # Choosing this as a primary key so the table is partitioned by domain first,

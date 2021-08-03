@@ -41,6 +41,8 @@ class TestCreatePageViewEvent:
             ua_string="Mozilla/5.0 (X11; Linux x86_64; rv:9000.0) Gecko/20100101 Firefox/9000.0",
             page_view_id=str(page_view_id),
             ip=mock_ip_address,
+            width=1920,
+            height=1080,
         )
         event = crud.event.create_with_domain(db=db, obj_in=event_in, domain=domain)
         assert event.domain_id == domain.id
@@ -48,6 +50,8 @@ class TestCreatePageViewEvent:
         assert event.ip_country
         assert event.ip_continent_code
         assert event.visitor_fingerprint
+        assert event.width == 1920
+        assert event.height == 1080
 
     @pytest.mark.parametrize(
         "referrer, expected_referrer_medium, expected_referrer_name",
