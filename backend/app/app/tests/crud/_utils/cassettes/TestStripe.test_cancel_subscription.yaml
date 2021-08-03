@@ -11,8 +11,8 @@ interactions:
       User-Agent:
       - Stripe/v1 PythonBindings/2.60.0
       X-Stripe-Client-Telemetry:
-      - '{"last_request_metrics": {"request_id": "req_ysrwrwvxNnEe4o", "request_duration_ms":
-        406}}'
+      - '{"last_request_metrics": {"request_id": "req_DBGRwtPzVtAb2Z", "request_duration_ms":
+        371}}'
       X-Stripe-Client-User-Agent:
       - '{"bindings_version": "2.60.0", "lang": "python", "publisher": "stripe", "httplib":
         "requests", "lang_version": "3.8.2", "platform": "Linux-5.10.49-1-MANJARO-x86_64-with-glibc2.2.5",
@@ -21,73 +21,74 @@ interactions:
       authorization:
       - DUMMY
     method: GET
-    uri: https://api.stripe.com/v1/subscriptions?customer=cus_JvoAx7X7LaA7IQ
+    uri: https://api.stripe.com/v1/subscriptions?customer=cus_JyQYOl2zHrlL7r
   response:
     body:
-      string: "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"sub_JvoAqy89pB27C1\",\n
+      string: "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"sub_JyQYRn8QVtijTW\",\n
         \     \"object\": \"subscription\",\n      \"application_fee_percent\": null,\n
         \     \"automatic_tax\": {\n        \"enabled\": false\n      },\n      \"billing_cycle_anchor\":
-        1628626022,\n      \"billing_thresholds\": null,\n      \"cancel_at\": null,\n
+        1630612497,\n      \"billing_thresholds\": null,\n      \"cancel_at\": null,\n
         \     \"cancel_at_period_end\": false,\n      \"canceled_at\": null,\n      \"collection_method\":
-        \"charge_automatically\",\n      \"created\": 1627416422,\n      \"current_period_end\":
-        1628626022,\n      \"current_period_start\": 1627416422,\n      \"customer\":
-        \"cus_JvoAx7X7LaA7IQ\",\n      \"days_until_due\": null,\n      \"default_payment_method\":
+        \"charge_automatically\",\n      \"created\": 1628020497,\n      \"current_period_end\":
+        1630612497,\n      \"current_period_start\": 1628020497,\n      \"customer\":
+        \"cus_JyQYOl2zHrlL7r\",\n      \"days_until_due\": null,\n      \"default_payment_method\":
         null,\n      \"default_source\": null,\n      \"default_tax_rates\": [\n\n
         \     ],\n      \"discount\": null,\n      \"ended_at\": null,\n      \"items\":
         {\n        \"object\": \"list\",\n        \"data\": [\n          {\n            \"id\":
-        \"si_JvoAPjiUbRAWqv\",\n            \"object\": \"subscription_item\",\n            \"billing_thresholds\":
-        null,\n            \"created\": 1627416422,\n            \"metadata\": {\n
-        \           },\n            \"plan\": {\n              \"id\": \"price_1JHcZiISAshlKrRgK9G5oNXY\",\n
+        \"si_JyQYGqbKCpo2oS\",\n            \"object\": \"subscription_item\",\n            \"billing_thresholds\":
+        null,\n            \"created\": 1628020497,\n            \"metadata\": {\n
+        \           },\n            \"plan\": {\n              \"id\": \"price_1JFnKPISAshlKrRgQ3RTCFiO\",\n
         \             \"object\": \"plan\",\n              \"active\": true,\n              \"aggregate_usage\":
-        null,\n              \"amount\": 0,\n              \"amount_decimal\": \"0\",\n
+        null,\n              \"amount\": 500,\n              \"amount_decimal\": \"500\",\n
         \             \"billing_scheme\": \"per_unit\",\n              \"created\":
-        1627339626,\n              \"currency\": \"eur\",\n              \"interval\":
+        1626904305,\n              \"currency\": \"eur\",\n              \"interval\":
         \"month\",\n              \"interval_count\": 1,\n              \"livemode\":
         false,\n              \"metadata\": {\n              },\n              \"nickname\":
-        null,\n              \"product\": \"prod_JvTW5tdIV7RZrO\",\n              \"tiers_mode\":
+        null,\n              \"product\": \"prod_JtaVoLzg2hQ3rf\",\n              \"tiers_mode\":
         null,\n              \"transform_usage\": null,\n              \"trial_period_days\":
         null,\n              \"usage_type\": \"licensed\"\n            },\n            \"price\":
-        {\n              \"id\": \"price_1JHcZiISAshlKrRgK9G5oNXY\",\n              \"object\":
+        {\n              \"id\": \"price_1JFnKPISAshlKrRgQ3RTCFiO\",\n              \"object\":
         \"price\",\n              \"active\": true,\n              \"billing_scheme\":
-        \"per_unit\",\n              \"created\": 1627339626,\n              \"currency\":
+        \"per_unit\",\n              \"created\": 1626904305,\n              \"currency\":
         \"eur\",\n              \"livemode\": false,\n              \"lookup_key\":
-        \"trial\",\n              \"metadata\": {\n              },\n              \"nickname\":
-        null,\n              \"product\": \"prod_JvTW5tdIV7RZrO\",\n              \"recurring\":
+        \"lite\",\n              \"metadata\": {\n              },\n              \"nickname\":
+        null,\n              \"product\": \"prod_JtaVoLzg2hQ3rf\",\n              \"recurring\":
         {\n                \"aggregate_usage\": null,\n                \"interval\":
         \"month\",\n                \"interval_count\": 1,\n                \"trial_period_days\":
-        null,\n                \"usage_type\": \"licensed\"\n              },\n              \"tiers_mode\":
-        null,\n              \"transform_quantity\": null,\n              \"type\":
-        \"recurring\",\n              \"unit_amount\": 0,\n              \"unit_amount_decimal\":
-        \"0\"\n            },\n            \"quantity\": 1,\n            \"subscription\":
-        \"sub_JvoAqy89pB27C1\",\n            \"tax_rates\": [\n\n            ]\n          }\n
-        \       ],\n        \"has_more\": false,\n        \"total_count\": 1,\n        \"url\":
-        \"/v1/subscription_items?subscription=sub_JvoAqy89pB27C1\"\n      },\n      \"latest_invoice\":
-        \"in_1JHwYMISAshlKrRgDuLVcJhS\",\n      \"livemode\": false,\n      \"metadata\":
-        {\n      },\n      \"next_pending_invoice_item_invoice\": null,\n      \"pause_collection\":
-        null,\n      \"payment_settings\": {\n        \"payment_method_options\":
-        null,\n        \"payment_method_types\": null\n      },\n      \"pending_invoice_item_interval\":
-        null,\n      \"pending_setup_intent\": \"seti_1JHwYMISAshlKrRgubLvBjtA\",\n
-        \     \"pending_update\": null,\n      \"plan\": {\n        \"id\": \"price_1JHcZiISAshlKrRgK9G5oNXY\",\n
-        \       \"object\": \"plan\",\n        \"active\": true,\n        \"aggregate_usage\":
-        null,\n        \"amount\": 0,\n        \"amount_decimal\": \"0\",\n        \"billing_scheme\":
-        \"per_unit\",\n        \"created\": 1627339626,\n        \"currency\": \"eur\",\n
+        null,\n                \"usage_type\": \"licensed\"\n              },\n              \"tax_behavior\":
+        \"unspecified\",\n              \"tiers_mode\": null,\n              \"transform_quantity\":
+        null,\n              \"type\": \"recurring\",\n              \"unit_amount\":
+        500,\n              \"unit_amount_decimal\": \"500\"\n            },\n            \"quantity\":
+        1,\n            \"subscription\": \"sub_JyQYRn8QVtijTW\",\n            \"tax_rates\":
+        [\n\n            ]\n          }\n        ],\n        \"has_more\": false,\n
+        \       \"total_count\": 1,\n        \"url\": \"/v1/subscription_items?subscription=sub_JyQYRn8QVtijTW\"\n
+        \     },\n      \"latest_invoice\": \"in_1JKThVISAshlKrRgwK75eIPV\",\n      \"livemode\":
+        false,\n      \"metadata\": {\n      },\n      \"next_pending_invoice_item_invoice\":
+        null,\n      \"pause_collection\": null,\n      \"payment_settings\": {\n
+        \       \"payment_method_options\": null,\n        \"payment_method_types\":
+        null\n      },\n      \"pending_invoice_item_interval\": null,\n      \"pending_setup_intent\":
+        \"seti_1JKThVISAshlKrRgxoblU5oo\",\n      \"pending_update\": null,\n      \"plan\":
+        {\n        \"id\": \"price_1JFnKPISAshlKrRgQ3RTCFiO\",\n        \"object\":
+        \"plan\",\n        \"active\": true,\n        \"aggregate_usage\": null,\n
+        \       \"amount\": 500,\n        \"amount_decimal\": \"500\",\n        \"billing_scheme\":
+        \"per_unit\",\n        \"created\": 1626904305,\n        \"currency\": \"eur\",\n
         \       \"interval\": \"month\",\n        \"interval_count\": 1,\n        \"livemode\":
         false,\n        \"metadata\": {\n        },\n        \"nickname\": null,\n
-        \       \"product\": \"prod_JvTW5tdIV7RZrO\",\n        \"tiers_mode\": null,\n
+        \       \"product\": \"prod_JtaVoLzg2hQ3rf\",\n        \"tiers_mode\": null,\n
         \       \"transform_usage\": null,\n        \"trial_period_days\": null,\n
         \       \"usage_type\": \"licensed\"\n      },\n      \"quantity\": 1,\n      \"schedule\":
-        null,\n      \"start_date\": 1627416422,\n      \"status\": \"trialing\",\n
-        \     \"transfer_data\": null,\n      \"trial_end\": 1628626022,\n      \"trial_start\":
-        1627416422\n    }\n  ],\n  \"has_more\": false,\n  \"url\": \"/v1/subscriptions\"\n}\n"
+        null,\n      \"start_date\": 1628020497,\n      \"status\": \"trialing\",\n
+        \     \"transfer_data\": null,\n      \"trial_end\": 1630612497,\n      \"trial_start\":
+        1628020497\n    }\n  ],\n  \"has_more\": false,\n  \"url\": \"/v1/subscriptions\"\n}\n"
     headers:
       Connection:
       - keep-alive
       Content-Length:
-      - '4268'
+      - '4324'
       Content-Type:
       - application/json
       Date:
-      - Tue, 27 Jul 2021 20:07:04 GMT
+      - Tue, 03 Aug 2021 19:54:59 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -105,7 +106,7 @@ interactions:
       cache-control:
       - no-cache, no-store
       request-id:
-      - req_H6ergspt1IqAp0
+      - req_CYbzwQUU9fW2DB
       stripe-version:
       - '2020-08-27'
       x-stripe-c-cost:
@@ -127,8 +128,8 @@ interactions:
       User-Agent:
       - Stripe/v1 PythonBindings/2.60.0
       X-Stripe-Client-Telemetry:
-      - '{"last_request_metrics": {"request_id": "req_H6ergspt1IqAp0", "request_duration_ms":
-        381}}'
+      - '{"last_request_metrics": {"request_id": "req_CYbzwQUU9fW2DB", "request_duration_ms":
+        368}}'
       X-Stripe-Client-User-Agent:
       - '{"bindings_version": "2.60.0", "lang": "python", "publisher": "stripe", "httplib":
         "requests", "lang_version": "3.8.2", "platform": "Linux-5.10.49-1-MANJARO-x86_64-with-glibc2.2.5",
@@ -137,67 +138,68 @@ interactions:
       authorization:
       - DUMMY
     method: DELETE
-    uri: https://api.stripe.com/v1/subscriptions/sub_JvoAqy89pB27C1
+    uri: https://api.stripe.com/v1/subscriptions/sub_JyQYRn8QVtijTW
   response:
     body:
-      string: "{\n  \"id\": \"sub_JvoAqy89pB27C1\",\n  \"object\": \"subscription\",\n
+      string: "{\n  \"id\": \"sub_JyQYRn8QVtijTW\",\n  \"object\": \"subscription\",\n
         \ \"application_fee_percent\": null,\n  \"automatic_tax\": {\n    \"enabled\":
-        false\n  },\n  \"billing_cycle_anchor\": 1628626022,\n  \"billing_thresholds\":
+        false\n  },\n  \"billing_cycle_anchor\": 1630612497,\n  \"billing_thresholds\":
         null,\n  \"cancel_at\": null,\n  \"cancel_at_period_end\": false,\n  \"canceled_at\":
-        1627416424,\n  \"collection_method\": \"charge_automatically\",\n  \"created\":
-        1627416422,\n  \"current_period_end\": 1628626022,\n  \"current_period_start\":
-        1627416422,\n  \"customer\": \"cus_JvoAx7X7LaA7IQ\",\n  \"days_until_due\":
+        1628020499,\n  \"collection_method\": \"charge_automatically\",\n  \"created\":
+        1628020497,\n  \"current_period_end\": 1630612497,\n  \"current_period_start\":
+        1628020497,\n  \"customer\": \"cus_JyQYOl2zHrlL7r\",\n  \"days_until_due\":
         null,\n  \"default_payment_method\": null,\n  \"default_source\": null,\n
         \ \"default_tax_rates\": [\n\n  ],\n  \"discount\": null,\n  \"ended_at\":
-        1627416424,\n  \"items\": {\n    \"object\": \"list\",\n    \"data\": [\n
-        \     {\n        \"id\": \"si_JvoAPjiUbRAWqv\",\n        \"object\": \"subscription_item\",\n
-        \       \"billing_thresholds\": null,\n        \"created\": 1627416422,\n
+        1628020499,\n  \"items\": {\n    \"object\": \"list\",\n    \"data\": [\n
+        \     {\n        \"id\": \"si_JyQYGqbKCpo2oS\",\n        \"object\": \"subscription_item\",\n
+        \       \"billing_thresholds\": null,\n        \"created\": 1628020497,\n
         \       \"metadata\": {\n        },\n        \"plan\": {\n          \"id\":
-        \"price_1JHcZiISAshlKrRgK9G5oNXY\",\n          \"object\": \"plan\",\n          \"active\":
-        true,\n          \"aggregate_usage\": null,\n          \"amount\": 0,\n          \"amount_decimal\":
-        \"0\",\n          \"billing_scheme\": \"per_unit\",\n          \"created\":
-        1627339626,\n          \"currency\": \"eur\",\n          \"interval\": \"month\",\n
-        \         \"interval_count\": 1,\n          \"livemode\": false,\n          \"metadata\":
-        {\n          },\n          \"nickname\": null,\n          \"product\": \"prod_JvTW5tdIV7RZrO\",\n
-        \         \"tiers_mode\": null,\n          \"transform_usage\": null,\n          \"trial_period_days\":
-        null,\n          \"usage_type\": \"licensed\"\n        },\n        \"price\":
-        {\n          \"id\": \"price_1JHcZiISAshlKrRgK9G5oNXY\",\n          \"object\":
-        \"price\",\n          \"active\": true,\n          \"billing_scheme\": \"per_unit\",\n
-        \         \"created\": 1627339626,\n          \"currency\": \"eur\",\n          \"livemode\":
-        false,\n          \"lookup_key\": \"trial\",\n          \"metadata\": {\n
-        \         },\n          \"nickname\": null,\n          \"product\": \"prod_JvTW5tdIV7RZrO\",\n
-        \         \"recurring\": {\n            \"aggregate_usage\": null,\n            \"interval\":
-        \"month\",\n            \"interval_count\": 1,\n            \"trial_period_days\":
-        null,\n            \"usage_type\": \"licensed\"\n          },\n          \"tiers_mode\":
-        null,\n          \"transform_quantity\": null,\n          \"type\": \"recurring\",\n
-        \         \"unit_amount\": 0,\n          \"unit_amount_decimal\": \"0\"\n
-        \       },\n        \"quantity\": 1,\n        \"subscription\": \"sub_JvoAqy89pB27C1\",\n
+        \"price_1JFnKPISAshlKrRgQ3RTCFiO\",\n          \"object\": \"plan\",\n          \"active\":
+        true,\n          \"aggregate_usage\": null,\n          \"amount\": 500,\n
+        \         \"amount_decimal\": \"500\",\n          \"billing_scheme\": \"per_unit\",\n
+        \         \"created\": 1626904305,\n          \"currency\": \"eur\",\n          \"interval\":
+        \"month\",\n          \"interval_count\": 1,\n          \"livemode\": false,\n
+        \         \"metadata\": {\n          },\n          \"nickname\": null,\n          \"product\":
+        \"prod_JtaVoLzg2hQ3rf\",\n          \"tiers_mode\": null,\n          \"transform_usage\":
+        null,\n          \"trial_period_days\": null,\n          \"usage_type\": \"licensed\"\n
+        \       },\n        \"price\": {\n          \"id\": \"price_1JFnKPISAshlKrRgQ3RTCFiO\",\n
+        \         \"object\": \"price\",\n          \"active\": true,\n          \"billing_scheme\":
+        \"per_unit\",\n          \"created\": 1626904305,\n          \"currency\":
+        \"eur\",\n          \"livemode\": false,\n          \"lookup_key\": \"lite\",\n
+        \         \"metadata\": {\n          },\n          \"nickname\": null,\n          \"product\":
+        \"prod_JtaVoLzg2hQ3rf\",\n          \"recurring\": {\n            \"aggregate_usage\":
+        null,\n            \"interval\": \"month\",\n            \"interval_count\":
+        1,\n            \"trial_period_days\": null,\n            \"usage_type\":
+        \"licensed\"\n          },\n          \"tax_behavior\": \"unspecified\",\n
+        \         \"tiers_mode\": null,\n          \"transform_quantity\": null,\n
+        \         \"type\": \"recurring\",\n          \"unit_amount\": 500,\n          \"unit_amount_decimal\":
+        \"500\"\n        },\n        \"quantity\": 1,\n        \"subscription\": \"sub_JyQYRn8QVtijTW\",\n
         \       \"tax_rates\": [\n\n        ]\n      }\n    ],\n    \"has_more\":
-        false,\n    \"total_count\": 1,\n    \"url\": \"/v1/subscription_items?subscription=sub_JvoAqy89pB27C1\"\n
-        \ },\n  \"latest_invoice\": \"in_1JHwYMISAshlKrRgDuLVcJhS\",\n  \"livemode\":
+        false,\n    \"total_count\": 1,\n    \"url\": \"/v1/subscription_items?subscription=sub_JyQYRn8QVtijTW\"\n
+        \ },\n  \"latest_invoice\": \"in_1JKThVISAshlKrRgwK75eIPV\",\n  \"livemode\":
         false,\n  \"metadata\": {\n  },\n  \"next_pending_invoice_item_invoice\":
         null,\n  \"pause_collection\": null,\n  \"payment_settings\": {\n    \"payment_method_options\":
         null,\n    \"payment_method_types\": null\n  },\n  \"pending_invoice_item_interval\":
-        null,\n  \"pending_setup_intent\": \"seti_1JHwYMISAshlKrRgubLvBjtA\",\n  \"pending_update\":
-        null,\n  \"plan\": {\n    \"id\": \"price_1JHcZiISAshlKrRgK9G5oNXY\",\n    \"object\":
+        null,\n  \"pending_setup_intent\": \"seti_1JKThVISAshlKrRgxoblU5oo\",\n  \"pending_update\":
+        null,\n  \"plan\": {\n    \"id\": \"price_1JFnKPISAshlKrRgQ3RTCFiO\",\n    \"object\":
         \"plan\",\n    \"active\": true,\n    \"aggregate_usage\": null,\n    \"amount\":
-        0,\n    \"amount_decimal\": \"0\",\n    \"billing_scheme\": \"per_unit\",\n
-        \   \"created\": 1627339626,\n    \"currency\": \"eur\",\n    \"interval\":
+        500,\n    \"amount_decimal\": \"500\",\n    \"billing_scheme\": \"per_unit\",\n
+        \   \"created\": 1626904305,\n    \"currency\": \"eur\",\n    \"interval\":
         \"month\",\n    \"interval_count\": 1,\n    \"livemode\": false,\n    \"metadata\":
-        {\n    },\n    \"nickname\": null,\n    \"product\": \"prod_JvTW5tdIV7RZrO\",\n
+        {\n    },\n    \"nickname\": null,\n    \"product\": \"prod_JtaVoLzg2hQ3rf\",\n
         \   \"tiers_mode\": null,\n    \"transform_usage\": null,\n    \"trial_period_days\":
         null,\n    \"usage_type\": \"licensed\"\n  },\n  \"quantity\": 1,\n  \"schedule\":
-        null,\n  \"start_date\": 1627416422,\n  \"status\": \"canceled\",\n  \"transfer_data\":
-        null,\n  \"trial_end\": 1628626022,\n  \"trial_start\": 1627416422\n}\n"
+        null,\n  \"start_date\": 1628020497,\n  \"status\": \"canceled\",\n  \"transfer_data\":
+        null,\n  \"trial_end\": 1630612497,\n  \"trial_start\": 1628020497\n}\n"
     headers:
       Connection:
       - keep-alive
       Content-Length:
-      - '3649'
+      - '3701'
       Content-Type:
       - application/json
       Date:
-      - Tue, 27 Jul 2021 20:07:04 GMT
+      - Tue, 03 Aug 2021 19:54:59 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -215,7 +217,7 @@ interactions:
       cache-control:
       - no-cache, no-store
       request-id:
-      - req_WFXuvE1GKT6xPm
+      - req_8oQR4xXHepoGFj
       stripe-version:
       - '2020-08-27'
       x-stripe-c-cost:

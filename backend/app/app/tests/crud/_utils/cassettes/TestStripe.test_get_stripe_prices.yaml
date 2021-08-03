@@ -11,8 +11,8 @@ interactions:
       User-Agent:
       - Stripe/v1 PythonBindings/2.60.0
       X-Stripe-Client-Telemetry:
-      - '{"last_request_metrics": {"request_id": "req_9AX3YMf987EaCA", "request_duration_ms":
-        1000}}'
+      - '{"last_request_metrics": {"request_id": "req_pK68Zv7zquq6sS", "request_duration_ms":
+        913}}'
       X-Stripe-Client-User-Agent:
       - '{"bindings_version": "2.60.0", "lang": "python", "publisher": "stripe", "httplib":
         "requests", "lang_version": "3.8.2", "platform": "Linux-5.10.49-1-MANJARO-x86_64-with-glibc2.2.5",
@@ -21,7 +21,7 @@ interactions:
       authorization:
       - DUMMY
     method: GET
-    uri: https://api.stripe.com/v1/prices?lookup_keys%5B0%5D=no_plan&lookup_keys%5B1%5D=trial&lookup_keys%5B2%5D=trial_expired&lookup_keys%5B3%5D=free&lookup_keys%5B4%5D=lite&lookup_keys%5B5%5D=medium&lookup_keys%5B6%5D=enterprise&lookup_keys%5B7%5D=cancelled
+    uri: https://api.stripe.com/v1/prices?lookup_keys%5B0%5D=no_plan&lookup_keys%5B1%5D=trial_expired&lookup_keys%5B2%5D=free&lookup_keys%5B3%5D=lite&lookup_keys%5B4%5D=medium&lookup_keys%5B5%5D=enterprise&lookup_keys%5B6%5D=cancelled
   response:
     body:
       string: "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"price_1JFnKrISAshlKrRgdPcdclQ9\",\n
@@ -31,17 +31,18 @@ interactions:
         {\n      },\n      \"nickname\": null,\n      \"product\": \"prod_JtaVPrC8nroNHr\",\n
         \     \"recurring\": {\n        \"aggregate_usage\": null,\n        \"interval\":
         \"month\",\n        \"interval_count\": 1,\n        \"trial_period_days\":
-        null,\n        \"usage_type\": \"licensed\"\n      },\n      \"tiers_mode\":
-        null,\n      \"transform_quantity\": null,\n      \"type\": \"recurring\",\n
-        \     \"unit_amount\": 4900,\n      \"unit_amount_decimal\": \"4900\"\n    },\n
-        \   {\n      \"id\": \"price_1JFnKPISAshlKrRgQ3RTCFiO\",\n      \"object\":
-        \"price\",\n      \"active\": true,\n      \"billing_scheme\": \"per_unit\",\n
-        \     \"created\": 1626904305,\n      \"currency\": \"eur\",\n      \"livemode\":
-        false,\n      \"lookup_key\": \"lite\",\n      \"metadata\": {\n      },\n
-        \     \"nickname\": null,\n      \"product\": \"prod_JtaVoLzg2hQ3rf\",\n      \"recurring\":
-        {\n        \"aggregate_usage\": null,\n        \"interval\": \"month\",\n
-        \       \"interval_count\": 1,\n        \"trial_period_days\": null,\n        \"usage_type\":
-        \"licensed\"\n      },\n      \"tiers_mode\": null,\n      \"transform_quantity\":
+        null,\n        \"usage_type\": \"licensed\"\n      },\n      \"tax_behavior\":
+        \"unspecified\",\n      \"tiers_mode\": null,\n      \"transform_quantity\":
+        null,\n      \"type\": \"recurring\",\n      \"unit_amount\": 4900,\n      \"unit_amount_decimal\":
+        \"4900\"\n    },\n    {\n      \"id\": \"price_1JFnKPISAshlKrRgQ3RTCFiO\",\n
+        \     \"object\": \"price\",\n      \"active\": true,\n      \"billing_scheme\":
+        \"per_unit\",\n      \"created\": 1626904305,\n      \"currency\": \"eur\",\n
+        \     \"livemode\": false,\n      \"lookup_key\": \"lite\",\n      \"metadata\":
+        {\n      },\n      \"nickname\": null,\n      \"product\": \"prod_JtaVoLzg2hQ3rf\",\n
+        \     \"recurring\": {\n        \"aggregate_usage\": null,\n        \"interval\":
+        \"month\",\n        \"interval_count\": 1,\n        \"trial_period_days\":
+        null,\n        \"usage_type\": \"licensed\"\n      },\n      \"tax_behavior\":
+        \"unspecified\",\n      \"tiers_mode\": null,\n      \"transform_quantity\":
         null,\n      \"type\": \"recurring\",\n      \"unit_amount\": 500,\n      \"unit_amount_decimal\":
         \"500\"\n    },\n    {\n      \"id\": \"price_1JFnKfISAshlKrRgGSXXMHHy\",\n
         \     \"object\": \"price\",\n      \"active\": true,\n      \"billing_scheme\":
@@ -50,28 +51,19 @@ interactions:
         {\n      },\n      \"nickname\": null,\n      \"product\": \"prod_JtaVCSClv3JOfb\",\n
         \     \"recurring\": {\n        \"aggregate_usage\": null,\n        \"interval\":
         \"month\",\n        \"interval_count\": 1,\n        \"trial_period_days\":
-        null,\n        \"usage_type\": \"licensed\"\n      },\n      \"tiers_mode\":
-        null,\n      \"transform_quantity\": null,\n      \"type\": \"recurring\",\n
-        \     \"unit_amount\": 1900,\n      \"unit_amount_decimal\": \"1900\"\n    },\n
-        \   {\n      \"id\": \"price_1JHcZiISAshlKrRgK9G5oNXY\",\n      \"object\":
-        \"price\",\n      \"active\": true,\n      \"billing_scheme\": \"per_unit\",\n
-        \     \"created\": 1627339626,\n      \"currency\": \"eur\",\n      \"livemode\":
-        false,\n      \"lookup_key\": \"trial\",\n      \"metadata\": {\n      },\n
-        \     \"nickname\": null,\n      \"product\": \"prod_JvTW5tdIV7RZrO\",\n      \"recurring\":
-        {\n        \"aggregate_usage\": null,\n        \"interval\": \"month\",\n
-        \       \"interval_count\": 1,\n        \"trial_period_days\": null,\n        \"usage_type\":
-        \"licensed\"\n      },\n      \"tiers_mode\": null,\n      \"transform_quantity\":
-        null,\n      \"type\": \"recurring\",\n      \"unit_amount\": 0,\n      \"unit_amount_decimal\":
-        \"0\"\n    }\n  ],\n  \"has_more\": false,\n  \"url\": \"/v1/prices\"\n}\n"
+        null,\n        \"usage_type\": \"licensed\"\n      },\n      \"tax_behavior\":
+        \"unspecified\",\n      \"tiers_mode\": null,\n      \"transform_quantity\":
+        null,\n      \"type\": \"recurring\",\n      \"unit_amount\": 1900,\n      \"unit_amount_decimal\":
+        \"1900\"\n    }\n  ],\n  \"has_more\": false,\n  \"url\": \"/v1/prices\"\n}\n"
     headers:
       Connection:
       - keep-alive
       Content-Length:
-      - '2808'
+      - '2243'
       Content-Type:
       - application/json
       Date:
-      - Tue, 27 Jul 2021 20:07:03 GMT
+      - Tue, 03 Aug 2021 19:54:58 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -89,7 +81,7 @@ interactions:
       cache-control:
       - no-cache, no-store
       request-id:
-      - req_UFIpxPlNRNHaxC
+      - req_L9RAfJBt8PaHbK
       stripe-version:
       - '2020-08-27'
       x-stripe-c-cost:

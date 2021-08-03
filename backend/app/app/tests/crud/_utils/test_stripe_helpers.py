@@ -38,7 +38,7 @@ class TestStripe:
 
     def test_get_stripe_prices(self):
         prices = get_stripe_prices()
-        assert len(list(prices.keys())) == 4
+        assert len(list(prices.keys())) == 3
 
     def test_get_stripe_subscriptions_for_user(self, user: User, db: Session):
         assert len(get_stripe_subscriptions_for_user(user)) == 1
