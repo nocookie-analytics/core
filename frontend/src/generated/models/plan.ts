@@ -14,10 +14,20 @@
 
 
 
-export * from './api/analytics-api';
-export * from './api/billing-api';
-export * from './api/domains-api';
-export * from './api/events-api';
-export * from './api/login-api';
-export * from './api/users-api';
+/**
+ * An enumeration.
+ * @export
+ * @enum {string}
+ */
+export enum Plan {
+    NoPlan = 'no_plan',
+    TrialExpired = 'trial_expired',
+    Free = 'free',
+    Lite = 'lite',
+    Medium = 'medium',
+    Enterprise = 'enterprise',
+    Cancelled = 'cancelled'
+}
+
+
 

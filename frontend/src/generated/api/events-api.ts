@@ -39,6 +39,8 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
          * @summary New Event
          * @param {string} url 
          * @param {EventType} [et] Event type
+         * @param {number} [w] 
+         * @param {number} [h] 
          * @param {string} [pvid] Page view ID
          * @param {string} [tz] Timezone
          * @param {string} [ref] Referrer
@@ -47,7 +49,7 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newEvent: async (url: string, et?: EventType, pvid?: string, tz?: string, ref?: string, mn?: MetricType, mv?: number, options: any = {}): Promise<RequestArgs> => {
+        newEvent: async (url: string, et?: EventType, w?: number, h?: number, pvid?: string, tz?: string, ref?: string, mn?: MetricType, mv?: number, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'url' is not null or undefined
             assertParamExists('newEvent', 'url', url)
             const localVarPath = `/api/v1/e/`;
@@ -64,6 +66,14 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
 
             if (et !== undefined) {
                 localVarQueryParameter['et'] = et;
+            }
+
+            if (w !== undefined) {
+                localVarQueryParameter['w'] = w;
+            }
+
+            if (h !== undefined) {
+                localVarQueryParameter['h'] = h;
             }
 
             if (pvid !== undefined) {
@@ -116,6 +126,8 @@ export const EventsApiFp = function(configuration?: Configuration) {
          * @summary New Event
          * @param {string} url 
          * @param {EventType} [et] Event type
+         * @param {number} [w] 
+         * @param {number} [h] 
          * @param {string} [pvid] Page view ID
          * @param {string} [tz] Timezone
          * @param {string} [ref] Referrer
@@ -124,8 +136,8 @@ export const EventsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newEvent(url: string, et?: EventType, pvid?: string, tz?: string, ref?: string, mn?: MetricType, mv?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EventCreated>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.newEvent(url, et, pvid, tz, ref, mn, mv, options);
+        async newEvent(url: string, et?: EventType, w?: number, h?: number, pvid?: string, tz?: string, ref?: string, mn?: MetricType, mv?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EventCreated>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.newEvent(url, et, w, h, pvid, tz, ref, mn, mv, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -143,6 +155,8 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
          * @summary New Event
          * @param {string} url 
          * @param {EventType} [et] Event type
+         * @param {number} [w] 
+         * @param {number} [h] 
          * @param {string} [pvid] Page view ID
          * @param {string} [tz] Timezone
          * @param {string} [ref] Referrer
@@ -151,8 +165,8 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newEvent(url: string, et?: EventType, pvid?: string, tz?: string, ref?: string, mn?: MetricType, mv?: number, options?: any): AxiosPromise<EventCreated> {
-            return localVarFp.newEvent(url, et, pvid, tz, ref, mn, mv, options).then((request) => request(axios, basePath));
+        newEvent(url: string, et?: EventType, w?: number, h?: number, pvid?: string, tz?: string, ref?: string, mn?: MetricType, mv?: number, options?: any): AxiosPromise<EventCreated> {
+            return localVarFp.newEvent(url, et, w, h, pvid, tz, ref, mn, mv, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -176,6 +190,20 @@ export interface EventsApiNewEventRequest {
      * @memberof EventsApiNewEvent
      */
     readonly et?: EventType
+
+    /**
+     * 
+     * @type {number}
+     * @memberof EventsApiNewEvent
+     */
+    readonly w?: number
+
+    /**
+     * 
+     * @type {number}
+     * @memberof EventsApiNewEvent
+     */
+    readonly h?: number
 
     /**
      * Page view ID
@@ -229,6 +257,6 @@ export class EventsApi extends BaseAPI {
      * @memberof EventsApi
      */
     public newEvent(requestParameters: EventsApiNewEventRequest, options?: any) {
-        return EventsApiFp(this.configuration).newEvent(requestParameters.url, requestParameters.et, requestParameters.pvid, requestParameters.tz, requestParameters.ref, requestParameters.mn, requestParameters.mv, options).then((request) => request(this.axios, this.basePath));
+        return EventsApiFp(this.configuration).newEvent(requestParameters.url, requestParameters.et, requestParameters.w, requestParameters.h, requestParameters.pvid, requestParameters.tz, requestParameters.ref, requestParameters.mn, requestParameters.mv, options).then((request) => request(this.axios, this.basePath));
     }
 }
