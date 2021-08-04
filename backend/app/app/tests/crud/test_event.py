@@ -1,4 +1,6 @@
+from app.tests.utils.domain import create_random_domain
 from datetime import datetime, timedelta
+import time
 from typing import Sequence
 
 import arrow
@@ -131,6 +133,28 @@ class TestCreatePageViewEvent:
         assert event.utm_medium == "social"
         assert event.utm_campaign == "buffer"
         assert event.utm_source == "facebook.com"
+
+    def test_session(
+        self,
+        db: Session,
+        mock_ip_address: str,
+    ) -> None:
+        domain = create_random_domain(db)
+        event = create_random_page_view_event(
+            db,
+            domain=domain,
+            ip_address=mock_ip_address,
+        )
+        assert event.seconds_since_last_visit.total_seconds() == 0
+        assert event.session_start == event.timestamp
+
+        event2 = create_random_page_view_event(
+            db,
+            domain=domain,
+            ip_address=mock_ip_address,
+        )
+        assert event2.session_start == event.timestamp
+        assert event2.seconds_since_last_visit.total_seconds() > 0
 
 
 class TestGetAnalytics:

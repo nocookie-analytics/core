@@ -89,6 +89,10 @@ class Event(Base):
     )
     ip_country: Country = relationship("Country")  # type: ignore
     ip_continent_code = Column(String(length=2))
+
+    seconds_since_last_visit = Column(INTERVAL)
+    session_start = Column(DateTime(timezone=True))
+
     width = Column(Integer)
     height = Column(Integer)
 
