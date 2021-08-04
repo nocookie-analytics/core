@@ -18,8 +18,8 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import JSONB, UUID, ENUM
 from sqlalchemy.dialects.postgresql.base import INTERVAL
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql.expression import and_
-from sqlalchemy.sql.sqltypes import Enum as SQLAlchemyEnum, Float
+from sqlalchemy.sql.expression import and_, text
+from sqlalchemy.sql.sqltypes import Enum as SQLAlchemyEnum, Interval
 
 from app.db.base_class import Base
 
@@ -144,6 +144,15 @@ class Event(Base):
         device_type,
         timestamp,
         postgresql_where=device_type.isnot(None),
+    )
+
+    ix_session_start = Index("ix_session_start", domain_id, session_start, timestamp)
+    ix_seconds_since_last_visit = Index(
+        "ix_seconds_since_last_visit",
+        domain_id,
+        seconds_since_last_visit,
+        timestamp,
+        postgresql_where=seconds_since_last_visit > text("interval '0'"),
     )
 
     __table_args__: Tuple = (
