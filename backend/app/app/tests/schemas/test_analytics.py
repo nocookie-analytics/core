@@ -38,12 +38,21 @@ class TestPageViewStat:
         assert data.total_visits == 2
         assert data.visitors == 1
         assert data.bounce_rate == 0
+        assert data.average_page_visit_time_seconds > 0
+        assert data.average_session_time_seconds > 0
 
         create_random_page_view_event(db, domain=domain, ip_address="127.0.0.1")
-        data = SummaryStat.from_base_query(db, base_query)
+        data2 = SummaryStat.from_base_query(db, base_query)
         assert (
-            data.bounce_rate == 50
+            data2.bounce_rate == 50
         )  # At this point in the test: 2 visitors, 1 bounced 1 didn't
+
+        # Single visits do not count towards session or page visit time
+        assert data2.average_session_time_seconds == data.average_session_time_seconds
+        assert (
+            data2.average_page_visit_time_seconds
+            == data.average_page_visit_time_seconds
+        )
 
 
 class TestPageViewsPerDayStat:
