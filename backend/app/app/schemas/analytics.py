@@ -10,7 +10,7 @@ from sqlalchemy import func, column
 from sqlalchemy.orm import Query
 from sqlalchemy.orm.session import Session
 from sqlalchemy.sql import desc
-from sqlalchemy.sql.expression import case, distinct, select, text
+from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.schema import Column
 
 from app.models.event import Event, MetricType
@@ -26,6 +26,7 @@ class AnalyticsType(Enum):
     BROWSERS = "browser_families"
     OS = "os_families"
     DEVICE_BRANDS = "device_brands"
+    SCREEN_SIZES = "screen_sizes"
     DEVICE_TYPES = "device_types"
     REFERRER_MEDIUMS = "referrer_mediums"
     REFERRER_NAMES = "referrer_names"
@@ -259,6 +260,7 @@ class AnalyticsData(BaseModel):
 
     browser_families: Optional[List[AggregateStat]]
     countries: Optional[List[AggregateStat]]
+    screen_sizes: Optional[List[AggregateStat]]
     os_families: Optional[List[AggregateStat]]
     device_brands: Optional[List[AggregateStat]]
     device_types: Optional[List[AggregateStat]]

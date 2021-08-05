@@ -8,6 +8,7 @@ from sqlalchemy import and_
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.elements import TextClause
 from sqlalchemy.sql.expression import text
+from sqlalchemy.sql.functions import func
 
 from app.core.config import settings
 from app.crud.base import CRUDBase
@@ -317,7 +318,17 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 )
             elif field == AnalyticsType.OS:
                 data.os_families = AggregateStat.from_base_query(
-                    page_view_base_query, Event.os_family, group_limit=group_limit
+                    page_view_base_query,
+                    Event.os_family,
+                    group_limit=group_limit,
+                    filter_none=True,
+                )
+            elif field == AnalyticsType.SCREEN_SIZES:
+                data.screen_sizes = AggregateStat.from_base_query(
+                    page_view_base_query,
+                    func.concat(Event.width, "x", Event.height),
+                    group_limit=group_limit,
+                    filter_none=True,
                 )
             elif field == AnalyticsType.DEVICE_BRANDS:
                 data.device_brands = AggregateStat.from_base_query(
