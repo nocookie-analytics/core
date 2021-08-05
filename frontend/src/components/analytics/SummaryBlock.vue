@@ -142,9 +142,7 @@ export default class SummaryBlock extends Vue {
     });
     blocks.push({
       title: 'Time on page',
-      value: `${this.summaryData.average_page_visit_time_seconds
-        .toPrecision(2)
-        .toString()}s`,
+      value: `${this.summaryData.average_page_visit_time_seconds.toFixed(2)}s`,
       icon: mdiDebugStepOver,
       changeSign: 1,
       class: '',
@@ -157,9 +155,7 @@ export default class SummaryBlock extends Vue {
     });
     blocks.push({
       title: 'Time per session',
-      value: `${this.summaryData.average_session_time_seconds
-        .toPrecision(2)
-        .toString()}s`,
+      value: `${this.summaryData.average_session_time_seconds.toFixed(2)}s`,
       icon: mdiBookOpen,
       changeSign: 1,
       class: '',
