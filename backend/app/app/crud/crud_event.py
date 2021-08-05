@@ -325,10 +325,11 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 )
             elif field == AnalyticsType.SCREEN_SIZES:
                 data.screen_sizes = AggregateStat.from_base_query(
-                    page_view_base_query,
+                    page_view_base_query.filter(
+                        and_(Event.width.isnot(None), Event.height.isnot(None))
+                    ),
                     func.concat(Event.width, "x", Event.height),
                     group_limit=group_limit,
-                    filter_none=True,
                 )
             elif field == AnalyticsType.DEVICE_BRANDS:
                 data.device_brands = AggregateStat.from_base_query(
