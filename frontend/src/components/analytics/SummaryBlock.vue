@@ -4,13 +4,23 @@
       <v-col
         v-for="block in summaryBlocks"
         :key="block.title"
-        cols="6"
+        cols="12"
         lg="3"
         xl="2"
         sm="6"
       >
-        <v-card outlined min-width="165" max-width="165" width="165">
-          <v-card-title>{{ block.title }}</v-card-title>
+        <v-card outlined>
+          <v-card-title>
+            <v-tooltip left>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon dark size="14" left v-bind="attrs" v-on="on">
+                  {{ icons.mdiInformationOutline }}
+                </v-icon>
+              </template>
+              <span>{{ block.tooltip }}</span>
+            </v-tooltip>
+            {{ block.title }}
+          </v-card-title>
           <v-card-text>
             <v-icon :class="block.class">{{ block.icon }}</v-icon>
             {{ block.value }}
@@ -50,6 +60,9 @@ import {
   mdiTrendingNeutral,
   mdiSubdirectoryArrowRight,
   mdiSawtoothWave,
+  mdiBookOpen,
+  mdiDebugStepOver,
+  mdiInformationOutline,
 } from '@mdi/js';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
@@ -71,6 +84,7 @@ export default class SummaryBlock extends Vue {
       mdiTrendingUp,
       mdiTrendingDown,
       mdiTrendingNeutral,
+      mdiInformationOutline,
     };
   }
 
@@ -86,6 +100,7 @@ export default class SummaryBlock extends Vue {
         changeSign: 1,
         class: '',
         icon: mdiCropLandscape,
+        tooltip: 'Page views in this period',
       },
       {
         title: 'Visitors',
@@ -97,6 +112,7 @@ export default class SummaryBlock extends Vue {
           this.summaryData.visitors,
           this.summaryDataPreviousInterval.visitors,
         ),
+        tooltip: 'Unique visitors in this period',
       },
     ];
     if (this.summaryData.bounce_rate) {
@@ -110,16 +126,48 @@ export default class SummaryBlock extends Vue {
           this.summaryData.bounce_rate,
           this.summaryDataPreviousInterval.bounce_rate,
         ),
+        tooltip:
+          'Visitors who visit only one page and never come back are "bounced"',
       });
     }
     blocks.push({
-      // TODO: This should update automatically
+      // TODO: This should refresh automatically
       title: 'Live visitors',
       value: `${this.liveVisitorCount}`,
       icon: mdiSawtoothWave,
       changeSign: 1,
       change: undefined,
       class: 'blink',
+      tooltip: 'Visitors in the last 5 minutes',
+    });
+    blocks.push({
+      title: 'Page time',
+      value: `${this.summaryData.average_page_visit_time_seconds
+        .toPrecision(2)
+        .toString()}s`,
+      icon: mdiDebugStepOver,
+      changeSign: 1,
+      class: '',
+      change: this.percentagechange(
+        this.summaryData.average_page_visit_time_seconds,
+        this.summaryDataPreviousInterval.average_page_visit_time_seconds,
+      ),
+      tooltip:
+        'Average time spent on a page before moving to another page on the website',
+    });
+    blocks.push({
+      title: 'Session time',
+      value: `${this.summaryData.average_session_time_seconds
+        .toPrecision(2)
+        .toString()}s`,
+      icon: mdiBookOpen,
+      changeSign: 1,
+      class: '',
+      change: this.percentagechange(
+        this.summaryData.average_session_time_seconds,
+        this.summaryDataPreviousInterval.average_session_time_seconds,
+      ),
+      tooltip: 'Average time spent on the website',
     });
     return blocks;
   }
