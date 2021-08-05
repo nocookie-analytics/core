@@ -128,7 +128,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
 
         This function is very similar to _get_seconds_since_last_visit_query
         """
-        r = text(
+        return text(
             f"""coalesce((select session_start from event
             where domain_id = :domain_id_2
                 and visitor_fingerprint = :fingerprint
@@ -141,8 +141,6 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             domain_id_2=domain_id,
             fingerprint=fingerprint,
         )
-        print(r)
-        return r
 
     @staticmethod
     def _get_seconds_since_last_visit_query(
@@ -290,18 +288,21 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             page_view_base_query = base_query_current_interval.filter(
                 Event.event_type == EventType.page_view
             )
+            page_view_base_query_previous_interval = (
+                base_query_previous_interval.filter(
+                    Event.event_type == EventType.page_view
+                )
+            )
             metric_base_query = base_query_current_interval.filter(
                 Event.event_type == EventType.metric
             )
             if field == AnalyticsType.SUMMARY:
-                data.summary = SummaryStat.from_base_query(
-                    db, base_query_current_interval
-                )
+                data.summary = SummaryStat.from_base_query(db, page_view_base_query)
             elif field == AnalyticsType.LIVE_VISITORS:
                 data.live_visitors = LiveVisitorStat.from_base_query(base_query)
             elif field == AnalyticsType.SUMMARY_PREVIOUS_INTERVAL:
                 data.summary_previous_interval = SummaryStat.from_base_query(
-                    db, base_query_previous_interval
+                    db, page_view_base_query_previous_interval
                 )
             elif field == AnalyticsType.BROWSERS:
                 data.browser_families = AggregateStat.from_base_query(
@@ -387,7 +388,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 )
             elif field == AnalyticsType.PAGEVIEWS_PER_DAY:
                 data.pageviews_per_day = PageViewsPerDayStat.from_base_query(
-                    base_query_current_interval,
+                    page_view_base_query,
                     start=start.datetime,
                     end=end.datetime,
                     interval=interval,
