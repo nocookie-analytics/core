@@ -97,6 +97,12 @@ export default class AnalyticsContainer extends Vue {
         urlExclude: ['Unknown'],
       },
       {
+        data: this.analyticsData.screen_sizes || [],
+        title: 'Screen sizes',
+        urlParamName: 'screenSize',
+        noIcon: true,
+      },
+      {
         data: this.analyticsData.utm_terms || [],
         title: 'UTM Term',
       },
