@@ -107,6 +107,12 @@ export interface AnalyticsData {
      * @type {Array<AggregateStat>}
      * @memberof AnalyticsData
      */
+    screen_sizes?: Array<AggregateStat>;
+    /**
+     * 
+     * @type {Array<AggregateStat>}
+     * @memberof AnalyticsData
+     */
     os_families?: Array<AggregateStat>;
     /**
      * 
