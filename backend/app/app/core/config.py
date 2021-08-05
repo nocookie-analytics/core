@@ -115,7 +115,7 @@ class Settings(BaseSettings):
     STRIPE_API_KEY: Optional[str] = None
     STRIPE_WEBHOOK_SECRET: Optional[str] = None
 
-    # Minutes elapsed between two subsequent visits by the same user before it will be considered a new page view
+    # Minutes elapsed between two subsequent visits by the same user before it will be considered a new session
     SESSION_TIMEOUT_MINUTES: int = 5
 
     class Config:
