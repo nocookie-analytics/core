@@ -141,7 +141,7 @@ export default class SummaryBlock extends Vue {
       tooltip: 'Visitors in the last 5 minutes',
     });
     blocks.push({
-      title: 'Page time',
+      title: 'Time on page',
       value: `${this.summaryData.average_page_visit_time_seconds
         .toPrecision(2)
         .toString()}s`,
@@ -156,7 +156,7 @@ export default class SummaryBlock extends Vue {
         'Average time spent on a page before moving to another page on the website',
     });
     blocks.push({
-      title: 'Session time',
+      title: 'Time per session',
       value: `${this.summaryData.average_session_time_seconds
         .toPrecision(2)
         .toString()}s`,
