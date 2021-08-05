@@ -16,6 +16,8 @@ export * from './interval-type';
 export * from './metric-type';
 export * from './msg';
 export * from './page-views-per-day-stat';
+export * from './plan';
+export * from './stripe-link';
 export * from './summary-stat';
 export * from './token';
 export * from './user';

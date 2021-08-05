@@ -1,13 +1,16 @@
-from app.utils.geolocation import get_ip_gelocation
+from hashlib import sha3_256
 from typing import Dict, List, Optional, Union
 
-from hashlib import sha3_256
 from arrow.arrow import Arrow
 from fastapi.exceptions import HTTPException
 from furl.furl import furl
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.elements import TextClause
+from sqlalchemy.sql.expression import text
+from sqlalchemy.sql.functions import func
 
+from app.core.config import settings
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
 from app.models.event import (
@@ -19,16 +22,17 @@ from app.models.event import (
 )
 from app.models.parsed_ua import ParsedUA
 from app.schemas.analytics import (
+    AggregateStat,
+    AnalyticsData,
+    AnalyticsType,
     AvgMetricPerDayStat,
     IntervalType,
     LiveVisitorStat,
     PageViewsPerDayStat,
-    AggregateStat,
-    AnalyticsData,
-    AnalyticsType,
     SummaryStat,
 )
 from app.schemas.event import EventCreate, EventUpdate
+from app.utils.geolocation import get_ip_gelocation
 from app.utils.referer_parser import Referer
 
 
@@ -116,12 +120,64 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             data["ip_continent_code"] = continent_code
         return data
 
-    def build_db_obj(self, event_in: EventCreate, domain: Domain) -> Event:
+    @staticmethod
+    def _get_session_start_query(domain_id: int, fingerprint: str) -> TextClause:
+        """Select session_start of a previous visit from the same user
+        This visit needs to be within the last SESSION_TIMEOUT_MINUTES.
+        If the user didn't visit in the last X minutes,
+        start a new session for the current user by selecting the current timestamp (coalesce)
+
+        This function is very similar to _get_seconds_since_last_visit_query
+        """
+        return text(
+            f"""coalesce((select session_start from event
+            where domain_id = :domain_id_2
+                and visitor_fingerprint = :fingerprint
+                and timestamp between now() - interval '{settings.SESSION_TIMEOUT_MINUTES} minutes' and now()
+            order by timestamp desc
+            limit 1
+            ), now())
+            """
+        ).bindparams(
+            domain_id_2=domain_id,
+            fingerprint=fingerprint,
+        )
+
+    @staticmethod
+    def _get_seconds_since_last_visit_query(
+        domain_id: int, fingerprint: str
+    ) -> TextClause:
+        """Select time since last visit of this user's fingerprint
+        This visit needs to be within the last SESSION_TIMEOUT_MINUTES.
+        If the user didn't visit in the last X minutes,
+        select a '0' interval, (coalesce)
+
+        This function is very similar to _get_session_start_query
+        """
+        return text(
+            f"""coalesce((select now() - timestamp from event
+                where domain_id = :domain_id_2
+                    and visitor_fingerprint = :fingerprint
+                    and timestamp between now() - interval '{settings.SESSION_TIMEOUT_MINUTES} minutes' and now()
+                order by timestamp desc
+                limit 1), interval '0')
+            """
+        ).bindparams(
+            # We use domain_id_2 as a bind param because we can't reuse the bind param from
+            # the ones reserved by SQLAlchemy
+            domain_id_2=domain_id,
+            fingerprint=fingerprint,
+        )
+
+    def build_db_obj(self, event_in: EventCreate, db: Session, domain: Domain) -> Event:
         obj_in_data = {
             **event_in.dict(),
             "page_view_id": event_in.page_view_id.hex,
         }
         if event_in.event_type == EventType.page_view:
+            fingerprint = self._get_visitor_fingerprint(
+                event_in.ua_string, domain, event_in.ip
+            )
             url_components = self._get_url_components(event_in.url)
             obj_in_data = {
                 **obj_in_data,
@@ -133,9 +189,11 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 **(self._get_parsed_ua(event_in.ua_string)),
                 **self._get_geolocation_info(event_in.ip),
                 **url_components,
-                "visitor_fingerprint": self._get_visitor_fingerprint(
-                    event_in.ua_string, domain, event_in.ip
+                "visitor_fingerprint": fingerprint,
+                "seconds_since_last_visit": self._get_seconds_since_last_visit_query(
+                    domain.id, fingerprint
                 ),
+                "session_start": self._get_session_start_query(domain.id, fingerprint),
             }
         del obj_in_data["referrer"]
         del obj_in_data["ua_string"]
@@ -154,7 +212,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         """
         Create an event
         """
-        db_obj = self.build_db_obj(obj_in, domain=domain)
+        db_obj = self.build_db_obj(obj_in, db, domain=domain)
         db_obj.domain_id = domain.id
         db.add(db_obj)
         db.commit()
@@ -231,18 +289,21 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
             page_view_base_query = base_query_current_interval.filter(
                 Event.event_type == EventType.page_view
             )
+            page_view_base_query_previous_interval = (
+                base_query_previous_interval.filter(
+                    Event.event_type == EventType.page_view
+                )
+            )
             metric_base_query = base_query_current_interval.filter(
                 Event.event_type == EventType.metric
             )
             if field == AnalyticsType.SUMMARY:
-                data.summary = SummaryStat.from_base_query(
-                    db, base_query_current_interval
-                )
+                data.summary = SummaryStat.from_base_query(db, page_view_base_query)
             elif field == AnalyticsType.LIVE_VISITORS:
                 data.live_visitors = LiveVisitorStat.from_base_query(base_query)
             elif field == AnalyticsType.SUMMARY_PREVIOUS_INTERVAL:
                 data.summary_previous_interval = SummaryStat.from_base_query(
-                    db, base_query_previous_interval
+                    db, page_view_base_query_previous_interval
                 )
             elif field == AnalyticsType.BROWSERS:
                 data.browser_families = AggregateStat.from_base_query(
@@ -257,7 +318,17 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 )
             elif field == AnalyticsType.OS:
                 data.os_families = AggregateStat.from_base_query(
-                    page_view_base_query, Event.os_family, group_limit=group_limit
+                    page_view_base_query,
+                    Event.os_family,
+                    group_limit=group_limit,
+                    filter_none=True,
+                )
+            elif field == AnalyticsType.SCREEN_SIZES:
+                data.screen_sizes = AggregateStat.from_base_query(
+                    page_view_base_query,
+                    func.concat(Event.width, "x", Event.height),
+                    group_limit=group_limit,
+                    filter_none=True,
                 )
             elif field == AnalyticsType.DEVICE_BRANDS:
                 data.device_brands = AggregateStat.from_base_query(
@@ -328,7 +399,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 )
             elif field == AnalyticsType.PAGEVIEWS_PER_DAY:
                 data.pageviews_per_day = PageViewsPerDayStat.from_base_query(
-                    base_query_current_interval,
+                    page_view_base_query,
                     start=start.datetime,
                     end=end.datetime,
                     interval=interval,

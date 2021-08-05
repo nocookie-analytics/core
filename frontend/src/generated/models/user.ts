@@ -13,6 +13,7 @@
  */
 
 
+import { Plan } from './plan';
 
 /**
  * 
@@ -50,6 +51,12 @@ export interface User {
      * @memberof User
      */
     id?: number;
+    /**
+     * 
+     * @type {Plan}
+     * @memberof User
+     */
+    active_plan: Plan;
 }
 
 

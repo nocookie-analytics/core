@@ -26,7 +26,10 @@
       </a>
     </span>
     <span v-else>
-      <Icon :value="itemValue" />&nbsp;<optional-router-link
+      <Icon
+        :value="itemValue"
+        v-if="!block.noIcon"
+      />&nbsp;<optional-router-link
         :to="filterOnThisItemUrl"
         :disabled="!filterOnThisItemUrl.query"
         >{{ itemValue }}</optional-router-link

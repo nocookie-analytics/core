@@ -10,7 +10,7 @@ from sqlalchemy import func, column
 from sqlalchemy.orm import Query
 from sqlalchemy.orm.session import Session
 from sqlalchemy.sql import desc
-from sqlalchemy.sql.expression import case
+from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.schema import Column
 
 from app.models.event import Event, MetricType
@@ -26,6 +26,7 @@ class AnalyticsType(Enum):
     BROWSERS = "browser_families"
     OS = "os_families"
     DEVICE_BRANDS = "device_brands"
+    SCREEN_SIZES = "screen_sizes"
     DEVICE_TYPES = "device_types"
     REFERRER_MEDIUMS = "referrer_mediums"
     REFERRER_NAMES = "referrer_names"
@@ -167,7 +168,51 @@ class LiveVisitorStat:
 class SummaryStat(BaseModel):
     total_visits: int
     bounce_rate: Optional[int]
+    average_page_visit_time_seconds: float
+    average_session_time_seconds: float
     visitors: int
+
+    @staticmethod
+    def _get_average_session_time(db: Session, base_query: Query) -> float:
+        session_length = (Event.timestamp - Event.session_start).label("session_length")
+        stmt = (
+            base_query.distinct(Event.visitor_fingerprint)
+            .distinct(Event.session_start)
+            .filter(Event.session_start.isnot(None))
+            .with_entities(session_length)
+            .order_by(
+                Event.visitor_fingerprint, Event.session_start, Event.timestamp.desc()
+            )
+        ).subquery()
+        interval = (
+            db.query(stmt)
+            .filter(stmt.c.session_length > datetime.timedelta(0))
+            .with_entities(func.avg(stmt.c.session_length))
+            .one()[0]
+        )
+        return interval.total_seconds() if interval else 0
+
+    @staticmethod
+    def _get_average_page_visit_time(base_query: Query) -> float:
+        avg_page_visit_time = (
+            base_query.filter(Event.seconds_since_last_visit > text("interval '0'"))
+            .with_entities(
+                func.coalesce(
+                    func.avg(Event.seconds_since_last_visit), text("interval '0'")
+                )
+            )
+            .one()
+        )
+        return avg_page_visit_time[0].total_seconds()
+
+    @staticmethod
+    def _get_single_visit_visitors(base_query: Query) -> int:
+        return (
+            base_query.with_entities(Event.visitor_fingerprint)
+            .group_by(Event.visitor_fingerprint)
+            .having(func.count() == 1)
+            .count()
+        )
 
     @staticmethod
     def from_base_query(db: Session, base_query: Query):
@@ -179,12 +224,7 @@ class SummaryStat(BaseModel):
 
         bounce_rate = None
         if total_visitors > 0:
-            single_visit_visitors = (
-                base_query.with_entities(Event.visitor_fingerprint)
-                .group_by(Event.visitor_fingerprint)
-                .having(func.count() == 1)
-                .count()
-            )
+            single_visit_visitors = SummaryStat._get_single_visit_visitors(base_query)
             multiple_visit_visitors = total_visitors - single_visit_visitors
             bounce_rate = (
                 single_visit_visitors
@@ -194,6 +234,12 @@ class SummaryStat(BaseModel):
             total_visits=total_visits,
             visitors=total_visitors,
             bounce_rate=bounce_rate,
+            average_page_visit_time_seconds=SummaryStat._get_average_page_visit_time(
+                base_query
+            ),
+            average_session_time_seconds=SummaryStat._get_average_session_time(
+                db, base_query
+            ),
         )
 
 
@@ -214,6 +260,7 @@ class AnalyticsData(BaseModel):
 
     browser_families: Optional[List[AggregateStat]]
     countries: Optional[List[AggregateStat]]
+    screen_sizes: Optional[List[AggregateStat]]
     os_families: Optional[List[AggregateStat]]
     device_brands: Optional[List[AggregateStat]]
     device_types: Optional[List[AggregateStat]]

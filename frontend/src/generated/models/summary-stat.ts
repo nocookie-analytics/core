@@ -37,6 +37,18 @@ export interface SummaryStat {
      * @type {number}
      * @memberof SummaryStat
      */
+    average_page_visit_time_seconds: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof SummaryStat
+     */
+    average_session_time_seconds: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof SummaryStat
+     */
     visitors: number;
 }
 

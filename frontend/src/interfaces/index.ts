@@ -29,4 +29,5 @@ export interface ISummaryBlock {
   changeSign: number; // Things like bounce rate need a "reversed" logic for deciding if it's a good thing or not
   class: string;
   icon: string;
+  tooltip: string;
 }

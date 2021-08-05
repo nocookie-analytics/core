@@ -29,6 +29,7 @@ export enum AnalyticsType {
     BrowserFamilies = 'browser_families',
     OsFamilies = 'os_families',
     DeviceBrands = 'device_brands',
+    ScreenSizes = 'screen_sizes',
     DeviceTypes = 'device_types',
     ReferrerMediums = 'referrer_mediums',
     ReferrerNames = 'referrer_names',

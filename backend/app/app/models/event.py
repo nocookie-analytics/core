@@ -16,8 +16,10 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.dialects.postgresql import JSONB, UUID, ENUM
+from sqlalchemy.dialects.postgresql.base import INTERVAL
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql.sqltypes import Enum as SQLAlchemyEnum
+from sqlalchemy.sql.expression import and_, text
+from sqlalchemy.sql.sqltypes import Enum as SQLAlchemyEnum, Interval
 
 from app.db.base_class import Base
 
@@ -88,6 +90,12 @@ class Event(Base):
     ip_country: Country = relationship("Country")  # type: ignore
     ip_continent_code = Column(String(length=2))
 
+    seconds_since_last_visit = Column(INTERVAL)
+    session_start = Column(DateTime(timezone=True))
+
+    width = Column(Integer)
+    height = Column(Integer)
+
     metric_name = Column(MetricTypeEnum)
     metric_value = Column(NUMERIC)
 
@@ -138,6 +146,15 @@ class Event(Base):
         postgresql_where=device_type.isnot(None),
     )
 
+    ix_session_start = Index("ix_session_start", domain_id, session_start, timestamp)
+    ix_seconds_since_last_visit = Index(
+        "ix_seconds_since_last_visit",
+        domain_id,
+        seconds_since_last_visit,
+        timestamp,
+        postgresql_where=seconds_since_last_visit > text("interval '0'"),
+    )
+
     __table_args__: Tuple = (
         Index(
             "ix_visitor_fingerprint",
@@ -180,6 +197,14 @@ class Event(Base):
             utm_content,
             timestamp,
             postgresql_where=utm_content.isnot(None),
+        ),
+        Index(
+            "ix_width_height",
+            domain_id,
+            width,
+            height,
+            timestamp,
+            postgresql_where=and_(width.isnot(None), height.isnot(None)),
         ),
         ix_timestamp,
         # Choosing this as a primary key so the table is partitioned by domain first,
