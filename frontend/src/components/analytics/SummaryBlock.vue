@@ -140,31 +140,39 @@ export default class SummaryBlock extends Vue {
       class: 'blink',
       tooltip: 'Visitors in the last 5 minutes',
     });
-    blocks.push({
-      title: 'Time on page',
-      value: `${this.summaryData.average_page_visit_time_seconds.toFixed(2)}s`,
-      icon: mdiDebugStepOver,
-      changeSign: 1,
-      class: '',
-      change: this.percentagechange(
-        this.summaryData.average_page_visit_time_seconds,
-        this.summaryDataPreviousInterval.average_page_visit_time_seconds,
-      ),
-      tooltip:
-        'Average time spent on a page before moving to another page on the website',
-    });
-    blocks.push({
-      title: 'Time per session',
-      value: `${this.summaryData.average_session_time_seconds.toFixed(2)}s`,
-      icon: mdiBookOpen,
-      changeSign: 1,
-      class: '',
-      change: this.percentagechange(
-        this.summaryData.average_session_time_seconds,
-        this.summaryDataPreviousInterval.average_session_time_seconds,
-      ),
-      tooltip: 'Average time spent on the website',
-    });
+    if (this.summaryData.average_page_visit_time_seconds > 0) {
+      blocks.push({
+        title: 'Time on page',
+        value: `${this.summaryData.average_page_visit_time_seconds.toFixed(
+          2,
+        )}s`,
+        icon: mdiDebugStepOver,
+        changeSign: 1,
+        class: '',
+        change: this.percentagechange(
+          this.summaryData.average_page_visit_time_seconds,
+          this.summaryDataPreviousInterval.average_page_visit_time_seconds,
+        ),
+        tooltip:
+          'Average time spent on a page before moving to another page on the website',
+      });
+    }
+    if (this.summaryData.average_session_time_seconds > 0) {
+      blocks.push({
+        title: 'Time per session',
+        value: `${{
+          seconds: this.summaryData.average_session_time_seconds.toFixed(2),
+        }}s`,
+        icon: mdiBookOpen,
+        changeSign: 1,
+        class: '',
+        change: this.percentagechange(
+          this.summaryData.average_session_time_seconds,
+          this.summaryDataPreviousInterval.average_session_time_seconds,
+        ),
+        tooltip: 'Average time spent on the website',
+      });
+    }
     return blocks;
   }
 }
