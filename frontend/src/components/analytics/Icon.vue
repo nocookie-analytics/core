@@ -59,6 +59,7 @@ const indirectIconMap = {
   Edge: 'microsoftedge',
   Googlebot: 'google',
   'Hacker News': 'ycombinator',
+  'Yahoo!': 'yahoo',
 };
 
 @Component
