@@ -160,9 +160,7 @@ export default class SummaryBlock extends Vue {
     if (this.summaryData.average_session_time_seconds > 0) {
       blocks.push({
         title: 'Time per session',
-        value: `${{
-          seconds: this.summaryData.average_session_time_seconds.toFixed(2),
-        }}s`,
+        value: `${this.summaryData.average_session_time_seconds.toFixed(2)}s`,
         icon: mdiBookOpen,
         changeSign: 1,
         class: '',
