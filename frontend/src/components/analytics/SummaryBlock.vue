@@ -146,7 +146,7 @@ export default class SummaryBlock extends Vue {
         value: `${this.summaryData.average_page_visit_time_seconds.toFixed(
           2,
         )}s`,
-        icon: mdiDebugStepOver,
+        icon: mdiBookOpen,
         changeSign: 1,
         class: '',
         change: this.percentagechange(
@@ -161,8 +161,8 @@ export default class SummaryBlock extends Vue {
       blocks.push({
         title: 'Time per session',
         value: `${this.summaryData.average_session_time_seconds.toFixed(2)}s`,
-        icon: mdiBookOpen,
         changeSign: 1,
+        icon: mdiDebugStepOver,
         class: '',
         change: this.percentagechange(
           this.summaryData.average_session_time_seconds,
