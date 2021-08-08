@@ -2,6 +2,7 @@ from datetime import datetime
 import logging
 import sentry_sdk
 from app.db.session import SessionLocal
+from starlette.staticfiles import StaticFiles
 import socket
 
 from fastapi import FastAPI
@@ -38,6 +39,7 @@ if settings.BACKEND_CORS_ORIGINS:
     )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
+app.mount("/", StaticFiles(directory="static"))
 simplify_operation_ids(app)
 
 if settings.SENTRY_DSN:
