@@ -2,17 +2,11 @@
   var pageViewId = '';
   var reportServer = 'nocookieanalytics.com';
   var protocol = 'https';
-  var eventUrl = protocol + '://' + reportServer + '/api/v1/e/';
-
-  function setScriptConfigFromEnv() {
-    var me = document.currentScript;
-    if (!me) {
-      return;
-    }
-    if (me.attributes['data-domain']) {
-      reportServer = me.attributes['data-domain'];
-    }
+  var me = document.currentScript;
+  if (me && me.attributes['data-domain']) {
+    reportServer = me.attributes['data-domain'].value;
   }
+  var eventUrl = protocol + '://' + reportServer + '/api/v1/e/';
 
   function getTimezone() {
     var tz = '';
@@ -25,9 +19,6 @@
   function httpGet(url) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
-    xhr.onerror = function (e) {
-      console.error(xhr.statusText);
-    };
     xhr.send(null);
   }
 
@@ -67,6 +58,6 @@
     }
   }
 
-  setScriptConfigFromEnv();
+  trackPageView();
   trackURLChanges();
 })();
