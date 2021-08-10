@@ -14,7 +14,7 @@ from app.utils.stripe_helpers import create_stripe_customer_for_user
 router = APIRouter()
 
 
-@router.get("/", response_model=List[schemas.User])
+@router.get("/", response_model=List[schemas.User], include_in_schema=False)
 def read_users(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
@@ -28,7 +28,7 @@ def read_users(
     return users
 
 
-@router.post("/", response_model=schemas.User)
+@router.post("/", response_model=schemas.User, include_in_schema=False)
 def create_user(
     *,
     db: Session = Depends(deps.get_db),
@@ -137,7 +137,7 @@ def read_user_by_id(
     return user
 
 
-@router.put("/{user_id}", response_model=schemas.User)
+@router.put("/{user_id}", response_model=schemas.User, include_in_schema=False)
 def update_user(
     *,
     db: Session = Depends(deps.get_db),
