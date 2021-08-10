@@ -39,8 +39,14 @@
       </v-card-text>
       <v-card-actions v-if="!error">
         <v-spacer></v-spacer>
-        <v-btn @click="cancel">Cancel</v-btn>
-        <v-btn type="submit" @click="submit" :disabled="!valid" color="primary">
+        <v-btn class="ma-3" @click="cancel">Cancel</v-btn>
+        <v-btn
+          class="ma-3"
+          type="submit"
+          @click="submit"
+          :disabled="!valid"
+          color="primary"
+        >
           Save
         </v-btn>
       </v-card-actions>
