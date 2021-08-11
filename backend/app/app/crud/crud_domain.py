@@ -1,4 +1,5 @@
 from crypt import mksalt
+from datetime import datetime, timedelta
 from typing import List, Optional
 
 from arrow.arrow import Arrow
@@ -36,6 +37,7 @@ class CRUDDomain(CRUDBase[Domain, DomainCreate, DomainUpdate]):
         return (
             db.query(self.model)
             .filter(Domain.owner_id == owner_id)
+            .filter(Domain.delete_at.is_(None))
             .order_by(Domain.domain_name)
             .offset(skip)
             .limit(limit)
@@ -43,12 +45,20 @@ class CRUDDomain(CRUDBase[Domain, DomainCreate, DomainUpdate]):
         )
 
     def get_by_name(self, db: Session, name: str) -> Domain:
-        return db.query(self.model).filter(Domain.domain_name == name).scalar()
+        return (
+            db.query(self.model)
+            .filter(Domain.domain_name == name, Domain.delete_at.is_(None))
+            .scalar()
+        )
 
     def get_by_name_check_permission(
         self, db: Session, name: str, current_user: Optional[User]
     ) -> Optional[Domain]:
-        obj = db.query(self.model).filter(Domain.domain_name == name).scalar()
+        obj = (
+            db.query(self.model)
+            .filter(Domain.domain_name == name, Domain.delete_at.is_(None))
+            .scalar()
+        )
         if not obj:
             return None
         if obj.public is True:
@@ -57,6 +67,11 @@ class CRUDDomain(CRUDBase[Domain, DomainCreate, DomainUpdate]):
             if crud.user.is_superuser(current_user) or obj.owner_id == current_user.id:
                 return obj
         return None
+
+    def mark_for_removal(self, db: Session, id: int, days: int = 30) -> None:
+        obj = db.query(self.model).get(id)
+        obj.delete_at = datetime.now() + timedelta(days=days)
+        db.commit()
 
     def refresh_domain_salts(self, db: Session) -> None:
         filter_before = Arrow.now().shift(days=-1).datetime

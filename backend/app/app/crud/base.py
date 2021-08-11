@@ -24,11 +24,25 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.model = model
 
     def get(self, db: Session, id: Any) -> Optional[ModelType]:
+        if hasattr(self.model, "delete_at"):
+            return (
+                db.query(self.model)
+                .filter(self.model.delete_at.is_(None), self.model.id == id)
+                .scalar()
+            )
         return db.query(self.model).get(id)
 
     def get_multi(
         self, db: Session, *, skip: int = 0, limit: int = 100
     ) -> List[ModelType]:
+        if hasattr(self.model, "delete_at"):
+            return (
+                db.query(self.model)
+                .filter(self.model.delete_at.is_(None))
+                .offset(skip)
+                .limit(limit)
+                .all()
+            )
         return db.query(self.model).offset(skip).limit(limit).all()
 
     def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
