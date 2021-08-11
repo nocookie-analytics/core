@@ -1,9 +1,12 @@
-from app.models.domain import Domain
+from datetime import datetime
+from app.tests.utils.event import create_random_page_view_event
+from app.tests.utils.domain import create_random_domain
 import pytest
 import sqlalchemy
 from sqlalchemy.orm import Session
 
-from app import crud
+from app import crud, models
+from app.models.domain import Domain
 from app.schemas.domain import DomainCreate, DomainUpdate
 from app.tests.utils.user import create_random_user
 from app.tests.utils.utils import random_lower_string
@@ -93,3 +96,23 @@ def test_public_domain(
             db, read_write_domain.domain_name, current_user=current_user
         )
         assert domain, f"{current_user} should be able to access the domain"
+
+
+def test_delete_pending_domains(db: Session):
+    domain = create_random_domain(db)
+    domain_id = domain.id
+    domain2 = create_random_domain(db)
+
+    event_id = create_random_page_view_event(db, domain=domain).id
+    event2_id = create_random_page_view_event(db, domain=domain2).id
+
+    domain.delete_at = datetime.now()
+    db.commit()
+
+    crud.domain.delete_pending_domains(db)
+
+    assert not db.query(models.Event).filter(models.Event.id == event_id).scalar()
+    assert not db.query(models.Domain).get(domain_id)
+    # Only domain1 should have been deleted, nothing from other domains
+    assert db.query(models.Event).filter(models.Event.id == event2_id).scalar()
+    assert db.query(models.Domain).get(domain2.id)

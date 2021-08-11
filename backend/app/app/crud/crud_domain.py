@@ -13,6 +13,7 @@ from app import crud
 from app.crud.base import CRUDBase
 from app.logger import logger
 from app.models.domain import Domain
+from app.models.event import Event
 from app.models.user import User
 from app.schemas.domain import DomainCreate, DomainUpdate
 
@@ -85,6 +86,24 @@ class CRUDDomain(CRUDBase[Domain, DomainCreate, DomainUpdate]):
             db.add(domain)
         db.commit()
         logger.info("Updated salt for %d domains", i)
+
+    def delete_pending_domains(self, db: Session) -> None:
+        domain_ids = (
+            db.query(Domain)
+            .filter(Domain.delete_at < datetime.now())
+            .with_entities(Domain.id)
+            .all()
+        )
+        domain_ids = tuple(domain_id[0] for domain_id in domain_ids)
+        if domain_ids:
+            db.execute(
+                "delete from event where domain_id in :domain_ids",
+                {"domain_ids": domain_ids},
+            )
+            db.execute(
+                "delete from domain where id in :domain_ids", {"domain_ids": domain_ids}
+            )
+            db.commit()
 
 
 domain = CRUDDomain(Domain)
