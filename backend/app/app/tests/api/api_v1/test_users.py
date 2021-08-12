@@ -1,3 +1,4 @@
+from app.tests.utils.user import create_random_user, user_authentication_headers
 from typing import Dict
 import unittest
 
@@ -30,6 +31,27 @@ def test_get_users_normal_user_me(
     assert current_user["is_active"] is True
     assert current_user["is_superuser"] is False
     assert current_user["email"] == settings.EMAIL_TEST_USER
+
+    assert not current_user["delete_at"]
+
+
+def test_delete_user_me(
+    db: Session, client: TestClient, normal_user_token_headers: Dict[str, str]
+) -> None:
+    password = "123456"
+    user = create_random_user(db, password=password)
+    headers = user_authentication_headers(
+        client=client, email=user.email, password=password
+    )
+    assert user.delete_at is None
+    r = client.delete(f"{settings.API_V1_STR}/users/me", headers=headers)
+    assert r.status_code == 200
+    db.refresh(user)
+    assert user.delete_at is not None
+
+    # A deleted user shouldn't be fetchable anymore
+    r = client.get(f"{settings.API_V1_STR}/users/me", headers=headers)
+    assert r.status_code == 404
 
 
 def test_create_user_new_email(
