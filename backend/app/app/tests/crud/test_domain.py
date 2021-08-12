@@ -116,3 +116,10 @@ def test_delete_pending_domains(db: Session):
     # Only domain1 should have been deleted, nothing from other domains
     assert db.query(models.Event).filter(models.Event.id == event2_id).scalar()
     assert db.query(models.Domain).get(domain2.id)
+
+
+def test_mark_deletion(db: Session):
+    domain = create_random_domain(db)
+    assert not domain.delete_at
+    crud.domain.mark_for_removal(db, domain)
+    assert domain.delete_at

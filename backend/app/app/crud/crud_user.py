@@ -1,8 +1,9 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any, Dict, Optional, Union
 
 from sqlalchemy.orm import Session
 
+from app.core.config import settings
 from app.core.security import get_password_hash, verify_password
 from app.crud.base import CRUDBase
 from app.models.domain import Domain
@@ -52,6 +53,12 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
     def is_superuser(self, user: User) -> bool:
         return user.is_superuser
+
+    def mark_for_removal(self, db: Session, user: User) -> None:
+        user.delete_at = datetime.now() + timedelta(
+            days=settings.SOFT_DELETE_DURATION_DAYS
+        )
+        db.commit()
 
     def update_stripe_info(
         self, db: Session, *, user_obj: User, obj_in: UserStripeInfoUpdate

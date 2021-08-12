@@ -101,5 +101,5 @@ def delete_domain(
         domain.owner_id != current_user.id
     ):
         raise HTTPException(status_code=400, detail="Not enough permissions")
-    crud.domain.mark_for_removal(db=db, id=domain.id)
+    crud.domain.mark_for_removal(db=db, domain=domain)
     return domain

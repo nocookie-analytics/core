@@ -14,6 +14,7 @@ from app.crud.base import CRUDBase
 from app.logger import logger
 from app.models.domain import Domain
 from app.models.event import Event
+from app.core.config import settings
 from app.models.user import User
 from app.schemas.domain import DomainCreate, DomainUpdate
 
@@ -69,9 +70,10 @@ class CRUDDomain(CRUDBase[Domain, DomainCreate, DomainUpdate]):
                 return obj
         return None
 
-    def mark_for_removal(self, db: Session, id: int, days: int = 30) -> None:
-        obj = db.query(self.model).get(id)
-        obj.delete_at = datetime.now() + timedelta(days=days)
+    def mark_for_removal(self, db: Session, domain: Domain) -> None:
+        domain.delete_at = datetime.now() + timedelta(
+            days=settings.SOFT_DELETE_DURATION_DAYS
+        )
         db.commit()
 
     def refresh_domain_salts(self, db: Session) -> None:

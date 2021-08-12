@@ -87,6 +87,18 @@ def read_user_me(
     return current_user
 
 
+@router.delete("/me", response_model=schemas.User)
+def delete_user_me(
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Delete current user.
+    """
+    crud.user.mark_for_removal(db, current_user)
+    return current_user
+
+
 @router.post("/open", response_model=schemas.User)
 def create_user_open(
     *,

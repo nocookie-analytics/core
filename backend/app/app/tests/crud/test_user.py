@@ -102,6 +102,13 @@ def test_update_user(db: Session) -> None:
     assert verify_password(new_password, user_2.hashed_password)
 
 
+def test_mark_deletion(db: Session):
+    user = create_random_user(db)
+    assert not user.delete_at
+    crud.user.mark_for_removal(db, user)
+    assert user.delete_at
+
+
 def test_delete_pending_users(db: Session):
     user = create_random_user(db)
     domain = create_random_domain(db, owner_id=user.id)
