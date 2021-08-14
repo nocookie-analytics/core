@@ -28,56 +28,12 @@ import { BodyUpdateUserMeApiV1UsersMePut } from '../models';
 import { HTTPValidationError } from '../models';
 // @ts-ignore
 import { User } from '../models';
-// @ts-ignore
-import { UserCreate } from '../models';
-// @ts-ignore
-import { UserUpdate } from '../models';
 /**
  * UsersApi - axios parameter creator
  * @export
  */
 export const UsersApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
-        /**
-         * Create new user.
-         * @summary Create User
-         * @param {UserCreate} userCreate 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createUser: async (userCreate: UserCreate, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'userCreate' is not null or undefined
-            assertParamExists('createUser', 'userCreate', userCreate)
-            const localVarPath = `/api/v1/users/`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(userCreate, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
         /**
          * Create new user without the need to be logged in.
          * @summary Create User Open
@@ -108,6 +64,40 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(bodyCreateUserOpenApiV1UsersOpenPost, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete current user.
+         * @summary Delete User Me
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteUserMe: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/users/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -187,94 +177,6 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Retrieve users.
-         * @summary Read Users
-         * @param {number} [skip] 
-         * @param {number} [limit] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        readUsers: async (skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/users/`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-            if (skip !== undefined) {
-                localVarQueryParameter['skip'] = skip;
-            }
-
-            if (limit !== undefined) {
-                localVarQueryParameter['limit'] = limit;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Update a user.
-         * @summary Update User
-         * @param {number} userId 
-         * @param {UserUpdate} userUpdate 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateUser: async (userId: number, userUpdate: UserUpdate, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'userId' is not null or undefined
-            assertParamExists('updateUser', 'userId', userId)
-            // verify required parameter 'userUpdate' is not null or undefined
-            assertParamExists('updateUser', 'userUpdate', userUpdate)
-            const localVarPath = `/api/v1/users/{user_id}`
-                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(userUpdate, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * Update own user.
          * @summary Update User Me
          * @param {BodyUpdateUserMeApiV1UsersMePut} [bodyUpdateUserMeApiV1UsersMePut] 
@@ -323,17 +225,6 @@ export const UsersApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UsersApiAxiosParamCreator(configuration)
     return {
         /**
-         * Create new user.
-         * @summary Create User
-         * @param {UserCreate} userCreate 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async createUser(userCreate: UserCreate, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createUser(userCreate, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
          * Create new user without the need to be logged in.
          * @summary Create User Open
          * @param {BodyCreateUserOpenApiV1UsersOpenPost} bodyCreateUserOpenApiV1UsersOpenPost 
@@ -342,6 +233,16 @@ export const UsersApiFp = function(configuration?: Configuration) {
          */
         async createUserOpen(bodyCreateUserOpenApiV1UsersOpenPost: BodyCreateUserOpenApiV1UsersOpenPost, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createUserOpen(bodyCreateUserOpenApiV1UsersOpenPost, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Delete current user.
+         * @summary Delete User Me
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteUserMe(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUserMe(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -366,30 +267,6 @@ export const UsersApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Retrieve users.
-         * @summary Read Users
-         * @param {number} [skip] 
-         * @param {number} [limit] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async readUsers(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.readUsers(skip, limit, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * Update a user.
-         * @summary Update User
-         * @param {number} userId 
-         * @param {UserUpdate} userUpdate 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async updateUser(userId: number, userUpdate: UserUpdate, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateUser(userId, userUpdate, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
          * Update own user.
          * @summary Update User Me
          * @param {BodyUpdateUserMeApiV1UsersMePut} [bodyUpdateUserMeApiV1UsersMePut] 
@@ -411,16 +288,6 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = UsersApiFp(configuration)
     return {
         /**
-         * Create new user.
-         * @summary Create User
-         * @param {UserCreate} userCreate 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createUser(userCreate: UserCreate, options?: any): AxiosPromise<User> {
-            return localVarFp.createUser(userCreate, options).then((request) => request(axios, basePath));
-        },
-        /**
          * Create new user without the need to be logged in.
          * @summary Create User Open
          * @param {BodyCreateUserOpenApiV1UsersOpenPost} bodyCreateUserOpenApiV1UsersOpenPost 
@@ -429,6 +296,15 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          */
         createUserOpen(bodyCreateUserOpenApiV1UsersOpenPost: BodyCreateUserOpenApiV1UsersOpenPost, options?: any): AxiosPromise<User> {
             return localVarFp.createUserOpen(bodyCreateUserOpenApiV1UsersOpenPost, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete current user.
+         * @summary Delete User Me
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteUserMe(options?: any): AxiosPromise<User> {
+            return localVarFp.deleteUserMe(options).then((request) => request(axios, basePath));
         },
         /**
          * Get a specific user by id.
@@ -450,28 +326,6 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.readUserMe(options).then((request) => request(axios, basePath));
         },
         /**
-         * Retrieve users.
-         * @summary Read Users
-         * @param {number} [skip] 
-         * @param {number} [limit] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        readUsers(skip?: number, limit?: number, options?: any): AxiosPromise<Array<User>> {
-            return localVarFp.readUsers(skip, limit, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Update a user.
-         * @summary Update User
-         * @param {number} userId 
-         * @param {UserUpdate} userUpdate 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateUser(userId: number, userUpdate: UserUpdate, options?: any): AxiosPromise<User> {
-            return localVarFp.updateUser(userId, userUpdate, options).then((request) => request(axios, basePath));
-        },
-        /**
          * Update own user.
          * @summary Update User Me
          * @param {BodyUpdateUserMeApiV1UsersMePut} [bodyUpdateUserMeApiV1UsersMePut] 
@@ -483,20 +337,6 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
         },
     };
 };
-
-/**
- * Request parameters for createUser operation in UsersApi.
- * @export
- * @interface UsersApiCreateUserRequest
- */
-export interface UsersApiCreateUserRequest {
-    /**
-     * 
-     * @type {UserCreate}
-     * @memberof UsersApiCreateUser
-     */
-    readonly userCreate: UserCreate
-}
 
 /**
  * Request parameters for createUserOpen operation in UsersApi.
@@ -527,48 +367,6 @@ export interface UsersApiReadUserByIdRequest {
 }
 
 /**
- * Request parameters for readUsers operation in UsersApi.
- * @export
- * @interface UsersApiReadUsersRequest
- */
-export interface UsersApiReadUsersRequest {
-    /**
-     * 
-     * @type {number}
-     * @memberof UsersApiReadUsers
-     */
-    readonly skip?: number
-
-    /**
-     * 
-     * @type {number}
-     * @memberof UsersApiReadUsers
-     */
-    readonly limit?: number
-}
-
-/**
- * Request parameters for updateUser operation in UsersApi.
- * @export
- * @interface UsersApiUpdateUserRequest
- */
-export interface UsersApiUpdateUserRequest {
-    /**
-     * 
-     * @type {number}
-     * @memberof UsersApiUpdateUser
-     */
-    readonly userId: number
-
-    /**
-     * 
-     * @type {UserUpdate}
-     * @memberof UsersApiUpdateUser
-     */
-    readonly userUpdate: UserUpdate
-}
-
-/**
  * Request parameters for updateUserMe operation in UsersApi.
  * @export
  * @interface UsersApiUpdateUserMeRequest
@@ -590,18 +388,6 @@ export interface UsersApiUpdateUserMeRequest {
  */
 export class UsersApi extends BaseAPI {
     /**
-     * Create new user.
-     * @summary Create User
-     * @param {UsersApiCreateUserRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UsersApi
-     */
-    public createUser(requestParameters: UsersApiCreateUserRequest, options?: any) {
-        return UsersApiFp(this.configuration).createUser(requestParameters.userCreate, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
      * Create new user without the need to be logged in.
      * @summary Create User Open
      * @param {UsersApiCreateUserOpenRequest} requestParameters Request parameters.
@@ -611,6 +397,17 @@ export class UsersApi extends BaseAPI {
      */
     public createUserOpen(requestParameters: UsersApiCreateUserOpenRequest, options?: any) {
         return UsersApiFp(this.configuration).createUserOpen(requestParameters.bodyCreateUserOpenApiV1UsersOpenPost, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Delete current user.
+     * @summary Delete User Me
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public deleteUserMe(options?: any) {
+        return UsersApiFp(this.configuration).deleteUserMe(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -634,30 +431,6 @@ export class UsersApi extends BaseAPI {
      */
     public readUserMe(options?: any) {
         return UsersApiFp(this.configuration).readUserMe(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Retrieve users.
-     * @summary Read Users
-     * @param {UsersApiReadUsersRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UsersApi
-     */
-    public readUsers(requestParameters: UsersApiReadUsersRequest = {}, options?: any) {
-        return UsersApiFp(this.configuration).readUsers(requestParameters.skip, requestParameters.limit, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Update a user.
-     * @summary Update User
-     * @param {UsersApiUpdateUserRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UsersApi
-     */
-    public updateUser(requestParameters: UsersApiUpdateUserRequest, options?: any) {
-        return UsersApiFp(this.configuration).updateUser(requestParameters.userId, requestParameters.userUpdate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

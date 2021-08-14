@@ -57,6 +57,12 @@ export interface User {
      * @memberof User
      */
     active_plan: Plan;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    delete_at?: string;
 }
 
 
