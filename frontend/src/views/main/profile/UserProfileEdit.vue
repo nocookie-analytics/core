@@ -33,17 +33,32 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <v-expansion-panels class="pa-3">
+      <v-expansion-panel>
+        <v-expansion-panel-header> Danger zone </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <delete-item
+            item-name="my account"
+            :delete-function="deleteItem"
+          ></delete-item>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
   </v-container>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Store } from 'vuex';
 import { IUserProfileUpdate } from '@/interfaces';
 import { readUserProfile } from '@/store/main/getters';
-import { dispatchUpdateUserProfile } from '@/store/main/actions';
+import {
+  dispatchUpdateUserProfile,
+  dispatchUserDeleteLogout,
+} from '@/store/main/actions';
+import DeleteItem from '@/components/DeleteItem.vue';
+import { UsersApi } from '@/generated';
 
-@Component
+@Component({ components: { DeleteItem } })
 export default class UserProfileEdit extends Vue {
   public valid = true;
   public fullName = '';
@@ -85,6 +100,12 @@ export default class UserProfileEdit extends Vue {
       await dispatchUpdateUserProfile(this.$store, updatedProfile);
       this.$router.push('/main/profile');
     }
+  }
+
+  public async deleteItem(): Promise<void> {
+    const usersApi = this.$store.getters.usersApi as UsersApi;
+    await usersApi.deleteUserMe();
+    await dispatchUserDeleteLogout(this.$store);
   }
 }
 </script>

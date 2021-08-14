@@ -139,6 +139,13 @@ export const actions = {
     await dispatchRemoveLogIn(context);
     await dispatchRouteLogOut(context);
   },
+  async actionUserDeleteLogout(context: MainContext) {
+    await dispatchLogOut(context);
+    commitAddNotification(context, {
+      content: 'Account queued for deletion',
+      color: 'success',
+    });
+  },
   async actionUserLogOut(context: MainContext) {
     await dispatchLogOut(context);
     commitAddNotification(context, {
@@ -248,6 +255,9 @@ export const dispatchRegister = dispatch(actions.actionRegister);
 export const dispatchLogIn = dispatch(actions.actionLogIn);
 export const dispatchLogOut = dispatch(actions.actionLogOut);
 export const dispatchUserLogOut = dispatch(actions.actionUserLogOut);
+export const dispatchUserDeleteLogout = dispatch(
+  actions.actionUserDeleteLogout,
+);
 export const dispatchRemoveLogIn = dispatch(actions.actionRemoveLogIn);
 export const dispatchRouteLoggedIn = dispatch(actions.actionRouteLoggedIn);
 export const dispatchRouteLogOut = dispatch(actions.actionRouteLogOut);

@@ -53,7 +53,9 @@
     </v-card>
     <v-expansion-panels class="pa-3">
       <v-expansion-panel>
-        <v-expansion-panel-header> Danger zone </v-expansion-panel-header>
+        <v-expansion-panel-header v-if="!isCreate">
+          Danger zone
+        </v-expansion-panel-header>
         <v-expansion-panel-content>
           <delete-item
             :itemName="this.$route.params.domainName"

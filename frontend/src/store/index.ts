@@ -10,6 +10,7 @@ import {
   Configuration,
   ConfigurationParameters,
   DomainsApi,
+  UsersApi,
 } from '@/generated';
 import { apiUrl } from '@/env';
 
@@ -28,6 +29,9 @@ export const storeOptions: StoreOptions<RootState> = {
         basePath: apiUrl,
       };
       return new Configuration(apiConfig);
+    },
+    usersApi: (_, getters): UsersApi => {
+      return new UsersApi(getters.apiConfig);
     },
     domainsApi: (_, getters): DomainsApi => {
       return new DomainsApi(getters.apiConfig);
