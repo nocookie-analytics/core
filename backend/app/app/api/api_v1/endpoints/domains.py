@@ -85,7 +85,7 @@ def update_domain_by_name(
 
 
 @router.delete("/by-name/{name}", response_model=schemas.Domain)
-def delete_domain(
+def delete_domain_by_name(
     *,
     db: Session = Depends(deps.get_db),
     name: str,
