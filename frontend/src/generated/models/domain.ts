@@ -44,6 +44,12 @@ export interface Domain {
      * @memberof Domain
      */
     owner_id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Domain
+     */
+    delete_at?: string;
 }
 
 

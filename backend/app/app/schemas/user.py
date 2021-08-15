@@ -41,6 +41,7 @@ class UserInDBBase(UserBase):
 # Additional properties to return via API
 class User(UserInDBBase):
     active_plan: Plan
+    delete_at: Optional[datetime]
 
 
 # Additional properties stored in DB

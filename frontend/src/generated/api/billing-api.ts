@@ -29,7 +29,7 @@ import { StripeLink } from '../models';
 export const BillingApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         * Get a link to the Stripe portal to manage subscriptions
          * @summary Portal
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -62,36 +62,6 @@ export const BillingApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @summary Webhook Received
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        webhookReceived: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/billing/webhook`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -103,23 +73,13 @@ export const BillingApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = BillingApiAxiosParamCreator(configuration)
     return {
         /**
-         * 
+         * Get a link to the Stripe portal to manage subscriptions
          * @summary Portal
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async portal(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StripeLink>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.portal(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @summary Webhook Received
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async webhookReceived(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.webhookReceived(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -133,22 +93,13 @@ export const BillingApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = BillingApiFp(configuration)
     return {
         /**
-         * 
+         * Get a link to the Stripe portal to manage subscriptions
          * @summary Portal
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         portal(options?: any): AxiosPromise<StripeLink> {
             return localVarFp.portal(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Webhook Received
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        webhookReceived(options?: any): AxiosPromise<any> {
-            return localVarFp.webhookReceived(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -161,7 +112,7 @@ export const BillingApiFactory = function (configuration?: Configuration, basePa
  */
 export class BillingApi extends BaseAPI {
     /**
-     * 
+     * Get a link to the Stripe portal to manage subscriptions
      * @summary Portal
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -169,16 +120,5 @@ export class BillingApi extends BaseAPI {
      */
     public portal(options?: any) {
         return BillingApiFp(this.configuration).portal(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Webhook Received
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BillingApi
-     */
-    public webhookReceived(options?: any) {
-        return BillingApiFp(this.configuration).webhookReceived(options).then((request) => request(this.axios, this.basePath));
     }
 }

@@ -39,14 +39,27 @@
       </v-card-text>
       <v-card-actions v-if="!error">
         <v-spacer></v-spacer>
-        <v-btn @click="cancel">Cancel</v-btn>
-        <v-btn type="submit" @click="submit" :disabled="!valid" color="primary">
+        <v-btn class="ma-3" @click="cancel">Cancel</v-btn>
+        <v-btn
+          class="ma-3"
+          type="submit"
+          @click="submit"
+          :disabled="!valid"
+          color="primary"
+        >
           Save
         </v-btn>
       </v-card-actions>
     </v-card>
     <v-expansion-panels class="pa-3">
-      <v-expansion-panel>
+      <v-expansion-panel v-if="!isCreate">
+        <v-expansion-panel-header> Danger zone </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <delete-item
+            :itemName="this.$route.params.domainName"
+            :deleteFunction="deleteItem"
+          ></delete-item>
+        </v-expansion-panel-content>
         <v-expansion-panel-header>
           Add the script tag to your website
         </v-expansion-panel-header>
@@ -66,8 +79,9 @@ import { Component, Vue } from 'vue-property-decorator';
 import isValidDomain from 'is-valid-domain';
 import { DomainsApi } from '@/generated';
 import { commitAddNotification } from '@/store/main/mutations';
+import DeleteItem from '@/components/DeleteItem.vue';
 
-@Component
+@Component({ components: { DeleteItem } })
 export default class EditDomain extends Vue {
   public domainName = '';
   public public_ = false;
@@ -94,6 +108,19 @@ export default class EditDomain extends Vue {
       this.public_ = data.public;
     }
     this.finishedLoading = true;
+  }
+
+  public async deleteItem(): Promise<void> {
+    const domainsApi = this.$store.getters.domainsApi as DomainsApi;
+    await domainsApi.deleteDomain({
+      name: this.$route.params.domainName,
+    });
+    this.$router.push(`/domains/`);
+    commitAddNotification(this.$store, {
+      content: 'Domain queued for deletion',
+      color: 'success',
+      timeout: 5000,
+    });
   }
 
   public async submit(): Promise<void> {

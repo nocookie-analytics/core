@@ -1,7 +1,5 @@
 from datetime import datetime
-import logging
 import sentry_sdk
-from app.db.session import SessionLocal
 import socket
 
 from fastapi import FastAPI
@@ -10,7 +8,6 @@ from fastapi_utils.tasks import repeat_every
 from starlette.middleware.cors import CORSMiddleware
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
-from app import crud
 from app.logger import logger
 from app.api.api_v1.api import api_router
 from app.core.config import settings
@@ -53,11 +50,34 @@ if settings.SENTRY_DSN:
 @app.on_event("startup")
 @repeat_every(seconds=60 * 15, wait_first=True, logger=logger)
 def update_salts() -> None:
+    from app import crud
+    from app.db.session import SessionLocal
+
     # this task isn't well-suited for scaling horizontally, but that's a problem for another time
     db = SessionLocal()
     logger.info("Updating salts, current time %s", datetime.now())
     try:
         crud.domain.refresh_domain_salts(db=db)
+    except Exception as e:
+        logger.error(e)
+        raise e
+    finally:
+        db.close()
+    logger.info("Finished at %s", datetime.now())
+
+
+@app.on_event("startup")
+@repeat_every(seconds=60 * 60, wait_first=True, logger=logger)
+def delete_pending_objects() -> None:
+    from app import crud
+    from app.db.session import SessionLocal
+
+    db = SessionLocal()
+
+    logger.info("Deleting objects, current time %s", datetime.now())
+    try:
+        crud.user.delete_pending_users(db=db)
+        crud.domain.delete_pending_domains(db=db)
     except Exception as e:
         logger.error(e)
         raise e

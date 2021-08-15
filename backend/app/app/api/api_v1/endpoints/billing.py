@@ -29,11 +29,12 @@ def portal(
     request: Request,
     current_user: models.User = Depends(deps.get_current_active_user),
 ):
+    """Get a link to the Stripe portal to manage subscriptions"""
     url = get_portal_session_url(request.base_url, current_user)
     return {"url": url}
 
 
-@router.post("/webhook")
+@router.post("/webhook", include_in_schema=False)
 async def webhook_received(
     request: Request,
     background_tasks: BackgroundTasks,

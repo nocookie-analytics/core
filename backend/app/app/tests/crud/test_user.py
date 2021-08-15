@@ -1,9 +1,17 @@
+from datetime import datetime
+
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
 from app import crud
 from app.core.security import verify_password
+from app.models.domain import Domain
+from app.models.event import Event
+from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
+from app.tests.utils.domain import create_random_domain
+from app.tests.utils.event import create_random_page_view_event
+from app.tests.utils.user import create_random_user
 from app.tests.utils.utils import random_email, random_lower_string
 
 
@@ -92,3 +100,36 @@ def test_update_user(db: Session) -> None:
     assert user_2
     assert user.email == user_2.email
     assert verify_password(new_password, user_2.hashed_password)
+
+
+def test_mark_deletion(db: Session):
+    user = create_random_user(db)
+    assert not user.delete_at
+    crud.user.mark_for_removal(db, user)
+    assert user.delete_at
+
+
+def test_delete_pending_users(db: Session):
+    user = create_random_user(db)
+    domain = create_random_domain(db, owner_id=user.id)
+    event_id = create_random_page_view_event(db, domain=domain).id
+
+    user2 = create_random_user(db)
+    domain2 = create_random_domain(db, owner_id=user2.id)
+    event2_id = create_random_page_view_event(db, domain=domain2).id
+
+    domain_id = domain.id
+    user_id = user.id
+
+    user.delete_at = datetime.now()
+    db.commit()
+
+    crud.user.delete_pending_users(db)
+
+    assert not db.query(Domain).get(domain_id)
+    assert not db.query(User).get(user_id)
+    assert not db.query(Event).filter(Event.id == event_id).scalar()
+
+    assert db.query(Event).filter(Event.id == event2_id).scalar()
+    assert db.query(Domain).get(domain2.id)
+    assert db.query(User).get(user2.id)

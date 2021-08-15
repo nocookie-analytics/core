@@ -118,6 +118,9 @@ class Settings(BaseSettings):
     # Minutes elapsed between two subsequent visits by the same user before it will be considered a new session
     SESSION_TIMEOUT_MINUTES: int = 5
 
+    # Accounts and domains are not deleted immediately, but after a period of few days, just in case
+    SOFT_DELETE_DURATION_DAYS: int = 14
+
     class Config:
         case_sensitive = True
 

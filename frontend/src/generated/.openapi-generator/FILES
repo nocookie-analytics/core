@@ -35,7 +35,5 @@ models/plan.ts
 models/stripe-link.ts
 models/summary-stat.ts
 models/token.ts
-models/user-create.ts
-models/user-update.ts
 models/user.ts
 models/validation-error.ts

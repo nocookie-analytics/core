@@ -1,6 +1,5 @@
 from app.tests.utils.domain import create_random_domain
 from datetime import datetime, timedelta
-import time
 from typing import Sequence
 
 import arrow

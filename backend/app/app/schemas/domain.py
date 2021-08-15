@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel
@@ -32,7 +33,7 @@ class DomainInDBBase(DomainBase):
 
 # Properties to return to client
 class Domain(DomainInDBBase):
-    pass
+    delete_at: Optional[datetime]
 
 
 # Properties properties stored in DB

@@ -46,48 +46,6 @@ def create_domain(
     return domain
 
 
-@router.put("/{id}", response_model=schemas.Domain)
-def update_domain(
-    *,
-    db: Session = Depends(deps.get_db),
-    id: int,
-    domain_in: schemas.DomainUpdate,
-    current_user: models.User = Depends(deps.get_current_active_user),
-) -> Any:
-    """
-    Update a domain.
-    """
-    domain = crud.domain.get(db=db, id=id)
-    if not domain:
-        raise HTTPException(status_code=404, detail="Domain not found")
-    if not crud.user.is_superuser(current_user) and (
-        domain.owner_id != current_user.id
-    ):
-        raise HTTPException(status_code=400, detail="Not enough permissions")
-    domain = crud.domain.update(db=db, db_obj=domain, obj_in=domain_in)
-    return domain
-
-
-@router.get("/{id}", response_model=schemas.Domain)
-def read_domain(
-    *,
-    db: Session = Depends(deps.get_db),
-    id: int,
-    current_user: models.User = Depends(deps.get_current_active_user),
-) -> Any:
-    """
-    Get domain by ID.
-    """
-    domain = crud.domain.get(db=db, id=id)
-    if not domain:
-        raise HTTPException(status_code=404, detail="Domain not found")
-    if not crud.user.is_superuser(current_user) and (
-        domain.owner_id != current_user.id
-    ):
-        raise HTTPException(status_code=400, detail="Not enough permissions")
-    return domain
-
-
 @router.get("/by-name/{name}", response_model=schemas.Domain)
 def read_domain_by_name(
     *,
@@ -126,22 +84,22 @@ def update_domain_by_name(
     return domain
 
 
-@router.delete("/{id}", response_model=schemas.Domain)
-def delete_domain(
+@router.delete("/by-name/{name}", response_model=schemas.Domain)
+def delete_domain_by_name(
     *,
     db: Session = Depends(deps.get_db),
-    id: int,
+    name: str,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Delete a domain.
     """
-    domain = crud.domain.get(db=db, id=id)
+    domain = crud.domain.get_by_name(db=db, name=name)
     if not domain:
         raise HTTPException(status_code=404, detail="Domain not found")
     if not crud.user.is_superuser(current_user) and (
         domain.owner_id != current_user.id
     ):
         raise HTTPException(status_code=400, detail="Not enough permissions")
-    domain = crud.domain.remove(db=db, id=id)
+    crud.domain.mark_for_removal(db=db, domain=domain)
     return domain
