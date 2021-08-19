@@ -12,8 +12,24 @@ from app.logger import logger
 from app.api.api_v1.api import api_router
 from app.core.config import settings
 
+description = """
+## Javascript snippet
+
+Integrating No Cookie Analytics in your website with a simple snippet. Add this script tag on your page and you're good to go:
+
+```javascript
+ <script async defer src="https://nocookieanalytics.com/latest.js"></script>
+```
+
+
+## OpenAPI documentation
+
+The following routes are generated from the OpenAPI schema.
+"""
 app = FastAPI(
-    title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
+    title=settings.PROJECT_NAME,
+    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    description=description,
 )
 
 # https://github.com/tiangolo/fastapi/issues/2033#issuecomment-696465251
