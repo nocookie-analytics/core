@@ -219,7 +219,9 @@ import store from '@/store';
 const startRouteGuard = async (to, from, next) => {
   await dispatchCheckLoggedIn(store);
   if (readIsLoggedIn(store)) {
-    if (['/login', '/login/', '/'].includes(to.path)) {
+    if (
+      ['/login', '/login/', '/', '/register/', '/register'].includes(to.path)
+    ) {
       next('/domains/');
     } else {
       next();
