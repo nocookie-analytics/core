@@ -15,7 +15,7 @@ from app.core.config import settings
 description = """
 ## Javascript snippet
 
-Integrating No Cookie Analytics in your website with a simple snippet. Add this script tag on your page and you're good to go:
+Integrate No Cookie Analytics on your website with a simple snippet. Add this script tag on your page and you're good to go:
 
 ```javascript
  <script async defer src="https://nocookieanalytics.com/latest.js"></script>

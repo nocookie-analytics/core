@@ -91,6 +91,20 @@
         </v-list>
         <v-spacer></v-spacer>
         <v-list>
+          <v-list-item
+            href="https://nocookieanalytics.com/docs"
+            target="_blank"
+          >
+            <v-list-item-action>
+              <v-icon> {{ $vuetify.icons.values.fileDocumentOutline }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title class="text-subtitle-1"
+                >Docs
+                <v-icon> {{ $vuetify.icons.values.openInNew }}</v-icon>
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-list-item @click="logout">
             <v-list-item-action>
               <v-icon> {{ $vuetify.icons.values.close }}</v-icon>

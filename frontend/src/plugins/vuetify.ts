@@ -33,6 +33,7 @@ import {
   mdiOpenInNew,
   mdiPencil,
   mdiWeb,
+  mdiFileDocumentOutline,
 } from '@mdi/js';
 
 export default new Vuetify({
@@ -61,6 +62,7 @@ export default new Vuetify({
       web: mdiWeb,
       login: mdiLogin,
       openInNew: mdiOpenInNew,
+      fileDocumentOutline: mdiFileDocumentOutline,
     },
   },
   theme: {
