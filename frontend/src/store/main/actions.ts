@@ -166,7 +166,9 @@ export const actions = {
   actionRouteLoggedIn(context: MainContext) {
     if (
       router.currentRoute.path === '/login' ||
+      router.currentRoute.path === '/login/' ||
       router.currentRoute.path === '/register' ||
+      router.currentRoute.path === '/register/' ||
       router.currentRoute.path === '/'
     ) {
       router.push('/domains');
