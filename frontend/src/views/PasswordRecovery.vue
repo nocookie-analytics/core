@@ -56,12 +56,17 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { appName } from '@/env';
 import { dispatchPasswordRecovery } from '@/store/main/actions';
+import { trackPageView } from '@/utils';
 
 @Component
 export default class Login extends Vue {
   public valid = true;
   public username = '';
   public appName = appName;
+
+  public mounted() {
+    trackPageView();
+  }
 
   public cancel() {
     this.$router.back();

@@ -64,12 +64,17 @@ import { api } from '@/api';
 import { appName } from '@/env';
 import { readLoginError } from '@/store/main/getters';
 import { dispatchLogIn } from '@/store/main/actions';
+import { trackPageView } from '@/utils';
 
 @Component
 export default class Login extends Vue {
   public email = '';
   public password = '';
   public appName = appName;
+
+  public mounted() {
+    trackPageView();
+  }
 
   public get loginError() {
     return readLoginError(this.$store);

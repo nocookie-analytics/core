@@ -60,12 +60,17 @@ import { appName } from '@/env';
 import { readRegistrationError } from '@/store/main/getters';
 import { IUserProfileCreate } from '@/interfaces';
 import { dispatchRegister } from '@/store/main/actions';
+import { trackPageView } from '@/utils';
 
 @Component
 export default class Register extends Vue {
   public email = '';
   public password = '';
   public appName = appName;
+
+  public mounted() {
+    trackPageView();
+  }
 
   public get hasRegistrationError() {
     return Boolean(this.registrationError);
