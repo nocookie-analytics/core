@@ -44,6 +44,7 @@ const directMatchIconMap = [
   'medium',
   'nokia',
   'opera',
+  'reddit',
   'safari',
   'samsung',
   'twitter',
