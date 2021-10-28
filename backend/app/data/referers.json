@@ -769,7 +769,8 @@
                 "images.google.tt", 
                 "images.google.us", 
                 "images.google.vg", 
-                "images.google.vu"
+                "images.google.vu",
+                "com.google.android.googlequicksearchbox"
             ], 
             "parameters": [
                 "q"
@@ -2219,15 +2220,6 @@
                 "q"
             ]
         }, 
-        "Startpage": {
-            "domains": [
-                "www.startpage.com",
-                "startpage.com"
-            ],
-            "parameters": [
-                "query"
-            ]
-        },
         "Baidu": {
             "domains": [
                 "www.baidu.com", 
@@ -2236,8 +2228,7 @@
                 "tieba.baidu.com", 
                 "news.baidu.com", 
                 "web.gougou.com", 
-                "m.baidu.com",
-                "baidu.com"
+                "m.baidu.com"
             ], 
             "parameters": [
                 "wd", 
@@ -4623,12 +4614,12 @@
         }, 
         "Last.fm": {
             "domains": [
-                "last.fm"
+                "lastfm.ru"
             ]
         }, 
         "LiveJournal": {
             "domains": [
-                "livejournal.com"
+                "livejournal.ru"
             ]
         }, 
         "Tumblr": {
@@ -4639,7 +4630,8 @@
         }, 
         "Hacker News": {
             "domains": [
-                "news.ycombinator.com"
+                "news.ycombinator.com",
+                "io.github.hidroh.materialistic"
             ]
         }, 
         "Hocam.com": {
@@ -4662,14 +4654,35 @@
                 "paper.li"
             ]
         }, 
+        "Flipboard": {
+            "domains": [
+                "flipboard.com"
+            ]
+        }, 
+        "Feedly": {
+            "domains": [
+                "feedly.com"
+            ]
+        }, 
+        "Newsblur": {
+            "domains": [
+                "newsblur.com",
+                "www.newsblur.com"
+            ]
+        }, 
+        "Inoreader": {
+            "domains": [
+                "www.inoreader.com"
+            ]
+        }, 
+        "Telegram": {
+            "domains": [
+                "org.telegram.messenger"
+            ]
+        }, 
         "MoiKrug.ru": {
             "domains": [
                 "moikrug.ru"
-            ]
-        },
-        "Medium": {
-            "domains": [
-                "medium.com"
             ]
         }
     }
