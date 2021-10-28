@@ -26,23 +26,32 @@ const iconMap = {
 };
 
 const directMatchIconMap = [
-  'android',
+  'amazon',
   'android',
   'apple',
+  'asus',
   'baidu',
   'duckduckgo',
   'facebook',
-  'firefox',
   'fedora',
+  'firefox',
+  'flipboard',
+  'freebsd',
   'github',
+  'gmail',
   'google',
   'huawei',
   'instagram',
   'ios',
+  'lenovo',
+  'lg',
   'linux',
   'macos',
   'medium',
+  'motorola',
   'nokia',
+  'oneplus',
+  'openbsd',
   'opera',
   'reddit',
   'safari',
@@ -54,13 +63,18 @@ const directMatchIconMap = [
 ];
 
 const indirectIconMap = {
+  'Chrome Mobile iOS': 'googlechrome',
+  'Chrome OS': 'googlechrome',
+  'Edge Mobile': 'microsoftedge',
+  'Hacker News': 'ycombinator',
+  'Opera Mobile': 'opera',
+  'Yahoo!': 'yahoo',
   Bing: 'microsoftbing',
   Chrome: 'googlechrome',
   Chromium: 'googlechrome',
   Edge: 'microsoftedge',
   Googlebot: 'google',
-  'Hacker News': 'ycombinator',
-  'Yahoo!': 'yahoo',
+  IE: 'internetexplorer',
 };
 
 @Component
