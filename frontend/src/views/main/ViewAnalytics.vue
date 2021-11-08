@@ -94,7 +94,7 @@ export default class ViewAnalytics extends Vue {
       'This month': [startOfMonth(today), today],
       'Last 1 month': [addMonths(today, -1), today],
       'This year': [startOfYear(today), today],
-      'Last 1 year': [addYears(today, -12), today],
+      'Last 1 year': [addYears(today, -1), today],
     };
   }
 
