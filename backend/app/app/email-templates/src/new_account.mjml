@@ -6,7 +6,19 @@
         <mj-text font-size="20px" color="#555" font-family="helvetica">{{ project_name }} - New Account</mj-text>
         <mj-text font-size="16px" color="#555">You have a new account:</mj-text>
         <mj-text font-size="16px" color="#555">Username: {{ username }}</mj-text>
-        <mj-button padding="50px 0px" href="{{ link }}">Go to Dashboard</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+          <mj-button background-color="#e75f3b" href="{{ link }}">🏠 Visit Dashboard</mj-button>
+      </mj-column>
+      <mj-column>
+          <mj-button background-color="#666666" href="{{ docs_link }}">📝 Go to Documentation</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="16px" color="#555">If you have any questions about No Cookie Analytics, you can reply to this email and I'll get back to you at the earliest.</mj-text>
         <mj-text font-size="16px" color="#555">Thanks for being a part of the privacy movement!</mj-text>
         <mj-divider border-color="#555" border-width="2px" />
       </mj-column>

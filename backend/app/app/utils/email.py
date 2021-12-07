@@ -1,4 +1,5 @@
 from datetime import date
+from furl import furl
 import logging
 from typing import Any, Dict
 import emails
@@ -13,6 +14,7 @@ def send_new_account_email(email_to: str, username: str) -> None:
     with open(Path(settings.EMAIL_TEMPLATES_DIR) / "new_account.html") as f:
         template_str = f.read()
     link = settings.SERVER_HOST
+    docs_link = furl(link).add(path="/docs")
     send_email(
         email_to=email_to,
         subject_template=subject,
@@ -22,6 +24,7 @@ def send_new_account_email(email_to: str, username: str) -> None:
             "username": username,
             "email": email_to,
             "link": link,
+            "docs_link": str(docs_link),
         },
     )
 
