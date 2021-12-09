@@ -45,6 +45,7 @@ const directMatchIconMap = [
   'ios',
   'lenovo',
   'lg',
+  'linkedin',
   'linux',
   'macos',
   'medium',
@@ -60,6 +61,7 @@ const directMatchIconMap = [
   'ubuntu',
   'windows',
   'xiaomi',
+  'youtube',
 ];
 
 const indirectIconMap = {
@@ -68,7 +70,9 @@ const indirectIconMap = {
   'Edge Mobile': 'microsoftedge',
   'Hacker News': 'ycombinator',
   'Opera Mobile': 'opera',
+  'Product Hunt': 'producthunt',
   'Yahoo!': 'yahoo',
+  'com.linkedin.android': 'linkedin',
   Bing: 'microsoftbing',
   Chrome: 'googlechrome',
   Chromium: 'googlechrome',
