@@ -124,10 +124,14 @@ export default class EditDomain extends Vue {
       }
       if (this.error === false) {
         this.$router.push(`/domains/`);
+        let content = 'Changes saved successfully.';
+        if (this.isCreate) {
+          content = `${content} Read the docs (link in sidebar) and add the Javascript snippet to ${this.domainData.domain_name}.`;
+        }
         commitAddNotification(this.$store, {
-          content: 'Changes saved successfully',
+          content,
           color: 'success',
-          timeout: 5000,
+          timeout: 10000,
         });
       }
     }
@@ -158,7 +162,6 @@ export default class EditDomain extends Vue {
         domainUpdate: this.domainData,
       });
     } catch (e) {
-      console.debug(e);
       this.error = true;
     }
   }
