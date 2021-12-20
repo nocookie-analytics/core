@@ -3,6 +3,11 @@ services:
 
   proxy:
     image: traefik:v2.2
+    logging:
+      driver: "local"
+      options:
+       max-size: "100k"
+       max-file: "5"
     networks:
       - ${TRAEFIK_PUBLIC_NETWORK}
       - default
@@ -86,6 +91,11 @@ services:
 
   backend:
     image: '${DOCKER_IMAGE_BACKEND}:${TAG-latest}'
+    logging:
+      driver: "local"
+      options:
+       max-size: "100k"
+       max-file: "5"
     env_file:
       - .env
     environment:
@@ -119,6 +129,11 @@ services:
 
   frontend:
     image: '${DOCKER_IMAGE_FRONTEND}:${TAG-latest}'
+    logging:
+      driver: "local"
+      options:
+       max-size: "100k"
+       max-file: "5"
     build:
       cache_from:
         - '${DOCKER_IMAGE_FRONTEND}:${BRANCH_TAG-latest}'
