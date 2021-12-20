@@ -118,9 +118,9 @@ export default class EditDomain extends Vue {
     this.error = false;
     if (await this.$validator.validateAll()) {
       if (this.isCreate) {
-        this.createDomain();
+        await this.createDomain();
       } else {
-        this.updateDomain();
+        await this.updateDomain();
       }
       if (this.error === false) {
         this.$router.push(`/domains/`);
