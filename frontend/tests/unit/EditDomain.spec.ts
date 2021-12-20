@@ -48,6 +48,7 @@ describe('EditDomain.vue', () => {
     expect(saveButton.text()).to.equal('Save');
     saveButton.trigger('click');
     await Vue.nextTick();
+    await Vue.nextTick();
     expect(apiStub.calledOnce).to.be.true;
     expect($router.length).to.equal(1);
     expect($router[0]).to.equal('/domains/');
