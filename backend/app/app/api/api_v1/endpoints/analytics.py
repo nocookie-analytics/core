@@ -53,7 +53,10 @@ def get_analytics(
     limit: int = 100,
     current_user: models.User = Depends(deps.get_current_active_user_silent),
     include_bots: bool = False,
-    interval: IntervalType = IntervalType.DAY,
+    interval: IntervalType = Query(
+        IntervalType.DAY,
+        description="Works with per day metrics. Set interval to hour to get more granular metrics for each hour of the day",
+    ),
     db: Session = Depends(deps.get_db),
 ):
     # TODO: This section (getting domain/verifying ownership)
