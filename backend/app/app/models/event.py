@@ -99,6 +99,9 @@ class Event(Base):
     metric_name = Column(MetricTypeEnum)
     metric_value = Column(NUMERIC)
 
+    event_name = Column(String)
+    event_value = Column(NUMERIC)
+
     browser_family = Column(String)
     browser_version_major = Column(String)
     os_family = Column(String)
@@ -205,6 +208,13 @@ class Event(Base):
             height,
             timestamp,
             postgresql_where=and_(width.isnot(None), height.isnot(None)),
+        ),
+        Index(
+            "ix_event_name",
+            domain_id,
+            event_name,
+            timestamp,
+            postgresql_where=event_name.isnot(None),
         ),
         ix_timestamp,
         # Choosing this as a primary key so the table is partitioned by domain first,
