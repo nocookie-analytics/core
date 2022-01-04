@@ -8,7 +8,7 @@ import pytest
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
-from app.models.event import EventType
+from app.models.event import Event, EventType
 from app.tests.utils.domain import create_random_domain
 
 
@@ -17,14 +17,9 @@ def create_event(db, **kwargs):
     url = f"https://{domain.domain_name}/path?query=123"
     event = {
         "et": EventType.page_view.value,
-        "uas": "Firefox",
         "url": url,
-        "pt": "Hello World Page Title",
-        "sc": 200,
-        "ltms": 10,
-        "psb": 300000,
         "ref": None,
-        "ut": "Europe/Amsterdam",
+        "tz": "Europe/Amsterdam",
         "ip_country_iso_code": "US",
         "ip_continent_code": "NA",
         **kwargs,
@@ -72,13 +67,51 @@ def test_create_metric_event(client: TestClient, db: Session) -> None:
     assert content["pvid"] == str(pvid)
 
 
-@pytest.mark.usefixtures("override_testclient")
-def test_create_custom_event_fail(client: TestClient, db: Session) -> None:
-    data = create_event(db, et=EventType.custom.value)
-    response = client.get(f"{settings.API_V1_STR}/e/", params=data)
-    assert response.status_code == 400
-    content = response.json()
-    assert content["detail"]
+class TestCustomEvent:
+    @pytest.mark.usefixtures("override_testclient")
+    def test_create_custom_event_fail_no_pageview_id(
+        self, client: TestClient, db: Session
+    ) -> None:
+        data = create_event(db, et=EventType.custom.value)
+        response = client.get(f"{settings.API_V1_STR}/e/", params=data)
+        assert response.status_code == 400
+        content = response.json()
+        assert content["detail"]
+
+    @pytest.mark.usefixtures("override_testclient")
+    def test_create_custom_event_fail_no_event_name(
+        self, client: TestClient, db: Session
+    ) -> None:
+        data = create_event(db, et=EventType.custom.value, event_name="")
+        response = client.get(f"{settings.API_V1_STR}/e/", params=data)
+        assert response.status_code == 400
+        content = response.json()
+        assert content["detail"]
+
+    @pytest.mark.usefixtures("override_testclient")
+    def test_create_custom_event(self, client: TestClient, db: Session) -> None:
+        pvid = uuid4()
+        data = create_event(
+            db, et=EventType.custom.value, pvid=pvid, event_name="event_name"
+        )
+        response = client.get(f"{settings.API_V1_STR}/e/", params=data)
+        assert response.status_code == 200
+        content = response.json()
+        assert content["success"] is True
+
+        event: Event = (
+            db.query(Event)
+            .filter(
+                Event.page_view_id == str(pvid), Event.event_type == EventType.custom
+            )
+            .scalar()
+        )
+        assert event
+        assert event.event_type == EventType.custom
+        # Custom events should not get any fields that we set with page views, we test a few of them just in case
+        assert event.browser_family is None
+        assert event.device_type is None
+        assert event.ip_country_iso_code is None
 
 
 @pytest.mark.usefixtures("override_testclient")

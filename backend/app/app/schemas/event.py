@@ -1,14 +1,13 @@
 from __future__ import annotations
-from app.utils.geolocation import get_ip_from_request, get_ip_gelocation
+from app.utils.geolocation import get_ip_from_request
 from decimal import Decimal
-from typing import Dict, Optional, Union
+from typing import Optional
 from uuid import uuid4
 
 from fastapi import Query
 from fastapi.exceptions import HTTPException
 import pydantic
 from pydantic import BaseModel
-from pydantic.networks import HttpUrl, IPvAnyAddress
 from pydantic.types import UUID4
 from starlette.requests import Request
 
@@ -42,6 +41,9 @@ class EventCreate(EventBase):
     metric_name: Optional[MetricType] = None
     metric_value: Optional[Decimal] = None
 
+    event_name: Optional[str] = None
+    event_value: Optional[Decimal] = None
+
     ip: Optional[str]
 
     @classmethod
@@ -55,10 +57,14 @@ class EventCreate(EventBase):
         tz: Optional[str] = Query(None, description="Timezone"),
         url: Optional[str] = Query(None, description="Current page URL"),
         ref: Optional[str] = Query(None, description="Referrer"),
-        mn: Optional[MetricType] = Query(None, description="Metric name"),
-        mv: Optional[Decimal] = Query(
+        metric_name: Optional[MetricType] = Query(None, description="Metric name"),
+        metric_value: Optional[Decimal] = Query(
             None,
             description="Metric value",
+        ),
+        event_name: Optional[str] = Query(None, description="Event name"),
+        event_value: Optional[Decimal] = Query(
+            None, description="Event value (integer or decimal)"
         ),
     ) -> EventCreate:
         try:
@@ -69,6 +75,16 @@ class EventCreate(EventBase):
             pvid = UUID4(uuid4().hex)
         elif event_type in (EventType.metric, EventType.custom) and not pvid:
             raise HTTPException(status_code=400, detail="Bad data")
+        elif event_type != EventType.custom and (event_name or event_value):
+            raise HTTPException(
+                status_code=400,
+                detail="Event name and value are only valid for custom events",
+            )
+        elif event_type == EventType.custom:
+            if not event_name:
+                raise HTTPException(status_code=400)
+            if not event_value:
+                event_value = Decimal(1)
 
         try:
             return cls(
@@ -80,9 +96,11 @@ class EventCreate(EventBase):
                 width=w,
                 height=h,
                 page_view_id=pvid,
-                metric_name=mn,
-                metric_value=mv,
+                metric_name=metric_name,
+                metric_value=metric_value,
                 ip=get_ip_from_request(request),
+                event_name=event_name,
+                event_value=event_value,
             )
         except pydantic.error_wrappers.ValidationError as e:
             # TODO: Return error fields from exception
