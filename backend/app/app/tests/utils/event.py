@@ -1,12 +1,11 @@
 from app.models.domain import Domain
-from app.utils.geolocation import get_ip_gelocation
 import uuid
 from typing import Dict, Optional
 
 from sqlalchemy.orm import Session
 
 from app import crud, models
-from app.models.event import EventType, MetricType
+from app.models.event import MetricType
 from app.schemas.event import MetricEventCreate, PageViewEventCreate
 
 
@@ -20,7 +19,6 @@ def create_random_page_view_event(
     if not create_overrides:
         create_overrides = {}
     params = {
-        "event_type": EventType.page_view,
         "url": "https://google.com",
         "referrer": "abc",
         "user_timezone": "Europe/Amsterdam",
@@ -40,11 +38,9 @@ def create_random_metric_event(
     ip_address: Optional[str] = None,
     create_overrides: Dict = None,
 ) -> models.Event:
-    geolocation = get_ip_gelocation(ip_address)
     if not create_overrides:
         create_overrides = {}
     event_in_data = {
-        "event_type": EventType.metric,
         "url": "https://google.com",
         "referrer": "abc",
         "user_timezone": "Europe/Amsterdam",

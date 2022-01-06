@@ -1,11 +1,12 @@
-from app.tests.utils.domain import create_random_domain
 from datetime import datetime, timedelta
+import string
 from typing import Sequence
 
 import arrow
 from hypothesis import given
 from hypothesis.extra.pytz import timezones
-from hypothesis.strategies import datetimes, timedeltas, uuids
+from hypothesis.strategies import datetimes, integers, text, timedeltas, uuids
+from pydantic.types import UUID4
 import pytest
 from sqlalchemy.orm import Session
 
@@ -13,7 +14,8 @@ from app import crud
 from app.models.domain import Domain
 from app.models.event import EventType, ReferrerMediumType
 from app.schemas.analytics import AnalyticsType
-from app.schemas.event import PageViewEventCreate
+from app.schemas.event import CustomEventCreate, PageViewEventCreate
+from app.tests.utils.domain import create_random_domain
 from app.tests.utils.event import create_random_page_view_event
 from app.tests.utils.utils import paths
 
@@ -35,7 +37,6 @@ class TestCreatePageViewEvent:
         domain = mock_read_only_domain
         url = f"http://{domain.domain_name}/{path}"
         event_in = PageViewEventCreate(
-            event_type=EventType.page_view,
             url=url,
             referrer="abc",
             user_timezone="Europe/Amsterdam",
@@ -201,5 +202,29 @@ def test_get_analytics_from_fields(
 
 
 class TestCustomEvent:
-    def create_custom_event(db: Session, mock_read_only_domain: Domain):
-        ...
+    @given(
+        uuids(version=4), text(string.printable, min_size=2, max_size=50), integers()
+    )
+    def test_create_custom_event(
+        self,
+        db: Session,
+        mock_read_only_domain: Domain,
+        page_view_id: UUID4,
+        event_name: str,
+        event_value: int,
+    ):
+        url = f"http://{mock_read_only_domain.domain_name}/somepath"
+        event_in = CustomEventCreate(
+            url=url,
+            page_view_id=page_view_id,
+            event_name=event_name,
+            event_value=event_value,
+        )
+        event = crud.event.create_with_domain(
+            db=db, obj_in=event_in, domain=mock_read_only_domain
+        )
+        assert event
+        assert event.event_type == EventType.custom
+        assert event.page_view_id == str(event_in.page_view_id)
+        assert event.event_name == event_in.event_name
+        assert event.event_value == event_in.event_value
