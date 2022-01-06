@@ -12,7 +12,7 @@ from app.models.event import Event, EventType
 from app.tests.utils.domain import create_random_domain
 
 
-def create_event(db, **kwargs):
+def create_pageview_event(db, **kwargs):
     domain = create_random_domain(db)
     url = f"https://{domain.domain_name}/path?query=123"
     event = {
@@ -31,7 +31,7 @@ def create_event(db, **kwargs):
 @hypothesis_settings(deadline=timedelta(milliseconds=500))
 @pytest.mark.usefixtures("override_testclient")
 def test_create_page_view_event(client: TestClient, db: Session, url: str) -> None:
-    data = create_event(db, ref=url)
+    data = create_pageview_event(db, ref=url)
     response = client.get(f"{settings.API_V1_STR}/e/", params=data)
     assert response.status_code == 200, response.json()
     content = response.json()
@@ -41,7 +41,7 @@ def test_create_page_view_event(client: TestClient, db: Session, url: str) -> No
 
 @pytest.mark.usefixtures("override_testclient")
 def test_create_page_view_event_no_ref(client: TestClient, db: Session) -> None:
-    data = create_event(db, ref="")
+    data = create_pageview_event(db, ref="")
     response = client.get(f"{settings.API_V1_STR}/e/", params=data)
     assert response.status_code == 200, response.json()
     content = response.json()
@@ -49,17 +49,23 @@ def test_create_page_view_event_no_ref(client: TestClient, db: Session) -> None:
     assert content["pvid"]
 
 
+@pytest.mark.skip(
+    "This route only accepts page views now, metric events are not being recorded"
+)
 @pytest.mark.usefixtures("override_testclient")
 def test_create_metric_event_invalid_uuid(client: TestClient, db: Session) -> None:
-    data = create_event(db, et=EventType.metric.value, pvid="invalid-uuid")
+    data = create_pageview_event(db, et=EventType.metric.value, pvid="invalid-uuid")
     response = client.get(f"{settings.API_V1_STR}/e/", params=data)
     assert response.status_code == 422, response.json()
 
 
+@pytest.mark.skip(
+    "This route only accepts page views now, metric events are not being recorded"
+)
 @pytest.mark.usefixtures("override_testclient")
 def test_create_metric_event(client: TestClient, db: Session) -> None:
     pvid = uuid4()
-    data = create_event(db, et=EventType.metric.value, pvid=pvid)
+    data = create_pageview_event(db, et=EventType.metric.value, pvid=pvid)
     response = client.get(f"{settings.API_V1_STR}/e/", params=data)
     assert response.status_code == 200, response.json()
     content = response.json()
@@ -72,8 +78,7 @@ class TestCustomEvent:
     def test_create_custom_event_fail_no_pageview_id(
         self, client: TestClient, db: Session
     ) -> None:
-        data = create_event(db, et=EventType.custom.value)
-        response = client.get(f"{settings.API_V1_STR}/e/", params=data)
+        response = client.get(f"{settings.API_V1_STR}/e/custom", params={})
         assert response.status_code == 400
         content = response.json()
         assert content["detail"]
@@ -82,8 +87,9 @@ class TestCustomEvent:
     def test_create_custom_event_fail_no_event_name(
         self, client: TestClient, db: Session
     ) -> None:
-        data = create_event(db, et=EventType.custom.value, event_name="")
-        response = client.get(f"{settings.API_V1_STR}/e/", params=data)
+        response = client.get(
+            f"{settings.API_V1_STR}/e/custom", params={"page_view_id": str(uuid4())}
+        )
         assert response.status_code == 400
         content = response.json()
         assert content["detail"]
@@ -91,11 +97,13 @@ class TestCustomEvent:
     @pytest.mark.usefixtures("override_testclient")
     def test_create_custom_event(self, client: TestClient, db: Session) -> None:
         pvid = uuid4()
-        data = create_event(
-            db, et=EventType.custom.value, pvid=pvid, event_name="event_name"
+        domain = create_random_domain(db)
+        url = f"https://{domain.domain_name}/path?query=123"
+        response = client.get(
+            f"{settings.API_V1_STR}/e/custom",
+            params={"page_view_id": str(pvid), "event_name": "click", "url": url},
         )
-        response = client.get(f"{settings.API_V1_STR}/e/", params=data)
-        assert response.status_code == 200
+        assert response.status_code == 200, response.json()
         content = response.json()
         assert content["success"] is True
 
@@ -112,14 +120,3 @@ class TestCustomEvent:
         assert event.browser_family is None
         assert event.device_type is None
         assert event.ip_country_iso_code is None
-
-
-@pytest.mark.usefixtures("override_testclient")
-def test_create_page_view_event_invalid_event_type(
-    client: TestClient, db: Session
-) -> None:
-    data = create_event(db, et="invalid_event")
-    response = client.get(f"{settings.API_V1_STR}/e/", params=data)
-    assert response.status_code == 422, response.text
-    content = response.json()
-    assert content["detail"]

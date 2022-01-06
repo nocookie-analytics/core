@@ -1,5 +1,5 @@
 from hashlib import sha3_256
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Type, Union
 
 from arrow.arrow import Arrow
 from fastapi.exceptions import HTTPException
@@ -31,7 +31,13 @@ from app.schemas.analytics import (
     PageViewsPerDayStat,
     SummaryStat,
 )
-from app.schemas.event import EventCreate, EventUpdate
+from app.schemas.event import (
+    CustomEventCreate,
+    EventCreate,
+    EventUpdate,
+    MetricEventCreate,
+    PageViewEventCreate,
+)
 from app.utils.geolocation import get_ip_gelocation
 from app.utils.referer_parser import Referer
 
@@ -195,10 +201,12 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 ),
                 "session_start": self._get_session_start_query(domain.id, fingerprint),
             }
-        del obj_in_data["referrer"]
-        del obj_in_data["ua_string"]
-        del obj_in_data["url"]
-        del obj_in_data["ip"]
+            del obj_in_data["referrer"]
+            del obj_in_data["ua_string"]
+            del obj_in_data["url"]
+            del obj_in_data["ip"]
+        elif event_in.event_type == EventType.custom:
+            obj_in_data = {**obj_in_data}
         db_obj = self.model(**obj_in_data)
         return db_obj
 
@@ -206,7 +214,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         self,
         db: Session,
         *,
-        obj_in: EventCreate,
+        obj_in: Union[PageViewEventCreate, CustomEventCreate, MetricEventCreate],
         domain: Domain,
     ) -> Event:
         """

@@ -13,7 +13,7 @@ from app import crud
 from app.models.domain import Domain
 from app.models.event import EventType, ReferrerMediumType
 from app.schemas.analytics import AnalyticsType
-from app.schemas.event import EventCreate
+from app.schemas.event import PageViewEventCreate
 from app.tests.utils.event import create_random_page_view_event
 from app.tests.utils.utils import paths
 
@@ -34,7 +34,7 @@ class TestCreatePageViewEvent:
     ) -> None:
         domain = mock_read_only_domain
         url = f"http://{domain.domain_name}/{path}"
-        event_in = EventCreate(
+        event_in = PageViewEventCreate(
             event_type=EventType.page_view,
             url=url,
             referrer="abc",
@@ -198,3 +198,8 @@ def test_get_analytics_from_fields(
     )
     assert len(set(result.dict(exclude_unset=True).keys()) - set(["start", "end"])) == 1
     assert getattr(result, field.value) is not None, field.value
+
+
+class TestCustomEvent:
+    def create_custom_event(db: Session, mock_read_only_domain: Domain):
+        ...

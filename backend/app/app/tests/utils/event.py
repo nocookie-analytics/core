@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from app import crud, models
 from app.models.event import EventType, MetricType
-from app.schemas.event import EventCreate
+from app.schemas.event import MetricEventCreate, PageViewEventCreate
 
 
 def create_random_page_view_event(
@@ -29,7 +29,7 @@ def create_random_page_view_event(
         "ip": ip_address or "8.8.8.8",
         **create_overrides,
     }
-    event_in = EventCreate(**params)
+    event_in = PageViewEventCreate(**params)
     return crud.event.create_with_domain(db=db, obj_in=event_in, domain=domain)
 
 
@@ -55,5 +55,5 @@ def create_random_metric_event(
         "ip": ip_address or "8.8.8.8",
         **create_overrides,
     }
-    event_in = EventCreate(**event_in_data)
+    event_in = MetricEventCreate(**event_in_data)
     return crud.event.create_with_domain(db=db, obj_in=event_in, domain=domain)
