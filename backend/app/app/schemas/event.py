@@ -8,7 +8,7 @@ from fastapi import Query
 from fastapi.exceptions import HTTPException
 import pydantic
 from pydantic import BaseModel, Field
-from pydantic.types import UUID4
+from pydantic.types import UUID4, constr
 from starlette.requests import Request
 
 from app.models.event import EventType, MetricType
@@ -106,7 +106,7 @@ class PageViewEventCreate(EventBase):
 class CustomEventCreate(EventBase):
     event_type: EventType = Field(EventType.custom, const=True)
     page_view_id: UUID4
-    event_name: str
+    event_name: constr(min_length=2, max_length=50)
     event_value: Decimal = Decimal(1)
 
     @classmethod
