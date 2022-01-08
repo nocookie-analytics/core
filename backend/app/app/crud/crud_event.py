@@ -26,6 +26,7 @@ from app.schemas.analytics import (
     AnalyticsData,
     AnalyticsType,
     AvgMetricPerDayStat,
+    CustomEventStat,
     IntervalType,
     LiveVisitorStat,
     PageViewsPerDayStat,
@@ -241,6 +242,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         device_type: DeviceType = None,
         device_brand: str = None,
         referrer_name: str = None,
+        event_name: str = None,
         group_limit: int = None,
         include_bots: bool = False,
         interval: IntervalType = IntervalType.DAY,
@@ -261,10 +263,6 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                     Event.timestamp <= end.datetime,
                 )
             )
-            if include_bots is False:
-                base_query_current_interval = base_query_current_interval.filter(
-                    Event.is_bot.is_(False)
-                )
             group_limit = group_limit or 100
             if country is not None:
                 base_query_current_interval = base_query_current_interval.filter(
@@ -294,6 +292,21 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 base_query_current_interval = base_query_current_interval.filter(
                     Event.referrer_name == referrer_name
                 )
+            if event_name is not None:
+                # Filtering on events is different than the rest of the filters
+                # we first find the page view ids for the event in a subquery
+                # and then use those page view ids
+                event_name_subquery = (
+                    base_query_current_interval.with_entities(Event.page_view_id)
+                    .filter(
+                        Event.event_name == event_name,
+                        Event.event_type == EventType.custom,
+                    )
+                    .subquery()
+                )
+                base_query_current_interval = base_query_current_interval.filter(
+                    Event.page_view_id.in_(event_name_subquery)
+                )
             page_view_base_query = base_query_current_interval.filter(
                 Event.event_type == EventType.page_view
             )
@@ -301,6 +314,18 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                 base_query_previous_interval.filter(
                     Event.event_type == EventType.page_view
                 )
+            )
+            if include_bots is False:
+                page_view_base_query = page_view_base_query.filter(
+                    Event.is_bot.is_(False)
+                )
+                page_view_base_query_previous_interval = (
+                    page_view_base_query_previous_interval.filter(
+                        Event.is_bot.is_(False)
+                    )
+                )
+            custom_event_base_query = base_query_current_interval.filter(
+                Event.event_type == EventType.custom
             )
             metric_base_query = base_query_current_interval.filter(
                 Event.event_type == EventType.metric
@@ -440,6 +465,10 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
                     MetricType.CLS,
                     start=start.datetime,
                     end=end.datetime,
+                )
+            elif field == AnalyticsType.CUSTOM_EVENTS:
+                data.custom_events = CustomEventStat.from_base_query(
+                    custom_event_base_query
                 )
             else:
                 raise HTTPException(status_code=400)

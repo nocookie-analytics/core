@@ -39,6 +39,7 @@ class AnalyticsType(Enum):
     FID_PER_DAY = "fid_per_day"
     FP_PER_DAY = "fp_per_day"
     CLS_PER_DAY = "cls_per_day"
+    CUSTOM_EVENTS = "custom_events"
 
 
 class IntervalType(Enum):
@@ -88,6 +89,23 @@ class AggregateStat(BaseModel):
             )
             for row in query
         ]
+
+
+class CustomEventStat(BaseModel):
+    event_name: str
+    total: int
+
+    @staticmethod
+    def from_base_query(
+        base_query: Query,
+    ) -> List[CustomEventStat]:
+        query = (
+            base_query.with_entities(Event.event_name, func.sum(Event.event_value))
+            .group_by(Event.event_name)
+            .order_by(func.sum(Event.event_value))
+        )
+        print(query)
+        return [CustomEventStat(event_name=row[0], total=row[1]) for row in query]
 
 
 class PageViewsPerDayStat(BaseModel):
@@ -271,6 +289,7 @@ class AnalyticsData(BaseModel):
     utm_campaigns: Optional[List[AggregateStat]]
     utm_terms: Optional[List[AggregateStat]]
     utm_contents: Optional[List[AggregateStat]]
+    custom_events: Optional[List[CustomEventStat]]
 
     class Config:
         json_encoders = {arrow.Arrow: lambda obj: obj.isoformat()}

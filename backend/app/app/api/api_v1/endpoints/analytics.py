@@ -50,6 +50,7 @@ def get_analytics(
     device: DeviceType = None,
     device_brand: str = None,
     referrer_name: str = None,
+    event_name: str = None,
     limit: int = 100,
     current_user: models.User = Depends(deps.get_current_active_user_silent),
     include_bots: bool = False,
@@ -83,4 +84,5 @@ def get_analytics(
         include_bots=include_bots,
         referrer_name=referrer_name,
         interval=interval,
+        event_name=event_name,
     )
