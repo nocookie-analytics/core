@@ -6,6 +6,7 @@ from sqlalchemy.orm.session import Session
 from app.models.event import Event, EventType, MetricType
 from app.schemas.analytics import (
     AvgMetricPerDayStat,
+    CustomEventStat,
     IntervalType,
     LiveVisitorStat,
     PageViewsPerDayStat,
@@ -15,6 +16,7 @@ from app.schemas.analytics import (
 )
 from app.tests.utils.domain import create_random_domain
 from app.tests.utils.event import (
+    create_random_custom_event,
     create_random_metric_event,
     create_random_page_view_event,
 )
@@ -32,7 +34,7 @@ class TestPageViewStat:
 
         create_random_page_view_event(db, domain=domain, ip_address=mock_ip_address)
         create_random_page_view_event(db, domain=domain, ip_address=mock_ip_address)
-        create_random_metric_event(db, domain=domain, ip_address=mock_ip_address)
+        create_random_metric_event(db, domain=domain)
 
         data = SummaryStat.from_base_query(db, base_query)
         assert data.total_visits == 2
@@ -81,7 +83,7 @@ class TestPageViewsPerDayStat:
         assert per_day_data[-1].visitors == 1
 
         # With two page view events and one metric event
-        create_random_metric_event(db, domain=domain, ip_address=mock_ip_address)
+        create_random_metric_event(db, domain=domain)
         per_day_data = PageViewsPerDayStat.from_base_query(
             base_query, start=start, end=end, interval=IntervalType.DAY
         )
@@ -205,6 +207,33 @@ class TestAvgMetricPerDayStat:
             assert fid.value == 0
         assert lcp_per_day[-1].value == 7.5
         assert fid_per_day[-1].value == 0
+
+
+class TestCustomEventStat:
+    def test_custom_event(self, db, mock_ip_address):
+        domain = create_random_domain(db)
+        create_random_page_view_event(db, domain=domain, ip_address=mock_ip_address)
+        create_random_custom_event(
+            db,
+            domain=domain,
+            create_overrides={"event_name": "event", "event_value": 2},
+        )
+        create_random_custom_event(
+            db,
+            domain=domain,
+            create_overrides={"event_name": "event", "event_value": 2},
+        )
+
+        end = datetime.now()
+        start = end - timedelta(days=1)
+        base_query = domain.events.filter(Event.event_type == EventType.custom).filter(
+            Event.timestamp.between(start, end)
+        )
+
+        stat = CustomEventStat.from_base_query(base_query)
+        assert len(stat) == 1
+        assert stat[0].event_name == "event"
+        assert stat[0].total == 4
 
 
 class TestLiveVisitorStat:
