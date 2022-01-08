@@ -99,6 +99,7 @@ class CustomEventStat(BaseModel):
     def from_base_query(
         base_query: Query,
     ) -> List[CustomEventStat]:
+        # TODO: This might be better written as a self inner join
         query = (
             base_query.with_entities(Event.event_name, func.sum(Event.event_value))
             .group_by(Event.event_name)
