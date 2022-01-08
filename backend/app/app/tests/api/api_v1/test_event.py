@@ -31,7 +31,7 @@ def create_pageview_event(db, **kwargs):
 @pytest.mark.usefixtures("override_testclient")
 def test_create_page_view_event(client: TestClient, db: Session, url: str) -> None:
     data = create_pageview_event(db, ref=url)
-    response = client.get(f"{settings.API_V1_STR}/e/", params=data)
+    response = client.get(f"{settings.API_V1_STR}/e/page_view", params=data)
     assert response.status_code == 200, response.json()
     content = response.json()
     assert content["success"] is True
@@ -41,7 +41,7 @@ def test_create_page_view_event(client: TestClient, db: Session, url: str) -> No
 @pytest.mark.usefixtures("override_testclient")
 def test_create_page_view_event_no_ref(client: TestClient, db: Session) -> None:
     data = create_pageview_event(db, ref="")
-    response = client.get(f"{settings.API_V1_STR}/e/", params=data)
+    response = client.get(f"{settings.API_V1_STR}/e/page_view", params=data)
     assert response.status_code == 200, response.json()
     content = response.json()
     assert content["success"] is True
