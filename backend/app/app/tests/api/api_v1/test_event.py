@@ -16,7 +16,6 @@ def create_pageview_event(db, **kwargs):
     domain = create_random_domain(db)
     url = f"https://{domain.domain_name}/path?query=123"
     event = {
-        "et": EventType.page_view.value,
         "url": url,
         "ref": None,
         "tz": "Europe/Amsterdam",
@@ -36,7 +35,7 @@ def test_create_page_view_event(client: TestClient, db: Session, url: str) -> No
     assert response.status_code == 200, response.json()
     content = response.json()
     assert content["success"] is True
-    assert content["pvid"]
+    assert content["page_view_id"]
 
 
 @pytest.mark.usefixtures("override_testclient")
@@ -46,7 +45,7 @@ def test_create_page_view_event_no_ref(client: TestClient, db: Session) -> None:
     assert response.status_code == 200, response.json()
     content = response.json()
     assert content["success"] is True
-    assert content["pvid"]
+    assert content["page_view_id"]
 
 
 @pytest.mark.skip(
@@ -54,7 +53,9 @@ def test_create_page_view_event_no_ref(client: TestClient, db: Session) -> None:
 )
 @pytest.mark.usefixtures("override_testclient")
 def test_create_metric_event_invalid_uuid(client: TestClient, db: Session) -> None:
-    data = create_pageview_event(db, et=EventType.metric.value, pvid="invalid-uuid")
+    data = create_pageview_event(
+        db, et=EventType.metric.value, page_view_id="invalid-uuid"
+    )
     response = client.get(f"{settings.API_V1_STR}/e/", params=data)
     assert response.status_code == 422, response.json()
 
@@ -64,13 +65,15 @@ def test_create_metric_event_invalid_uuid(client: TestClient, db: Session) -> No
 )
 @pytest.mark.usefixtures("override_testclient")
 def test_create_metric_event(client: TestClient, db: Session) -> None:
-    pvid = uuid4()
-    data = create_pageview_event(db, et=EventType.metric.value, pvid=pvid)
+    page_view_id = uuid4()
+    data = create_pageview_event(
+        db, et=EventType.metric.value, page_view_id=page_view_id
+    )
     response = client.get(f"{settings.API_V1_STR}/e/", params=data)
     assert response.status_code == 200, response.json()
     content = response.json()
     assert content["success"] is True
-    assert content["pvid"] == str(pvid)
+    assert content["page_view_id"] == str(page_view_id)
 
 
 class TestCustomEvent:
@@ -96,12 +99,16 @@ class TestCustomEvent:
 
     @pytest.mark.usefixtures("override_testclient")
     def test_create_custom_event(self, client: TestClient, db: Session) -> None:
-        pvid = uuid4()
+        page_view_id = uuid4()
         domain = create_random_domain(db)
         url = f"https://{domain.domain_name}/path?query=123"
         response = client.get(
             f"{settings.API_V1_STR}/e/custom",
-            params={"page_view_id": str(pvid), "event_name": "click", "url": url},
+            params={
+                "page_view_id": str(page_view_id),
+                "event_name": "click",
+                "url": url,
+            },
         )
         assert response.status_code == 200, response.json()
         content = response.json()
@@ -110,7 +117,8 @@ class TestCustomEvent:
         event: Event = (
             db.query(Event)
             .filter(
-                Event.page_view_id == str(pvid), Event.event_type == EventType.custom
+                Event.page_view_id == str(page_view_id),
+                Event.event_type == EventType.custom,
             )
             .scalar()
         )

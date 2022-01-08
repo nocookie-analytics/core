@@ -33,7 +33,6 @@ class EventCreate(EventBase):
         et: EventType = Query(None, description="Event type"),
         w: Optional[int] = None,
         h: Optional[int] = None,
-        pvid: Optional[UUID4] = Query(None, description="Page view ID"),
         tz: Optional[str] = Query(None, description="Timezone"),
         url: Optional[str] = Query(None, description="Current page URL"),
         ref: Optional[str] = Query(None, description="Referrer"),
@@ -43,8 +42,8 @@ class EventCreate(EventBase):
         except ValueError:
             raise HTTPException(status_code=400, detail="Bad event type")
         if event_type == EventType.page_view:
-            pvid = UUID4(uuid4().hex)
-        elif event_type in (EventType.metric, EventType.custom):
+            page_view_id = UUID4(uuid4().hex)
+        else:
             raise HTTPException(
                 status_code=400, detail="This route is only for page view events"
             )
@@ -58,7 +57,7 @@ class EventCreate(EventBase):
                 url=url,
                 width=w,
                 height=h,
-                page_view_id=pvid,
+                page_view_id=page_view_id,
                 ip=get_ip_from_request(request),
             )
         except pydantic.error_wrappers.ValidationError as e:
