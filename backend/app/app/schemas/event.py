@@ -22,7 +22,7 @@ class EventBase(BaseModel):
 class EventCreated(BaseModel):
     success: bool = True
     error: Optional[str] = None
-    pvid: Optional[UUID4] = None
+    page_view_id: Optional[UUID4] = None
 
 
 class EventCreate(EventBase):
@@ -44,8 +44,10 @@ class EventCreate(EventBase):
             raise HTTPException(status_code=400, detail="Bad event type")
         if event_type == EventType.page_view:
             pvid = UUID4(uuid4().hex)
-        elif event_type in (EventType.metric, EventType.custom) and not pvid:
-            raise HTTPException(status_code=400, detail="Bad data")
+        elif event_type in (EventType.metric, EventType.custom):
+            raise HTTPException(
+                status_code=400, detail="This route is only for page view events"
+            )
 
         try:
             return PageViewEventCreate(

@@ -32,7 +32,7 @@ def new_event(
         obj_in=event_in,
         domain=request_domain,
     )
-    return schemas.EventCreated(success=True, pvid=event_in.page_view_id)
+    return schemas.EventCreated(success=True, page_view_id=event_in.page_view_id)
 
 
 @router.get(
@@ -55,7 +55,7 @@ def new_page_view_event(
         obj_in=event_in,
         domain=request_domain,
     )
-    return schemas.EventCreated(success=True, pvid=event_in.page_view_id)
+    return schemas.EventCreated(success=True, page_view_id=event_in.page_view_id)
 
 
 @router.get(
@@ -78,4 +78,4 @@ def new_custom_event(
         obj_in=event_in,
         domain=request_domain,
     )
-    return schemas.EventCreated(success=True, pvid=event_in.page_view_id)
+    return schemas.EventCreated(success=True, page_view_id=event_in.page_view_id)
