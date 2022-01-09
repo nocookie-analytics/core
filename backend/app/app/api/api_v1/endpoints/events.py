@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 @router.get(
-    "/e",
+    "/e/",
     response_model=schemas.EventCreated,
     deprecated=True,
 )
