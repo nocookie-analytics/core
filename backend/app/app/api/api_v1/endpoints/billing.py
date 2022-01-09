@@ -23,7 +23,7 @@ from app.utils.stripe_helpers import (
 router = APIRouter()
 
 
-@router.get("/portal", response_model=schemas.StripeLink)
+@router.get("/portal", response_model=schemas.StripeLink, include_in_schema=False)
 def portal(
     *,
     request: Request,

@@ -25,6 +25,8 @@ def get_ip_gelocation(
 
 
 def get_ip_from_request(request: Request) -> str:
+    # TODO: This should be configurable, but for our current traefik powered setup
+    # x-real-ip is what we'll always use
     if "x-real-ip" in request.headers:
         # Using this header blindly might be a security issue normally but it seems
         # that traefik will overwrite this header if an end user passes it
