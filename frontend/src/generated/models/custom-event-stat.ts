@@ -15,14 +15,23 @@
 
 
 /**
- * An enumeration.
+ * 
  * @export
- * @enum {string}
+ * @interface CustomEventStat
  */
-export enum IntervalType {
-    Day = 'day',
-    Hour = 'hour'
+export interface CustomEventStat {
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomEventStat
+     */
+    event_name: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CustomEventStat
+     */
+    total: number;
 }
-
 
 
