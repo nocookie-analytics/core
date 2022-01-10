@@ -43,6 +43,7 @@ export const getFiltersFromUrl = (): AnalyticsFilterState => {
     page: getURLParamValue('page'),
     country: getURLParamValue('country'),
     browser: getURLParamValue('browser'),
+    eventName: getURLParamValue('eventName'),
     device: mapDeviceStringToDeviceEnum(getURLParamValue('device')),
     deviceBrand: getURLParamValue('deviceBrand'),
     os: getURLParamValue('os'),

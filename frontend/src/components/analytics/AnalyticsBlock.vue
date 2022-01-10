@@ -14,7 +14,7 @@
         :data="currentPageItems"
         :keyHeader="'Name'"
         :valueHeader="'Visitors'"
-        v-if="block.urlParamName !== 'customEvent'"
+        v-if="block.urlParamName !== 'eventName'"
       >
         <template v-slot:itemName="{ item }">
           <AnalyticsSingleValue

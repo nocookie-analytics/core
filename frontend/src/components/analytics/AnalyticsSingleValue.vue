@@ -71,7 +71,7 @@ export default class AnalyticsSingleValue extends Vue {
   get filterOnThisItemUrl() {
     if (this.urlParamName) {
       const value = this.itemValue;
-      const excludes = this.urlExclude;
+      const excludes = this.urlExclude || [];
       if (excludes && !excludes.includes(value)) {
         return {
           query: {

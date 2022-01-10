@@ -1,8 +1,4 @@
-import {
-  AnalyticsFilterState,
-  AnalyticsState,
-  BaseAnalyticsFilterState,
-} from './state';
+import { AnalyticsFilterState, AnalyticsState } from './state';
 import { getStoreAccessors } from 'typesafe-vuex';
 import { RootState } from '../state';
 import { AnalyticsData } from '@/generated';

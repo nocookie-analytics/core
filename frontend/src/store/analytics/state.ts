@@ -8,6 +8,7 @@ export interface BaseAnalyticsFilterState {
   device: DeviceType | undefined;
   deviceBrand: string | undefined;
   referrerName: string | undefined;
+  eventName: string | undefined;
 }
 
 export interface AnalyticsFilterState extends BaseAnalyticsFilterState {
