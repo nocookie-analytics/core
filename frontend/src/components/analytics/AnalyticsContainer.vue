@@ -103,6 +103,12 @@ export default class AnalyticsContainer extends Vue {
         noIcon: true,
       },
       {
+        data: this.analyticsData.custom_events || [],
+        title: 'Custom events',
+        urlParamName: 'customEvent',
+        noIcon: true,
+      },
+      {
         data: this.analyticsData.utm_terms || [],
         title: 'UTM Term',
       },

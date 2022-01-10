@@ -67,6 +67,8 @@ export const actions = {
           AnalyticsType.UtmMediums,
           AnalyticsType.UtmContents,
           AnalyticsType.UtmCampaigns,
+
+          AnalyticsType.CustomEvents,
         ],
         ...context.state.filters,
         // start and end are already part of destructured filters, but as Date type
