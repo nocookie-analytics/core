@@ -41,7 +41,8 @@ export enum AnalyticsType {
     LcpPerDay = 'lcp_per_day',
     FidPerDay = 'fid_per_day',
     FpPerDay = 'fp_per_day',
-    ClsPerDay = 'cls_per_day'
+    ClsPerDay = 'cls_per_day',
+    CustomEvents = 'custom_events'
 }
 
 

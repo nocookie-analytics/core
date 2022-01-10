@@ -48,15 +48,16 @@ export const AnalyticsApiAxiosParamCreator = function (configuration?: Configura
          * @param {DeviceType} [device] 
          * @param {string} [deviceBrand] 
          * @param {string} [referrerName] 
+         * @param {string} [eventName] 
          * @param {number} [limit] 
          * @param {boolean} [includeBots] 
-         * @param {IntervalType} [interval] 
+         * @param {IntervalType} [interval] Works with per day metrics. Set interval to hour to get more granular metrics for each hour of the day
          * @param {string} [start] 
          * @param {string} [end] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAnalytics: async (domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: DeviceType, deviceBrand?: string, referrerName?: string, limit?: number, includeBots?: boolean, interval?: IntervalType, start?: string, end?: string, options: any = {}): Promise<RequestArgs> => {
+        getAnalytics: async (domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: DeviceType, deviceBrand?: string, referrerName?: string, eventName?: string, limit?: number, includeBots?: boolean, interval?: IntervalType, start?: string, end?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'domainName' is not null or undefined
             assertParamExists('getAnalytics', 'domainName', domainName)
             // verify required parameter 'include' is not null or undefined
@@ -111,6 +112,10 @@ export const AnalyticsApiAxiosParamCreator = function (configuration?: Configura
 
             if (referrerName !== undefined) {
                 localVarQueryParameter['referrer_name'] = referrerName;
+            }
+
+            if (eventName !== undefined) {
+                localVarQueryParameter['event_name'] = eventName;
             }
 
             if (limit !== undefined) {
@@ -170,16 +175,17 @@ export const AnalyticsApiFp = function(configuration?: Configuration) {
          * @param {DeviceType} [device] 
          * @param {string} [deviceBrand] 
          * @param {string} [referrerName] 
+         * @param {string} [eventName] 
          * @param {number} [limit] 
          * @param {boolean} [includeBots] 
-         * @param {IntervalType} [interval] 
+         * @param {IntervalType} [interval] Works with per day metrics. Set interval to hour to get more granular metrics for each hour of the day
          * @param {string} [start] 
          * @param {string} [end] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: DeviceType, deviceBrand?: string, referrerName?: string, limit?: number, includeBots?: boolean, interval?: IntervalType, start?: string, end?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AnalyticsData>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAnalytics(domainName, include, page, country, browser, os, device, deviceBrand, referrerName, limit, includeBots, interval, start, end, options);
+        async getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: DeviceType, deviceBrand?: string, referrerName?: string, eventName?: string, limit?: number, includeBots?: boolean, interval?: IntervalType, start?: string, end?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AnalyticsData>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAnalytics(domainName, include, page, country, browser, os, device, deviceBrand, referrerName, eventName, limit, includeBots, interval, start, end, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -204,16 +210,17 @@ export const AnalyticsApiFactory = function (configuration?: Configuration, base
          * @param {DeviceType} [device] 
          * @param {string} [deviceBrand] 
          * @param {string} [referrerName] 
+         * @param {string} [eventName] 
          * @param {number} [limit] 
          * @param {boolean} [includeBots] 
-         * @param {IntervalType} [interval] 
+         * @param {IntervalType} [interval] Works with per day metrics. Set interval to hour to get more granular metrics for each hour of the day
          * @param {string} [start] 
          * @param {string} [end] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: DeviceType, deviceBrand?: string, referrerName?: string, limit?: number, includeBots?: boolean, interval?: IntervalType, start?: string, end?: string, options?: any): AxiosPromise<AnalyticsData> {
-            return localVarFp.getAnalytics(domainName, include, page, country, browser, os, device, deviceBrand, referrerName, limit, includeBots, interval, start, end, options).then((request) => request(axios, basePath));
+        getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: DeviceType, deviceBrand?: string, referrerName?: string, eventName?: string, limit?: number, includeBots?: boolean, interval?: IntervalType, start?: string, end?: string, options?: any): AxiosPromise<AnalyticsData> {
+            return localVarFp.getAnalytics(domainName, include, page, country, browser, os, device, deviceBrand, referrerName, eventName, limit, includeBots, interval, start, end, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -289,6 +296,13 @@ export interface AnalyticsApiGetAnalyticsRequest {
 
     /**
      * 
+     * @type {string}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly eventName?: string
+
+    /**
+     * 
      * @type {number}
      * @memberof AnalyticsApiGetAnalytics
      */
@@ -302,7 +316,7 @@ export interface AnalyticsApiGetAnalyticsRequest {
     readonly includeBots?: boolean
 
     /**
-     * 
+     * Works with per day metrics. Set interval to hour to get more granular metrics for each hour of the day
      * @type {IntervalType}
      * @memberof AnalyticsApiGetAnalytics
      */
@@ -339,6 +353,6 @@ export class AnalyticsApi extends BaseAPI {
      * @memberof AnalyticsApi
      */
     public getAnalytics(requestParameters: AnalyticsApiGetAnalyticsRequest, options?: any) {
-        return AnalyticsApiFp(this.configuration).getAnalytics(requestParameters.domainName, requestParameters.include, requestParameters.page, requestParameters.country, requestParameters.browser, requestParameters.os, requestParameters.device, requestParameters.deviceBrand, requestParameters.referrerName, requestParameters.limit, requestParameters.includeBots, requestParameters.interval, requestParameters.start, requestParameters.end, options).then((request) => request(this.axios, this.basePath));
+        return AnalyticsApiFp(this.configuration).getAnalytics(requestParameters.domainName, requestParameters.include, requestParameters.page, requestParameters.country, requestParameters.browser, requestParameters.os, requestParameters.device, requestParameters.deviceBrand, requestParameters.referrerName, requestParameters.eventName, requestParameters.limit, requestParameters.includeBots, requestParameters.interval, requestParameters.start, requestParameters.end, options).then((request) => request(this.axios, this.basePath));
     }
 }

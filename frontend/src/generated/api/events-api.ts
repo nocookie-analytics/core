@@ -26,8 +26,6 @@ import { EventCreated } from '../models';
 import { EventType } from '../models';
 // @ts-ignore
 import { HTTPValidationError } from '../models';
-// @ts-ignore
-import { MetricType } from '../models';
 /**
  * EventsApi - axios parameter creator
  * @export
@@ -35,21 +33,70 @@ import { MetricType } from '../models';
 export const EventsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Report a new event.
+         * Report a new custom event
+         * @summary New Custom Event
+         * @param {string} url 
+         * @param {string} [pageViewId] Page view ID (from a page view event)
+         * @param {string} [eventName] Event name
+         * @param {number} [eventValue] Event value (numeric)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        newCustomEvent: async (url: string, pageViewId?: string, eventName?: string, eventValue?: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'url' is not null or undefined
+            assertParamExists('newCustomEvent', 'url', url)
+            const localVarPath = `/api/v1/e/custom`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (url !== undefined) {
+                localVarQueryParameter['url'] = url;
+            }
+
+            if (pageViewId !== undefined) {
+                localVarQueryParameter['page_view_id'] = pageViewId;
+            }
+
+            if (eventName !== undefined) {
+                localVarQueryParameter['event_name'] = eventName;
+            }
+
+            if (eventValue !== undefined) {
+                localVarQueryParameter['event_value'] = eventValue;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Report a new page view event.  Deprecated. Use `/e/page_view` instead
          * @summary New Event
          * @param {string} url 
          * @param {EventType} [et] Event type
          * @param {number} [w] 
          * @param {number} [h] 
-         * @param {string} [pvid] Page view ID
          * @param {string} [tz] Timezone
          * @param {string} [ref] Referrer
-         * @param {MetricType} [mn] Metric name
-         * @param {number} [mv] Metric value
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newEvent: async (url: string, et?: EventType, w?: number, h?: number, pvid?: string, tz?: string, ref?: string, mn?: MetricType, mv?: number, options: any = {}): Promise<RequestArgs> => {
+        newEvent: async (url: string, et?: EventType, w?: number, h?: number, tz?: string, ref?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'url' is not null or undefined
             assertParamExists('newEvent', 'url', url)
             const localVarPath = `/api/v1/e/`;
@@ -76,10 +123,6 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['h'] = h;
             }
 
-            if (pvid !== undefined) {
-                localVarQueryParameter['pvid'] = pvid;
-            }
-
             if (tz !== undefined) {
                 localVarQueryParameter['tz'] = tz;
             }
@@ -92,12 +135,61 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['ref'] = ref;
             }
 
-            if (mn !== undefined) {
-                localVarQueryParameter['mn'] = mn;
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Report a new page view event
+         * @summary New Page View Event
+         * @param {string} url 
+         * @param {number} [w] Screen width (pixels)
+         * @param {number} [h] Screen height (pixels)
+         * @param {string} [tz] Timezone
+         * @param {string} [ref] Referrer
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        newPageViewEvent: async (url: string, w?: number, h?: number, tz?: string, ref?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'url' is not null or undefined
+            assertParamExists('newPageViewEvent', 'url', url)
+            const localVarPath = `/api/v1/e/page_view`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
             }
 
-            if (mv !== undefined) {
-                localVarQueryParameter['mv'] = mv;
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (url !== undefined) {
+                localVarQueryParameter['url'] = url;
+            }
+
+            if (w !== undefined) {
+                localVarQueryParameter['w'] = w;
+            }
+
+            if (h !== undefined) {
+                localVarQueryParameter['h'] = h;
+            }
+
+            if (tz !== undefined) {
+                localVarQueryParameter['tz'] = tz;
+            }
+
+            if (ref !== undefined) {
+                localVarQueryParameter['ref'] = ref;
             }
 
 
@@ -122,22 +214,48 @@ export const EventsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = EventsApiAxiosParamCreator(configuration)
     return {
         /**
-         * Report a new event.
+         * Report a new custom event
+         * @summary New Custom Event
+         * @param {string} url 
+         * @param {string} [pageViewId] Page view ID (from a page view event)
+         * @param {string} [eventName] Event name
+         * @param {number} [eventValue] Event value (numeric)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async newCustomEvent(url: string, pageViewId?: string, eventName?: string, eventValue?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EventCreated>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.newCustomEvent(url, pageViewId, eventName, eventValue, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Report a new page view event.  Deprecated. Use `/e/page_view` instead
          * @summary New Event
          * @param {string} url 
          * @param {EventType} [et] Event type
          * @param {number} [w] 
          * @param {number} [h] 
-         * @param {string} [pvid] Page view ID
          * @param {string} [tz] Timezone
          * @param {string} [ref] Referrer
-         * @param {MetricType} [mn] Metric name
-         * @param {number} [mv] Metric value
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newEvent(url: string, et?: EventType, w?: number, h?: number, pvid?: string, tz?: string, ref?: string, mn?: MetricType, mv?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EventCreated>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.newEvent(url, et, w, h, pvid, tz, ref, mn, mv, options);
+        async newEvent(url: string, et?: EventType, w?: number, h?: number, tz?: string, ref?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EventCreated>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.newEvent(url, et, w, h, tz, ref, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Report a new page view event
+         * @summary New Page View Event
+         * @param {string} url 
+         * @param {number} [w] Screen width (pixels)
+         * @param {number} [h] Screen height (pixels)
+         * @param {string} [tz] Timezone
+         * @param {string} [ref] Referrer
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async newPageViewEvent(url: string, w?: number, h?: number, tz?: string, ref?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EventCreated>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.newPageViewEvent(url, w, h, tz, ref, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -151,25 +269,84 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
     const localVarFp = EventsApiFp(configuration)
     return {
         /**
-         * Report a new event.
+         * Report a new custom event
+         * @summary New Custom Event
+         * @param {string} url 
+         * @param {string} [pageViewId] Page view ID (from a page view event)
+         * @param {string} [eventName] Event name
+         * @param {number} [eventValue] Event value (numeric)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        newCustomEvent(url: string, pageViewId?: string, eventName?: string, eventValue?: number, options?: any): AxiosPromise<EventCreated> {
+            return localVarFp.newCustomEvent(url, pageViewId, eventName, eventValue, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Report a new page view event.  Deprecated. Use `/e/page_view` instead
          * @summary New Event
          * @param {string} url 
          * @param {EventType} [et] Event type
          * @param {number} [w] 
          * @param {number} [h] 
-         * @param {string} [pvid] Page view ID
          * @param {string} [tz] Timezone
          * @param {string} [ref] Referrer
-         * @param {MetricType} [mn] Metric name
-         * @param {number} [mv] Metric value
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newEvent(url: string, et?: EventType, w?: number, h?: number, pvid?: string, tz?: string, ref?: string, mn?: MetricType, mv?: number, options?: any): AxiosPromise<EventCreated> {
-            return localVarFp.newEvent(url, et, w, h, pvid, tz, ref, mn, mv, options).then((request) => request(axios, basePath));
+        newEvent(url: string, et?: EventType, w?: number, h?: number, tz?: string, ref?: string, options?: any): AxiosPromise<EventCreated> {
+            return localVarFp.newEvent(url, et, w, h, tz, ref, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Report a new page view event
+         * @summary New Page View Event
+         * @param {string} url 
+         * @param {number} [w] Screen width (pixels)
+         * @param {number} [h] Screen height (pixels)
+         * @param {string} [tz] Timezone
+         * @param {string} [ref] Referrer
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        newPageViewEvent(url: string, w?: number, h?: number, tz?: string, ref?: string, options?: any): AxiosPromise<EventCreated> {
+            return localVarFp.newPageViewEvent(url, w, h, tz, ref, options).then((request) => request(axios, basePath));
         },
     };
 };
+
+/**
+ * Request parameters for newCustomEvent operation in EventsApi.
+ * @export
+ * @interface EventsApiNewCustomEventRequest
+ */
+export interface EventsApiNewCustomEventRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof EventsApiNewCustomEvent
+     */
+    readonly url: string
+
+    /**
+     * Page view ID (from a page view event)
+     * @type {string}
+     * @memberof EventsApiNewCustomEvent
+     */
+    readonly pageViewId?: string
+
+    /**
+     * Event name
+     * @type {string}
+     * @memberof EventsApiNewCustomEvent
+     */
+    readonly eventName?: string
+
+    /**
+     * Event value (numeric)
+     * @type {number}
+     * @memberof EventsApiNewCustomEvent
+     */
+    readonly eventValue?: number
+}
 
 /**
  * Request parameters for newEvent operation in EventsApi.
@@ -206,13 +383,6 @@ export interface EventsApiNewEventRequest {
     readonly h?: number
 
     /**
-     * Page view ID
-     * @type {string}
-     * @memberof EventsApiNewEvent
-     */
-    readonly pvid?: string
-
-    /**
      * Timezone
      * @type {string}
      * @memberof EventsApiNewEvent
@@ -225,20 +395,48 @@ export interface EventsApiNewEventRequest {
      * @memberof EventsApiNewEvent
      */
     readonly ref?: string
+}
 
+/**
+ * Request parameters for newPageViewEvent operation in EventsApi.
+ * @export
+ * @interface EventsApiNewPageViewEventRequest
+ */
+export interface EventsApiNewPageViewEventRequest {
     /**
-     * Metric name
-     * @type {MetricType}
-     * @memberof EventsApiNewEvent
+     * 
+     * @type {string}
+     * @memberof EventsApiNewPageViewEvent
      */
-    readonly mn?: MetricType
+    readonly url: string
 
     /**
-     * Metric value
+     * Screen width (pixels)
      * @type {number}
-     * @memberof EventsApiNewEvent
+     * @memberof EventsApiNewPageViewEvent
      */
-    readonly mv?: number
+    readonly w?: number
+
+    /**
+     * Screen height (pixels)
+     * @type {number}
+     * @memberof EventsApiNewPageViewEvent
+     */
+    readonly h?: number
+
+    /**
+     * Timezone
+     * @type {string}
+     * @memberof EventsApiNewPageViewEvent
+     */
+    readonly tz?: string
+
+    /**
+     * Referrer
+     * @type {string}
+     * @memberof EventsApiNewPageViewEvent
+     */
+    readonly ref?: string
 }
 
 /**
@@ -249,7 +447,19 @@ export interface EventsApiNewEventRequest {
  */
 export class EventsApi extends BaseAPI {
     /**
-     * Report a new event.
+     * Report a new custom event
+     * @summary New Custom Event
+     * @param {EventsApiNewCustomEventRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventsApi
+     */
+    public newCustomEvent(requestParameters: EventsApiNewCustomEventRequest, options?: any) {
+        return EventsApiFp(this.configuration).newCustomEvent(requestParameters.url, requestParameters.pageViewId, requestParameters.eventName, requestParameters.eventValue, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Report a new page view event.  Deprecated. Use `/e/page_view` instead
      * @summary New Event
      * @param {EventsApiNewEventRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -257,6 +467,18 @@ export class EventsApi extends BaseAPI {
      * @memberof EventsApi
      */
     public newEvent(requestParameters: EventsApiNewEventRequest, options?: any) {
-        return EventsApiFp(this.configuration).newEvent(requestParameters.url, requestParameters.et, requestParameters.w, requestParameters.h, requestParameters.pvid, requestParameters.tz, requestParameters.ref, requestParameters.mn, requestParameters.mv, options).then((request) => request(this.axios, this.basePath));
+        return EventsApiFp(this.configuration).newEvent(requestParameters.url, requestParameters.et, requestParameters.w, requestParameters.h, requestParameters.tz, requestParameters.ref, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Report a new page view event
+     * @summary New Page View Event
+     * @param {EventsApiNewPageViewEventRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventsApi
+     */
+    public newPageViewEvent(requestParameters: EventsApiNewPageViewEventRequest, options?: any) {
+        return EventsApiFp(this.configuration).newPageViewEvent(requestParameters.url, requestParameters.w, requestParameters.h, requestParameters.tz, requestParameters.ref, options).then((request) => request(this.axios, this.basePath));
     }
 }

@@ -99,7 +99,12 @@ export default class AnalyticsContainer extends Vue {
       {
         data: this.analyticsData.screen_sizes || [],
         title: 'Screen sizes',
-        urlParamName: 'screenSize',
+        noIcon: true,
+      },
+      {
+        data: this.analyticsData.custom_events || [],
+        title: 'Custom events',
+        urlParamName: 'eventName',
         noIcon: true,
       },
       {

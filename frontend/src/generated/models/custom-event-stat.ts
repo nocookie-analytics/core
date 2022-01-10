@@ -17,27 +17,21 @@
 /**
  * 
  * @export
- * @interface EventCreated
+ * @interface CustomEventStat
  */
-export interface EventCreated {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof EventCreated
-     */
-    success?: boolean;
+export interface CustomEventStat {
     /**
      * 
      * @type {string}
-     * @memberof EventCreated
+     * @memberof CustomEventStat
      */
-    error?: string;
+    event_name: string;
     /**
      * 
-     * @type {string}
-     * @memberof EventCreated
+     * @type {number}
+     * @memberof CustomEventStat
      */
-    page_view_id?: string;
+    total: number;
 }
 
 

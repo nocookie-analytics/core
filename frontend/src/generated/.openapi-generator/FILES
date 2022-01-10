@@ -2,7 +2,6 @@
 .npmignore
 api.ts
 api/analytics-api.ts
-api/billing-api.ts
 api/domains-api.ts
 api/events-api.ts
 api/login-api.ts
@@ -19,6 +18,7 @@ models/avg-metric-per-day-stat.ts
 models/body-create-user-open-api-v1-users-open-post.ts
 models/body-reset-password-api-v1-reset-password-post.ts
 models/body-update-user-me-api-v1-users-me-put.ts
+models/custom-event-stat.ts
 models/device-type.ts
 models/domain-create.ts
 models/domain-update.ts
@@ -28,11 +28,9 @@ models/event-type.ts
 models/httpvalidation-error.ts
 models/index.ts
 models/interval-type.ts
-models/metric-type.ts
 models/msg.ts
 models/page-views-per-day-stat.ts
 models/plan.ts
-models/stripe-link.ts
 models/summary-stat.ts
 models/token.ts
 models/user.ts

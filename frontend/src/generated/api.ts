@@ -15,7 +15,6 @@
 
 
 export * from './api/analytics-api';
-export * from './api/billing-api';
 export * from './api/domains-api';
 export * from './api/events-api';
 export * from './api/login-api';

@@ -1,6 +1,6 @@
 <template>
   <span class="fixed-min-width">
-    <span v-if="block.urlParamName === 'country'" class="nowrap">
+    <span v-if="urlParamName === 'country'" class="nowrap">
       <country-flag :countryName="itemValue" style="margin-right: 5px" />
       <optional-router-link
         :to="filterOnThisItemUrl"
@@ -8,7 +8,7 @@
         >{{ countryCodeToCountryName(itemValue) }}</optional-router-link
       >
     </span>
-    <span v-else-if="block.urlParamName === 'page'">
+    <span v-else-if="urlParamName === 'page'">
       <span class="nowrap">
         <optional-router-link
           :to="filterOnThisItemUrl"
@@ -26,10 +26,7 @@
       </a>
     </span>
     <span v-else>
-      <Icon
-        :value="itemValue"
-        v-if="!block.noIcon"
-      />&nbsp;<optional-router-link
+      <Icon :value="itemValue" v-if="!noIcon" />&nbsp;<optional-router-link
         :to="filterOnThisItemUrl"
         :disabled="!filterOnThisItemUrl.query"
         >{{ itemValue }}</optional-router-link
@@ -42,8 +39,6 @@ import countryCodes from '@/components/data/countryCodes';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Icon from '@/components/analytics/Icon.vue';
 import CountryFlag from '@/components/analytics/CountryFlag.vue';
-import { DeclarativeAnalyticsBlock } from './interfaces';
-import { AggregateStat } from '@/generated';
 import { readCurrentDomain } from '@/store/analytics/getters';
 import OptionalRouterLink from './OptionalRouterLink.vue';
 
@@ -55,34 +50,33 @@ import OptionalRouterLink from './OptionalRouterLink.vue';
   },
 })
 export default class AnalyticsSingleValue extends Vue {
-  @Prop() public block!: DeclarativeAnalyticsBlock;
-  @Prop() public item!: AggregateStat;
+  @Prop() public value!: string;
+  @Prop() public noIcon!: boolean;
+  @Prop() public urlParamName?: string;
+  @Prop() public urlExclude?: Array<string>;
 
   countryCodeToCountryName(countryCode: string): string {
     return countryCodes[countryCode] || countryCode;
   }
 
   get itemValue(): string {
-    if (this.block.transformValue) {
-      return this.block.transformValue(this.item.value);
-    }
-    return this.item.value;
+    return this.value;
   }
 
   get externalLink(): string {
     const domainName = readCurrentDomain(this.$store);
-    return `https://${domainName}${this.item.value}`;
+    return `https://${domainName}${this.value}`;
   }
 
   get filterOnThisItemUrl() {
-    if (this.block.urlParamName && this.block.data.length > 1) {
-      const value = this.item.value;
-      const excludes = this.block.urlExclude;
+    if (this.urlParamName) {
+      const value = this.itemValue;
+      const excludes = this.urlExclude || [];
       if (excludes && !excludes.includes(value)) {
         return {
           query: {
             ...this.$route.query,
-            [this.block.urlParamName]: value,
+            [this.urlParamName]: value,
           },
         };
       }

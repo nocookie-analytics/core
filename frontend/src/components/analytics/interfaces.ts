@@ -1,7 +1,7 @@
-import { AggregateStat } from '@/generated';
+import { AggregateStat, CustomEventStat } from '@/generated';
 
 export interface DeclarativeAnalyticsBlock {
-  data: AggregateStat[];
+  data: AggregateStat[] | CustomEventStat[];
   title: string;
   urlParamName?: string;
   urlExclude?: Array<string>;

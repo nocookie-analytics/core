@@ -10,9 +10,41 @@
       />
     </v-card-title>
     <v-card class="pa-2" outlined tile>
-      <Tabular :data="currentPageItems">
+      <Tabular
+        :data="currentPageItems"
+        :keyHeader="'Name'"
+        :valueHeader="'Visitors'"
+        v-if="block.urlParamName !== 'eventName'"
+      >
         <template v-slot:itemName="{ item }">
-          <AnalyticsSingleValue :block="block" :item="item" />
+          <AnalyticsSingleValue
+            :value="
+              block.transformValue
+                ? block.transformValue(item.value)
+                : item.value
+            "
+            :noIcon="block.noIcon"
+            :urlParamName="block.data.length > 1 ? block.urlParamName : null"
+            :urlExclude="block.urlExclude"
+          />
+        </template>
+      </Tabular>
+      <Tabular
+        :data="currentPageItems"
+        :keyHeader="'Event name'"
+        :valueHeader="'Total'"
+        v-else
+      >
+        <template v-slot:itemName="{ item }">
+          <AnalyticsSingleValue
+            :value="item.event_name"
+            :noIcon="block.noIcon"
+            :urlParamName="block.data.length > 1 ? block.urlParamName : null"
+            :urlExclude="block.urlExclude"
+          />
+        </template>
+        <template v-slot:itemValue="{ item }">
+          {{ item.total }}
         </template>
       </Tabular>
     </v-card>
@@ -27,7 +59,11 @@ import AnalyticsSingleValue from './AnalyticsSingleValue.vue';
 import AnalyticsBlockTitle from './AnalyticsBlockTitle.vue';
 
 @Component({
-  components: { Tabular, AnalyticsSingleValue, AnalyticsBlockTitle },
+  components: {
+    Tabular,
+    AnalyticsSingleValue,
+    AnalyticsBlockTitle,
+  },
 })
 export default class AnalyticsBlock extends Vue {
   @Prop() public block!: DeclarativeAnalyticsBlock;

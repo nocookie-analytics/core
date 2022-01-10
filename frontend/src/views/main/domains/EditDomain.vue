@@ -103,7 +103,7 @@ export default class EditDomain extends Vue {
 
   public async deleteItem(): Promise<void> {
     const domainsApi = this.$store.getters.domainsApi as DomainsApi;
-    await domainsApi.deleteDomain({
+    await domainsApi.deleteDomainByName({
       name: this.$route.params.domainName,
     });
     this.$router.push(`/domains/`);

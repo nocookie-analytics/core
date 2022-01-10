@@ -15,6 +15,7 @@
 
 import { AggregateStat } from './aggregate-stat';
 import { AvgMetricPerDayStat } from './avg-metric-per-day-stat';
+import { CustomEventStat } from './custom-event-stat';
 import { PageViewsPerDayStat } from './page-views-per-day-stat';
 import { SummaryStat } from './summary-stat';
 
@@ -168,6 +169,12 @@ export interface AnalyticsData {
      * @memberof AnalyticsData
      */
     utm_contents?: Array<AggregateStat>;
+    /**
+     * 
+     * @type {Array<CustomEventStat>}
+     * @memberof AnalyticsData
+     */
+    custom_events?: Array<CustomEventStat>;
 }
 
 
