@@ -55,7 +55,6 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { DeclarativeAnalyticsBlock } from './interfaces';
 import Tabular from './Tabular.vue';
-import EventTabular from './EventTabular.vue';
 import AnalyticsSingleValue from './AnalyticsSingleValue.vue';
 import AnalyticsBlockTitle from './AnalyticsBlockTitle.vue';
 
@@ -64,7 +63,6 @@ import AnalyticsBlockTitle from './AnalyticsBlockTitle.vue';
     Tabular,
     AnalyticsSingleValue,
     AnalyticsBlockTitle,
-    EventTabular,
   },
 })
 export default class AnalyticsBlock extends Vue {
