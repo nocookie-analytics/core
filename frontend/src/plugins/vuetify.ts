@@ -34,6 +34,9 @@ import {
   mdiPencil,
   mdiWeb,
   mdiFileDocumentOutline,
+  mdiGithub,
+  mdiTwitter,
+  mdiDiscord,
 } from '@mdi/js';
 
 export default new Vuetify({
@@ -63,6 +66,9 @@ export default new Vuetify({
       login: mdiLogin,
       openInNew: mdiOpenInNew,
       fileDocumentOutline: mdiFileDocumentOutline,
+      github: mdiGithub,
+      twitter: mdiTwitter,
+      discord: mdiDiscord,
     },
   },
   theme: {

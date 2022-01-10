@@ -191,6 +191,16 @@
     </v-main>
     <v-footer class="pa-3" fixed app>
       <v-spacer></v-spacer>
+      <v-btn icon href="https://twitter.com/saynotocookies" target="_blank">
+        <v-icon size="24px">{{ $vuetify.icons.values.twitter }}</v-icon>
+      </v-btn>
+      <v-btn icon href="https://github.com/nocookie-analytics/" target="_blank">
+        <v-icon size="24px">{{ $vuetify.icons.values.github }}</v-icon>
+      </v-btn>
+      <v-btn icon href="https://discord.gg/K3ZBWxsfQB" target="_blank">
+        <v-icon size="24px">{{ $vuetify.icons.values.discord }}</v-icon>
+      </v-btn>
+      <v-spacer></v-spacer>
       <span>&copy; {{ appName }}</span>
     </v-footer>
   </div>
