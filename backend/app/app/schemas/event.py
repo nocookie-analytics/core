@@ -80,7 +80,7 @@ class PageViewEventCreate(EventBase):
     def depends(
         cls,
         request: Request,
-        url: str = Query(None, description="Current page URL"),
+        url: str = Query(..., description="Current page URL"),
         w: Optional[int] = Query(None, description="Screen width (pixels)"),
         h: Optional[int] = Query(None, description="Screen height (pixels)"),
         tz: Optional[str] = Query(None, description="Timezone"),
@@ -113,11 +113,11 @@ class CustomEventCreate(EventBase):
     @classmethod
     def depends(
         cls,
-        url: str = Query(None, description="Current page URL"),
+        url: str = Query(..., description="Current page URL"),
         page_view_id: UUID4 = Query(
-            None, description="Page view ID (from a page view event)"
+            ..., description="Page view ID (from a page view event)"
         ),
-        event_name: str = Query(None, description="Event name"),
+        event_name: str = Query(..., description="Event name"),
         event_value: Optional[Decimal] = Query(
             Decimal(1), description="Event value (numeric)"
         ),
