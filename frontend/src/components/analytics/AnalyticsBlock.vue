@@ -39,7 +39,7 @@
           <AnalyticsSingleValue
             :value="item.event_name"
             :noIcon="block.noIcon"
-            :urlParamName="block.data.length > 1 ? block.urlParamName : null"
+            :urlParamName="block.urlParamName"
             :urlExclude="block.urlExclude"
           />
         </template>
