@@ -44,6 +44,12 @@ class User(UserInDBBase):
     delete_at: Optional[datetime]
 
 
+class UserForAdmin(UserInDBBase):
+    active_plan: Plan
+    delete_at: Optional[datetime]
+    created: datetime
+
+
 # Additional properties stored in DB
 class UserInDB(UserInDBBase):
     hashed_password: str

@@ -14,7 +14,7 @@ from app.utils.stripe_helpers import create_stripe_customer_for_user
 router = APIRouter()
 
 
-@router.get("/", response_model=List[schemas.User], include_in_schema=False)
+@router.get("/", response_model=List[schemas.UserForAdmin], include_in_schema=False)
 def read_users(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
