@@ -82,7 +82,7 @@ class TestCustomEvent:
         self, client: TestClient, db: Session
     ) -> None:
         response = client.get(f"{settings.API_V1_STR}/e/custom", params={})
-        assert response.status_code == 400
+        assert response.status_code == 422
         content = response.json()
         assert content["detail"]
 
@@ -93,7 +93,7 @@ class TestCustomEvent:
         response = client.get(
             f"{settings.API_V1_STR}/e/custom", params={"page_view_id": str(uuid4())}
         )
-        assert response.status_code == 400
+        assert response.status_code == 422
         content = response.json()
         assert content["detail"]
 

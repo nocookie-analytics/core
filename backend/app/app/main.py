@@ -10,27 +10,18 @@ from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 from app.logger import logger
 from app.api.api_v1.api import api_router
+from app.api.api_v1.docs import docs_router, description
 from app.core.config import settings
 
-description = """
-## Javascript snippet
 
-Integrate No Cookie Analytics on your website with a simple snippet. Add this script tag on your page and you're good to go:
-
-```javascript
- <script async defer src="https://nocookieanalytics.com/latest.js"></script>
-```
-
-
-## OpenAPI documentation
-
-The following routes are generated from the OpenAPI schema.
-"""
 app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     description=description,
+    docs_url=None,
+    redoc_url=None,
 )
+
 
 # https://github.com/tiangolo/fastapi/issues/2033#issuecomment-696465251
 try:
@@ -51,6 +42,8 @@ if settings.BACKEND_CORS_ORIGINS:
     )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
+app.include_router(docs_router)
+
 simplify_operation_ids(app)
 
 if settings.SENTRY_DSN:

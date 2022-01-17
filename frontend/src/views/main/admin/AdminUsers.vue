@@ -16,6 +16,9 @@
           {{ $vuetify.icons.values.check }}</v-icon
         >
       </template>
+      <template #[`item.created`]="{ item }">
+        {{ item.created.slice(0, 10) }}
+      </template>
       <template #[`item.id`]="{ item }">
         <v-tooltip top>
           <span>Edit</span>
@@ -61,6 +64,12 @@ export default class AdminUsers extends Vue {
       text: 'Is Active',
       sortable: true,
       value: 'isActive',
+      align: 'left',
+    },
+    {
+      text: 'Signed up',
+      sortable: true,
+      value: 'created',
       align: 'left',
     },
     {
