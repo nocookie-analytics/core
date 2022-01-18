@@ -1,9 +1,10 @@
-name: Python application (${{ matrix.use_timescaledb }})
+name: Python application
 
 on: [workflow_dispatch, push]
 
 jobs:
   test:
+    name: Build and test (Timescale ${{ matrix.use_timescaledb }})
     strategy:
       matrix:
         use_timescaledb: [false, true]
