@@ -37,7 +37,8 @@ def db(request) -> Generator:
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
     init_db(session)
-    session.execute("SELECT create_hypertable('event', 'timestamp')")
+    if settings.USE_TIMESCALEDB:
+        session.execute("SELECT create_hypertable('event', 'timestamp')")
 
     def teardown():
         session.rollback()
