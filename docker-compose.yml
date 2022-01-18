@@ -76,7 +76,8 @@ services:
         - traefik.http.routers.${STACK_NAME}-proxy-http.middlewares=${STACK_NAME}-www-redirect,${STACK_NAME}-https-redirect
 
   db:
-    image: timescale/timescaledb:latest-pg12
+    # image: timescale/timescaledb:latest-pg12
+    image: postgres:12
     volumes:
       - app-db-data:/var/lib/postgresql/data/pgdata
     env_file:

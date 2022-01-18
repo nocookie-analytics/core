@@ -121,6 +121,8 @@ class Settings(BaseSettings):
     # Accounts and domains are not deleted immediately, but after a period of few days, just in case
     SOFT_DELETE_DURATION_DAYS: int = 14
 
+    USE_TIMESCALEDB: bool = False
+
     class Config:
         case_sensitive = True
 

@@ -1,18 +1,19 @@
 from __future__ import annotations
-from app.models.domain import Domain
 import datetime
 from enum import Enum
 from typing import List, Optional, Union
 
 import arrow
 from pydantic import BaseModel
-from sqlalchemy import func, column
+from sqlalchemy import Date, DateTime, cast, column, func
 from sqlalchemy.orm import Query
 from sqlalchemy.orm.session import Session
 from sqlalchemy.sql import desc
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.schema import Column
 
+from app.core.config import settings
+from app.models.domain import Domain
 from app.models.event import Event, MetricType
 
 
@@ -121,29 +122,51 @@ class PageViewsPerDayStat(BaseModel):
         end: datetime.datetime,
         interval: IntervalType,
     ) -> List[PageViewsPerDayStat]:
-        interval_text = "1 day"
-        if interval == IntervalType.HOUR:
-            interval_text = "1 hour"
+        from app.utils.db import time_bucket_gapfill
+
+        if settings.USE_TIMESCALEDB:
+            interval_text = "1 day" if interval == IntervalType.DAY else "1 hour"
+            date_column = func.time_bucket_gapfill(
+                interval_text, Event.timestamp, start.date(), end.date()
+            )
+        else:
+            # Without timescale db, we can't use the time_bucket_gapfill function
+            # so we have to do it manually in Python
+            date_column = func.date_trunc(interval.value, Event.timestamp)
+
         rows = (
             base_query.group_by(column("interval"))
             .with_entities(
-                func.time_bucket_gapfill(
-                    interval_text, Event.timestamp, start.date(), end.date()
-                ).label("interval"),
+                date_column.label("interval"),
                 func.coalesce(func.count(), 0),
                 func.coalesce(func.count(func.distinct(Event.visitor_fingerprint)), 0),
             )
             .order_by("interval")
         )
-        return [
-            PageViewsPerDayStat(date=row[0], total_visits=row[1], visitors=row[2])
+        data = [
+            PageViewsPerDayStat(
+                date=row[0],
+                total_visits=row[1],
+                visitors=row[2],
+            )
             for row in rows
         ]
+        if settings.USE_TIMESCALEDB is False:
+            data = time_bucket_gapfill(
+                data,
+                start,
+                end,
+                interval,
+                creator=lambda date: PageViewsPerDayStat(
+                    date=date, total_visits=0, visitors=0
+                ),
+            )
+        return data
 
 
 class AvgMetricPerDayStat(BaseModel):
     value: float
-    date: datetime.date
+    date: datetime.datetime
 
     @staticmethod
     def from_base_query(
@@ -152,18 +175,36 @@ class AvgMetricPerDayStat(BaseModel):
         start: datetime.datetime,
         end: datetime.datetime,
     ) -> List[AvgMetricPerDayStat]:
+        from app.utils.db import time_bucket_gapfill
+
+        if settings.USE_TIMESCALEDB:
+            date_column = func.time_bucket_gapfill(
+                "1 day", Event.timestamp, start.date(), end.date()
+            )
+        else:
+            # Without timescale db, we can't use the time_bucket_gapfill function
+            # so we have to do it manually in Python
+            date_column = func.date_trunc("day", Event.timestamp)
+
         rows = (
             base_query.group_by(column("one_day"))
             .with_entities(
-                func.time_bucket_gapfill("1 day", Event.timestamp, start, end).label(
-                    "one_day"
-                ),
+                date_column.label("one_day"),
                 func.coalesce(func.avg(Event.metric_value), 0).label("average"),
             )
             .filter(Event.metric_name == metric_name)
             .order_by("one_day")
         )
-        return [AvgMetricPerDayStat(date=row[0], value=row[1]) for row in rows]
+        data = [AvgMetricPerDayStat(date=row[0], value=row[1]) for row in rows]
+        if settings.USE_TIMESCALEDB is False:
+            data = time_bucket_gapfill(
+                data,
+                start,
+                end,
+                IntervalType.DAY,
+                creator=lambda date: AvgMetricPerDayStat(date=date, value=0),
+            )
+        return data
 
 
 class LiveVisitorStat:

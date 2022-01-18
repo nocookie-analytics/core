@@ -247,6 +247,11 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         include_bots: bool = False,
         interval: IntervalType = IntervalType.DAY,
     ) -> AnalyticsData:
+        # Set timezone to UTC if missing
+        if not start.tzinfo:
+            start.replace(tzinfo="UTC")
+        if not end.tzinfo:
+            end.replace(tzinfo="UTC")
         data = AnalyticsData(start=start, end=end)
         for field in fields:
             base_query = db.query(Event).filter(Event.domain_id == domain.id)

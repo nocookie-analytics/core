@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 import pytest
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm.session import Session
@@ -63,7 +63,7 @@ class TestPageViewsPerDayStat:
         domain = create_random_domain(db)
         create_random_page_view_event(db, domain=domain, ip_address=mock_ip_address)
         base_query = domain.events.filter(Event.event_type == EventType.page_view)
-        end = datetime.now()
+        end = datetime.now(tz=timezone.utc)
         start = end - timedelta(days=1)
 
         per_day_data = PageViewsPerDayStat.from_base_query(
@@ -95,7 +95,7 @@ class TestPageViewsPerDayStat:
         domain = create_random_domain(db)
         create_random_page_view_event(db, domain=domain, ip_address=mock_ip_address)
         base_query = domain.events.filter(Event.event_type == EventType.page_view)
-        end = datetime.now()
+        end = datetime.now(tz=timezone.utc)
         start = end - timedelta(days=1)
 
         per_hour_data = PageViewsPerDayStat.from_base_query(
