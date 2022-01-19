@@ -8,12 +8,12 @@ T = TypeVar("T", bound=Union[PageViewsPerDayStat, AvgMetricPerDayStat])
 
 
 def time_bucket_gapfill(
-    data: List[PageViewsPerDayStat],
+    data: List[T],
     start: datetime,
     end: datetime,
     interval: IntervalType,
     creator: Callable,
-) -> List[PageViewsPerDayStat]:
+) -> List[T]:
     """A python implementation of the time_bucket_gapfill provided by TimescaleDB."""
     existing = {row.date: row for row in data}
     for date in arrow.Arrow.span_range(interval.value, start, end):
