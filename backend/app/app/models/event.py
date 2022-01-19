@@ -40,6 +40,7 @@ class ReferrerMediumType(Enum):
     EMAIL = "email"
     SOCIAL = "social"
     SEARCH = "search"
+    PAID = "paid"
 
 
 class MetricType(Enum):
