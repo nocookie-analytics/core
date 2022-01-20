@@ -4,6 +4,10 @@ on: [workflow_dispatch, push]
 
 jobs:
   test:
+    name: Build and test (Timescale ${{ matrix.use_timescaledb }})
+    strategy:
+      matrix:
+        use_timescaledb: [false, true]
     runs-on: ubuntu-latest
     container: docker/compose
 
@@ -13,6 +17,7 @@ jobs:
       TRAEFIK_PUBLIC_NETWORK_IS_EXTERNAL: false
       INSTALL_DEV: true
       COMPOSE_DOCKER_CLI_BUILD: 1
+      USE_TIMESCALEDB: ${{ matrix.use_timescaledb }}
       #DOCKER_BUILDKIT: 1
       #BUILDKIT_INLINE_CACHE: 1
       DOCKER_IMAGE_BACKEND: ghcr.io/nocookie-analytics/nca-backend

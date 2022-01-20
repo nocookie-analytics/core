@@ -8,6 +8,7 @@ Create Date: 2020-09-05 16:27:38.928637
 import sqlalchemy as sa
 from alembic import op
 from sqlalchemy.dialects import postgresql
+from app.core.config import settings
 
 from app.models.event import EventTypeEnum
 
@@ -57,7 +58,8 @@ def upgrade():
         ),
         sa.PrimaryKeyConstraint("domain_id", "timestamp", "id"),
     )
-    op.execute("SELECT create_hypertable('event', 'timestamp')")
+    if settings.USE_TIMESCALEDB:
+        op.execute("SELECT create_hypertable('event', 'timestamp')")
     op.create_index(
         "ix_domain_timestamp", "event", ["domain_id", "timestamp"], unique=False
     )
