@@ -16,7 +16,7 @@
     },
     "FIRST_SUPERUSER_PASSWORD": {
       "description": "The password for the first superuser",
-      "generator": "something-very-secure-please-change"
+      "value": "something-very-secure-please-change"
     }
   },
   "stack": "container",
