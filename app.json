@@ -12,11 +12,11 @@
     },
     "FIRST_SUPERUSER": {
       "description": "The first superuser to be created",
-      "value": "admin"
+      "value": "admin@example.com"
     },
     "FIRST_SUPERUSER_PASSWORD": {
       "description": "The password for the first superuser",
-      "generator": "secret"
+      "generator": "something-very-secure-please-change"
     }
   },
   "stack": "container",
