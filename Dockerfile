@@ -33,6 +33,6 @@ RUN poetry install --no-root --no-dev
 
 COPY ./backend/app /app
 
-COPY --from=frontend-build-stage /app/dist /app/static
+COPY --from=frontend-build-stage /app/dist /app/assets
 
 ENV PYTHONPATH=/app

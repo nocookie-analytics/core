@@ -3,6 +3,7 @@ import sentry_sdk
 import socket
 
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi_utils.openapi import simplify_operation_ids
 from fastapi_utils.tasks import repeat_every
 from starlette.middleware.cors import CORSMiddleware
@@ -23,6 +24,8 @@ app = FastAPI(
     docs_url=None,
     redoc_url=None,
 )
+
+app.mount("/", StaticFiles(directory="assets"), name="static")
 
 
 # https://github.com/tiangolo/fastapi/issues/2033#issuecomment-696465251
@@ -103,5 +106,5 @@ async def add_404_middleware(request: Request, call_next):
     if request["path"].startswith(settings.API_V1_STR):
         return response
     if response.status_code == 404:
-        return FileResponse("static/index.html")
+        return FileResponse("assets/index.html")
     return response
