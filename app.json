@@ -22,7 +22,7 @@
   "stack": "container",
   "success_url": "/login",
   "scripts": {
-    "postdeploy": "/app/prestart.sh"
+    "postdeploy": "sh /app/prestart.sh"
   },
   "addons": [
     {
