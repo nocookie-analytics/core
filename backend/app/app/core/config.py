@@ -24,7 +24,7 @@ class Settings(BaseSettings):
 
     @validator("SERVER_HOST", pre=True)
     def assemble_server_host(cls, v: Optional[AnyHttpUrl], values: Dict[str, Any]):
-        if not v and values["SERVER_NAME"]:
+        if not v and "SERVER_NAME" in values:
             return f'https://{values["SERVER_NAME"]}'
         return v
 
