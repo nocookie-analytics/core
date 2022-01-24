@@ -18,6 +18,9 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fetch mmdb
+        run: |
+          sh backend/app/scripts/fetch-db-ip.sh
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v3
