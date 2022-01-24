@@ -61,6 +61,8 @@ class Settings(BaseSettings):
     @validator("DATABASE_URL", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> str:
         if v:
+            if v.startswith("postgres://"):
+                return v.replace("postgres://", "postgresql://")
             return v
         if not (
             values.get("POSTGRES_USER")
