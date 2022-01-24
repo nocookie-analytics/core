@@ -1,6 +1,8 @@
 # All in one (monolith) Dockerfile, FastAPI serves static assets
 # NOTE: Keep steps in this Dockerfile synced with the individual frontend and backend Dockerfiles
 
+FROM ghcr.io/nocookie-analytics/nca-tracker:main as tracker-build-stage
+
 FROM node:15 as frontend-build-stage
 
 WORKDIR /app
@@ -34,5 +36,7 @@ RUN poetry install --no-root --no-dev
 COPY ./backend/app /app
 
 COPY --from=frontend-build-stage /app/dist /app/assets
+
+COPY --from=tracker-build-stage /usr/share/nginx/html/latest.js /app/assets
 
 ENV PYTHONPATH=/app
