@@ -73,6 +73,14 @@ async def get_documentation():
 
           </body>
           <script async defer src="/latest.js"></script>
+          <script type="text/javascript">
+           var me = document.currentScript;
+           var reportServer = 'nocookieanalytics.com';
+           if (me) {
+             var url = new URL(jsFileUrl);
+             reportServer = url.hostname;
+            }
+            document.querySelector('.sl-code-viewer').innerHTML = document.querySelector('.sl-code-viewer').innerHTML.replace('nocookieanalytics.com', reportServer);
         </html>
     """
     )
