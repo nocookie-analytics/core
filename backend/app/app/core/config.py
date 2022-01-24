@@ -19,12 +19,12 @@ class Settings(BaseSettings):
     SECRET_KEY: str = secrets.token_urlsafe(32)
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
-    SERVER_NAME: str
+    SERVER_NAME: Optional[str]
     SERVER_HOST: Optional[AnyHttpUrl] = None
 
     @validator("SERVER_HOST", pre=True)
     def assemble_server_host(cls, v: Optional[AnyHttpUrl], values: Dict[str, Any]):
-        if not v:
+        if not v and values["SERVER_NAME"]:
             return f'https://{values["SERVER_NAME"]}'
         return v
 
