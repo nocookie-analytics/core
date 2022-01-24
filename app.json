@@ -6,7 +6,7 @@
   "keywords": ["python", "analytics"],
   "website": "https://nocookieanalytics.com",
   "env": {
-    "SECRET_TOKEN": {
+    "SECRET_KEY": {
       "description": "A secret key for verifying the integrity of signed cookies.",
       "generator": "secret"
     },
