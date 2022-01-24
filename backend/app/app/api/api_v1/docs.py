@@ -77,7 +77,7 @@ async def get_documentation():
            var me = document.currentScript;
            var reportServer = 'nocookieanalytics.com';
            if (me) {
-             var url = new URL(jsFileUrl);
+             var url = new URL(me.src);
              reportServer = url.hostname;
             }
             document.querySelector('.sl-code-viewer').innerHTML = document.querySelector('.sl-code-viewer').innerHTML.replace('nocookieanalytics.com', reportServer);
