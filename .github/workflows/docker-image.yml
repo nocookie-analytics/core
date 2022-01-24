@@ -28,6 +28,7 @@ jobs:
           images: ghcr.io/nocookie-analytics/nocookie-analytics
           tags: |
             type=ref,event=branch
+            type=sha,format=long
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
       - name: Build and push
