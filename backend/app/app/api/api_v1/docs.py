@@ -1,7 +1,6 @@
 from fastapi import APIRouter
 from starlette.responses import HTMLResponse
 
-
 docs_router = APIRouter()
 
 description = """
@@ -72,15 +71,22 @@ async def get_documentation():
             />
 
           </body>
-          <script async defer src="/latest.js"></script>
           <script type="text/javascript">
-           var me = document.currentScript;
-           var reportServer = 'nocookieanalytics.com';
-           if (me) {
-             var url = new URL(me.src);
-             reportServer = url.hostname;
+
+          function replaceDomain() {
+            var reportServer = window.location.hostname;
+            var elm = document.querySelector('.sl-code-viewer');
+            if (elm) {
+                elm.innerHTML = elm.innerHTML.replace('nocookieanalytics.com', reportServer);
+            } else {
+                setTimeout(replaceDomain, 500);
             }
-            document.querySelector('.sl-code-viewer').innerHTML = document.querySelector('.sl-code-viewer').innerHTML.replace('nocookieanalytics.com', reportServer);
+          }
+
+          document.addEventListener('DOMContentLoaded', replaceDomain);
+            </script>
+
+          <script async defer src="/latest.js"></script>
         </html>
     """
     )
