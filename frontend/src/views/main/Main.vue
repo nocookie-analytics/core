@@ -91,10 +91,7 @@
         </v-list>
         <v-spacer></v-spacer>
         <v-list>
-          <v-list-item
-            href="https://nocookieanalytics.com/docs"
-            target="_blank"
-          >
+          <v-list-item href="/docs" target="_blank">
             <v-list-item-action>
               <v-icon> {{ $vuetify.icons.values.fileDocumentOutline }}</v-icon>
             </v-list-item-action>

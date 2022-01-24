@@ -72,7 +72,7 @@ async def get_documentation():
             />
 
           </body>
-          <script async defer src="https://nocookieanalytics.com/latest.js"></script>
+          <script async defer src="/latest.js"></script>
         </html>
     """
     )
