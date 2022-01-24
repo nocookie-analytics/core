@@ -20,6 +20,10 @@
     }
   },
   "stack": "container",
+  "success_url": "/login",
+  "scripts": {
+    "postdeploy": "/app/prestart.sh"
+  },
   "addons": [
     {
       "plan": "heroku-postgresql"

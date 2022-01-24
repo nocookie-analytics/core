@@ -25,8 +25,6 @@ app = FastAPI(
     redoc_url=None,
 )
 
-app.mount("/", StaticFiles(directory="assets"), name="static")
-
 
 # https://github.com/tiangolo/fastapi/issues/2033#issuecomment-696465251
 try:
@@ -103,8 +101,13 @@ def delete_pending_objects() -> None:
 @app.middleware("http")
 async def add_404_middleware(request: Request, call_next):
     response = await call_next(request)
-    if request["path"].startswith(settings.API_V1_STR):
+    path = request["path"]
+    if path.startswith(settings.API_V1_STR):
         return response
     if response.status_code == 404:
         return FileResponse("assets/index.html")
     return response
+
+
+# Static should always be the last mount, otherwise it'll interfere with app routes
+app.mount("/", StaticFiles(directory="assets"), name="static")
