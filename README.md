@@ -1,6 +1,6 @@
 # No Cookie Analytics
 
-![CI badge](https://github.com/nocookie-analytics/core/actions/workflows/pythonapp/badge.svg)
+![CI badge](https://github.com/nocookie-analytics/core/actions/workflows/pythonapp.yml/badge.svg)
 
 ## About
 
