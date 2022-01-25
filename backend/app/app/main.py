@@ -3,9 +3,12 @@ import sentry_sdk
 import socket
 
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi_utils.openapi import simplify_operation_ids
 from fastapi_utils.tasks import repeat_every
 from starlette.middleware.cors import CORSMiddleware
+from starlette.requests import Request
+from starlette.responses import FileResponse
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 from app.logger import logger
@@ -93,3 +96,18 @@ def delete_pending_objects() -> None:
     finally:
         db.close()
     logger.info("Finished at %s", datetime.now())
+
+
+@app.middleware("http")
+async def add_404_middleware(request: Request, call_next):
+    response = await call_next(request)
+    path = request["path"]
+    if path.startswith(settings.API_V1_STR):
+        return response
+    if response.status_code == 404:
+        return FileResponse("assets/index.html")
+    return response
+
+
+# Static should always be the last mount, otherwise it'll interfere with app routes
+app.mount("/", StaticFiles(directory="assets"), name="static")

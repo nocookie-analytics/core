@@ -4,6 +4,7 @@ import sys
 import os
 
 from alembic import context
+from app.core.config import settings
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
 
@@ -33,13 +34,7 @@ target_metadata = Base.metadata
 
 
 def get_url():
-    if url := os.getenv("DATABASE_URL"):
-        return url
-    user = os.getenv("POSTGRES_USER", "postgres")
-    password = os.getenv("POSTGRES_PASSWORD", "")
-    server = os.getenv("POSTGRES_SERVER", "db")
-    db = os.getenv("POSTGRES_DB", "app")
-    return f"postgresql://{user}:{password}@{server}/{db}"
+    return settings.DATABASE_URL
 
 
 def run_migrations_offline():

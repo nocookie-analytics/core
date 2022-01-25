@@ -1,19 +1,25 @@
 from datetime import date
-from furl import furl
 import logging
+from pathlib import Path
 from typing import Any, Dict
+
 import emails
 from emails.template import JinjaTemplate
+from furl import furl
+
 from app.core.config import settings
-from pathlib import Path
+from app.logger import logger
 
 
 def send_new_account_email(email_to: str, username: str) -> None:
+    link = settings.SERVER_HOST
+    if not link:
+        logger.error("No server host provided, please set SERVER_NAME in config")
+        return
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - New account for user {username}"
     with open(Path(settings.EMAIL_TEMPLATES_DIR) / "new_account.html") as f:
         template_str = f.read()
-    link = settings.SERVER_HOST
     docs_link = furl(link).add(path="/docs")
     send_email(
         email_to=email_to,
@@ -30,12 +36,15 @@ def send_new_account_email(email_to: str, username: str) -> None:
 
 
 def send_reset_password_email(email_to: str, email: str, token: str) -> None:
+    server_host = settings.SERVER_HOST
+    if not server_host:
+        logger.error("No server host provided, please set SERVER_NAME in config")
+        return
+    link = f"{server_host}/reset-password?token={token}"
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - Password recovery for user {email}"
     with open(Path(settings.EMAIL_TEMPLATES_DIR) / "reset_password.html") as f:
         template_str = f.read()
-    server_host = settings.SERVER_HOST
-    link = f"{server_host}/reset-password?token={token}"
     send_email(
         email_to=email_to,
         subject_template=subject,
@@ -64,6 +73,10 @@ def send_test_email(email_to: str) -> None:
 
 
 def send_trial_ending_email(email_to: str, trial_end_date: date) -> None:
+    server_host = settings.SERVER_HOST
+    if not server_host:
+        logger.error("No server host provided, please set SERVER_NAME in config")
+        return
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - Trial ending soon"
     with open(Path(settings.EMAIL_TEMPLATES_DIR) / "trial-ending.html") as f:

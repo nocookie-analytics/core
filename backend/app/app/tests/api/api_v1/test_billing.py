@@ -6,7 +6,7 @@ from app.core.config import settings
 
 
 def test_get_portal_url_no_auth(client: TestClient) -> None:
-    resp = client.get(f"{settings.API_V1_STR}/billing/portal/")
+    resp = client.get(f"{settings.API_V1_STR}/billing/portal")
     assert resp.status_code == 401
 
 
@@ -17,7 +17,7 @@ def test_get_portal_url(client: TestClient, normal_user_token_headers: Dict) -> 
         return_value=portal_url,
     ):
         resp = client.get(
-            f"{settings.API_V1_STR}/billing/portal/", headers=normal_user_token_headers
+            f"{settings.API_V1_STR}/billing/portal", headers=normal_user_token_headers
         )
         assert resp.status_code == 200
         assert resp.json()["url"] == portal_url

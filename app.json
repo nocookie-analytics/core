@@ -1,0 +1,32 @@
+{
+  "name": "No Cookie Analytics",
+  "description": "Hassle-free privacy-friendly analytics",
+  "repository": "https://github.com/nocookie-analytics/core",
+  "logo": "https://nocookieanalytics.com/img/logo.png",
+  "keywords": ["python", "analytics"],
+  "website": "https://nocookieanalytics.com",
+  "env": {
+    "SECRET_KEY": {
+      "description": "A secret key for verifying the integrity of signed cookies.",
+      "generator": "secret"
+    },
+    "FIRST_SUPERUSER": {
+      "description": "The first superuser to be created",
+      "value": "admin@example.com"
+    },
+    "FIRST_SUPERUSER_PASSWORD": {
+      "description": "The password for the first superuser",
+      "value": "something-very-secure-please-change"
+    }
+  },
+  "stack": "container",
+  "success_url": "/login",
+  "scripts": {
+    "postdeploy": "sh /app/prestart.sh"
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql"
+    }
+  ]
+}

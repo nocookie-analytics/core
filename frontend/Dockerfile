@@ -1,3 +1,4 @@
+# NOTE: Keep steps in this file in sync with the monolith Dockerfile in the root directory
 FROM node:15 as build-stage
 
 WORKDIR /app

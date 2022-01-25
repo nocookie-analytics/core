@@ -1,3 +1,4 @@
+# NOTE: Keep steps in this file in sync with the monolith Dockerfile in the root directory
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
 
 # Allow installing dev dependencies to run tests

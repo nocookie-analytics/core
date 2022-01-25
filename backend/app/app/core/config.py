@@ -16,15 +16,15 @@ import stripe
 
 class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
-    SECRET_KEY: str = secrets.token_urlsafe(32)
+    SECRET_KEY: str
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
-    SERVER_NAME: str
+    SERVER_NAME: Optional[str]
     SERVER_HOST: Optional[AnyHttpUrl] = None
 
     @validator("SERVER_HOST", pre=True)
     def assemble_server_host(cls, v: Optional[AnyHttpUrl], values: Dict[str, Any]):
-        if not v:
+        if not v and "SERVER_NAME" in values:
             return f'https://{values["SERVER_NAME"]}'
         return v
 
@@ -41,7 +41,7 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
-    PROJECT_NAME: str
+    PROJECT_NAME: Optional[str] = "No Cookie Analytics"
     SENTRY_DSN: Optional[HttpUrl] = None
 
     @validator("SENTRY_DSN", pre=True)
@@ -61,6 +61,8 @@ class Settings(BaseSettings):
     @validator("DATABASE_URL", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> str:
         if v:
+            if v.startswith("postgres://"):
+                return v.replace("postgres://", "postgresql://")
             return v
         if not (
             values.get("POSTGRES_USER")
