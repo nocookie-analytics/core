@@ -44,10 +44,8 @@ You can use No Cookie Analytics to integrate with your own services using this A
 """
 
 
-@docs_router.get(
-    "/docs",
-    include_in_schema=False,
-)
+@docs_router.get("/docs/", include_in_schema=False)
+@docs_router.get("/docs", include_in_schema=False)
 async def get_documentation():
     return HTMLResponse(
         """
