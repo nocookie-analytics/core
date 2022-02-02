@@ -47,7 +47,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
     @staticmethod
     def _get_url_components(url: str) -> Dict:
         furled_url = furl(url)
-        path = str(furled_url.path)
+        path = str(furled_url.path) or "/"
         url_params = {}
         params_to_keep = [
             "ref",
