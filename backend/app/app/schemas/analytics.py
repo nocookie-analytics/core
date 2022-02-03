@@ -104,7 +104,7 @@ class CustomEventStat(BaseModel):
         query = (
             base_query.with_entities(Event.event_name, func.sum(Event.event_value))
             .group_by(Event.event_name)
-            .order_by(func.sum(Event.event_value))
+            .order_by(desc(func.sum(Event.event_value)))
         )
         print(query)
         return [CustomEventStat(event_name=row[0], total=row[1]) for row in query]

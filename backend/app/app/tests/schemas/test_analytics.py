@@ -223,6 +223,11 @@ class TestCustomEventStat:
             domain=domain,
             create_overrides={"event_name": "event", "event_value": 2},
         )
+        create_random_custom_event(
+            db,
+            domain=domain,
+            create_overrides={"event_name": "event2", "event_value": 10},
+        )
 
         end = datetime.now()
         start = end - timedelta(days=1)
@@ -231,9 +236,11 @@ class TestCustomEventStat:
         )
 
         stat = CustomEventStat.from_base_query(base_query)
-        assert len(stat) == 1
-        assert stat[0].event_name == "event"
-        assert stat[0].total == 4
+        assert len(stat) == 2
+        assert stat[0].event_name == "event2"
+        assert stat[1].event_name == "event"
+        assert stat[0].total == 10
+        assert stat[1].total == 4
 
 
 class TestLiveVisitorStat:
