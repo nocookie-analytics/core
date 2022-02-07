@@ -1,5 +1,7 @@
 from __future__ import annotations
 import datetime
+import time
+import functools
 from enum import Enum
 from typing import List, Optional, Union
 
@@ -59,12 +61,31 @@ class PydanticArrow(datetime.datetime):
         return arrow.get(v)
 
 
+def timeit(func):
+    @functools.wraps(func)
+    def new_func(*args, **kwargs):
+        start_time = time.perf_counter()
+        result = func(*args, **kwargs)
+        elapsed_time = time.perf_counter() - start_time
+        if isinstance(result, list):
+            if result:
+                result[0].elapsed_time = elapsed_time
+        else:
+            result.elapsed_time = elapsed_time
+
+        return result
+
+    return new_func
+
+
 class AggregateStat(BaseModel):
     total_visits: int
     visitors: int
     value: Union[str, Enum]
+    elapsed_time: Optional[float]
 
     @staticmethod
+    @timeit
     def from_base_query(
         base_query: Query,
         group_by_column: Column,
@@ -95,8 +116,10 @@ class AggregateStat(BaseModel):
 class CustomEventStat(BaseModel):
     event_name: str
     total: int
+    elapsed_time: Optional[float]
 
     @staticmethod
+    @timeit
     def from_base_query(
         base_query: Query,
     ) -> List[CustomEventStat]:
@@ -114,8 +137,10 @@ class PageViewsPerDayStat(BaseModel):
     total_visits: int
     visitors: int
     date: datetime.datetime
+    elapsed_time: Optional[float]
 
     @staticmethod
+    @timeit
     def from_base_query(
         base_query: Query,
         start: datetime.datetime,
@@ -167,8 +192,10 @@ class PageViewsPerDayStat(BaseModel):
 class AvgMetricPerDayStat(BaseModel):
     value: float
     date: datetime.datetime
+    elapsed_time: Optional[float]
 
     @staticmethod
+    @timeit
     def from_base_query(
         base_query: Query,
         metric_name: MetricType,
@@ -231,6 +258,7 @@ class SummaryStat(BaseModel):
     average_page_visit_time_seconds: float
     average_session_time_seconds: float
     visitors: int
+    elapsed_time: Optional[float]
 
     @staticmethod
     def _get_average_session_time(db: Session, base_query: Query) -> float:
@@ -275,6 +303,7 @@ class SummaryStat(BaseModel):
         )
 
     @staticmethod
+    @timeit
     def from_base_query(db: Session, base_query: Query):
         row = base_query.with_entities(
             func.coalesce(func.count(), 0),
