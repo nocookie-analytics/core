@@ -9,8 +9,11 @@ import router from './router';
 import store from '@/store';
 import './registerServiceWorker';
 import 'vuetify/dist/vuetify.min.css';
+import { initSentry } from './sentry';
 
 Vue.config.productionTip = false;
+
+initSentry();
 
 new Vue({
   vuetify,
