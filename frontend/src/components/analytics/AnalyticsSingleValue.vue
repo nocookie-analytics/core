@@ -18,7 +18,7 @@
       </span>
       <a
         :href="externalLink"
-        rel="noopener"
+        rel="noopener external nofollow"
         target="_blank"
         class="external-link"
       >
