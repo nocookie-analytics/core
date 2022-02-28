@@ -32,12 +32,6 @@ Use the `nca_event` function to track custom events. It's injected by the Javasc
 
  ```
 
-
- ## OpenAPI schema
-
- The OpenAPI schema for No Cookie Analytics is available at [this URL](/api/v1/openapi.json)
-
-
  ## Custom backend integrations
 
 You can use No Cookie Analytics to integrate with your own services using this API documentation.
