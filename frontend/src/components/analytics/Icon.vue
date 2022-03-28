@@ -12,9 +12,14 @@
 
 <script lang="ts">
 import {
+  mdiAccountGroupOutline,
+  mdiAt,
+  mdiCached,
   mdiCellphone,
   mdiDesktopMac,
   mdiHelpCircleOutline,
+  mdiHomeCurrencyUsd,
+  mdiMagnify,
   mdiTablet,
 } from '@mdi/js';
 import { Component, Prop, Vue } from 'vue-property-decorator';
@@ -23,6 +28,11 @@ const iconMap = {
   desktop: mdiDesktopMac,
   mobile: mdiCellphone,
   tablet: mdiTablet,
+  social: mdiAccountGroupOutline,
+  search: mdiMagnify,
+  internal: mdiCached,
+  email: mdiAt,
+  paid: mdiHomeCurrencyUsd,
 };
 
 const directMatchIconMap = [
