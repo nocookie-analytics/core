@@ -253,88 +253,82 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         if not end.tzinfo:
             end.replace(tzinfo="UTC")
         data = AnalyticsData(start=start, end=end)
-        for field in fields:
-            base_query = db.query(Event).filter(Event.domain_id == domain.id)
-            base_query_previous_interval = base_query.filter(
-                and_(
-                    Event.timestamp >= start.datetime - (end.datetime - start.datetime),
-                    Event.timestamp <= start.datetime,
-                )
+        base_query = db.query(Event).filter(Event.domain_id == domain.id)
+        base_query_previous_interval = base_query.filter(
+            and_(
+                Event.timestamp >= start.datetime - (end.datetime - start.datetime),
+                Event.timestamp <= start.datetime,
             )
+        )
 
-            base_query_current_interval = base_query.filter(
-                and_(
-                    Event.timestamp >= start.datetime,
-                    Event.timestamp <= end.datetime,
-                )
+        base_query_current_interval = base_query.filter(
+            and_(
+                Event.timestamp >= start.datetime,
+                Event.timestamp <= end.datetime,
             )
-            group_limit = group_limit or 100
-            if country is not None:
-                base_query_current_interval = base_query_current_interval.filter(
-                    Event.ip_country_iso_code == country
-                )
-            if page is not None:
-                base_query_current_interval = base_query_current_interval.filter(
-                    Event.path == page
-                )
-            if browser is not None:
-                base_query_current_interval = base_query_current_interval.filter(
-                    Event.browser_family == browser
-                )
-            if os is not None:
-                base_query_current_interval = base_query_current_interval.filter(
-                    Event.os_family == os
-                )
-            if device_brand is not None:
-                base_query_current_interval = base_query_current_interval.filter(
-                    Event.device_brand == device_brand
-                )
-            if device_type is not None:
-                base_query_current_interval = base_query_current_interval.filter(
-                    Event.device_type == device_type
-                )
-            if referrer_name is not None:
-                base_query_current_interval = base_query_current_interval.filter(
-                    Event.referrer_name == referrer_name
-                )
-            if event_name is not None:
-                # Filtering on events is different than the rest of the filters
-                # we first find the page view ids for the event in a subquery
-                # and then use those page view ids
-                event_name_subquery = (
-                    base_query_current_interval.with_entities(Event.page_view_id)
-                    .filter(
-                        Event.event_name == event_name,
-                        Event.event_type == EventType.custom,
-                    )
-                    .subquery()
-                )
-                base_query_current_interval = base_query_current_interval.filter(
-                    Event.page_view_id.in_(event_name_subquery)
-                )
-            page_view_base_query = base_query_current_interval.filter(
-                Event.event_type == EventType.page_view
+        )
+        group_limit = group_limit or 100
+        if country is not None:
+            base_query_current_interval = base_query_current_interval.filter(
+                Event.ip_country_iso_code == country
             )
+        if page is not None:
+            base_query_current_interval = base_query_current_interval.filter(
+                Event.path == page
+            )
+        if browser is not None:
+            base_query_current_interval = base_query_current_interval.filter(
+                Event.browser_family == browser
+            )
+        if os is not None:
+            base_query_current_interval = base_query_current_interval.filter(
+                Event.os_family == os
+            )
+        if device_brand is not None:
+            base_query_current_interval = base_query_current_interval.filter(
+                Event.device_brand == device_brand
+            )
+        if device_type is not None:
+            base_query_current_interval = base_query_current_interval.filter(
+                Event.device_type == device_type
+            )
+        if referrer_name is not None:
+            base_query_current_interval = base_query_current_interval.filter(
+                Event.referrer_name == referrer_name
+            )
+        if event_name is not None:
+            # Filtering on events is different than the rest of the filters
+            # we first find the page view ids for the event in a subquery
+            # and then use those page view ids
+            event_name_subquery = (
+                base_query_current_interval.with_entities(Event.page_view_id)
+                .filter(
+                    Event.event_name == event_name,
+                    Event.event_type == EventType.custom,
+                )
+                .subquery()
+            )
+            base_query_current_interval = base_query_current_interval.filter(
+                Event.page_view_id.in_(event_name_subquery)
+            )
+        page_view_base_query = base_query_current_interval.filter(
+            Event.event_type == EventType.page_view
+        )
+        page_view_base_query_previous_interval = base_query_previous_interval.filter(
+            Event.event_type == EventType.page_view
+        )
+        if include_bots is False:
+            page_view_base_query = page_view_base_query.filter(Event.is_bot.is_(False))
             page_view_base_query_previous_interval = (
-                base_query_previous_interval.filter(
-                    Event.event_type == EventType.page_view
-                )
+                page_view_base_query_previous_interval.filter(Event.is_bot.is_(False))
             )
-            if include_bots is False:
-                page_view_base_query = page_view_base_query.filter(
-                    Event.is_bot.is_(False)
-                )
-                page_view_base_query_previous_interval = (
-                    page_view_base_query_previous_interval.filter(
-                        Event.is_bot.is_(False)
-                    )
-                )
-            custom_event_base_query = base_query_current_interval.filter(
-                Event.event_type == EventType.custom
-            )
-            metric_base_query = base_query_current_interval.filter(
-                Event.event_type == EventType.metric
-            )
+        custom_event_base_query = base_query_current_interval.filter(
+            Event.event_type == EventType.custom
+        )
+        metric_base_query = base_query_current_interval.filter(
+            Event.event_type == EventType.metric
+        )
+        for field in fields:
             if field == AnalyticsType.SUMMARY:
                 data.summary = SummaryStat.from_base_query(db, page_view_base_query)
             elif field == AnalyticsType.LIVE_VISITORS:
