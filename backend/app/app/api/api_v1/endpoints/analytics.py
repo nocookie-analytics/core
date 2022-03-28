@@ -1,5 +1,5 @@
 from __future__ import annotations
-from app.models.event import DeviceType
+from app.models.event import DeviceType, ReferrerMediumType
 from datetime import datetime
 from typing import List, Optional
 
@@ -59,6 +59,7 @@ def get_analytics(
         description="Works with per day metrics. Set interval to hour to get more granular metrics for each hour of the day",
     ),
     db: Session = Depends(deps.get_db),
+    referrer_medium: ReferrerMediumType = None,
 ):
     # TODO: This section (getting domain/verifying ownership)
     # can be written as a reusable dependency
