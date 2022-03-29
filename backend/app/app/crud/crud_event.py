@@ -246,6 +246,7 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         group_limit: int = None,
         include_bots: bool = False,
         interval: IntervalType = IntervalType.DAY,
+        referrer_medium: ReferrerMediumType = None,
     ) -> AnalyticsData:
         # Set timezone to UTC if missing
         if not start.tzinfo:
@@ -295,6 +296,10 @@ class CRUDEvent(CRUDBase[Event, EventCreate, EventUpdate]):
         if referrer_name is not None:
             base_query_current_interval = base_query_current_interval.filter(
                 Event.referrer_name == referrer_name
+            )
+        if referrer_medium is not None:
+            base_query_current_interval = base_query_current_interval.filter(
+                Event.referrer_medium == referrer_medium
             )
         if event_name is not None:
             # Filtering on events is different than the rest of the filters

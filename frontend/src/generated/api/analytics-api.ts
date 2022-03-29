@@ -30,6 +30,8 @@ import { DeviceType } from '../models';
 import { HTTPValidationError } from '../models';
 // @ts-ignore
 import { IntervalType } from '../models';
+// @ts-ignore
+import { ReferrerMediumType } from '../models';
 /**
  * AnalyticsApi - axios parameter creator
  * @export
@@ -52,12 +54,13 @@ export const AnalyticsApiAxiosParamCreator = function (configuration?: Configura
          * @param {number} [limit] 
          * @param {boolean} [includeBots] 
          * @param {IntervalType} [interval] Works with per day metrics. Set interval to hour to get more granular metrics for each hour of the day
+         * @param {ReferrerMediumType} [referrerMedium] 
          * @param {string} [start] 
          * @param {string} [end] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAnalytics: async (domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: DeviceType, deviceBrand?: string, referrerName?: string, eventName?: string, limit?: number, includeBots?: boolean, interval?: IntervalType, start?: string, end?: string, options: any = {}): Promise<RequestArgs> => {
+        getAnalytics: async (domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: DeviceType, deviceBrand?: string, referrerName?: string, eventName?: string, limit?: number, includeBots?: boolean, interval?: IntervalType, referrerMedium?: ReferrerMediumType, start?: string, end?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'domainName' is not null or undefined
             assertParamExists('getAnalytics', 'domainName', domainName)
             // verify required parameter 'include' is not null or undefined
@@ -130,6 +133,10 @@ export const AnalyticsApiAxiosParamCreator = function (configuration?: Configura
                 localVarQueryParameter['interval'] = interval;
             }
 
+            if (referrerMedium !== undefined) {
+                localVarQueryParameter['referrer_medium'] = referrerMedium;
+            }
+
             if (start !== undefined) {
                 localVarQueryParameter['start'] = (start as any instanceof Date) ?
                     (start as any).toISOString() :
@@ -179,13 +186,14 @@ export const AnalyticsApiFp = function(configuration?: Configuration) {
          * @param {number} [limit] 
          * @param {boolean} [includeBots] 
          * @param {IntervalType} [interval] Works with per day metrics. Set interval to hour to get more granular metrics for each hour of the day
+         * @param {ReferrerMediumType} [referrerMedium] 
          * @param {string} [start] 
          * @param {string} [end] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: DeviceType, deviceBrand?: string, referrerName?: string, eventName?: string, limit?: number, includeBots?: boolean, interval?: IntervalType, start?: string, end?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AnalyticsData>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAnalytics(domainName, include, page, country, browser, os, device, deviceBrand, referrerName, eventName, limit, includeBots, interval, start, end, options);
+        async getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: DeviceType, deviceBrand?: string, referrerName?: string, eventName?: string, limit?: number, includeBots?: boolean, interval?: IntervalType, referrerMedium?: ReferrerMediumType, start?: string, end?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AnalyticsData>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAnalytics(domainName, include, page, country, browser, os, device, deviceBrand, referrerName, eventName, limit, includeBots, interval, referrerMedium, start, end, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -214,13 +222,14 @@ export const AnalyticsApiFactory = function (configuration?: Configuration, base
          * @param {number} [limit] 
          * @param {boolean} [includeBots] 
          * @param {IntervalType} [interval] Works with per day metrics. Set interval to hour to get more granular metrics for each hour of the day
+         * @param {ReferrerMediumType} [referrerMedium] 
          * @param {string} [start] 
          * @param {string} [end] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: DeviceType, deviceBrand?: string, referrerName?: string, eventName?: string, limit?: number, includeBots?: boolean, interval?: IntervalType, start?: string, end?: string, options?: any): AxiosPromise<AnalyticsData> {
-            return localVarFp.getAnalytics(domainName, include, page, country, browser, os, device, deviceBrand, referrerName, eventName, limit, includeBots, interval, start, end, options).then((request) => request(axios, basePath));
+        getAnalytics(domainName: string, include: Array<AnalyticsType>, page?: string, country?: string, browser?: string, os?: string, device?: DeviceType, deviceBrand?: string, referrerName?: string, eventName?: string, limit?: number, includeBots?: boolean, interval?: IntervalType, referrerMedium?: ReferrerMediumType, start?: string, end?: string, options?: any): AxiosPromise<AnalyticsData> {
+            return localVarFp.getAnalytics(domainName, include, page, country, browser, os, device, deviceBrand, referrerName, eventName, limit, includeBots, interval, referrerMedium, start, end, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -324,6 +333,13 @@ export interface AnalyticsApiGetAnalyticsRequest {
 
     /**
      * 
+     * @type {ReferrerMediumType}
+     * @memberof AnalyticsApiGetAnalytics
+     */
+    readonly referrerMedium?: ReferrerMediumType
+
+    /**
+     * 
      * @type {string}
      * @memberof AnalyticsApiGetAnalytics
      */
@@ -353,6 +369,6 @@ export class AnalyticsApi extends BaseAPI {
      * @memberof AnalyticsApi
      */
     public getAnalytics(requestParameters: AnalyticsApiGetAnalyticsRequest, options?: any) {
-        return AnalyticsApiFp(this.configuration).getAnalytics(requestParameters.domainName, requestParameters.include, requestParameters.page, requestParameters.country, requestParameters.browser, requestParameters.os, requestParameters.device, requestParameters.deviceBrand, requestParameters.referrerName, requestParameters.eventName, requestParameters.limit, requestParameters.includeBots, requestParameters.interval, requestParameters.start, requestParameters.end, options).then((request) => request(this.axios, this.basePath));
+        return AnalyticsApiFp(this.configuration).getAnalytics(requestParameters.domainName, requestParameters.include, requestParameters.page, requestParameters.country, requestParameters.browser, requestParameters.os, requestParameters.device, requestParameters.deviceBrand, requestParameters.referrerName, requestParameters.eventName, requestParameters.limit, requestParameters.includeBots, requestParameters.interval, requestParameters.referrerMedium, requestParameters.start, requestParameters.end, options).then((request) => request(this.axios, this.basePath));
     }
 }

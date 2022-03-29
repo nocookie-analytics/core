@@ -48,6 +48,7 @@ export const actions = {
           AnalyticsType.Summary,
           AnalyticsType.SummaryPreviousInterval,
           AnalyticsType.LiveVisitors,
+          AnalyticsType.ReferrerMediums,
 
           AnalyticsType.Pages,
           AnalyticsType.Countries,

@@ -36,15 +36,19 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
          * Report a new custom event
          * @summary New Custom Event
          * @param {string} url 
-         * @param {string} [pageViewId] Page view ID (from a page view event)
-         * @param {string} [eventName] Event name
+         * @param {string} pageViewId Page view ID (from a page view event)
+         * @param {string} eventName Event name
          * @param {number} [eventValue] Event value (numeric)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newCustomEvent: async (url: string, pageViewId?: string, eventName?: string, eventValue?: number, options: any = {}): Promise<RequestArgs> => {
+        newCustomEvent: async (url: string, pageViewId: string, eventName: string, eventValue?: number, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'url' is not null or undefined
             assertParamExists('newCustomEvent', 'url', url)
+            // verify required parameter 'pageViewId' is not null or undefined
+            assertParamExists('newCustomEvent', 'pageViewId', pageViewId)
+            // verify required parameter 'eventName' is not null or undefined
+            assertParamExists('newCustomEvent', 'eventName', eventName)
             const localVarPath = `/api/v1/e/custom`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -217,13 +221,13 @@ export const EventsApiFp = function(configuration?: Configuration) {
          * Report a new custom event
          * @summary New Custom Event
          * @param {string} url 
-         * @param {string} [pageViewId] Page view ID (from a page view event)
-         * @param {string} [eventName] Event name
+         * @param {string} pageViewId Page view ID (from a page view event)
+         * @param {string} eventName Event name
          * @param {number} [eventValue] Event value (numeric)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newCustomEvent(url: string, pageViewId?: string, eventName?: string, eventValue?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EventCreated>> {
+        async newCustomEvent(url: string, pageViewId: string, eventName: string, eventValue?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EventCreated>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.newCustomEvent(url, pageViewId, eventName, eventValue, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -272,13 +276,13 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
          * Report a new custom event
          * @summary New Custom Event
          * @param {string} url 
-         * @param {string} [pageViewId] Page view ID (from a page view event)
-         * @param {string} [eventName] Event name
+         * @param {string} pageViewId Page view ID (from a page view event)
+         * @param {string} eventName Event name
          * @param {number} [eventValue] Event value (numeric)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newCustomEvent(url: string, pageViewId?: string, eventName?: string, eventValue?: number, options?: any): AxiosPromise<EventCreated> {
+        newCustomEvent(url: string, pageViewId: string, eventName: string, eventValue?: number, options?: any): AxiosPromise<EventCreated> {
             return localVarFp.newCustomEvent(url, pageViewId, eventName, eventValue, options).then((request) => request(axios, basePath));
         },
         /**
@@ -331,14 +335,14 @@ export interface EventsApiNewCustomEventRequest {
      * @type {string}
      * @memberof EventsApiNewCustomEvent
      */
-    readonly pageViewId?: string
+    readonly pageViewId: string
 
     /**
      * Event name
      * @type {string}
      * @memberof EventsApiNewCustomEvent
      */
-    readonly eventName?: string
+    readonly eventName: string
 
     /**
      * Event value (numeric)

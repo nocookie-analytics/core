@@ -91,6 +91,11 @@ export default class AnalyticsContainer extends Vue {
         urlExclude: [],
       },
       {
+        data: this.analyticsData.referrer_mediums || [],
+        title: 'Referrer mediums',
+        urlParamName: 'referrerMedium',
+      },
+      {
         data: this.analyticsData.countries || [],
         title: 'Country',
         urlParamName: 'country',

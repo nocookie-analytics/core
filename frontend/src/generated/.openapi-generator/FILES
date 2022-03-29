@@ -31,6 +31,7 @@ models/interval-type.ts
 models/msg.ts
 models/page-views-per-day-stat.ts
 models/plan.ts
+models/referrer-medium-type.ts
 models/summary-stat.ts
 models/token.ts
 models/user.ts
