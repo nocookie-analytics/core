@@ -61,16 +61,17 @@ typing-extensions = {version = "*", markers = "python_version < \"3.8\""}
 
 [[package]]
 name = "astroid"
-version = "2.5.3"
+version = "2.11.2"
 description = "An abstract syntax tree for Python with inference support."
 category = "dev"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.6.2"
 
 [package.dependencies]
 lazy-object-proxy = ">=1.4.0"
-typed-ast = {version = ">=1.4.0,<1.5", markers = "implementation_name == \"cpython\" and python_version < \"3.8\""}
-wrapt = ">=1.11,<1.13"
+typed-ast = {version = ">=1.4.0,<2.0", markers = "implementation_name == \"cpython\" and python_version < \"3.8\""}
+typing-extensions = {version = ">=3.10", markers = "python_version < \"3.10\""}
+wrapt = ">=1.11,<2"
 
 [[package]]
 name = "async-timeout"
@@ -271,6 +272,17 @@ description = "Decorators for Humans"
 category = "dev"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*"
+
+[[package]]
+name = "dill"
+version = "0.3.4"
+description = "serialize all of python"
+category = "dev"
+optional = false
+python-versions = ">=2.7, !=3.0.*"
+
+[package.extras]
+graph = ["objgraph (>=1.7.2)"]
 
 [[package]]
 name = "dnspython"
@@ -879,21 +891,24 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "pylint"
-version = "2.7.4"
+version = "2.13.3"
 description = "python code static checker"
 category = "dev"
 optional = false
-python-versions = "~=3.6"
+python-versions = ">=3.6.2"
 
 [package.dependencies]
-astroid = ">=2.5.2,<2.7"
+astroid = ">=2.11.2,<=2.12.0-dev0"
 colorama = {version = "*", markers = "sys_platform == \"win32\""}
+dill = ">=0.2"
 isort = ">=4.2.5,<6"
-mccabe = ">=0.6,<0.7"
-toml = ">=0.7.1"
+mccabe = ">=0.6,<0.8"
+platformdirs = ">=2.2.0"
+tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
+typing-extensions = {version = ">=3.10.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
-docs = ["sphinx (==3.5.1)", "python-docs-theme (==2020.12)"]
+testutil = ["gitpython (>3)"]
 
 [[package]]
 name = "pyparsing"
@@ -1323,7 +1338,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "4a920d19d5688b673f2e87ca844127968fe5c700f733f32c23fc6b865bc7b857"
+content-hash = "70ad3fcdcd14b6661e5265e25e4bc753b071add5ebf36e10ff4fcaa49c8850b7"
 
 [metadata.files]
 aiofiles = [
@@ -1382,8 +1397,8 @@ arrow = [
     {file = "arrow-1.0.3.tar.gz", hash = "sha256:399c9c8ae732270e1aa58ead835a79a40d7be8aa109c579898eb41029b5a231d"},
 ]
 astroid = [
-    {file = "astroid-2.5.3-py3-none-any.whl", hash = "sha256:bea3f32799fbb8581f58431c12591bc20ce11cbc90ad82e2ea5717d94f2080d5"},
-    {file = "astroid-2.5.3.tar.gz", hash = "sha256:ad63b8552c70939568966811a088ef0bc880f99a24a00834abd0e3681b514f91"},
+    {file = "astroid-2.11.2-py3-none-any.whl", hash = "sha256:cc8cc0d2d916c42d0a7c476c57550a4557a083081976bf42a73414322a6411d9"},
+    {file = "astroid-2.11.2.tar.gz", hash = "sha256:8d0a30fe6481ce919f56690076eafbb2fb649142a89dc874f1ec0e7a011492d0"},
 ]
 async-timeout = [
     {file = "async-timeout-3.0.1.tar.gz", hash = "sha256:0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f"},
@@ -1560,6 +1575,10 @@ cssutils = [
 decorator = [
     {file = "decorator-4.4.2-py2.py3-none-any.whl", hash = "sha256:41fa54c2a0cc4ba648be4fd43cff00aedf5b9465c9bf18d64325bc225f08f760"},
     {file = "decorator-4.4.2.tar.gz", hash = "sha256:e3a62f0520172440ca0dcc823749319382e377f37f140a0b99ef45fecb84bfe7"},
+]
+dill = [
+    {file = "dill-0.3.4-py2.py3-none-any.whl", hash = "sha256:7e40e4a70304fd9ceab3535d36e58791d9c4a776b38ec7f7ec9afc8d3dca4d4f"},
+    {file = "dill-0.3.4.zip", hash = "sha256:9f9734205146b2b353ab3fec9af0070237b6ddae78452af83d2fca84d739e675"},
 ]
 dnspython = [
     {file = "dnspython-2.0.0-py3-none-any.whl", hash = "sha256:40bb3c24b9d4ec12500f0124288a65df232a3aa749bb0c39734b782873a2544d"},
@@ -2035,8 +2054,8 @@ pygments = [
     {file = "Pygments-2.7.3.tar.gz", hash = "sha256:ccf3acacf3782cbed4a989426012f1c535c9a90d3a7fc3f16d231b9372d2b716"},
 ]
 pylint = [
-    {file = "pylint-2.7.4-py3-none-any.whl", hash = "sha256:209d712ec870a0182df034ae19f347e725c1e615b2269519ab58a35b3fcbbe7a"},
-    {file = "pylint-2.7.4.tar.gz", hash = "sha256:bd38914c7731cdc518634a8d3c5585951302b6e2b6de60fbb3f7a0220e21eeee"},
+    {file = "pylint-2.13.3-py3-none-any.whl", hash = "sha256:c8837b6ec6440e3490ab8f066054b0645a516a29ca51ce442f16f7004f711a70"},
+    {file = "pylint-2.13.3.tar.gz", hash = "sha256:12ed2520510c40db647e4ec7f747b07e0d669b33ab41479c2a07bb89b92877db"},
 ]
 pyparsing = [
     {file = "pyparsing-2.4.7-py2.py3-none-any.whl", hash = "sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b"},
