@@ -18,7 +18,7 @@ jobs:
           sudo apt update
           sudo apt-get -qq -y install gh
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Run update script
         run: bash backend/app/data/update-referers.sh
