@@ -70,7 +70,7 @@ class AggregateStat(BaseModel):
         group_by_column: Column,
         group_limit: int,
         *,
-        filter_none: bool = False
+        filter_none: bool = False,
     ) -> List[AggregateStat]:
         query = (
             base_query.group_by(group_by_column)
