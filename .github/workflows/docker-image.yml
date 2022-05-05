@@ -25,7 +25,7 @@ jobs:
           sh backend/app/scripts/fetch-db-ip.sh
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: ghcr.io/nocookie-analytics/nocookie-analytics
           tags: |
