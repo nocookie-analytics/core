@@ -342,6 +342,17 @@ python-dateutil = "*"
 requests = "*"
 
 [[package]]
+name = "exceptiongroup"
+version = "1.0.0rc8"
+description = "Backport of PEP 654 (exception groups)"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+test = ["pytest (>=6)"]
+
+[[package]]
 name = "fastapi"
 version = "0.63.0"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
@@ -447,7 +458,7 @@ python-versions = "*"
 
 [[package]]
 name = "hypothesis"
-version = "6.40.0"
+version = "6.50.1"
 description = "A library for property-based testing"
 category = "dev"
 optional = false
@@ -455,6 +466,7 @@ python-versions = ">=3.7"
 
 [package.dependencies]
 attrs = ">=19.2.0"
+exceptiongroup = {version = ">=1.0.0rc8", markers = "python_version < \"3.11\""}
 sortedcontainers = ">=2.1.0,<3.0.0"
 
 [package.extras]
@@ -1360,7 +1372,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "33d9551b0a1e9d18d8129d3ddb31453dd2467f39347c9e3d5638931490ef41dc"
+content-hash = "da6403daccb9d2a921908cf1b98180657015d0bea07faad4c0ee0e075b7f17c4"
 
 [metadata.files]
 aiofiles = []
@@ -1392,6 +1404,7 @@ dnspython = []
 ecdsa = []
 email-validator = []
 emails = []
+exceptiongroup = []
 fastapi = []
 fastapi-utils = []
 flake8 = []
