@@ -41,7 +41,7 @@ flake8 = "^3.9.0"
 pytest = "^6.2.5"
 sqlalchemy-stubs = "^0.4"
 pytest-cov = "^2.11.1"
-pylint = "^2.13.3"
+pylint = "^2.13.9"
 ipython = "^7.32.0"
 coverage = {extras = ["toml"], version = "^5.5"}
 hypothesis = "^6.40.0"
