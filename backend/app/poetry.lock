@@ -1208,14 +1208,11 @@ requests = {version = ">=2.20", markers = "python_version >= \"3.0\""}
 
 [[package]]
 name = "tenacity"
-version = "7.0.0"
+version = "8.0.1"
 description = "Retry code until it succeeds"
 category = "main"
 optional = false
-python-versions = "*"
-
-[package.dependencies]
-six = ">=1.9.0"
+python-versions = ">=3.6"
 
 [package.extras]
 doc = ["reno", "sphinx", "tornado (>=4.5)"]
@@ -1372,7 +1369,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "da6403daccb9d2a921908cf1b98180657015d0bea07faad4c0ee0e075b7f17c4"
+content-hash = "d427384822a2d6e8efdca53caf7db16efadcec65a9a5ef50c8af4bf36626b4a2"
 
 [metadata.files]
 aiofiles = []
