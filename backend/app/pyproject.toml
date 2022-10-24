@@ -28,7 +28,7 @@ arrow = "^1.0.3"
 pytz = "2019.3"
 fastapi-utils = "^0.2.1"
 click = "7.*"
-sentry-sdk = "^1.1.0"
+sentry-sdk = "^1.10.1"
 stripe = "^2.60.0"
 aiofiles = "^0.8.0"
 
